@@ -3,7 +3,7 @@
     "node": ">=16.0.0",
     "npm": ">=7.0.0"
   },
-  "name": "daouhouse",
+  "name": "daohouse",
   "scripts": {
     "build": "npm run build --workspaces --if-present",
     "prebuild": "npm run prebuild --workspaces --if-present",
@@ -13,6 +13,16 @@
   },
   "type": "module",
   "workspaces": [
-    "src/daouhouse_frontend"
-  ]
+    "src/daohouse_frontend"
+  ],
+  "dependencies": {
+    "autoprefixer": "^10.4.19",
+    "i18next-browser-languagedetector": "^7.2.1",
+    "i18next-http-backend": "^2.5.1",
+    "postcss": "^8.4.38",
+    "postcss-custom-properties": "^13.3.8",
+    "react-i18next": "^14.1.1",
+    "react-router-dom": "^6.23.0",
+    "tailwindcss": "^3.4.3"
+  }
 }

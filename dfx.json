@@ -1,19 +1,19 @@
 {
   "canisters": {
-    "daouhouse_backend": {
-      "candid": "src/daouhouse_backend/daouhouse_backend.did",
-      "package": "daouhouse_backend",
+    "daohouse_backend": {
+      "candid": "src/daohouse_backend/daohouse_backend.did",
+      "package": "daohouse_backend",
       "type": "rust"
     },
-    "daouhouse_frontend": {
+    "daohouse_frontend": {
       "dependencies": [
-        "daouhouse_backend"
+        "daohouse_backend"
       ],
       "source": [
-        "src/daouhouse_frontend/dist"
+        "src/daohouse_frontend/dist"
       ],
       "type": "assets",
-      "workspace": "daouhouse_frontend"
+      "workspace": "daohouse_frontend"
     }
   },
   "defaults": {
