@@ -4,12 +4,16 @@ import starbucks from "../../../assets/starbucks.png"
 import panda from "../../../assets/panda.png"
 import image5 from "../../../assets/image5.png"
 import pandg from "../../../assets/pandg.png"
+import Widget from './Widget';
 
 
 const SupportingPartners = () => {
   return (
     <div className="bg-gray-200 py-[10rem]">
-      <div className="container mx-auto text-center mb-8">
+      <div className='flex justify-center mt-[-200px] items-center '>
+        <Widget />
+      </div>
+      <div className="container mx-auto text-center pt-4 mb-8 mt-8">
         <h2 className="text-[40px] font-medium mb-8">Supporting Partners</h2>
       </div>
       <div className="container  gap-5 mx-auto flex flex-wrap justify-center">

@@ -9,18 +9,19 @@ import SupportingPartners from "./SupportingPartners";
 
 const Dashboard = () => {
 
-    return (
-        <>
-          <div>
-            <HeroSection/>
-            <Empowering/>
-            <About />
-            <Feature/>
-            <Decentralization/>
-            <SupportingPartners/>
-          </div>
-        </>
-    );
+  return (
+    <>
+      <div>
+        <HeroSection />
+        <Empowering />
+        <About />
+        <Feature />
+        <Decentralization />
+        <SupportingPartners />
+
+      </div>
+    </>
+  );
 };
 
 export default Dashboard;
