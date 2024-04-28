@@ -9,12 +9,14 @@ import FeedPage from "./Components/FeedPage/FeedPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const App = () => {
+
   return (
     <Router>
       <Navbar />
       <Routes>
         <Route path="/*" element={<Error404 />} />
         <Route path="/" element={<Dashboard />} />
+
         <Route path="/feed" element={<FeedPage />} />
       </Routes>
       <Footer />
