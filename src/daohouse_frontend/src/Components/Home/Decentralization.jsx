@@ -1,5 +1,6 @@
 import React from 'react';
 import decentralization from "../../../assets/decentralization.png"
+import decentralize from "../../../assets/gif/decentralize.gif"
 
 
 const Decentralization = () => {
@@ -16,7 +17,7 @@ const Decentralization = () => {
           </div>
           
           <div className="w-full md:w-1/2">
-            <img src="your_right_image_source_here" alt="Right Image" className="w-full" />
+            <img src={decentralize} alt="Right Image" className="w-full" />
           </div>
         </div>
       </div>

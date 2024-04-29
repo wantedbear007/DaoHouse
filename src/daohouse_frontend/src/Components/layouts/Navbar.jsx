@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import i18n from '../../i18n';
-import Logo from '../../../assets/icpLogo2.png';
+import { Link } from 'react-router-dom'; 
+
 
 const Navbar = () => {
     const [locale, setLocale] = useState(i18n.language);
@@ -12,19 +13,18 @@ const Navbar = () => {
     }
 
     const menuItems = [
-        { label: 'Home' },
-        { label: 'Social Feed' },
-        { label: 'DAOs' },
-        { label: 'Proposals' },
+        { label: 'Home', route: '/' }, 
+        { label: 'Social Feed', route: '/social-feed' },
+        { label: 'DAOs', route: '/dao' },
+        { label: 'Proposals', route: '/proposals' },
     ];
-
     return (
         <div className="flex flex-col h-20 justify-center bg-[#DADEE4]  border-b shadow-lg  shadow-slate-900/20 shadow-b-2 fixed w-full z-50">
             <div className="px-4 flex justify-around items-center w-full">
                 <div className="flex items-center space-x-8">
                     {menuItems.map((item, index) => (
                         <div key={index} className="text-lg font-normal font-inter leading-[19.36px]  text-[#829095]">
-                            <span className="hover:text-[#05212C] hover:font-medium cursor-pointer hover:border-b-2 text-[16px] text-[#829095] border-transparent border-b-0.5 border-[#05212C]">{item.label}</span>
+                            <Link to={item.route} className="hover:text-[#05212C] hover:font-medium cursor-pointer hover:border-b-2 text-[16px] text-[#829095] border-transparent border-b-0.5 border-[#05212C]">{item.label}</Link>
                         </div>
                     ))}
                 </div>
