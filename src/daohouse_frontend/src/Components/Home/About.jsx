@@ -1,5 +1,5 @@
 import React from 'react';
-import about from "../../../assets/about.png"
+import about from "../../../assets/gif/about.gif"
 import smallelipse from "../../../assets/smallElipse.png"
 import bigellipse from "../../../assets/bigEllipse.png"
 
@@ -7,15 +7,14 @@ import bigellipse from "../../../assets/bigEllipse.png"
 const About = () => {
     return (
         <div className="bg-[#05212C] relative  flex justify-center items-center py-8">
-            <img src={smallelipse} alt="Small Ellipse" className="absolute left-[10%] top-0 mt-8" />
+            <img src={smallelipse} alt="Small Ellipse" className="absolute left-[20%] top-0 mt-8" />
 
             <div className="w-40%">
                 <div className='my-8'>
-                    <img src={about} alt="Image" className="w-full h-auto" />
+                    <img src={about} alt="Image" className="w-full h-auto rounded-r-full" />
                 </div>
             </div>
 
-            {/* Right Side (Text) */}
             <div className="w-60% p-8 text-white">
                 <div className='px-8'>
                     <h2 className="text-about-heading font-mulish font-medium text-2xl md:text-md lg:text-xl leading-tight my-4">About Platform</h2>

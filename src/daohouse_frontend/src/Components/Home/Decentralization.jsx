@@ -1,11 +1,11 @@
 import React from 'react';
 import decentralization from "../../../assets/decentralization.png"
-import decentralize from "../../../assets/gif/decentralize.gif"
+import decentralize from "../../../assets/gif/cropped.gif"
 
 
 const Decentralization = () => {
   return (
-    <div className="gradient-background  py-16">
+    <div className="bg-image-background   py-16">
       <div className="container mx-auto flex flex-col items-center justify-center">
         <img src={decentralization} alt="Decentralization Image" className="w-full mb-8" />
         <div className="flex flex-col md:flex-row justify-between items-center">
@@ -15,9 +15,9 @@ const Decentralization = () => {
             <button className="px-8 my-4 py-3 bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">Join DAO</button>
 
           </div>
-          
-          <div className="w-full md:w-1/2">
-            <img src={decentralize} alt="Right Image" className="w-full" />
+
+          <div className="w-full md:w-1/2 flex justify-center items-center rounded-full">
+            <img src={decentralize} alt="Right Image" className="rounded-full" />
           </div>
         </div>
       </div>

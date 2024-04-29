@@ -1,5 +1,6 @@
 import React from 'react';
 import herosectionleftbottomimg from "../../../assets/herosection.png"
+import herosectiongradient from "../../../assets/herosectiongradient.png"
 import circle from "../../../assets/circle.png"
 
 const HeroSection = () => {
@@ -15,12 +16,15 @@ const HeroSection = () => {
                 </div>
             </div>
 
-            {/* Bottom Left Image */}
+            <img src={herosectiongradient} alt="hero section gradient" className="absolute bottom-0 left-0 mb-4 ml-4 animate-gradient" />
             <img src={herosectionleftbottomimg} alt="Bottom Left Image" className="absolute bottom-0 left-0 mb-4 ml-4" />
 
             {/* Right Side */}
+            {/* Right Side */}
             <div className="w-1/2 flex items-center justify-center">
-                <img src={circle} alt="Placeholder" className="w-645 h-646 object-cover" />
+                <div className="relative">
+                    <img src={circle} alt="Placeholder" className="w-full h-full object-cover animate-spin-slow" />
+                </div>
             </div>
 
 
