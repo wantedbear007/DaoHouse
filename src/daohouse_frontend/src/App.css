@@ -6,3 +6,38 @@
 .gradient-background {
   background: linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%)
 }
+
+@keyframes spin-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+@keyframes gradientMovement {
+  0% {
+    transform: translate(-50%, 50%);
+  }
+  25% {
+    transform: translate(50%, -50%);
+  }
+  50% {
+    transform: translate(50%, 50%);
+  }
+  75% {
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    transform: translate(-50%, 50%);
+  }
+}
+
+.animate-gradient {
+  animation: gradientMovement 10s linear infinite; /* Adjust the duration and timing here (10s for example) */
+}
