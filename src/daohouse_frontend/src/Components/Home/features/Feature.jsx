@@ -24,9 +24,11 @@ const Feature = () => {
   ];
   return (
     <div className="bg-[#dadee4] py-16">
+
       <div className='flex justify-center items-center flex-col'>
-        <h2 className="text-[16px] font-medium mb-8 text-left">Features</h2>
-        <h3 className="text-3xl font-semibold mb-8 text-center">Unlocking Collective Intelligence</h3>
+        <h2 className="text-[16px] font-medium mb-2 ">Our Features</h2>
+
+        <h3 className="text-3xl font-semibold mb-8 text-center">Engaging Management Suite</h3>
       </div>
       <div className="flex justify-center">
         {cardData.map((data, index) => (

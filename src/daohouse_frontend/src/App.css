@@ -41,3 +41,10 @@
 .animate-gradient {
   animation: gradientMovement 10s linear infinite; /* Adjust the duration and timing here (10s for example) */
 }
+
+
+.bg-image-background {
+  background-image: url("../assets/bg\ gradient.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
