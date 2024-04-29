@@ -1,15 +1,20 @@
 import React from 'react';
 import about from "../../../assets/gif/about.gif"
 import smallelipse from "../../../assets/smallElipse.png"
+import smallelipsegif from "../../../assets/smallellipsegif.png"
 import bigellipse from "../../../assets/bigEllipse.png"
 
 
 const About = () => {
     return (
         <div className="bg-[#05212C] relative  flex justify-center items-center py-8">
-            <img src={smallelipse} alt="Small Ellipse" className="absolute left-[20%] top-0 mt-8" />
+            <img src={smallelipsegif} alt="Small Ellipse" className="absolute left-[35%] top-0 mt-6 z-50  animate-spin-slow " />
 
-            <div className="w-40%">
+
+
+            <img src={smallelipse} alt="Small Ellipse" className="absolute left-[35%] top-0 mt-8"/>
+
+            <div className="w-[100vw]">
                 <div className='my-8'>
                     <img src={about} alt="Image" className="w-full h-auto rounded-r-full" />
                 </div>

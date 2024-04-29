@@ -39,7 +39,7 @@
 }
 
 .animate-gradient {
-  animation: gradientMovement 10s linear infinite; /* Adjust the duration and timing here (10s for example) */
+  animation: gradientMovement 10s linear infinite; 
 }
 
 

@@ -20,10 +20,9 @@ const HeroSection = () => {
             <img src={herosectionleftbottomimg} alt="Bottom Left Image" className="absolute bottom-0 left-0 mb-4 ml-4" />
 
             {/* Right Side */}
-            {/* Right Side */}
             <div className="w-1/2 flex items-center justify-center">
                 <div className="relative">
-                    <img src={circle} alt="Placeholder" className="w-full h-full object-cover animate-spin-slow" />
+                    <img src={circle} alt="Placeholder" className="w-[85%] lg:w-[90%] xl:w-[92%] 2xl:w-full h-full object-cover animate-spin-slow" />
                 </div>
             </div>
 
