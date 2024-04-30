@@ -18,7 +18,6 @@ const Dashboard = () => {
         <Feature />
         <Decentralization />
         <SupportingPartners />
-
       </div>
     </>
   );
