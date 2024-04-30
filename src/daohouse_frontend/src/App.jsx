@@ -6,9 +6,9 @@ import Error404 from "./Components/utils/Error404";
 import Dashboard from "./Components/Home/Dashboard";
 import Footer from "./Components/layouts/Footer";
 import FeedPage from "./Components/FeedPage/FeedPage";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 import Dao from './pages/dao/Dao';
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const App = () => {
 
