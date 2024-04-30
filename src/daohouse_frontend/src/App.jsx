@@ -20,9 +20,8 @@ const App = () => {
         <Route path="/" element={<Dashboard />} />
 
         <Route path="/feed" element={<FeedPage />} />
+        <Route path="/dao" element={<Dao />} />
       </Routes>
-      
-      <Route path="/dao" element={<Dao />} />
       <Footer />
     </Router>
   );
