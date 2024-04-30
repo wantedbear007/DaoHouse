@@ -42,17 +42,15 @@ const FeedPage = () => {
 
         <div className={className + "__buttons flex flex-row"}>
           <button
-            className={`px-6 py-2 text-lg ${
-              !active.all ? "text-slate-500" : "text-white"
-            }`}
+            className={`px-6 py-2 text-lg text-white ${!active.all ? "" : "shadow-lg font-semibold"
+              }`}
             onClick={setAllActive}
           >
             All
           </button>
           <button
-            className={`px-6 py-2 text-lg ${
-              !active.latest ? "text-slate-500" : "text-white"
-            }`}
+            className={`px-6 py-2 text-lg text-white ${!active.latest ? "" : "shadow-lg font-semibold"
+              }`}
             onClick={setLatestActive}
           >
             Latest
@@ -66,11 +64,15 @@ const FeedPage = () => {
           "__label bg-[#c8ced3] py-8 px-10 flex flex-row w-full justify-between items-center"
         }
       >
-        <p className="text-4xl px-8 flex flex-row items-center gap-2">
-          {active.all ? "All" : "Latest"} <MdOutlineShortText />
+        <p className="text-4xl px-8 flex flex-row items-center gap-4">
+          {active.all ? "All" : "Latest"}
+          <div className="flex flex-col items-start">
+            <div className="w-32 border-t-2 border-black"></div>
+            <div className="w-14 mt-2 border-t-2 border-black"></div>
+          </div>
         </p>
 
-        <button className="flex flex-row items-center px-6 py-3 gap-2 rounded-[2rem] bg-white text-base">
+        <button className="bg-white gap-2 px-4 shadow-xl py-2 px-4 rounded-full shadow-md flex items-center space-x-4 rounded-2xl">
           <HiPlus />
           Create Post
         </button>
