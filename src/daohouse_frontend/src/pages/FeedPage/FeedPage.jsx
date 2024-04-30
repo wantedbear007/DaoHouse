@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { HiPlus } from "react-icons/hi";
-import { MdOutlineShortText } from "react-icons/md";
 
 import allFeed from "../../Components/FeedPage/AllFeeds";
 import latestFeed from "../../Components/FeedPage/LatestFeed";
 import PostCard from "../../Components/FeedPage/PostCard";
-import image from "../../../assets/bg_image.jpeg";
+import image from "../../../assets/bg_image.png";
 
 const FeedPage = () => {
   const [feed, setFeed] = useState(allFeed);
@@ -27,7 +26,7 @@ const FeedPage = () => {
       <div
         className={
           className +
-          "__filter w-100 h-[15vh] p-20 flex flex-col items-start justify-center"
+          "__filter w-100 h-[25vh] p-20 flex flex-col items-start justify-center"
         }
         style={{
           backgroundImage: `url("${image}")`,
