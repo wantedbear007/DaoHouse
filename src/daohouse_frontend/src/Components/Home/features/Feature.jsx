@@ -24,13 +24,15 @@ const Feature = () => {
   ];
   return (
     <div className="bg-[#dadee4] py-16">
-
-      <div className='flex justify-center items-center flex-col'>
-        <h2 className="text-[16px] font-medium mb-2 ">Our Features</h2>
-
-        <h3 className="text-3xl font-semibold mb-8 text-center">Engaging Management Suite</h3>
+      <div className="flex justify-center items-center py-5 pb-8">
+        <div className="flex flex-col">
+          <h2 className="text-about-heading font-mulish text-[#0E3746] font-normal text-[16ox] md:text-[16ox] lg:text-[16ox] leading-tight">Our Features</h2>
+          <p className="text-about-subheading font-mulish text-[#0E3746] font-[500] text-[40px] md:text-[40px]  leading-tight  mb-3">Engaging Management Suite</p>
+        </div>
       </div>
-      <div className="flex justify-center">
+
+
+      <div className="flex flex-col md:flex-row justify-center gap-4">
         {cardData.map((data, index) => (
           <Card
             key={index}

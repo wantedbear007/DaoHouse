@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import i18n from '../../i18n';
-import { Link } from 'react-router-dom'; 
+import { Link, useLocation } from 'react-router-dom'; 
 
 
 const Navbar = () => {
@@ -11,6 +11,7 @@ const Navbar = () => {
         i18n.changeLanguage(event.target.value);
         window.location.reload();
     }
+    const location = useLocation();
 
     const menuItems = [
         { label: 'Home', route: '/' }, 
@@ -24,7 +25,7 @@ const Navbar = () => {
                 <div className="flex items-center space-x-8">
                     {menuItems.map((item, index) => (
                         <div key={index} className="text-lg font-normal font-inter leading-[19.36px]  text-[#829095]">
-                            <Link to={item.route} className="hover:text-[#05212C] hover:font-medium cursor-pointer hover:border-b-2 text-[16px] text-[#829095] border-transparent border-b-0.5 border-[#05212C]">{item.label}</Link>
+                            <Link to={item.route} className={`hover:text-[#05212C] hover:font-medium cursor-pointer text-[16px] text-[#829095] ${location.pathname === item.route ? 'font-semibold border-b-2 border-[#05212C] text-[#05212C]' : 'border-transparent border-b-0.5'}`}>{item.label}</Link>
                         </div>
                     ))}
                 </div>
