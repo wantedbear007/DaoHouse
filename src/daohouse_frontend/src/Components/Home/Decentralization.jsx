@@ -9,9 +9,9 @@ const Decentralization = () => {
     <div className={className + " w-full bg-image-background pb-28"}>
       <div className="w-full flex flex-col items-center justify-center">
         <div className={className + "__movingTexts w-full py-6 flex flex-row overflow-auto"}>
-          <h1 className="text-white text-9xl font-semibold">DECENTRALIZATION. </h1>
-          <h1 className="text-white text-9xl font-semibold">DECENTRALIZATION. </h1>
-          <h1 className="text-white text-9xl font-semibold">DECENTRALIZATION. </h1>
+          <h1 className="text-white text-9xl font-semibold">DECENTRALIZATION.</h1>
+          <h1 className="text-white text-9xl font-semibold">DECENTRALIZATION.</h1>
+          <h1 className="text-white text-9xl font-semibold">DECENTRALIZATION.</h1>
         </div>
 
         <div className="w-full px-20 flex flex-col md:flex-row justify-between items-center">
