@@ -2,9 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .gradient-background {
-  background: linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%)
+  background: linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
 }
 
 @keyframes spin-slow {
@@ -42,9 +41,8 @@
   animation: gradientMovement 10s linear infinite; 
 }
 
-
 .bg-image-background {
-  background-image: url("../assets/bg\ gradient.png");
+  background: linear-gradient(to right, #102228, #01090c);
   background-size: cover;
   background-repeat: no-repeat;
 }
