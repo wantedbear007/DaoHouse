@@ -1,5 +1,5 @@
 [workspace]
 members = [
-    "src/daouhouse_backend"
+    "src/daohouse_backend"
 ]
 resolver = "2"
