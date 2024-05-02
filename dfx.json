@@ -5,6 +5,11 @@
       "package": "daohouse_backend",
       "type": "rust"
     },
+    "dao_canister": {
+      "candid": "src/dao_canister/dao_canister.did",
+      "package": "dao_canister",
+      "type": "rust"
+    },
     "daohouse_frontend": {
       "dependencies": [
         "daohouse_backend"

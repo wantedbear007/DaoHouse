@@ -1,5 +1,5 @@
 [workspace]
 members = [
-    "src/daohouse_backend"
+    "src/daohouse_backend","src/dao_canister"
 ]
 resolver = "2"
