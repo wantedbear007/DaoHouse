@@ -482,6 +482,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "dao_canister"
+version = "0.1.0"
+dependencies = [
+ "candid",
+ "ic-cdk",
+ "serde",
+]
+
+[[package]]
 name = "daohouse_backend"
 version = "0.1.0"
 dependencies = [
