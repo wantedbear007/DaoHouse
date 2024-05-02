@@ -1,0 +1,31 @@
+.Decentralization__movingTexts::-webkit-scrollbar {
+  display: none;
+}
+
+.Decentralization__movingTexts {
+  h1 {
+    font-family: "Mulish", sans-serif;
+    animation: moving 10s linear 0s infinite forwards;
+  
+    /* Create the gradient. */
+    background-image: linear-gradient(to bottom, #2c5364, #102228);
+    
+    /* Set the background size and repeat properties. */
+    background-size: 100%;
+    background-repeat: repeat;
+  
+    /* Use the text as a mask for the background. */
+    /* This will show the gradient as a text color rather than element bg. */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+  }
+}
+
+@keyframes moving {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
