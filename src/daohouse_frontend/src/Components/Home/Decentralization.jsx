@@ -34,7 +34,7 @@ const Decentralization = () => {
             <img
               src={decentralize}
               alt="Right Image"
-              className="rounded-full"
+              className="w-3/5 rounded-full"
             />
           </div>
         </div>
