@@ -1,10 +1,10 @@
 {
-  "name": "daouhouse_frontend",
+  "name": "daohouse_frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "setup": "npm i && dfx canister create daouhouse_backend && dfx generate daouhouse_backend && dfx deploy",
+    "setup": "npm i && dfx canister create daohouse_backend && dfx generate daohouse_backend && dfx deploy",
     "start": "vite --port 3000",
     "prebuild": "dfx generate",
     "build": "tsc && vite build",
