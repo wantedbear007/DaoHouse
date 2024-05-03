@@ -35,11 +35,11 @@ const FeedPage = () => {
           backgroundPosition: "center",
         }}
       >
-        <h1 className="text-3xl border-b-2 border-white p-3 text-white">
+        <h1 className="text-3xl p-3 text-white">
           Social Feed
         </h1>
 
-        <div className={className + "__buttons flex flex-row"}>
+        <div className={className + "__buttons flex flex-row  border-t-2 border-white"}>
           <button
             className={`px-6 py-2 text-lg text-white ${!active.all ? "" : "shadow-lg font-semibold"
               }`}
