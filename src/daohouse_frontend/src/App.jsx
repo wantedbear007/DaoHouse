@@ -9,6 +9,7 @@ import Footer from "./Components/layouts/Footer";
 import FeedPage from "./pages/FeedPage/FeedPage";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Proposals from "./pages/Proposals/Proposals";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/*" element={<Error404 />} />
         <Route path="/" element={<Dashboard />} />
         <Route path="/social-feed" element={<FeedPage />} />
+        <Route path="/proposals" element={<Proposals />} />
         <Route path="/dao" element={<Dao />} />
       </Routes>
       <Footer />
