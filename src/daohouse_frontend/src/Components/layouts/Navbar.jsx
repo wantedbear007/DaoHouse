@@ -22,12 +22,12 @@ const Navbar = () => {
 
   return (
     <nav>
-      <div className="flex flex-col h-20 justify-center bg-[#DADEE4] border-b shadow-lg shadow-slate-900/20 shadow-b-2 fixed w-screen z-50">
+      <div className="flex flex-col h-20 justify-center bg-[#DADEE4] border-b shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-screen z-50">
         <div className="px-4 flex justify-around items-center w-full">
           <div className="flex items-center space-x-8">
             {menuItems.map((item, index) => (
               <div key={index} className="text-lg font-normal font-inter leading-[19.36px] text-[#829095]">
-                <Link to={item.route} className={`hover:text-[#05212C] hover:font-medium cursor-pointer text-[16px] text-[#829095] ${location.pathname === item.route ? 'font-semibold border-b-2 border-[#05212C] text-[#05212C]' : 'border-transparent border-b-0.5'}`}>{item.label}</Link>
+                <Link to={item.route} className={`hover:text-[#05212C] hover:font-medium cursor-pointer text-[16px] text-[#829095] ${location.pathname === item.route ? 'font-semibold border-b-2 border-[#05212C] text-black' : 'border-transparent border-b-0.5'}`}>{item.label}</Link>
               </div>
             ))}
           </div>

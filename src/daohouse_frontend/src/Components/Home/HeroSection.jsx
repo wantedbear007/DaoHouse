@@ -5,7 +5,7 @@ import circle from "../../../assets/circle.png"
 
 const HeroSection = () => {
     return (
-        <div className="relative flex justify-center items-center h-[90vh]">
+        <div className="relative flex justify-center items-center h-[85vh]">
             {/* Left Side */}
             <div className="w-1/2 px-10 z-10">
                 <div className="text-[#0E3746] font-mulish font-semibold text-7xl leading-tight mb-4">Building Better Future, Together</div>
