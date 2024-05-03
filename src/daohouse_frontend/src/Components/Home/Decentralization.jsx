@@ -8,7 +8,7 @@ const Decentralization = () => {
   return (
     <div className={className + " w-full bg-image-background pb-28"}>
       <div className="w-full flex flex-col items-center justify-center">
-        <div className={className + "__movingTexts w-full py-6 flex flex-row overflow-auto"}>
+        <div className={className + "__movingTexts pointer-events-none select-none w-full py-6 flex flex-row overflow-auto"}>
           <h1 className="text-white text-9xl font-semibold">DECENTRALIZATION.</h1>
           <h1 className="text-white text-9xl font-semibold">DECENTRALIZATION.</h1>
           <h1 className="text-white text-9xl font-semibold">DECENTRALIZATION.</h1>
@@ -34,7 +34,7 @@ const Decentralization = () => {
             <img
               src={decentralize}
               alt="Right Image"
-              className="w-3/5 rounded-full"
+              className="w-3/5 rounded-full pointer-events-none select-none"
             />
           </div>
         </div>
