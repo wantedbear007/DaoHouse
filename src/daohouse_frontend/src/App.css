@@ -46,3 +46,10 @@
   background-size: cover;
   background-repeat: no-repeat;
 }
+
+
+.placeholder-custom::placeholder {
+  font-size: 16px;
+  color: #646464;
+  font-weight: 400;
+}
