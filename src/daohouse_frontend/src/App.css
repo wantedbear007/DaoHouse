@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* body {
+  overflow-x: hidden;
+} */
+
 .gradient-background {
   background: linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
 }
@@ -38,7 +42,7 @@
 }
 
 .animate-gradient {
-  animation: gradientMovement 10s linear infinite; 
+  animation: gradientMovement 10s linear infinite;
 }
 
 .bg-image-background {
