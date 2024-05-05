@@ -4,10 +4,12 @@ import SearchProposals from '../../Components/Proposals/SearchProposals';
 import { BsPlusLg } from 'react-icons/bs';
 import ProposalList from '../../Components/Proposals/ProposalList';
 import { proposalsArray } from '../../Components/Proposals/proposals';
+import { useNavigate } from 'react-router-dom';
 
 const Proposals = () => {
     const [Recent, setRecent] = useState(true);
     const [joinedDAO, setJoinedDAO] = useState(false);
+    const navigate=useNavigate()
     const className = "Proposals";
 
     return (
@@ -62,7 +64,9 @@ const Proposals = () => {
                         Filter
                     </button>
 
-                    <button className="bg-white text-[16px] text-[#05212C] gap-1 px-7 shadow-xl py-4 px-4 rounded-full shadow-md flex items-center space-x-4 rounded-2xl">
+                    <button onClick={()=>{
+                        navigate("/create-proposal")
+                    }} className="bg-white text-[16px] text-[#05212C] gap-1 px-7 shadow-xl py-4 px-4 rounded-full shadow-md flex items-center space-x-4 rounded-2xl">
                         <BsPlusLg className='mx-1' size={19} />
                         Create Proposals
                     </button>
