@@ -1,1 +1,55 @@
-service : { greet : (text) -> (text) query }
+type Dao = record {
+  document_name : text;
+  dao_id : principal;
+  social_link : vec text;
+  dao_name : text;
+  link_of_legal_document : text;
+  dao_address : text;
+  groups_count : nat32;
+  dao_purpose : text;
+  cool_down_period : nat8;
+  required_votes : nat32;
+};
+type DaoInput = record {
+  document_name : text;
+  social_link : vec text;
+  dao_name : text;
+  link_of_document : text;
+  cool_down_period : nat8;
+  purpose : text;
+  required_votes : nat32;
+};
+type ProposalInput = record {
+  proposal_receiver_id : text;
+  created_by : text;
+  proposal_amount : text;
+  proposal_title : text;
+  proposal_description : text;
+};
+type Proposals = record {
+  share_count : nat64;
+  proposal_expired_at : text;
+  proposal_submitted_at : text;
+  proposal_receiver_id : text;
+  proposal_approved_votes : nat64;
+  created_by : principal;
+  proposal_amount : text;
+  proposal_rejected_votes : nat64;
+  proposal_title : text;
+  rejected_votes_list : vec text;
+  proposal_description : text;
+  proposal_id : text;
+  proposal_status : text;
+  approved_votes_list : vec text;
+  comments : nat64;
+  comments_list : vec text;
+  required_votes : nat64;
+};
+service : (DaoInput) -> {
+  create_proposal : (ProposalInput) -> (text);
+  get_all_proposals : () -> (vec record { text; Proposals }) query;
+  get_dao_detail : () -> (vec record { principal; Dao }) query;
+  get_dao_detail_object : () -> (Dao) query;
+  get_proposal_by_id : (text) -> (Proposals) query;
+  greet : (text) -> (text) query;
+}
