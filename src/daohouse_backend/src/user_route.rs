@@ -70,6 +70,18 @@ pub async fn create_dao( dao_detail: DaoInput) -> Result<String,String> {
         profile_img: user_profile_detail.profile_img,
         username: user_profile_detail.username,
         dao_ids: user_profile_detail.dao_ids,
+        post_count: user_profile_detail.post_count,
+        post_id: user_profile_detail.post_id,
+        followers_count: user_profile_detail.followers_count,
+        followers_list:user_profile_detail.followers_list,
+        followings_count: user_profile_detail.followings_count,
+        followings_list: user_profile_detail.followings_list,
+        description: user_profile_detail.description,
+        tag_defines: user_profile_detail.tag_defines,
+        contact_number: user_profile_detail.contact_number,
+        twitter_id: user_profile_detail.twitter_id,
+        telegram: user_profile_detail.telegram,
+        website: user_profile_detail.website,
     };
     with_state(|state| {state.user_profile.insert(principal_id, new_profile)}).await;
     let arg1 = InstallCodeArgument {

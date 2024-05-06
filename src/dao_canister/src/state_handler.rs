@@ -33,7 +33,9 @@ impl State {
                 social_link: vec![String::from("Example Funds")],
                 groups_count: 0,
                 required_votes:0, 
-            }    
+            }
+            
+                
         }
     }
 }

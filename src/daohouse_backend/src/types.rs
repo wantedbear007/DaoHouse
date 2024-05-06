@@ -465,6 +465,18 @@ pub struct UserProfile{
     pub profile_img: Vec<i8>,
     pub username: String,
     pub dao_ids: Vec<String>,
+    pub post_count:u32,
+    pub post_id:Vec<String>,
+    pub followers_count:u32,
+    pub followers_list:Vec<String>,
+    pub followings_count:u32,
+    pub followings_list:Vec<String>,
+    pub description:String,
+    pub tag_defines:Vec<String>,
+    pub contact_number:String,
+    pub twitter_id:String,
+    pub telegram:String,
+    pub website:String,
 }
 
 
@@ -473,6 +485,12 @@ pub struct Profileinput{
     pub email_id: String,
     pub profile_img: Vec<i8>,
     pub username: String,
+    pub description:String,
+    pub contact_number:String,
+    pub twitter_id:String,
+    pub telegram:String,
+    pub website:String,
+
 } 
 
 #[derive(Clone,CandidType,Serialize,Deserialize)]
@@ -482,6 +500,7 @@ pub struct DaoInput{
     pub link_of_document:String,
     pub cool_down_period:String,
     pub members:Vec<String>,
+    
 }
 
 
