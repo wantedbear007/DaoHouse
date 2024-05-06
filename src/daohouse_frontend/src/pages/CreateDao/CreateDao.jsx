@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import TopComponent from "../../Components/Dao/TopComponent";
 import Step1 from "../../Components/Dao/Step1";
 import Step2 from "../../Components/Dao/Step2";
+import Step3 from "../../Components/Dao/Step3";
 
 const CreateDao = () => {
   const className = "CreateDAO";
@@ -15,12 +16,13 @@ const CreateDao = () => {
       case 0:
         return <Step1 tokenStatus={tokenStatus} setActiveStep={setActiveStep} setTokenStatus={setTokenStatus} />;
       case 1:
-        return <Step2 tokenStatus={tokenStatus} setActiveStep={setActiveStep} setTokenStatus={setTokenStatus} />;
+        return <Step2 setActiveStep={setActiveStep} />;
+      case 2:
+        return <Step3 setActiveStep={setActiveStep} />;
       default:
         return null;
     }
   }
-
 
   return (
     <Fragment>

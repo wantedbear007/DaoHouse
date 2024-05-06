@@ -9,7 +9,7 @@ const Step1 = ({ tokenStatus, setTokenStatus, setActiveStep }) => {
       <form
         className={
           className +
-          "__form bg-[#e6e0cf] p-10 mx-4 rounded-lg flex flex-col gap-4"
+          "__form bg-[#F4F2EC] p-10 mx-4 rounded-lg flex flex-col gap-4"
         }
       >
         {/** DAO Identifier */}
