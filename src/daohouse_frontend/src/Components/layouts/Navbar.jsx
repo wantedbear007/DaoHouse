@@ -22,7 +22,7 @@ const Navbar = () => {
 
   return (
     <nav>
-      <div className="flex flex-col h-20 justify-center bg-[#DADEE4] border-b shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-screen z-50">
+      <div className="flex flex-col h-20 justify-center bg-[#DADEE4] border-b shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50">
         <div className="px-4 flex justify-around items-center w-full">
           <div className="flex items-center space-x-8">
             {menuItems.map((item, index) => (

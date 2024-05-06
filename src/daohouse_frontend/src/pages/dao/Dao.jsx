@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { HiPlus } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
-import daobg from "../../../assets/daobg.png";
 import DaoCard from "../../Components/Dao/DaoCard";
 import NoDataComponent from "../../Components/Dao/NoDataComponent";
+import TopComponent from "../../Components/Dao/TopComponent";
 
 const Dao = () => {
   const [showAll, setShowAll] = useState(true);
@@ -30,43 +31,7 @@ const Dao = () => {
 
   return (
     <div className="bg-zinc-200">
-      <div
-        className={
-          className +
-          "__filter w-100 h-[25vh] p-20 flex flex-col items-start justify-center"
-        }
-        style={{
-          backgroundImage: `url("${daobg}")`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <h1 className="text-3xl p-3 text-white">DAOs</h1>
-
-        <div
-          className={
-            className + "__buttons flex flex-row border-t-2 border-white"
-          }
-        >
-          <button
-            className={`px-6 py-2 text-lg text-white ${
-              !showAll ? "" : "shadow-lg font-semibold"
-            }`}
-            onClick={() => setShowAll(true)}
-          >
-            All
-          </button>
-          <button
-            className={`px-6 py-2 text-lg text-white ${
-              showAll ? "" : "shadow-lg font-semibold"
-            }`}
-            onClick={() => setShowAll(false)}
-          >
-            Joined
-          </button>
-        </div>
-      </div>
+      <TopComponent showAll={showAll} setShowAll={setShowAll} showButtons={true} />
 
       <div
         className={
@@ -82,10 +47,12 @@ const Dao = () => {
           </div>
         </p>
 
-        <button className="bg-white gap-2 px-4 shadow-xl py-2 px-4 rounded-full shadow-md flex items-center space-x-4 rounded-2xl">
-          <HiPlus />
-          Create DAO
-        </button>
+        <Link to="/create-dao">
+          <button className="bg-white gap-2 px-4 shadow-xl py-2 px-4 rounded-full shadow-md flex items-center space-x-4 rounded-2xl hover:bg-[#ececec] hover:scale-105 transition">
+            <HiPlus />
+            Create DAO
+          </button>
+        </Link>
       </div>
 
       {showAll ? (
