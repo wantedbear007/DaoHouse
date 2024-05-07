@@ -3,13 +3,12 @@ import TopComponent from "../../Components/Dao/TopComponent";
 import Step1 from "../../Components/Dao/Step1";
 import Step2 from "../../Components/Dao/Step2";
 import Step3 from "../../Components/Dao/Step3";
+import Step4 from "../../Components/Dao/Step4";
 
 const CreateDao = () => {
   const className = "CreateDAO";
   const [activeStep, setActiveStep] = React.useState(0);
   const [tokenStatus, setTokenStatus] = React.useState(true);
-
-  console.log(activeStep);
 
   const Form = () => {
     switch (activeStep) {
@@ -19,6 +18,8 @@ const CreateDao = () => {
         return <Step2 setActiveStep={setActiveStep} />;
       case 2:
         return <Step3 setActiveStep={setActiveStep} />;
+      case 3:
+        return <Step4 setActiveStep={setActiveStep} />;
       default:
         return null;
     }
@@ -31,13 +32,13 @@ const CreateDao = () => {
       {/** Heading */}
       <div className={className + " bg-[#c8ced3] py-8 px-10"}>
         <div className={className + "__label py-2 px-4 w-full"}>
-          <p className="text-4xl flex flex-row items-center gap-4">
+          <div className="text-4xl flex flex-row items-center gap-4">
             Create DAO
             <div className="flex flex-col items-start">
               <div className="w-32 border-t-2 border-black"></div>
               <div className="w-14 mt-2 border-t-2 border-black"></div>
             </div>
-          </p>
+          </div>
         </div>
 
         {/** Steps */}
