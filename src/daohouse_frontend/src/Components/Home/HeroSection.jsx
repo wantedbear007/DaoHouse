@@ -5,10 +5,10 @@ import circle from "../../../assets/circle.png";
 
 const HeroSection = () => {
   return (
-    <div className="relative flex justify-center items-center h-[85vh]">
+    <div className="relative flex flex-col md:flex-row justify-center items-center h-[85vh]">
       {/* Left Side */}
-      <div className="w-1/2 px-10 z-10">
-        <div className="text-[#0E3746] font-mulish font-semibold text-7xl leading-tight mb-4">
+      <div className="md:w-1/2 px-10 z-10 md:text-left text-center">
+        <div className="text-[#0E3746] font-mulish font-semibold text-[48px] md:text-7xl leading-tight mb-4">
           Building Better Future, Together
         </div>
         <div className="text-black font-inter text-sm mb-8">
@@ -36,12 +36,12 @@ const HeroSection = () => {
       />
 
       {/* Right Side */}
-      <div className="w-1/2 flex items-center justify-center">
-        <div className="relative">
+      <div className="md:w-1/2 flex items-center justify-center md:mt-0 mt-8">
+        <div className="relative ">
           <img
             src={circle}
             alt="Placeholder"
-            className="w-[85%] pointer-events-none select-none lg:w-[90%] xl:w-[92%] 2xl:w-full h-full object-cover animate-spin-slow"
+            className=" w-[276px] h-[276px] md:mt-0 mt-8  md:w-[85%] pointer-events-none select-none lg:w-[90%] xl:w-[92%] 2xl:w-full h-full object-cover animate-spin-slow"
           />
         </div>
       </div>

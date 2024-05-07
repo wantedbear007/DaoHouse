@@ -27,7 +27,7 @@ const Footer = () => {
 
             </footer>
             <div className='bg-[#0E3746] py-4 flex justify-center items-center'>
-                <p className="text-white font-inter font-normal text-base ">All rights reserved. © {new Date().getFullYear()} Your Company/Organization Name</p>
+                <p className="text-white font-inter font-normal  text-[10px] md:text-base ">All rights reserved. © {new Date().getFullYear()} Your Company/Organization Name</p>
 
             </div></>
     );
