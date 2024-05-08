@@ -12,6 +12,7 @@ import CreateDao from "./pages/CreateDao/CreateDao";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Proposals from "./pages/Proposals/Proposals";
 import CreateProposal from "./pages/Proposals/CreateProposal";
+import MyProfile from "./pages/MyProfile/MyProfile";
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/create-proposal" element={<CreateProposal />} />
         <Route path="/dao" element={<Dao />} />
         <Route path="/create-dao" element={<CreateDao />} />
+        <Route path="/my-profile" element={<MyProfile />} />
       </Routes>
       <Footer />
     </Router>

@@ -11,15 +11,15 @@ const About = () => {
       <img
         src={smallelipsegif}
         alt="Small Ellipse"
-        className="absolute pointer-events-none select-none xl:left-[31.6%] 2xl:left-[34.8%] lg:left-[29%] top-1 mt-6 z-10  animate-spin-slow"
+        className="absolute pointer-events-none select-none xl:left-[31.6%] 2xl:left-[34.8%] lg:left-[29%] left-0 top-1 mt-6 z-10  animate-spin-slow"
       />
       <img
         src={smallelipse}
         alt="Small Ellipse"
-        className="absolute pointer-events-none select-none xl:left-[32%] 2xl:left-[35%] lg:left-[29%] top-0 mt-8"
+        className="absolute pointer-events-none select-none xl:left-[32%] 2xl:left-[35%] lg:left-[29%] left-0 top-0 mt-8"
       />
 
-      <div className="w-[100vw]">
+      <div className="w-[100vw] hidden md:block">
         <div className="my-8">
           <img
             src={about}
@@ -29,16 +29,17 @@ const About = () => {
         </div>
       </div>
 
-      <div className="w-60% p-8 text-white">
-        <div className="px-8">
-          <h2 className="text-about-heading font-mulish font-normal text-[16ox] md:text-[16ox] lg:text-[16ox] leading-tight mt-4 mb-1">
+      <div className="md:w-60% w-full md:p-8 text-white">
+        <div className="md:px-8 md:ml-0 ml-4 relative z-50 md:z-0">
+
+          <h2 className="text-about-heading font-mulish font-normal text-[16ox] md:text-[16ox] lg:text-[16ox] leading-tight   mt-4 mb-1">
             About Platform
           </h2>
-          <p className="text-about-subheading font-mulish font-medium text-xl md:text-[40px]  leading-tight mt-1 mb-3">
+          <p className="text-about-subheading font-mulish font-medium  text-[32px] md:text-[40px]  leading-tight mt-1 mb-3">
             Unlocking Collective Intelligence
           </p>
         </div>
-        <p className="text-about-content mx-w-[550px] flex flex-col font-mulish font-normal text-sm md:text-base lg:text-lg p-8 my-4 mr-6">
+        <p className="text-about-content md:mx-w-[550px] flex flex-col font-mulish font-normal text-sm md:text-base lg:text-lg md:p-8 md:mx-0 mx-4 md:my-4 md:mr-6">
           <span className="pr-4">
             {" "}
             At our platform. decentralized autonomous organization meets
@@ -54,7 +55,7 @@ const About = () => {
             and drive impactful change.
           </span>
         </p>
-        <div className="px-8">
+        <div className="px-8 md:my-0 my-8 md:text-left text-center z-50 relative">
           <button className="px-8 py-3 bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
             Join DAO
           </button>
