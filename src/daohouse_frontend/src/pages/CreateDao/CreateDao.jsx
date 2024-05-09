@@ -64,7 +64,7 @@ const CreateDao = () => {
             <div
               key={index}
               className={
-                "flex flex-row items-center gap-2 " +
+                "flex flex-row py-4 items-center gap-2 " +
                 `${activeStep >= index ? "opacity-100" : "opacity-50"}`
               }
             >
