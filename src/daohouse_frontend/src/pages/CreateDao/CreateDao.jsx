@@ -1,12 +1,13 @@
 import React, { Fragment } from "react";
+import './CreateDao.scss'
 import { FaCircleCheck } from "react-icons/fa6";
-import TopComponent from "../../Components/Dao/TopComponent";
 import Step1 from "../../Components/Dao/Step1";
 import Step2 from "../../Components/Dao/Step2";
 import Step3 from "../../Components/Dao/Step3";
 import Step4 from "../../Components/Dao/Step4";
 import Step5 from "../../Components/Dao/Step5";
 import Step6 from "../../Components/Dao/Step6";
+import TopComponent from "../../Components/Dao/TopComponent";
 
 const CreateDao = () => {
   const className = "CreateDAO";
@@ -57,7 +58,7 @@ const CreateDao = () => {
         {/** Steps */}
         <div
           className={
-            className + "__steps py-4 flex flex-row w-full justify-between"
+            className + "__steps overflow-x-scroll py-4 gap-20 flex flex-row w-full justify-between"
           }
         >
           {steps.map(({ step, name }, index) => (
@@ -72,10 +73,9 @@ const CreateDao = () => {
                 <div
                   className={
                     "border border-[#007a7b] " +
-                    `${
-                      activeStep === index
-                        ? "bg-[#007a7b] text-white font-semibold"
-                        : "bg-white text-black"
+                    `${activeStep === index
+                      ? "bg-[#007a7b] text-white font-semibold"
+                      : "bg-white text-black"
                     }` +
                     " rounded-[2rem] min-w-7 h-7"
                   }
@@ -85,7 +85,7 @@ const CreateDao = () => {
               ) : (
                 <FaCircleCheck className="text-2xl text-[#0E3746]" />
               )}
-              <span>{name}</span>
+              <span className="text-nowrap">{name}</span>
             </div>
           ))}
         </div>
