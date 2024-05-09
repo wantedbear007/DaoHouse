@@ -4,6 +4,7 @@ import Step1 from "../../Components/Dao/Step1";
 import Step2 from "../../Components/Dao/Step2";
 import Step3 from "../../Components/Dao/Step3";
 import Step4 from "../../Components/Dao/Step4";
+import Step5 from "../../Components/Dao/Step5";
 
 const CreateDao = () => {
   const className = "CreateDAO";
@@ -20,6 +21,8 @@ const CreateDao = () => {
         return <Step3 setActiveStep={setActiveStep} />;
       case 3:
         return <Step4 setActiveStep={setActiveStep} />;
+      case 4:
+        return <Step5 setActiveStep={setActiveStep} />;
       default:
         return null;
     }
