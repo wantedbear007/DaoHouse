@@ -16,7 +16,13 @@ const CreateDao = () => {
   const Form = () => {
     switch (activeStep) {
       case 0:
-        return <Step1 tokenStatus={tokenStatus} setActiveStep={setActiveStep} setTokenStatus={setTokenStatus} />;
+        return (
+          <Step1
+            tokenStatus={tokenStatus}
+            setActiveStep={setActiveStep}
+            setTokenStatus={setTokenStatus}
+          />
+        );
       case 1:
         return <Step2 setActiveStep={setActiveStep} />;
       case 2:
@@ -30,7 +36,7 @@ const CreateDao = () => {
       default:
         return null;
     }
-  }
+  };
 
   return (
     <Fragment>
@@ -51,31 +57,34 @@ const CreateDao = () => {
         {/** Steps */}
         <div
           className={
-            className +
-            "__steps py-4 flex flex-row w-full justify-between"
+            className + "__steps py-4 flex flex-row w-full justify-between"
           }
         >
           {steps.map(({ step, name }, index) => (
             <div
               key={index}
               className={
-                "flex flex-row items-center gap-2 p-4 " +
+                "flex flex-row items-center gap-2 " +
                 `${activeStep >= index ? "opacity-100" : "opacity-50"}`
               }
             >
-              {index >= activeStep ? <div
-                className={
-                  "border border-[#0E3746] " +
-                  `${activeStep === index
-                    ? "bg-[#0E3746] text-white font-semibold"
-                    : "bg-white text-black"
-                  }` +
-                  " rounded-[2rem] min-w-7 h-7"
-                }
-              >
-                <p className="w-full text-center">{step}</p>
-              </div> :
-                <FaCircleCheck className="text-2xl"/>}
+              {index >= activeStep ? (
+                <div
+                  className={
+                    "border border-[#007a7b] " +
+                    `${
+                      activeStep === index
+                        ? "bg-[#007a7b] text-white font-semibold"
+                        : "bg-white text-black"
+                    }` +
+                    " rounded-[2rem] min-w-7 h-7"
+                  }
+                >
+                  <p className="w-full text-center">{step}</p>
+                </div>
+              ) : (
+                <FaCircleCheck className="text-2xl text-[#0E3746]" />
+              )}
               <span>{name}</span>
             </div>
           ))}
