@@ -11,7 +11,7 @@ const Step4 = ({ setActiveStep }) => {
       <div
         className={
           className +
-          "__form w-full bg-[#F4F2EC] p-10 mx-4 rounded-lg flex flex-col gap-4"
+          "__form w-full bg-[#F4F2EC] p-10 rounded-lg flex flex-col gap-4"
         }
       >
         <ul className={className + "__steps flex flex-row gap-8 px-4"}>
