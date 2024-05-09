@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { FaCircleCheck } from "react-icons/fa6";
 import TopComponent from "../../Components/Dao/TopComponent";
 import Step1 from "../../Components/Dao/Step1";
 import Step2 from "../../Components/Dao/Step2";
@@ -58,11 +59,11 @@ const CreateDao = () => {
             <div
               key={index}
               className={
-                "flex flex-row gap-2 p-4 " +
-                `${activeStep === index ? "opacity-100" : "opacity-50"}`
+                "flex flex-row items-center gap-2 p-4 " +
+                `${activeStep >= index ? "opacity-100" : "opacity-50"}`
               }
             >
-              <div
+              {index >= activeStep ? <div
                 className={
                   "border border-[#0E3746] " +
                   `${activeStep === index
@@ -73,7 +74,8 @@ const CreateDao = () => {
                 }
               >
                 <p className="w-full text-center">{step}</p>
-              </div>
+              </div> :
+                <FaCircleCheck className="text-2xl"/>}
               <span>{name}</span>
             </div>
           ))}
