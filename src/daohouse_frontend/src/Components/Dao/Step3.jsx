@@ -5,12 +5,14 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
 const Step3 = ({ setActiveStep }) => {
-  const GandM = [{ name: "All", index: 0 }];
-  const [list, setList] = useState(GandM);
   const [count, setCount] = useState(1);
-  const [showInput, setShowInput] = useState(false);
-  const [memberName, setMemberName] = useState(false);
+  const [showMemberNameInput, setShowMemberNameInput] = useState(false);
+  const [showCouncilNameInput, setShowCouncilNameInput] = useState(false);
   const [addMemberIndex, setAddMemberIndex] = useState(null);
+  const [councilMembs, setCouncilMembs] = useState([
+    "nzbdchsvvksckshcbkjscb kc",
+  ]);
+  const [list, setList] = useState([{ name: "All", index: 0, users: [] }]);
   const className = "DAO__Step3";
 
   const handleGroupAdding = () => {
@@ -31,13 +33,32 @@ const Step3 = ({ setActiveStep }) => {
 
   const handleMemberAdding = (index) => {
     setAddMemberIndex(index);
-    setShowInput(true);
+    setShowMemberNameInput(true);
   };
 
-  const handleNameEnter = (name) => {
-    setMemberName(name);
+  const handleNameEnter = (name, event) => {
     if (event.key === "Enter") {
-      setShowInput(false);
+      const updatedList = list.map((item) => {
+        if (item.index === addMemberIndex) {
+          return { ...item, users: [...item.users, name] };
+        }
+        return item;
+      });
+      setList(updatedList);
+      setShowMemberNameInput(false);
+    }
+  };
+
+  const handleCouncilMemAdding = () => {
+    setShowCouncilNameInput(true);
+  };
+
+  const handleCouncilMemberName = (name, event) => {
+    if (event.key === "Enter") {
+      const updatedList = [...councilMembs, name];
+
+      setCouncilMembs(updatedList);
+      setShowCouncilNameInput(false);
     }
   };
 
@@ -70,13 +91,28 @@ const Step3 = ({ setActiveStep }) => {
         <div className="bg-[#E9EAEA] rounded-lg">
           <section className="w-full py-2 px-8 flex flex-row items-center justify-between border-b-2 border-[#b4b4b4]">
             <h2 className="font-semibold">Council</h2>
-            <button className="flex flex-row items-center gap-1 text-[#229ED9] bg-white p-2 rounded-md">
+            <button
+              onClick={handleCouncilMemAdding}
+              className="flex flex-row items-center gap-1 text-[#229ED9] bg-white p-2 rounded-md"
+            >
               <FaSquarePlus className="text-[#229ED9] text-2xl" /> Add Members
             </button>
           </section>
 
           <section className="py-4 px-8">
-            <p>nzbdchsvvksckshcbkjscb kc</p>
+            {showCouncilNameInput ? (
+              <input
+                type="text"
+                name="memberName"
+                className="p-2 rounded-md"
+                placeholder="Enter UserName"
+                onKeyDown={(e) => handleCouncilMemberName(e.target.value, e)}
+              />
+            ) : (
+              councilMembs.map((name, userIndex) => (
+                <p key={userIndex}>{name}</p>
+              ))
+            )}
           </section>
         </div>
 
@@ -120,16 +156,18 @@ const Step3 = ({ setActiveStep }) => {
 
               {addMemberIndex === item.index && (
                 <section className="py-4 px-8">
-                  {showInput ? (
+                  {showMemberNameInput ? (
                     <input
                       type="text"
                       name="memberName"
                       className="p-2 rounded-md"
                       placeholder="Enter UserName"
-                      onKeyDown={(e) => handleNameEnter(e.target.value)}
+                      onKeyDown={(e) => handleNameEnter(e.target.value, e)}
                     />
                   ) : (
-                    <p>{memberName}</p>
+                    item.users.map((userName, userIndex) => (
+                      <p key={userIndex}>{userName}</p>
+                    ))
                   )}
                 </section>
               )}
