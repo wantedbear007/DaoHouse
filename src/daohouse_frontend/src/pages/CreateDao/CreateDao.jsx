@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import './CreateDao.scss'
+import "./CreateDao.scss";
 import { FaCircleCheck } from "react-icons/fa6";
 import Step1 from "../../Components/Dao/Step1";
 import Step2 from "../../Components/Dao/Step2";
@@ -58,7 +58,8 @@ const CreateDao = () => {
         {/** Steps */}
         <div
           className={
-            className + "__steps overflow-x-scroll py-4 gap-20 flex flex-row w-full justify-between"
+            className +
+            "__steps overflow-x-scroll py-4 gap-20 flex flex-row w-full justify-between"
           }
         >
           {steps.map(({ step, name }, index) => (
@@ -73,9 +74,10 @@ const CreateDao = () => {
                 <div
                   className={
                     "border border-[#007a7b] " +
-                    `${activeStep === index
-                      ? "bg-[#007a7b] text-white font-semibold"
-                      : "bg-white text-black"
+                    `${
+                      activeStep === index
+                        ? "bg-[#007a7b] text-white font-semibold"
+                        : "bg-white text-black"
                     }` +
                     " rounded-[2rem] min-w-7 h-7"
                   }
