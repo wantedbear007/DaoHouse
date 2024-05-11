@@ -209,8 +209,8 @@ const Step3 = ({ setActiveStep }) => {
                     <p className="text-slate-500">No members added</p>
                   ) : (
                     item.users.map((userName, userIndex) => (
-                      <div className="oneUser flex flex-row gap-8 w-full">
-                        <p key={userIndex} className="text-slate-500 text-base">
+                      <div className="oneUser flex flex-row gap-8 w-full items-center">
+                        <p key={userIndex} className="text-slate-500 text-base w-[25%] whitespace-nowrap text-ellipsis overflow-hidden">
                           {userName}
                         </p>
 
