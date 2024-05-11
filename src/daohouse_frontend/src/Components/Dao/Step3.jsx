@@ -36,9 +36,12 @@ const Step3 = ({ setActiveStep }) => {
     console.log(updatedGroups);
   };
 
-  const handleMemberAdding = (index) => {
-    setAddMemberIndex(index);
+  const handleMemberAdding = () => {
     setShowMemberNameInput(true);
+  };
+
+  const openMemberNames = (index) => {
+    setAddMemberIndex(index);
   };
 
   const handleNameEnter = (name, event) => {
@@ -151,8 +154,9 @@ const Step3 = ({ setActiveStep }) => {
               className={`flex flex-col my-2 ${
                 addMemberIndex === item.index
                   ? "bg-[#E9EAEA] rounded-lg"
-                  : "bg-white rounded-lg"
+                  : "bg-white rounded-lg cursor-pointer"
               }`}
+              onClick={() => openMemberNames(item.index)}
             >
               <section
                 key={index}
