@@ -18,7 +18,10 @@ const Step3 = ({ setActiveStep }) => {
   const className = "DAO__Step3";
 
   const handleGroupAdding = () => {
-    const updateGroups = [...list, { name: `Group ${count}`, index: count }];
+    const updateGroups = [
+      ...list,
+      { name: `Group ${count}`, index: count, users: [] },
+    ];
     setCount(count + 1);
     setList(updateGroups);
     console.log(list);
