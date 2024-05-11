@@ -8,10 +8,11 @@ const Step3 = ({ setActiveStep }) => {
   const [count, setCount] = useState(1);
   const [showMemberNameInput, setShowMemberNameInput] = useState(false);
   const [showCouncilNameInput, setShowCouncilNameInput] = useState(false);
+  const [groupNameInputIndex, setGropuNameInputIndex] = useState(null);
   const [addMemberIndex, setAddMemberIndex] = useState(null);
 
   const [list, setList] = useState([
-    { name: "Council", users: ["nzbdchsvvksckshcbkjscb kc"] },
+    { name: "Council", members: ["nzbdchsvvksckshcbkjscb kc"] },
     { name: "All", index: 0 },
   ]);
 
@@ -20,7 +21,7 @@ const Step3 = ({ setActiveStep }) => {
   const handleGroupAdding = () => {
     const updateGroups = [
       ...list,
-      { name: `Group ${count}`, index: count, users: [] },
+      { name: `Group ${count}`, index: count, members: [] },
     ];
     setCount(count + 1);
     setList(updateGroups);
@@ -47,7 +48,7 @@ const Step3 = ({ setActiveStep }) => {
     if ((event.key === "Enter") & (name !== "")) {
       const updatedList = list.map((item) => {
         if (item.index === addMemberIndex) {
-          return { ...item, users: [...item.users, name] };
+          return { ...item, members: [...item.members, name] };
         }
         return item;
       });
@@ -69,31 +70,52 @@ const Step3 = ({ setActiveStep }) => {
 
       if (councilIndex !== -1) {
         // If "Council" object exists in the list
-        updatedList[councilIndex].users = [
-          ...updatedList[councilIndex].users,
+        updatedList[councilIndex].members = [
+          ...updatedList[councilIndex].members,
           name,
-        ]; // Add username to the "Council" object
-        setList(updatedList); // Update the state with the modified list
-        setShowCouncilNameInput(false); // Hide the input field
+        ];
+        setList(updatedList);
+        setShowCouncilNameInput(false);
       } else {
-        // If "Council" object doesn't exist in the list
         Alert.alert("Error", "Council group not found in the list");
       }
     }
   };
 
-  const handleRemoveMember = (objIndex, userName) => {
+  const handleRemoveMember = (objIndex, memberName) => {
     const updatedList = list.map((item) => {
-      if (item.index == objIndex && item.users.includes(userName)) {
+      if (item.index == objIndex && item.members.includes(memberName)) {
         return {
           ...item,
-          users: item.users.filter((user) => user !== userName),
+          members: item.members.filter((user) => user !== memberName),
         };
       }
       return item;
     });
 
     setList(updatedList);
+  };
+
+  const handleShowGroupNameInput = (index) => {
+    setGropuNameInputIndex(index);
+  };
+
+  const handleGroupNameInput = (groupName, event) => {
+    if (event.key === "Enter") {
+      const updatedList = list.map((item) => {
+        if (item.index === groupNameInputIndex) {
+          return {
+            ...item,
+            name: groupName,
+          };
+        }
+        // Return the item
+        return item;
+      });
+
+      setList(updatedList);
+      setGropuNameInputIndex(null);
+    }
   };
 
   return (
@@ -104,6 +126,7 @@ const Step3 = ({ setActiveStep }) => {
           "__form bg-[#F4F2EC] p-10 mx-4 rounded-lg flex flex-col gap-4"
         }
       >
+        {/**Texts */}
         <div className="flex flex-row items-start justify-between">
           <section className="w-11/12">
             <h2 className="font-semibold">Add Groups & Members</h2>
@@ -114,6 +137,7 @@ const Step3 = ({ setActiveStep }) => {
             </p>
           </section>
 
+          {/**Button to add Groups */}
           <button
             onClick={handleGroupAdding}
             className="bg-white w-10 h-10 text-lg flex items-center justify-center rounded-[50%]"
@@ -122,11 +146,14 @@ const Step3 = ({ setActiveStep }) => {
           </button>
         </div>
 
+        {/**Council */}
         <div className="bg-[#E9EAEA] rounded-lg">
           {
             <React.Fragment>
               <section className="w-full py-2 px-8 flex flex-row items-center justify-between border-b-2 border-[#b4b4b4]">
                 <h2 className="font-semibold">Council</h2>
+
+                {/**Council Add Member button */}
                 <button
                   onClick={handleCouncilMemAdding}
                   className="flex flex-row items-center gap-1 text-[#229ED9] bg-white p-2 rounded-md"
@@ -135,21 +162,25 @@ const Step3 = ({ setActiveStep }) => {
                 </button>
               </section>
 
-              <section className="py-4 px-8">
+              {/**Show Council members or take input */}
+              <section className="py-4 px-8 transition">
                 {showCouncilNameInput ? (
                   <input
                     type="text"
                     name="memberName"
-                    className="p-2 rounded-md"
-                    placeholder="Enter UserName"
+                    className="p-2 rounded-md border border-slate-500"
+                    placeholder="Enter Member Name"
                     onKeyDown={(e) =>
                       handleCouncilMemberName(e.target.value, e)
                     }
+                    onBlur={(e) => {
+                      if (!e.target.value) setShowCouncilNameInput(false);
+                    }}
                   />
                 ) : (
                   list
                     .find((item) => item.name === "Council")
-                    .users.map((name, userIndex) => (
+                    .members.map((name, userIndex) => (
                       <p key={userIndex}>{name}</p>
                     ))
                 )}
@@ -158,16 +189,19 @@ const Step3 = ({ setActiveStep }) => {
           }
         </div>
 
+        {/**List of all Groups */}
         <div className={className + "__container w-full"}>
+          {/**Removing the Council group and considering rest */}
           {list.slice(1).map((item, index) => (
             <div
               className={`flex flex-col my-2 bg-white rounded-lg ${
-                addMemberIndex === item.index
+                addMemberIndex === item.index || item.name == "All"
                   ? ""
-                  : " cursor-pointer transition"
+                  : "cursor-pointer transition"
               }`}
-              onClick={() => openMemberNames(item.index)}
+              onClick={() => item.name !== "All" && openMemberNames(item.index)}
             >
+              {/**The section that appears */}
               <section
                 key={index}
                 className={`w-full py-2 px-8 flex ${
@@ -176,9 +210,29 @@ const Step3 = ({ setActiveStep }) => {
                     : "rounded-lg"
                 } items-center justify-between`}
               >
-                <p className="font-semibold py-1">{item.name}</p>
+                {/**Group Name */}
+                {groupNameInputIndex == item.index ? (
+                  <input
+                    type="text"
+                    name="groupNameEdit"
+                    className="p-1 rounded-md border border-slate-500 text-sm"
+                    placeholder="Group Name"
+                    onKeyDown={(e) => handleGroupNameInput(e.target.value, e)}
+                    onBlur={(e) => {
+                      if (!e.target.value) setGropuNameInputIndex(null);
+                    }}
+                  />
+                ) : (
+                  <p
+                    className="font-semibold py-1 cursor-pointer"
+                    onDoubleClick={() => handleShowGroupNameInput(item.index)}
+                  >
+                    {item.name}
+                  </p>
+                )}
 
                 <div className={className + "__buttons flex flex-row gap-4"}>
+                  {/**Add member button...All group can't add members in it */}
                   {item.name !== "All" && (
                     <button
                       onClick={() => handleMemberAdding(item.index)}
@@ -189,34 +243,43 @@ const Step3 = ({ setActiveStep }) => {
                     </button>
                   )}
 
+                  {/**Delete the Group */}
                   <button onClick={() => deleteGroup(item.index)}>
                     <MdOutlineDeleteOutline className="text-red-500 text-2xl" />
                   </button>
                 </div>
               </section>
 
+              {/**The section that is hidden and open-ups with members names */}
               {addMemberIndex === item.index && (
                 <section className="py-4 px-8 gap-2 flex flex-col items-start">
                   {showMemberNameInput ? (
                     <input
                       type="text"
                       name="memberName"
-                      className="p-2 rounded-md"
-                      placeholder="Enter UserName"
+                      className="p-2 rounded-md border border-slate-500"
+                      placeholder="Enter Member Name"
                       onKeyDown={(e) => handleNameEnter(e.target.value, e)}
+                      onBlur={(e) => {
+                        if (!e.target.value) setShowMemberNameInput(false);
+                      }}
                     />
-                  ) : item.users.length === 0 ? (
+                  ) : item.members.length === 0 ? (
                     <p className="text-slate-500">No members added</p>
                   ) : (
-                    item.users.map((userName, userIndex) => (
+                    item.members.map((memberName, userIndex) => (
                       <div className="oneUser flex flex-row gap-8 w-full items-center">
-                        <p key={userIndex} className="text-slate-500 text-base w-[25%] whitespace-nowrap text-ellipsis overflow-hidden">
-                          {userName}
+                        {/**MemberName */}
+                        <p
+                          key={userIndex}
+                          className="text-slate-500 text-base w-[25%] whitespace-nowrap text-ellipsis overflow-hidden"
+                        >
+                          {memberName}
                         </p>
 
                         <button
                           onClick={() =>
-                            handleRemoveMember(item.index, userName)
+                            handleRemoveMember(item.index, memberName)
                           }
                           className="border border-cyan-800 px-4 text-sm rounded-md text-cyan-800"
                         >
