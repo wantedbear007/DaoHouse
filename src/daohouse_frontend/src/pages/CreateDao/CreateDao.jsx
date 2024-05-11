@@ -66,7 +66,7 @@ const CreateDao = () => {
             <div
               key={index}
               className={
-                "flex flex-row py-4 items-center gap-2 relative " +
+                "flex flex-row py-4 items-center gap-2 " +
                 `${activeStep >= index ? "opacity-100" : "opacity-50"}`
               }
             >
@@ -75,15 +75,15 @@ const CreateDao = () => {
                   className={
                     "border border-[#007a7b] " +
                     (activeStep === index
-                      ? "bg-[#007a7b] text-white font-semibold animate left-[-3rem]"
+                      ? "bg-[#007a7b] text-white font-semibold"
                       : "bg-white text-black") +
-                    " rounded-[2rem] min-w-7 h-7 flex items-center justify-center mr-2"
+                    " rounded-[2rem] min-w-7 h-7 flex items-center justify-center"
                   }
                 >
                   <p className="text-center">{step}</p>
                 </div>
               ) : (
-                <FaCircleCheck className="text-2xl text-[#0E3746] mr-2" />
+                <FaCircleCheck className="text-2xl text-[#0E3746]" />
               )}
               <span className="text-nowrap">{name}</span>
             </div>
