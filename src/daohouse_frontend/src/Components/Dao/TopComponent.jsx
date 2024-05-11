@@ -17,7 +17,7 @@ const TopComponent = ({ showButtons, showAll, setShowAll }) => {
                 backgroundPosition: "center",
             }}
         >
-            <h1 className="text-3xl p-3 text-white">DAOs</h1>
+            <h1 className="text-5xl p-3 text-white">DAOs</h1>
 
             {showButtons &&
                 <div

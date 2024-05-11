@@ -1,10 +1,13 @@
 import React, { Fragment } from "react";
-import TopComponent from "../../Components/Dao/TopComponent";
+import "./CreateDao.scss";
+import { FaCircleCheck } from "react-icons/fa6";
 import Step1 from "../../Components/Dao/Step1";
 import Step2 from "../../Components/Dao/Step2";
 import Step3 from "../../Components/Dao/Step3";
 import Step4 from "../../Components/Dao/Step4";
 import Step5 from "../../Components/Dao/Step5";
+import Step6 from "../../Components/Dao/Step6";
+import TopComponent from "../../Components/Dao/TopComponent";
 
 const CreateDao = () => {
   const className = "CreateDAO";
@@ -14,7 +17,13 @@ const CreateDao = () => {
   const Form = () => {
     switch (activeStep) {
       case 0:
-        return <Step1 tokenStatus={tokenStatus} setActiveStep={setActiveStep} setTokenStatus={setTokenStatus} />;
+        return (
+          <Step1
+            tokenStatus={tokenStatus}
+            setActiveStep={setActiveStep}
+            setTokenStatus={setTokenStatus}
+          />
+        );
       case 1:
         return <Step2 setActiveStep={setActiveStep} />;
       case 2:
@@ -23,10 +32,12 @@ const CreateDao = () => {
         return <Step4 setActiveStep={setActiveStep} />;
       case 4:
         return <Step5 setActiveStep={setActiveStep} />;
+      case 5:
+        return <Step6 setActiveStep={setActiveStep} />;
       default:
         return null;
     }
-  }
+  };
 
   return (
     <Fragment>
@@ -48,30 +59,35 @@ const CreateDao = () => {
         <div
           className={
             className +
-            "__steps py-4 flex flex-row w-full justify-between"
+            "__steps overflow-x-scroll py-4 gap-20 flex flex-row w-full justify-between"
           }
         >
           {steps.map(({ step, name }, index) => (
             <div
               key={index}
               className={
-                "flex flex-row gap-2 p-4 " +
-                `${activeStep === index ? "opacity-100" : "opacity-50"}`
+                "flex flex-row py-4 items-center gap-2 " +
+                `${activeStep >= index ? "opacity-100" : "opacity-50"}`
               }
             >
-              <div
-                className={
-                  "border border-[#0E3746] " +
-                  `${activeStep === index
-                    ? "bg-[#0E3746] text-white font-semibold"
-                    : "bg-white text-black"
-                  }` +
-                  " rounded-[2rem] min-w-7 h-7"
-                }
-              >
-                <p className="w-full text-center">{step}</p>
-              </div>
-              <span>{name}</span>
+              {index >= activeStep ? (
+                <div
+                  className={
+                    "border border-[#007a7b] " +
+                    `${
+                      activeStep === index
+                        ? "bg-[#007a7b] text-white font-semibold"
+                        : "bg-white text-black"
+                    }` +
+                    " rounded-[2rem] min-w-7 h-7"
+                  }
+                >
+                  <p className="w-full text-center">{step}</p>
+                </div>
+              ) : (
+                <FaCircleCheck className="text-2xl text-[#0E3746]" />
+              )}
+              <span className="text-nowrap">{name}</span>
             </div>
           ))}
         </div>
