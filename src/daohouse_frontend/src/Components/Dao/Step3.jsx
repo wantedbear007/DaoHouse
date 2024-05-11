@@ -9,14 +9,16 @@ const Step3 = ({ setActiveStep }) => {
   const [showMemberNameInput, setShowMemberNameInput] = useState(false);
   const [showCouncilNameInput, setShowCouncilNameInput] = useState(false);
   const [addMemberIndex, setAddMemberIndex] = useState(null);
-  const [councilMembs, setCouncilMembs] = useState([
-    "nzbdchsvvksckshcbkjscb kc",
+
+  const [list, setList] = useState([
+    { name: "Council", users: ["nzbdchsvvksckshcbkjscb kc"] },
+    { name: "All", index: 0, users: [] },
   ]);
-  const [list, setList] = useState([{ name: "All", index: 0, users: [] }]);
+
   const className = "DAO__Step3";
 
   const handleGroupAdding = () => {
-    const updateGroups = [...list, { name: "Group1", index: count }];
+    const updateGroups = [...list, { name: `Group ${count}`, index: count }];
     setCount(count + 1);
     setList(updateGroups);
     console.log(list);
@@ -55,10 +57,23 @@ const Step3 = ({ setActiveStep }) => {
 
   const handleCouncilMemberName = (name, event) => {
     if (event.key === "Enter") {
-      const updatedList = [...councilMembs, name];
+      const updatedList = [...list]; // Create a copy of the list
+      const councilIndex = updatedList.findIndex(
+        (item) => item.name === "Council"
+      );
 
-      setCouncilMembs(updatedList);
-      setShowCouncilNameInput(false);
+      if (councilIndex !== -1) {
+        // If "Council" object exists in the list
+        updatedList[councilIndex].users = [
+          ...updatedList[councilIndex].users,
+          name,
+        ]; // Add username to the "Council" object
+        setList(updatedList); // Update the state with the modified list
+        setShowCouncilNameInput(false); // Hide the input field
+      } else {
+        // If "Council" object doesn't exist in the list
+        Alert.alert("Error", "Council group not found in the list");
+      }
     }
   };
 
@@ -89,35 +104,46 @@ const Step3 = ({ setActiveStep }) => {
         </div>
 
         <div className="bg-[#E9EAEA] rounded-lg">
-          <section className="w-full py-2 px-8 flex flex-row items-center justify-between border-b-2 border-[#b4b4b4]">
-            <h2 className="font-semibold">Council</h2>
-            <button
-              onClick={handleCouncilMemAdding}
-              className="flex flex-row items-center gap-1 text-[#229ED9] bg-white p-2 rounded-md"
-            >
-              <FaSquarePlus className="text-[#229ED9] text-2xl" /> Add Members
-            </button>
-          </section>
+          {
+            <React.Fragment>
+              <section className="w-full py-2 px-8 flex flex-row items-center justify-between border-b-2 border-[#b4b4b4]">
+                <h2 className="font-semibold">Council</h2>
+                <button
+                  onClick={handleCouncilMemAdding}
+                  className="flex flex-row items-center gap-1 text-[#229ED9] bg-white p-2 rounded-md"
+                >
+                  <FaSquarePlus className="text-[#229ED9] text-2xl" /> Add
+                  Members
+                </button>
+              </section>
 
-          <section className="py-4 px-8">
-            {showCouncilNameInput ? (
-              <input
-                type="text"
-                name="memberName"
-                className="p-2 rounded-md"
-                placeholder="Enter UserName"
-                onKeyDown={(e) => handleCouncilMemberName(e.target.value, e)}
-              />
-            ) : (
-              councilMembs.map((name, userIndex) => (
-                <p key={userIndex}>{name}</p>
-              ))
-            )}
-          </section>
+              <section className="py-4 px-8">
+                {showCouncilNameInput ? (
+                  <input
+                    type="text"
+                    name="memberName"
+                    className="p-2 rounded-md"
+                    placeholder="Enter UserName"
+                    onKeyDown={(e) =>
+                      handleCouncilMemberName(e.target.value, e)
+                    }
+                  />
+                ) : (
+                  list
+                    .find((item) => item.name === "Council")
+                    .users.map((name, userIndex) => (
+                      <li key={userIndex} className="list-disc">
+                        {name}
+                      </li>
+                    ))
+                )}
+              </section>
+            </React.Fragment>
+          }
         </div>
 
         <div className={className + "__container w-full"}>
-          {list.map((item, index) => (
+          {list.slice(1).map((item, index) => (
             <div
               className={`flex flex-col my-2 ${
                 addMemberIndex === item.index
@@ -166,7 +192,9 @@ const Step3 = ({ setActiveStep }) => {
                     />
                   ) : (
                     item.users.map((userName, userIndex) => (
-                      <p key={userIndex}>{userName}</p>
+                      <li key={userIndex} className="list-disc">
+                        {userName}
+                      </li>
                     ))
                   )}
                 </section>
@@ -175,6 +203,7 @@ const Step3 = ({ setActiveStep }) => {
           ))}
         </div>
       </div>
+
       <div
         className={
           className +
