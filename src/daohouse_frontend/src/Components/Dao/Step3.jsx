@@ -73,11 +73,10 @@ const Step3 = ({ setActiveStep }) => {
         updatedList[councilIndex].members = [
           ...updatedList[councilIndex].members,
           name,
-        ]; // Add username to the "Council" object
-        setList(updatedList); // Update the state with the modified list
-        setShowCouncilNameInput(false); // Hide the input field
+        ];
+        setList(updatedList);
+        setShowCouncilNameInput(false);
       } else {
-        // If "Council" object doesn't exist in the list
         Alert.alert("Error", "Council group not found in the list");
       }
     }
@@ -101,8 +100,22 @@ const Step3 = ({ setActiveStep }) => {
     setGropuNameInputIndex(index);
   };
 
-  const handleGroupNameInput = (name, e) => {
-    // setGropuNameInputIndex(index);
+  const handleGroupNameInput = (groupName, event) => {
+    if (event.key === "Enter") {
+      const updatedList = list.map((item) => {
+        if (item.index === groupNameInputIndex) {
+          return {
+            ...item,
+            name: groupName,
+          };
+        }
+        // Return the item
+        return item;
+      });
+
+      setList(updatedList);
+      setGropuNameInputIndex(null);
+    }
   };
 
   return (
@@ -204,9 +217,7 @@ const Step3 = ({ setActiveStep }) => {
                     name="groupNameEdit"
                     className="p-1 rounded-md border border-slate-500 text-sm"
                     placeholder="Group Name"
-                    onKeyDown={(e) =>
-                      handleGroupNameInput(e.target.value, e, item.index)
-                    }
+                    onKeyDown={(e) => handleGroupNameInput(e.target.value, e)}
                     onBlur={(e) => {
                       if (!e.target.value) setGropuNameInputIndex(null);
                     }}
