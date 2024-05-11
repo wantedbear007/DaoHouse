@@ -59,14 +59,14 @@ const CreateDao = () => {
         <div
           className={
             className +
-            "__steps overflow-x-scroll py-4 gap-20 flex flex-row w-full justify-between"
+            "__steps overflow-x-scroll py-4 gap-20 flex flex-row w-full items-center justify-between"
           }
         >
           {steps.map(({ step, name }, index) => (
             <div
               key={index}
               className={
-                "flex flex-row py-4 items-center gap-2 " +
+                "flex flex-row py-4 items-center gap-2 relative " +
                 `${activeStep >= index ? "opacity-100" : "opacity-50"}`
               }
             >
@@ -74,18 +74,16 @@ const CreateDao = () => {
                 <div
                   className={
                     "border border-[#007a7b] " +
-                    `${
-                      activeStep === index
-                        ? "bg-[#007a7b] text-white font-semibold"
-                        : "bg-white text-black"
-                    }` +
-                    " rounded-[2rem] min-w-7 h-7"
+                    (activeStep === index
+                      ? "bg-[#007a7b] text-white font-semibold animate left-[-3rem]"
+                      : "bg-white text-black") +
+                    " rounded-[2rem] min-w-7 h-7 flex items-center justify-center mr-2"
                   }
                 >
-                  <p className="w-full text-center">{step}</p>
+                  <p className="text-center">{step}</p>
                 </div>
               ) : (
-                <FaCircleCheck className="text-2xl text-[#0E3746]" />
+                <FaCircleCheck className="text-2xl text-[#0E3746] mr-2" />
               )}
               <span className="text-nowrap">{name}</span>
             </div>
