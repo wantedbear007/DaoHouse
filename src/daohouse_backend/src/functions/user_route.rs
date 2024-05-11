@@ -29,6 +29,87 @@ async fn delete_profile() -> String {
     with_state(|state| routes::delete_profile(state)).await
 }
 
+
+#[update]
+async fn follow_user(userid:Principal)->String{
+    let principal_id = api::caller();
+
+    if with_state(|state| state.user_profile.contains_key(&principal_id)).await {
+        return "User not registered".to_string();
+    }
+
+    let getuser=with_state(|state| state.user_profile.get(&principal_id).unwrap().clone()).await;
+
+    if getuser.followers_list.contains(&principal_id) {
+        return "You have already follow this user".to_string();
+    }
+
+    let updated_followers_count = getuser.followers_count + 1;
+    let mut updated_list = getuser.followers_list.clone();
+    updated_list.push(principal_id);
+
+
+    
+    let update_user=UserProfile{
+
+        user_id:getuser.user_id,
+        email_id: getuser.email_id,
+        profile_img: getuser.profile_img,
+        username: getuser.username,
+        dao_ids: getuser.dao_ids,
+        post_count: getuser.post_count,
+        post_id: getuser.post_id,
+        followers_count: updated_followers_count,
+        followers_list: updated_list,
+        followings_count: getuser.followings_count,
+        followings_list: getuser.followings_list,
+        description: getuser.description,
+        tag_defines: getuser.tag_defines,
+        contact_number: getuser.contact_number,
+        twitter_id: getuser.twitter_id,
+        telegram: getuser.telegram,
+        website: getuser.website,
+
+    };
+
+
+
+    let getuser2=with_state(|state| state.user_profile.get(&userid).unwrap().clone()).await;
+
+    let updated_following_count = getuser2.followings_count + 1;
+    let mut updated_list2 = getuser2.followings_list.clone();
+    updated_list2.push(principal_id);
+
+
+
+    let updateuser2=UserProfile{
+        user_id:getuser2.user_id,
+        email_id: getuser2.email_id,
+        profile_img: getuser2.profile_img,
+        username: getuser2.username,
+        dao_ids: getuser2.dao_ids,
+        post_count: getuser2.post_count,
+        post_id: getuser2.post_id,
+        followers_count: getuser2.followers_count,
+        followers_list: getuser2.followings_list,
+        followings_count: updated_following_count,
+        followings_list: updated_list2,
+        description: getuser2.description,
+        tag_defines: getuser2.tag_defines,
+        contact_number: getuser2.contact_number,
+        twitter_id: getuser2.twitter_id,
+        telegram: getuser2.telegram,
+        website: getuser2.website,
+
+    };
+
+    with_state(|state|state.user_profile.insert(principal_id, update_user)).await;
+    with_state(|state|state.user_profile.insert(userid, updateuser2)).await;
+
+    
+
+    return "follow user successful".to_string();
+}
 // #[update]
 // async fn create_newdao(dao_detail: DaoInput) -> String {
 //     let result = with_state( |state| {

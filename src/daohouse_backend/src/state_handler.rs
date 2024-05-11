@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use candid::Principal;
 use serde::{Serialize,Deserialize};
-use crate::types::UserProfile;
+use crate::types::{UserProfile,PostInfo};
 // use std::collections::BTreeMap;
 
 
@@ -9,6 +9,9 @@ use crate::types::UserProfile;
 pub struct State {
 
     pub user_profile : HashMap<Principal, UserProfile>,
+
+    pub post_detail:HashMap<String,PostInfo>,
+    
 
     // pub users: HashMap<Principal, User>,
 }
@@ -19,6 +22,7 @@ impl State {
 
             user_profile: HashMap::new(),
             // users: HashMap::new(),
+            post_detail:HashMap::new()
         }
     }
 }

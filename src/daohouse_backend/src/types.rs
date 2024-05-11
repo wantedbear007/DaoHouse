@@ -468,9 +468,9 @@ pub struct UserProfile{
     pub post_count:u32,
     pub post_id:Vec<String>,
     pub followers_count:u32,
-    pub followers_list:Vec<String>,
+    pub followers_list:Vec<Principal>,
     pub followings_count:u32,
-    pub followings_list:Vec<String>,
+    pub followings_list:Vec<Principal>,
     pub description:String,
     pub tag_defines:Vec<String>,
     pub contact_number:String,
@@ -499,8 +499,26 @@ pub struct DaoInput{
     pub purpose:String,
     pub link_of_document:String,
     pub cool_down_period:String,
-    pub members:Vec<String>,
-    
+    pub members:Vec<String>,   
 }
 
+#[derive(Clone,CandidType,Serialize,Deserialize)]
+pub struct PostInfo{
+    pub post_id:String,
+    pub post_title:String,
+    pub post_description:String,
+    pub post_img:Vec<i8>,
+    pub post_created_at:String,
+    pub like_count:u32,
+    pub like_id_list:Vec<Principal>,
+    pub comment_count:u32,
+    pub comment_list:Vec<String>,  
+}
 
+#[derive(Clone,CandidType,Serialize,Deserialize)]
+pub struct PostInput{
+    pub post_title:String,
+    pub post_description:String,
+    pub post_img:Vec<i8>,
+    
+}

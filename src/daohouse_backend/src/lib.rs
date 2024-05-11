@@ -2,6 +2,7 @@ mod types;
 use ic_cdk::{api, init, query, update, export_candid};
 use std::cell::RefCell;
 pub mod routes;
+pub mod functions;
 use crate::api::call::CallResult;
 mod upgrade;
 use ic_cdk::{ post_upgrade, pre_upgrade};
@@ -9,7 +10,11 @@ mod state_handler;
 use state_handler::State;
 mod memory;
 use memory::Memory; 
-mod user_route;
+use std::collections::HashMap;
+use candid:: Principal;
+
+// mod user_route;
+// mod post_route;
 
 pub mod testing;
 

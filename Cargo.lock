@@ -516,12 +516,14 @@ dependencies = [
  "candid",
  "candid-extractor",
  "ciborium",
+ "getrandom",
  "ic-cdk",
  "ic-cdk-macros 0.8.4",
  "ic-cdk-timers",
  "ic-stable-structures",
  "serde",
  "serde_bytes",
+ "sha2 0.9.9",
 ]
 
 [[package]]
