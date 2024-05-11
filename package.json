@@ -18,12 +18,10 @@
     "src/daohouse_frontend"
   ],
   "dependencies": {
-    "autoprefixer": "^10.4.19",
     "cargo": "^0.8.0",
     "i18next-browser-languagedetector": "^7.2.1",
     "i18next-http-backend": "^2.5.1",
     "lottie-react": "^2.4.0",
-    "postcss": "^8.4.38",
     "postcss-custom-properties": "^13.3.8",
     "prop-types": "^15.8.1",
     "react-i18next": "^14.1.1",
@@ -31,6 +29,8 @@
     "react-router-dom": "^6.23.0"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3"
   }
 }

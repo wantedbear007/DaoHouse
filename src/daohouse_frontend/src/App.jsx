@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 // import Login from './Components/Auth/Login';
 import Dao from "./pages/dao/Dao";
 import Dashboard from '../src/pages/Home/Dashboard'
