@@ -1,5 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-
 module.exports = {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
@@ -19,6 +18,12 @@ module.exports = {
       },
       animation: {
         wiggle: "wiggle 4s ease-in-out infinite",
+      },
+      screens: {
+        mobile: "450px",
+        tablet: "1050px",
+        laptop: "1280px",
+        desktop: "1440px",
       },
     },
   },
