@@ -138,9 +138,7 @@ const Step3 = ({ setActiveStep }) => {
                   list
                     .find((item) => item.name === "Council")
                     .users.map((name, userIndex) => (
-                      <li key={userIndex} className="list-disc">
-                        {name}
-                      </li>
+                      <p key={userIndex}>{name}</p>
                     ))
                 )}
               </section>
@@ -154,7 +152,7 @@ const Step3 = ({ setActiveStep }) => {
               className={`flex flex-col my-2 ${
                 addMemberIndex === item.index
                   ? "bg-[#E9EAEA] rounded-lg"
-                  : "bg-white rounded-lg cursor-pointer"
+                  : "bg-white rounded-lg cursor-pointer transition"
               }`}
               onClick={() => openMemberNames(item.index)}
             >
@@ -199,9 +197,7 @@ const Step3 = ({ setActiveStep }) => {
                     />
                   ) : (
                     item.users.map((userName, userIndex) => (
-                      <li key={userIndex} className="list-disc">
-                        {userName}
-                      </li>
+                      <p key={userIndex}>{userName}</p>
                     ))
                   )}
                 </section>
