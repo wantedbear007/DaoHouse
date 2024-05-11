@@ -12,7 +12,7 @@ const Step3 = ({ setActiveStep }) => {
 
   const [list, setList] = useState([
     { name: "Council", users: ["nzbdchsvvksckshcbkjscb kc"] },
-    { name: "All", index: 0, users: [] },
+    { name: "All", index: 0 },
   ]);
 
   const className = "DAO__Step3";
@@ -24,7 +24,6 @@ const Step3 = ({ setActiveStep }) => {
     ];
     setCount(count + 1);
     setList(updateGroups);
-    console.log(list);
   };
 
   const deleteGroup = (index) => {
@@ -45,7 +44,7 @@ const Step3 = ({ setActiveStep }) => {
   };
 
   const handleNameEnter = (name, event) => {
-    if (event.key === "Enter") {
+    if ((event.key === "Enter") & (name !== "")) {
       const updatedList = list.map((item) => {
         if (item.index === addMemberIndex) {
           return { ...item, users: [...item.users, name] };
@@ -83,6 +82,20 @@ const Step3 = ({ setActiveStep }) => {
     }
   };
 
+  const handleRemoveMember = (objIndex, userName) => {
+    const updatedList = list.map((item) => {
+      if (item.index == objIndex && item.users.includes(userName)) {
+        return {
+          ...item,
+          users: item.users.filter((user) => user !== userName),
+        };
+      }
+      return item;
+    });
+
+    setList(updatedList);
+  };
+
   return (
     <React.Fragment>
       <div
@@ -118,8 +131,7 @@ const Step3 = ({ setActiveStep }) => {
                   onClick={handleCouncilMemAdding}
                   className="flex flex-row items-center gap-1 text-[#229ED9] bg-white p-2 rounded-md"
                 >
-                  <FaSquarePlus className="text-[#229ED9] text-2xl" /> Add
-                  Members
+                  <AddMemberButton />
                 </button>
               </section>
 
@@ -149,10 +161,10 @@ const Step3 = ({ setActiveStep }) => {
         <div className={className + "__container w-full"}>
           {list.slice(1).map((item, index) => (
             <div
-              className={`flex flex-col my-2 ${
+              className={`flex flex-col my-2 bg-white rounded-lg ${
                 addMemberIndex === item.index
-                  ? "bg-[#E9EAEA] rounded-lg"
-                  : "bg-white rounded-lg cursor-pointer transition"
+                  ? ""
+                  : " cursor-pointer transition"
               }`}
               onClick={() => openMemberNames(item.index)}
             >
@@ -164,20 +176,18 @@ const Step3 = ({ setActiveStep }) => {
                     : "rounded-lg"
                 } items-center justify-between`}
               >
-                <p className="font-semibold">{item.name}</p>
+                <p className="font-semibold py-1">{item.name}</p>
 
                 <div className={className + "__buttons flex flex-row gap-4"}>
-                  <button
-                    onClick={() => handleMemberAdding(item.index)}
-                    className={`flex flex-row items-center gap-1 text-[#229ED9] ${
-                      addMemberIndex === item.index
-                        ? "bg-white"
-                        : "bg-slate-200"
-                    } p-2 rounded-md`}
-                  >
-                    <FaSquarePlus className="text-[#229ED9] text-2xl" /> Add
-                    Members
-                  </button>
+                  {item.name !== "All" && (
+                    <button
+                      onClick={() => handleMemberAdding(item.index)}
+                      className={`flex flex-row items-center gap-1 text-[#229ED9] bg-slate-200
+                          p-2 rounded-md`}
+                    >
+                      <AddMemberButton />
+                    </button>
+                  )}
 
                   <button onClick={() => deleteGroup(item.index)}>
                     <MdOutlineDeleteOutline className="text-red-500 text-2xl" />
@@ -186,7 +196,7 @@ const Step3 = ({ setActiveStep }) => {
               </section>
 
               {addMemberIndex === item.index && (
-                <section className="py-4 px-8">
+                <section className="py-4 px-8 gap-2 flex flex-col items-start">
                   {showMemberNameInput ? (
                     <input
                       type="text"
@@ -195,9 +205,24 @@ const Step3 = ({ setActiveStep }) => {
                       placeholder="Enter UserName"
                       onKeyDown={(e) => handleNameEnter(e.target.value, e)}
                     />
+                  ) : item.users.length === 0 ? (
+                    <p className="text-slate-500">No members added</p>
                   ) : (
                     item.users.map((userName, userIndex) => (
-                      <p key={userIndex}>{userName}</p>
+                      <div className="oneUser flex flex-row gap-8 w-full">
+                        <p key={userIndex} className="text-slate-500 text-base">
+                          {userName}
+                        </p>
+
+                        <button
+                          onClick={() =>
+                            handleRemoveMember(item.index, userName)
+                          }
+                          className="border border-cyan-800 px-4 text-sm rounded-md text-cyan-800"
+                        >
+                          Remove
+                        </button>
+                      </div>
                     ))
                   )}
                 </section>
@@ -232,3 +257,12 @@ const Step3 = ({ setActiveStep }) => {
 };
 
 export default Step3;
+
+const AddMemberButton = () => {
+  return (
+    <React.Fragment>
+      <FaSquarePlus className="text-[#229ED9] text-lg" />
+      <p className="text-sm font-semibold">Add Members</p>
+    </React.Fragment>
+  );
+};
