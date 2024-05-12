@@ -10,6 +10,10 @@
       "package": "dao_canister",
       "type": "rust"
     },
+    "internet_identity": {
+      "type": "pull",
+      "id": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+    },
     "daohouse_frontend": {
       "dependencies": [
         "daohouse_backend"

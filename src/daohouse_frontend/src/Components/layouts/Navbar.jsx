@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import i18n from '../../i18n';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../utils/useAuthClient';
 
 const Navbar = () => {
   const [locale, setLocale] = useState(i18n.language);
   i18n.on("languageChanged", () => setLocale(i18n.language));
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLangChange = (event) => {
     i18n.changeLanguage(event.target.value);
     window.location.reload();
   };
-  
+  const { login, isAuthenticated,signInPlug, logout } = useAuth();
+
   const location = useLocation();
 
   const menuItems = [
@@ -19,6 +22,27 @@ const Navbar = () => {
     { label: 'DAOs', route: '/dao' },
     { label: 'Proposals', route: '/proposals' },
   ];
+
+  // Function to handle login
+  const handleLogin = async () => {
+    setIsLoading(true);
+    await login().then(() => window.location.reload());
+  };
+
+  // Function to handle login
+  const handleLogout = async () => {
+    setIsLoading(true);
+    await logout().then(() => {
+      window.location.reload();
+    }).catch(() => {
+      toast.error(t("dashboard.errorText"));
+    });
+  };
+
+  const handleLoginPlug = async () => {
+    setIsLoading(true);
+    await signInPlug().then(() => window.location.reload());
+  };
 
   return (
     <nav>
@@ -34,10 +58,15 @@ const Navbar = () => {
           <div className="flex items-center">
             <p className='text-black font-semibold'>LOGO</p>
           </div>
-          <div className="flex items-center space-x-4">
-            <button className="px-8 py-2 rounded-[27.5px] bg-[#0E3746] text-white whitespace-nowrap">Sign In</button>
+          {!isAuthenticated ? <div className="flex items-center space-x-4">
+            <button onClick={handleLogin}
+              className="px-8 py-2 rounded-[27.5px] bg-[#0E3746] text-white whitespace-nowrap">Sign In</button>
             <button className="px-8 py-2 rounded-[27.5px] bg-[#FFFFFF]">Connect</button>
-          </div>
+          </div> : (
+            <div>you are authenticated  <button onClick={handleLogout}>Logout</button></div>
+          )}
+
+          <button onClick={handleLoginPlug}>plug</button>
         </div>
       </div>
     </nav>
