@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { FaSquarePlus } from "react-icons/fa6";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
-const Step3 = ({ setActiveStep }) => {
+const Step3 = ({ data, setData, setActiveStep }) => {
   const [count, setCount] = useState(1);
   const [showMemberNameInput, setShowMemberNameInput] = useState(false);
   const [showCouncilNameInput, setShowCouncilNameInput] = useState(false);
@@ -17,6 +17,15 @@ const Step3 = ({ setActiveStep }) => {
   ]);
 
   const className = "DAO__Step3";
+
+  function handleSaveAndNext() {
+    setData((prev) => ({
+      ...prev,
+      step3: { ...list },
+    }));
+
+    setActiveStep(3);
+  }
 
   const handleGroupAdding = () => {
     const updateGroups = [
@@ -194,6 +203,7 @@ const Step3 = ({ setActiveStep }) => {
           {/**Removing the Council group and considering rest */}
           {list.slice(1).map((item, index) => (
             <div
+              key={index}
               className={`flex flex-col my-2 bg-white rounded-lg ${
                 addMemberIndex === item.index || item.name == "All"
                   ? ""
@@ -268,12 +278,12 @@ const Step3 = ({ setActiveStep }) => {
                     <p className="text-slate-500">No members added</p>
                   ) : (
                     item.members.map((memberName, userIndex) => (
-                      <div className="oneUser flex flex-row gap-8 w-full items-center">
+                      <div
+                        key={userIndex}
+                        className="oneUser flex flex-row gap-8 w-full items-center"
+                      >
                         {/**MemberName */}
-                        <p
-                          key={userIndex}
-                          className="text-slate-500 text-base w-[25%] whitespace-nowrap text-ellipsis overflow-hidden"
-                        >
+                        <p className="text-slate-500 text-base w-[25%] whitespace-nowrap text-ellipsis overflow-hidden">
                           {memberName}
                         </p>
 
@@ -309,7 +319,7 @@ const Step3 = ({ setActiveStep }) => {
         </button>
         <button
           type="submit"
-          onClick={() => setActiveStep(3)}
+          onClick={handleSaveAndNext}
           className="flex m-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white"
         >
           Save & Next <FaArrowRightLong />

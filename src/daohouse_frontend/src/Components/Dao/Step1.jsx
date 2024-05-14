@@ -1,12 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
 
-const Step1 = ({ tokenStatus, setTokenStatus, setActiveStep }) => {
+const Step1 = ({ setData, setActiveStep }) => {
+  const [inputData, setInputData] = useState({
+    DAOIdentifier: "",
+    Purpose: "",
+    DAOType: "",
+    exisitingToken: false,
+    tokenName: "",
+    tokenSymbol: "",
+    initialTokenSupply: 0,
+  });
+
   const className = "DAO__Step1";
+
+  function handleSaveAndNext() {
+
+    if (
+      inputData.DAOIdentifier == "" ||
+      inputData.tokenName == "" ||
+      inputData.tokenSymbol == ""
+    ) {
+      alert("Empty fields are not allowed");
+      return;
+    }
+
+    setData((prevData) => ({
+      ...prevData,
+      step1: { ...inputData },
+    }));
+
+    setActiveStep(1);
+  }
+
+  function handleChange(e) {
+    setInputData({
+      ...inputData,
+      [e.target.name]: e.target.value,
+    });
+
+    // console.log(inputData);
+  }
+
+  function handlenewTokenFlag(flag) {
+    setInputData((prevData) => ({
+      ...prevData,
+      exisitingToken: flag,
+    }));
+  }
 
   return (
     <React.Fragment>
-      <form
+      <div
         className={
           className +
           "__form bg-[#F4F2EC] p-10 mx-4 rounded-lg flex flex-col gap-4"
@@ -18,10 +63,12 @@ const Step1 = ({ tokenStatus, setTokenStatus, setActiveStep }) => {
         </label>
         <input
           type="text"
-          name="name"
+          name="DAOIdentifier"
           required
+          value={inputData.DAOIdentifier}
           placeholder="Enter DAO Name"
           className="rounded-lg p-3"
+          onChange={handleChange}
         />
 
         {/** Purpose of DAO */}
@@ -30,16 +77,24 @@ const Step1 = ({ tokenStatus, setTokenStatus, setActiveStep }) => {
         </label>
         <textarea
           type="text"
-          name="purpose"
+          name="Purpose"
+          value={inputData.Purpose}
           placeholder="Specify the primary purpose or objectives the DAO aims to achieve, such as governance, funding, community building,"
           className="rounded-lg p-3"
+          onChange={handleChange}
         />
 
         {/** DAO Type */}
         <label htmlFor="type" className="font-semibold">
           DAO Type
         </label>
-        <input type="text" name="type" className="rounded-lg p-3" />
+        <input
+          onChange={handleChange}
+          type="text"
+          value={inputData.DAOType}
+          name="DAOType"
+          className="rounded-lg p-3"
+        />
 
         {/** DAO Token */}
         <div className="flex flex-row gap-4 items-center">
@@ -49,23 +104,23 @@ const Step1 = ({ tokenStatus, setTokenStatus, setActiveStep }) => {
 
           <button
             className={
-              `${tokenStatus
+              `${inputData.exisitingToken
                 ? "bg-[#0E3746] text-white"
                 : "border border-[#0E3746]"
               }` + " p-2 rounded-lg transition"
             }
-            onClick={() => setTokenStatus(true)}
+            onClick={() => handlenewTokenFlag(true)}
           >
             New Token
           </button>
           <button
             className={
-              `${!tokenStatus
+              `${!inputData.exisitingToken
                 ? "bg-[#0E3746] text-white"
                 : "border border-[#0E3746]"
               }` + " p-2 border border-[#0E3746] rounded-lg transition"
             }
-            onClick={() => setTokenStatus(false)}
+            onClick={() => handlenewTokenFlag(false)}
           >
             Existing Token
           </button>
@@ -73,20 +128,24 @@ const Step1 = ({ tokenStatus, setTokenStatus, setActiveStep }) => {
 
         <div className="flex flex-row gap-4">
           <div className="flex flex-col w-1/2 gap-4">
-            <label htmlFor="token-name">Token Name</label>
+            <label htmlFor="tokenName">Token Name</label>
             <input
               required
               type="text"
-              name="token-name"
+              name="tokenName"
+              value={inputData.tokenName}
+              onChange={handleChange}
               className="rounded-lg p-3"
             />
           </div>
           <div className="flex flex-col w-1/2 gap-4">
-            <label htmlFor="token-name">Token Name</label>
+            <label htmlFor="tokenSymbol">Token Symbol</label>
             <input
               required
               type="text"
-              name="token-name"
+              name="tokenSymbol"
+              value={inputData.tokenSymbol}
+              onChange={handleChange}
               className="rounded-lg p-3"
             />
           </div>
@@ -98,11 +157,13 @@ const Step1 = ({ tokenStatus, setTokenStatus, setActiveStep }) => {
         </label>
         <input
           type="text"
+          onChange={handleChange}
+          value={inputData.initialTokenSupply}
           name="initialTokenSupply"
           placeholder="Enter number of tokens to be minted"
           className="rounded-lg p-3"
         />
-      </form>
+      </div>
 
       <div
         className={
@@ -112,7 +173,7 @@ const Step1 = ({ tokenStatus, setTokenStatus, setActiveStep }) => {
       >
         <button
           type="submit"
-          onClick={() => setActiveStep(1)}
+          onClick={handleSaveAndNext}
           className="flex m-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white"
         >
           Save & Next <FaArrowRightLong />
