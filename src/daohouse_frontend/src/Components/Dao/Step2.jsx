@@ -1,7 +1,7 @@
 import React from "react";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
-const Step2 = ({ setActiveStep }) => {
+const Step2 = ({ data, setData, setActiveStep }) => {
   const className = "DAO__Step2";
 
   return (

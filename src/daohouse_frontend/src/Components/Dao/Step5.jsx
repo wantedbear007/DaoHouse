@@ -5,7 +5,7 @@ import { IoPersonOutline } from "react-icons/io5";
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
-const Step5 = ({ setActiveStep }) => {
+const Step5 = ({ data, setData, setActiveStep }) => {
   const className = "DAO_Step5";
 
   const [quorum, setQuorum] = useState([
@@ -51,7 +51,7 @@ const Step5 = ({ setActiveStep }) => {
 
               <p className="w-1/3 flex flex-row gap-4">
                 <span>{index}</span>
-                <button>View</button>
+                <button className="text-cyan-800 bg-slate-200 px-5 py-1 rounded-md">View</button>
               </p>
 
               <div className="w-1/3 gap-2 flex items-center">

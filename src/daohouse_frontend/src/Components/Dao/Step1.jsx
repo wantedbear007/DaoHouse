@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
 
-const Step1 = ({ tokenStatus, setTokenStatus, setActiveStep }) => {
+const Step1 = ({
+  data,
+  setData,
+  newTokenFlag,
+  setNewTokenFlag,
+  setActiveStep,
+}) => {
+  const [inputData, setInputData] = useState({ ...data.step1 });
   const className = "DAO__Step1";
+
+  console.log(inputData);
+
+  function handleChange(){
+    
+  }
 
   return (
     <React.Fragment>
@@ -22,6 +35,9 @@ const Step1 = ({ tokenStatus, setTokenStatus, setActiveStep }) => {
           required
           placeholder="Enter DAO Name"
           className="rounded-lg p-3"
+          onChange={()=>{
+
+          }}
         />
 
         {/** Purpose of DAO */}
@@ -49,23 +65,25 @@ const Step1 = ({ tokenStatus, setTokenStatus, setActiveStep }) => {
 
           <button
             className={
-              `${tokenStatus
-                ? "bg-[#0E3746] text-white"
-                : "border border-[#0E3746]"
+              `${
+                newTokenFlag
+                  ? "bg-[#0E3746] text-white"
+                  : "border border-[#0E3746]"
               }` + " p-2 rounded-lg transition"
             }
-            onClick={() => setTokenStatus(true)}
+            onClick={() => setNewTokenFlag(true)}
           >
             New Token
           </button>
           <button
             className={
-              `${!tokenStatus
-                ? "bg-[#0E3746] text-white"
-                : "border border-[#0E3746]"
+              `${
+                !newTokenFlag
+                  ? "bg-[#0E3746] text-white"
+                  : "border border-[#0E3746]"
               }` + " p-2 border border-[#0E3746] rounded-lg transition"
             }
-            onClick={() => setTokenStatus(false)}
+            onClick={() => setNewTokenFlag(false)}
           >
             Existing Token
           </button>
@@ -82,7 +100,7 @@ const Step1 = ({ tokenStatus, setTokenStatus, setActiveStep }) => {
             />
           </div>
           <div className="flex flex-col w-1/2 gap-4">
-            <label htmlFor="token-name">Token Name</label>
+            <label htmlFor="token-name">Token Symbol</label>
             <input
               required
               type="text"
