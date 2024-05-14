@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Step4.scss";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
-const Step4 = ({ setActiveStep }) => {
+const Step4 = ({ data, setData, setActiveStep }) => {
   const className = "DAO__Step4";
   const [activeStage, setActiveStage] = useState(0);
 
@@ -16,16 +16,14 @@ const Step4 = ({ setActiveStep }) => {
       >
         <ul className={className + "__steps flex flex-row gap-8 px-4"}>
           <li
-            className={`list-disc text-lg font-semibold ${
-              activeStage == 0 ? "" : "opacity-50"
-            }`}
+            className={`list-disc text-lg font-semibold ${activeStage == 0 ? "" : "opacity-50"
+              }`}
           >
             Proposal Creation
           </li>
           <li
-            className={`list-disc text-lg font-semibold ${
-              activeStage == 1 ? "" : "opacity-50"
-            }`}
+            className={`list-disc text-lg font-semibold ${activeStage == 1 ? "" : "opacity-50"
+              }`}
           >
             Voting Permission
           </li>

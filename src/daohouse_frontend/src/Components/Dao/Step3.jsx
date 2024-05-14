@@ -4,7 +4,7 @@ import { FaSquarePlus } from "react-icons/fa6";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
-const Step3 = ({ setActiveStep }) => {
+const Step3 = ({ data, setData, setActiveStep }) => {
   const [count, setCount] = useState(1);
   const [showMemberNameInput, setShowMemberNameInput] = useState(false);
   const [showCouncilNameInput, setShowCouncilNameInput] = useState(false);
