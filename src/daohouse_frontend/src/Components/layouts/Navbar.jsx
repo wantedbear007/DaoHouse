@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import i18n from '../../i18n';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../utils/useAuthClient';
+import { LuChevronDown } from "react-icons/lu";
+import LoginModal from '../Auth/LoginModal';
+import { FaUser, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import avatarprofile from "../../../assets/avatarprofile.png"
+
 
 const Navbar = () => {
   const [locale, setLocale] = useState(i18n.language);
   i18n.on("languageChanged", () => setLocale(i18n.language));
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleLangChange = (event) => {
-    i18n.changeLanguage(event.target.value);
-    window.location.reload();
-  };
-  const { login, isAuthenticated,signInPlug, logout } = useAuth();
+  const { login, isAuthenticated, signInPlug, logout, getPrincipalId, principal, actor } = useAuth();
+  const [principleId, setPrincipleId] = useState(null)
 
   const location = useLocation();
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+
+  useEffect(() => {
+    const principalIdMain = getPrincipalId(principal);
+    setPrincipleId(principalIdMain)
+  }, [principal])
 
   const menuItems = [
     { label: 'Home', route: '/' },
@@ -41,8 +50,18 @@ const Navbar = () => {
 
   const handleLoginPlug = async () => {
     setIsLoading(true);
-    await signInPlug().then(() => window.location.reload());
+    await signInPlug().then(() => {
+      console.log("logined");
+      setIsModalOpen(false)
+    });
   };
+  const handleLoginModalOpen = async () => {
+    setIsLoading(true);
+    setIsModalOpen(true);
+  };
+
+  console.log({ isAuthenticated })
+
 
   return (
     <nav>
@@ -59,16 +78,45 @@ const Navbar = () => {
             <p className='text-black font-semibold'>LOGO</p>
           </div>
           {!isAuthenticated ? <div className="flex items-center space-x-4">
-            <button onClick={handleLogin}
+            <button onClick={handleLoginModalOpen}
               className="px-8 py-2 rounded-[27.5px] bg-[#0E3746] text-white whitespace-nowrap">Sign In</button>
-            <button className="px-8 py-2 rounded-[27.5px] bg-[#FFFFFF]">Connect</button>
+            <button onClick={handleLoginModalOpen} className="px-8 py-2 rounded-[27.5px] bg-[#FFFFFF]">Connect</button>
           </div> : (
-            <div>you are authenticated  <button onClick={handleLogout}>Logout</button></div>
-          )}
+            <div className="relative">
 
-          <button onClick={handleLoginPlug}>plug</button>
+              <div className="flex items-center space-x-4 relative bg-white rounded-full px-4 cursor-pointer shadow-lg" onClick={() => setDropdownVisible(!dropdownVisible)}>
+                <div className="w-10 h-10 flex items-center rounded-full overflow-hidden my-auto">
+                  <img src={avatarprofile} alt="User Avatar" className="w-8 h-8 object-cover rounded-full" />
+                </div>
+                <p className="text-black font-medium">asdsssaddsfad</p>
+                <LuChevronDown />
+                {dropdownVisible && (
+                  <div className="absolute top-full right-0 bg-white rounded-md border border-gray-300 shadow-md py-2 w-40">
+                    <button className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                      <FaUser className="mr-2" />
+                      <span>Profile</span>
+                    </button>
+                    <button className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                      <FaCog className="mr-2" />
+                      <span>Settings</span>
+                    </button>
+                    <button onClick={handleLogout} className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                      <FaSignOutAlt className="mr-2" />
+                      <span>Logout</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
+      <LoginModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onLogin={handleLogin}
+        onLoginPlug={handleLoginPlug}
+      />
     </nav>
   );
 };
