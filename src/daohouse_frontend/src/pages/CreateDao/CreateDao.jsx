@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import "./CreateDao.scss";
 import { FaCircleCheck } from "react-icons/fa6";
 import Step1 from "../../Components/Dao/Step1";
@@ -12,28 +12,42 @@ import TopComponent from "../../Components/Dao/TopComponent";
 const CreateDao = () => {
   const className = "CreateDAO";
   const [activeStep, setActiveStep] = React.useState(0);
-  const [tokenStatus, setTokenStatus] = React.useState(true);
+
+  const [data, setData] = useState({
+    step1: {},
+    step2: {},
+    step3: {},
+    step6: {
+      imageURI: "",
+    },
+  });
 
   const Form = () => {
     switch (activeStep) {
       case 0:
         return (
-          <Step1
-            tokenStatus={tokenStatus}
-            setActiveStep={setActiveStep}
-            setTokenStatus={setTokenStatus}
-          />
+          <Step1 data={data} setData={setData} setActiveStep={setActiveStep} />
         );
       case 1:
-        return <Step2 setActiveStep={setActiveStep} />;
+        return (
+          <Step2 data={data} setData={setData} setActiveStep={setActiveStep} />
+        );
       case 2:
-        return <Step3 setActiveStep={setActiveStep} />;
+        return (
+          <Step3 data={data} setData={setData} setActiveStep={setActiveStep} />
+        );
       case 3:
-        return <Step4 setActiveStep={setActiveStep} />;
+        return (
+          <Step4 data={data} setData={setData} setActiveStep={setActiveStep} />
+        );
       case 4:
-        return <Step5 setActiveStep={setActiveStep} />;
+        return (
+          <Step5 data={data} setData={setData} setActiveStep={setActiveStep} />
+        );
       case 5:
-        return <Step6 setActiveStep={setActiveStep} />;
+        return (
+          <Step6 data={data} setData={setData} setActiveStep={setActiveStep} />
+        );
       default:
         return null;
     }
