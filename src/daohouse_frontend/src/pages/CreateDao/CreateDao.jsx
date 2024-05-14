@@ -15,15 +15,8 @@ const CreateDao = () => {
 
   const [data, setData] = useState({
     step1: {},
-    step2: {
-      setUpPeriod: 0,
-    },
-    step3: {
-      groupAndMembers: [
-        { name: "Council", members: ["nzbdchsvvksckshcbkjscb kc"] },
-        { name: "All", index: 0 },
-      ],
-    },
+    step2: {},
+    step3: {},
     step6: {
       imageURI: "",
     },
@@ -33,11 +26,7 @@ const CreateDao = () => {
     switch (activeStep) {
       case 0:
         return (
-          <Step1
-            data={data}
-            setData={setData}
-            setActiveStep={setActiveStep}
-          />
+          <Step1 data={data} setData={setData} setActiveStep={setActiveStep} />
         );
       case 1:
         return (

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
 
-const Step1 = ({ data, setData, setActiveStep }) => {
+const Step1 = ({ setData, setActiveStep }) => {
   const [inputData, setInputData] = useState({
     DAOIdentifier: "",
     Purpose: "",
@@ -15,7 +15,7 @@ const Step1 = ({ data, setData, setActiveStep }) => {
   const className = "DAO__Step1";
 
   function handleSaveAndNext() {
-    
+
     if (
       inputData.DAOIdentifier == "" ||
       inputData.tokenName == "" ||
@@ -32,10 +32,6 @@ const Step1 = ({ data, setData, setActiveStep }) => {
 
     setActiveStep(1);
   }
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   function handleChange(e) {
     setInputData({
@@ -69,6 +65,7 @@ const Step1 = ({ data, setData, setActiveStep }) => {
           type="text"
           name="DAOIdentifier"
           required
+          value={inputData.DAOIdentifier}
           placeholder="Enter DAO Name"
           className="rounded-lg p-3"
           onChange={handleChange}
@@ -81,6 +78,7 @@ const Step1 = ({ data, setData, setActiveStep }) => {
         <textarea
           type="text"
           name="Purpose"
+          value={inputData.Purpose}
           placeholder="Specify the primary purpose or objectives the DAO aims to achieve, such as governance, funding, community building,"
           className="rounded-lg p-3"
           onChange={handleChange}
@@ -93,6 +91,7 @@ const Step1 = ({ data, setData, setActiveStep }) => {
         <input
           onChange={handleChange}
           type="text"
+          value={inputData.DAOType}
           name="DAOType"
           className="rounded-lg p-3"
         />
@@ -105,10 +104,9 @@ const Step1 = ({ data, setData, setActiveStep }) => {
 
           <button
             className={
-              `${
-                inputData.exisitingToken
-                  ? "bg-[#0E3746] text-white"
-                  : "border border-[#0E3746]"
+              `${inputData.exisitingToken
+                ? "bg-[#0E3746] text-white"
+                : "border border-[#0E3746]"
               }` + " p-2 rounded-lg transition"
             }
             onClick={() => handlenewTokenFlag(true)}
@@ -117,10 +115,9 @@ const Step1 = ({ data, setData, setActiveStep }) => {
           </button>
           <button
             className={
-              `${
-                !inputData.exisitingToken
-                  ? "bg-[#0E3746] text-white"
-                  : "border border-[#0E3746]"
+              `${!inputData.exisitingToken
+                ? "bg-[#0E3746] text-white"
+                : "border border-[#0E3746]"
               }` + " p-2 border border-[#0E3746] rounded-lg transition"
             }
             onClick={() => handlenewTokenFlag(false)}
@@ -136,6 +133,7 @@ const Step1 = ({ data, setData, setActiveStep }) => {
               required
               type="text"
               name="tokenName"
+              value={inputData.tokenName}
               onChange={handleChange}
               className="rounded-lg p-3"
             />
@@ -146,6 +144,7 @@ const Step1 = ({ data, setData, setActiveStep }) => {
               required
               type="text"
               name="tokenSymbol"
+              value={inputData.tokenSymbol}
               onChange={handleChange}
               className="rounded-lg p-3"
             />
@@ -159,6 +158,7 @@ const Step1 = ({ data, setData, setActiveStep }) => {
         <input
           type="text"
           onChange={handleChange}
+          value={inputData.initialTokenSupply}
           name="initialTokenSupply"
           placeholder="Enter number of tokens to be minted"
           className="rounded-lg p-3"
