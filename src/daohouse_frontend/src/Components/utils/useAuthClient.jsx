@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { AuthClient } from "@dfinity/auth-client";
-import { createActor } from '../../../../declarations/dao_canister';
-
+import { createActor } from '../../../../declarations/daohouse_backend/index';
 
 const AuthContext = createContext();
 
@@ -47,6 +46,8 @@ export const useAuthClient = () => {
 
         return true;
     }
+
+    console.log({backendActor})
 
     useEffect(() => {
         (async () => {
