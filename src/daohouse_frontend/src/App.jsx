@@ -24,7 +24,7 @@ const App = () => {
         <Route path="/proposals" element={<Proposals />} />
         <Route path="/create-proposal" element={<CreateProposal />} />
         <Route path="/dao" element={<Dao />} />
-        <Route path="/create-dao" element={<CreateDao />} />
+        <Route path="/dao/create-dao" element={<CreateDao />} />
         <Route path="/my-profile" element={<MyProfile />} />
       </Routes>
       <Footer />

@@ -12,20 +12,9 @@ import TopComponent from "../../Components/Dao/TopComponent";
 const CreateDao = () => {
   const className = "CreateDAO";
   const [activeStep, setActiveStep] = React.useState(0);
-  const [newTokenFlag, setNewTokenFlag] = React.useState(true);
 
   const [data, setData] = useState({
-    step1: {
-      DAOIdentifier: "",
-      Purpose: "",
-      DAOType: "",
-      token: {
-        exisiting: newTokenFlag ? true : false,
-        name: "",
-        symbol: "",
-      },
-      initialTokenSupply: 0,
-    },
+    step1: {},
     step2: {
       setUpPeriod: 0,
     },
@@ -40,19 +29,6 @@ const CreateDao = () => {
     },
   });
 
-  useEffect(() => {
-    setData((prevData) => ({
-      ...prevData,
-      step1: {
-        ...prevData.step1,
-        token: {
-          ...prevData.step1.token,
-          exisiting: newTokenFlag ? true : false,
-        },
-      },
-    }));
-  }, [newTokenFlag]);
-
   const Form = () => {
     switch (activeStep) {
       case 0:
@@ -60,9 +36,7 @@ const CreateDao = () => {
           <Step1
             data={data}
             setData={setData}
-            newTokenFlag={newTokenFlag}
             setActiveStep={setActiveStep}
-            setNewTokenFlag={setNewTokenFlag}
           />
         );
       case 1:
