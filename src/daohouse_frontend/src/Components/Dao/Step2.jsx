@@ -1,8 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
-const Step2 = ({ data, setData, setActiveStep }) => {
+const Step2 = ({ setData, setActiveStep }) => {
+  const [inputData, setInputData] = useState({ setUpPeriod: 0 });
   const className = "DAO__Step2";
+
+  function handleSaveAndNext() {
+    setData((prev) => ({
+      ...prev,
+      step2: { ...inputData },
+    }));
+
+    setActiveStep(2)
+  }
+
+  function changePeriod(value) {
+    setInputData({
+      setUpPeriod: value,
+    });
+  }
 
   return (
     <React.Fragment>
@@ -16,8 +32,10 @@ const Step2 = ({ data, setData, setActiveStep }) => {
           Setup Peroid (in days)
         </label>
         <input
-          type="text"
+          type="number"
           name="purpose"
+          value={inputData.setUpPeriod}
+          onChange={(e) => changePeriod(e.target.value)}
           placeholder="Setup the period between when a proposal is approved and is executed."
           className="rounded-lg p-3"
         />
@@ -37,7 +55,7 @@ const Step2 = ({ data, setData, setActiveStep }) => {
         </button>
         <button
           type="submit"
-          onClick={() => setActiveStep(2)}
+          onClick={handleSaveAndNext}
           className="flex m-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white"
         >
           Save & Next <FaArrowRightLong />
