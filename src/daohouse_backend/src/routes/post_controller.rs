@@ -1,12 +1,14 @@
 use crate::State;
-
+use candid:: Principal;
 use crate::types::{PostInfo, PostInput};
 use ic_cdk::api;
 use std::collections::HashMap;
 
 pub fn create_new_post(state: &mut State, post_id: String, postdetail: PostInput) -> String {
     let principal_id = api::caller();
-
+    if principal_id == Principal::anonymous() {
+        return "Anonymous principal not allowed to make calls.".to_string();
+    }
     let new_post = PostInfo {
         post_id: post_id.clone(),
         post_title: postdetail.post_title,

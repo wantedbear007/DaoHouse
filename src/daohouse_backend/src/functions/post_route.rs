@@ -5,10 +5,15 @@ use ic_cdk::api;
 use sha2::{Digest, Sha256};
 use std::collections::HashMap;
 use ic_cdk::api::management_canister::main::raw_rand;
+use candid:: Principal;
 
 
 #[update]
 async fn create_new_post(postdetail: PostInput) -> String {
+    let principal_id = api::caller();
+    if principal_id == Principal::anonymous() {
+        return "Anonymous principal not allowed to make calls.".to_string();
+    }
     let uuids = raw_rand().await.unwrap().0;
     let post_id = format!("{:x}", Sha256::digest(&uuids));
     with_state(|state| routes::create_new_post(state, post_id,postdetail.clone())).await
@@ -24,6 +29,9 @@ async fn like_post(post_id:String)->String{
     let getpost=with_state(|state| state.post_detail.get(&post_id).unwrap().clone()).await;
 
     let principal_id = api::caller();
+    if principal_id == Principal::anonymous() {
+        return "Anonymous principal not allowed to make calls.".to_string();
+    }
 
     if getpost.like_id_list.contains(&principal_id) {
         return "You have already liked this post".to_string();
@@ -61,6 +69,9 @@ async fn comment_post(post_id:String,comment:String)->String{
     let getpost=with_state(|state| state.post_detail.get(&post_id).unwrap().clone()).await;
 
     let principal_id = api::caller();
+    if principal_id == Principal::anonymous() {
+        return "Anonymous principal not allowed to make calls.".to_string();
+    }
 
     let updated_comment_count = getpost.comment_count + 1;
     let mut updated_list = getpost.comment_list.clone();

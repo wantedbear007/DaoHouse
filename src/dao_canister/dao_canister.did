@@ -1,23 +1,26 @@
 type Dao = record {
-  document_name : text;
   dao_id : principal;
-  social_link : vec text;
+  linksandsocials : vec text;
+  daotype : text;
   dao_name : text;
-  link_of_legal_document : text;
-  dao_address : text;
-  groups_count : nat32;
-  dao_purpose : text;
-  cool_down_period : nat8;
-  required_votes : nat32;
+  groups_count : nat64;
+  link_of_document : text;
+  tokenissuer : text;
+  group_name : vec text;
+  cool_down_period : text;
+  purpose : text;
+  required_votes : int8;
 };
 type DaoInput = record {
-  document_name : text;
-  social_link : vec text;
+  members : vec principal;
+  linksandsocials : vec text;
+  daotype : text;
   dao_name : text;
   link_of_document : text;
-  cool_down_period : nat8;
+  tokenissuer : text;
+  cool_down_period : text;
   purpose : text;
-  required_votes : nat32;
+  required_votes : int8;
 };
 type ProposalInput = record {
   proposal_receiver_id : text;

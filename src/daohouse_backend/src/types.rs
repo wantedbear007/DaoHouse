@@ -497,10 +497,16 @@ pub struct Profileinput{
 pub struct DaoInput{
     pub dao_name:String,
     pub purpose:String,
+    pub daotype:String,
     pub link_of_document:String,
     pub cool_down_period:String,
-    pub members:Vec<String>,   
+    pub members:Vec<Principal>,
+    pub tokenissuer:String,
+    pub linksandsocials:Vec<String>,
+    pub required_votes:i8,
+
 }
+
 
 #[derive(Clone,CandidType,Serialize,Deserialize)]
 pub struct PostInfo{

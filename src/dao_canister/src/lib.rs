@@ -33,12 +33,13 @@ async fn init(dao_input:DaoInput) {
     let new_dao=Dao{
         dao_id:principal_id,
         dao_name:dao_input.dao_name,
-        dao_address:String::new(),
-        dao_purpose:dao_input.purpose,
-        document_name:dao_input.document_name,
-        link_of_legal_document:dao_input.link_of_document,
+        purpose:dao_input.purpose,
+        daotype:dao_input.daotype,
+        link_of_document:dao_input.link_of_document,
         cool_down_period:dao_input.cool_down_period,
-        social_link:dao_input.social_link,
+        tokenissuer:dao_input.tokenissuer,
+        linksandsocials:dao_input.linksandsocials,
+        group_name:Vec::new(),
         groups_count:0,
         required_votes:dao_input.required_votes, 
     };

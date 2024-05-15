@@ -7,6 +7,7 @@ use crate::api::canister_version;
 use ic_cdk::api;
 use candid::Principal;
 use ic_cdk::println;
+use ic_cdk::trap;
 
 
 #[update]
@@ -15,7 +16,7 @@ async fn create_profile(profile: Profileinput) -> String {
 }
 
 #[query]
-async fn get_user_profile() -> UserProfile {
+async fn get_user_profile() -> Option<UserProfile> {
     with_state(|state| routes::get_user_profile(state)).await
 }
 
@@ -110,16 +111,13 @@ async fn follow_user(userid:Principal)->String{
 
     return "follow user successful".to_string();
 }
-// #[update]
-// async fn create_newdao(dao_detail: DaoInput) -> String {
-//     let result = with_state( |state| {
-//         routes:: create_dao(state, dao_detail.clone()).await
-//     }).await;
-//     result
-// }
+
 #[update]
 pub async fn create_dao( dao_detail: DaoInput) -> Result<String,String> {
     let principal_id = api::caller();
+    if principal_id == Principal::anonymous() {
+        trap("Anonymous principal not allowed to make calls.")
+    }
 
     // if with_state(|state| state.user_profile.contains_key(&principal_id)).await {
     //     return Err("User not registered".to_string());
@@ -127,7 +125,7 @@ pub async fn create_dao( dao_detail: DaoInput) -> Result<String,String> {
 
     // let user_detail=with_state(|state| state.user_profile.get(&principal_id));
 
-    let mut user_profile_detail =  with_state(|state| routes::get_user_profile(state)).await;
+    let mut user_profile_detail =  with_state(|state| state.user_profile.get(&principal_id).unwrap().clone()).await;
     let arg = CreateCanisterArgument {
         settings: None,
     };
@@ -208,7 +206,7 @@ async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
     // let wasm_base64: &str = "3831fb07143cd43c3c51f770342d2b7d0a594311529f5503587bf1544ccd44be";
     // let wasm_module_sample: Vec<u8> = base64::decode(wasm_base64).expect("Decoding failed");
 
-    // let wasm_module_sample: Vec<u8> = include_bytes!("/home/harshit/Desktop/company/experiment/DaoHouse/.dfx/local/canisters/daohouse_backend/daohouse_backend.wasm").to_vec();
+    let wasm_module_sample: Vec<u8> = include_bytes!("/home/harshit/Desktop/company/experiment/DaoHouse/.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
     
     
     let cycles: u128 = 10_000_000_000; 
@@ -216,7 +214,7 @@ async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
     let extended_arg = InstallCodeArgumentExtended {
         mode: arg.mode,
         canister_id: arg.canister_id,
-        wasm_module: arg.wasm_module,
+        wasm_module: wasm_module_sample,
         arg: arg.arg,
         sender_canister_version: Some(canister_version()),
     };

@@ -57,11 +57,15 @@ type CodeDeploymentRecord = record {
 type CreateCanisterArgument = record { settings : opt CanisterSettings };
 type CreationRecord = record { controllers : vec principal };
 type DaoInput = record {
-  members : vec text;
+  members : vec principal;
+  linksandsocials : vec text;
+  daotype : text;
   dao_name : text;
   link_of_document : text;
+  tokenissuer : text;
   cool_down_period : text;
   purpose : text;
+  required_votes : int8;
 };
 type DefiniteCanisterSettings = record {
   freezing_threshold : nat;
@@ -82,6 +86,12 @@ type InstallChunkedCodeArgument = record {
   chunk_hashes_list : vec ChunkHash;
   target_canister : principal;
   store_canister : opt principal;
+};
+type InstallCodeArgument = record {
+  arg : blob;
+  wasm_module : blob;
+  mode : CanisterInstallMode;
+  canister_id : principal;
 };
 type PostInfo = record {
   post_img : vec int8;
@@ -189,9 +199,10 @@ service : {
   follow_user : (principal) -> (text);
   get_all_posts : () -> (vec record { text; PostInfo }) query;
   get_post_byid : (text) -> (PostInfo) query;
-  get_user_profile : () -> (UserProfile) query;
+  get_user_profile : () -> (opt UserProfile) query;
   greet : (text) -> (text) query;
   install_chunked_code : (InstallChunkedCodeArgument) -> (Result_2);
+  install_code : (InstallCodeArgument) -> (Result_2);
   like_post : (text) -> (text);
   raw_rand : () -> (Result_5);
   start_canister : (CanisterIdRecord) -> (Result_2);

@@ -37,25 +37,29 @@ pub struct ProposalInput{
 pub struct Dao{
     pub dao_id:Principal,
     pub dao_name:String,
-    pub dao_address:String,
-    pub dao_purpose:String,
-    pub document_name:String,
-    pub link_of_legal_document:String,
-    pub cool_down_period:u8,
-    pub social_link:Vec<String>,
-    pub groups_count:u32,
-    pub required_votes:u32, 
+    pub purpose:String,
+    pub daotype:String,
+    pub link_of_document:String,
+    pub cool_down_period:String,
+    pub tokenissuer:String,
+    pub linksandsocials:Vec<String>,
+    pub required_votes:i8,
+    pub groups_count:u64,
+    pub group_name:Vec<String>,
 }
 
 #[derive(Clone,CandidType,Serialize,Deserialize)]
 pub struct DaoInput{
     pub dao_name:String,
     pub purpose:String,
-    pub document_name:String,
+    pub daotype:String,
     pub link_of_document:String,
-    pub cool_down_period:u8,
-    pub social_link:Vec<String>,
-    pub required_votes:u32,
+    pub cool_down_period:String,
+    pub members:Vec<Principal>,
+    pub tokenissuer:String,
+    pub linksandsocials:Vec<String>,
+    pub required_votes:i8,
+
 }
 
 

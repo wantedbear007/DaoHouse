@@ -1,11 +1,14 @@
 use crate::State;
 
 use ic_cdk::api;
-
+use candid:: Principal;
 use crate::types::{Profileinput, UserProfile};
 
 pub fn create_new_profile(state: &mut State, profile: Profileinput) -> String {
     let principal_id = api::caller();
+    if principal_id == Principal::anonymous() {
+        return "Anonymous principal not allowed to make calls.".to_string();
+    }
 
     if state.user_profile.contains_key(&principal_id) {
         return "User already registered".to_string();
@@ -39,10 +42,42 @@ pub fn create_new_profile(state: &mut State, profile: Profileinput) -> String {
     return "user registered successfully".to_string();
 }
 
-pub fn get_user_profile(state: &State) -> UserProfile {
+// pub fn get_user_profile(state: &State) -> UserProfile {
+//     let principal_id = api::caller();
+//     if principal_id == Principal::anonymous() {
+//         return "Anonymous principal not allowed to make calls.".to_string();
+//     }
+//     if !state.user_profile.contains_key(&principal_id) {
+//         return UserProfile {
+//             user_id: principal_id,
+//             email_id: String::new(),
+//             profile_img: Vec::new(),
+//             username: String::new(),
+//             dao_ids: Vec::new(),
+//             post_count: 0,
+//             post_id: Vec::new(),
+//             followers_count: 0,
+//             followers_list: Vec::new(),
+//             followings_count: 0,
+//             followings_list: Vec::new(),
+//             description: String::new(),
+//             tag_defines: Vec::new(),
+//             contact_number: String::new(),
+//             twitter_id: String::new(),
+//             telegram: String::new(),
+//             website: String::new(),
+//         };
+//     }
+//     state.user_profile.get(&principal_id).unwrap().clone()
+// }
+
+
+pub fn get_user_profile(state: &State) -> Option<UserProfile> {
     let principal_id = api::caller();
-    if !state.user_profile.contains_key(&principal_id) {
-        return UserProfile {
+    if principal_id == Principal::anonymous() {
+        None 
+    } else if !state.user_profile.contains_key(&principal_id) {
+        Some(UserProfile {
             user_id: principal_id,
             email_id: String::new(),
             profile_img: Vec::new(),
@@ -60,13 +95,17 @@ pub fn get_user_profile(state: &State) -> UserProfile {
             twitter_id: String::new(),
             telegram: String::new(),
             website: String::new(),
-        };
+        })
+    } else {
+        state.user_profile.get(&principal_id).cloned()
     }
-    state.user_profile.get(&principal_id).unwrap().clone()
 }
 
 pub fn update_profile(state: &mut State, profile: Profileinput) -> String {
     let principal_id = api::caller();
+    if principal_id == Principal::anonymous() {
+        return "Anonymous principal not allowed to make calls.".to_string();
+    }
     if !state.user_profile.contains_key(&principal_id) {
         return "User not registered".to_string();
     }
@@ -99,6 +138,9 @@ pub fn update_profile(state: &mut State, profile: Profileinput) -> String {
 
 pub fn delete_profile(state: &mut State) -> String {
     let principal_id = api::caller();
+    if principal_id == Principal::anonymous() {
+        return "Anonymous principal not allowed to make calls.".to_string();
+    }
     if !state.user_profile.contains_key(&principal_id) {
         return "User not registered".to_string();
     }

@@ -25,14 +25,15 @@ impl State {
             dao: Dao {
                 dao_id: Principal::anonymous(), 
                 dao_name: String::from("Example DAO"),
-                dao_address: String::from("Example Address"),
-                dao_purpose: String::from("Example Purpose"),
-                document_name: String::from("Example Document"),
-                link_of_legal_document: String::from("Example Link"),
-                cool_down_period: 0, 
-                social_link: vec![String::from("Example Funds")],
-                groups_count: 0,
-                required_votes:0, 
+                purpose:String::from("Example Purpose"),
+                daotype:String::from("Example Type"),
+                link_of_document:String::from("Example Document"),
+                cool_down_period:String::from("Example Cooldown"),
+                tokenissuer:String::from("Example Token Issuer"), 
+                linksandsocials:Vec::new(),
+                required_votes:0,
+                groups_count:0,
+                group_name:Vec::new(),
             }
             
                 
