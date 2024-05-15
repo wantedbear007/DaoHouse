@@ -5,7 +5,7 @@ use crate::types::{CreateCanisterArgument,CanisterInstallMode,CanisterIdRecord,C
 use crate::api::call::{call, call_with_payment128, CallResult};
 use crate::api::canister_version;
 use ic_cdk::api;
-use candid::Principal;
+use candid::{Principal, encode_one};
 use ic_cdk::println;
 use ic_cdk::trap;
 
@@ -119,6 +119,10 @@ pub async fn create_dao( dao_detail: DaoInput) -> Result<String,String> {
         trap("Anonymous principal not allowed to make calls.")
     }
 
+    let dao_detail_bytes: Vec<u8> = match encode_one(&dao_detail) {
+        Ok(bytes) => bytes,
+        Err(e) => return Err(format!("Failed to serialize DaoInput: {}", e)),
+    };
     // if with_state(|state| state.user_profile.contains_key(&principal_id)).await {
     //     return Err("User not registered".to_string());
     // }
@@ -167,7 +171,7 @@ pub async fn create_dao( dao_detail: DaoInput) -> Result<String,String> {
         mode: CanisterInstallMode::Install, 
         canister_id: canister_id_principal, 
         wasm_module: vec![],
-        arg: vec![], 
+        arg: dao_detail_bytes, 
     };
     let installcode = install_code(arg1).await;
     println!("Canister ID: {:?}", canister_id);
