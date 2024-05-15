@@ -3,8 +3,76 @@ import "./Step4.scss";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
 const Step4 = ({ data, setData, setActiveStep }) => {
-  const className = "DAO__Step4";
   const [activeStage, setActiveStage] = useState(0);
+  const groups = data.step3.map((grp) => grp.name);
+  const [inputData, setInputData] = useState({
+    proposal: theList(),
+    voting: theList(),
+  });
+  const className = "DAO__Step4";
+
+  {
+    /**Mind blowing */
+  }
+  function theList() {
+    const list = groups.reduce((acc, group) => {
+      acc[group] = {
+        ChangeDAOConfig: false,
+        ChangeDAOPolicy: false,
+        Bounty: false,
+        BountyDone: false,
+        Transfer: false,
+        Polls: false,
+        AddMembers: false,
+        FunctionCalls: false,
+        UpgradeSelf: false,
+        UpgradeRemote: false,
+        setVoteToken: false,
+      };
+      return acc;
+    }, {});
+
+    return list;
+  }
+
+  const permissionList = [
+    "ChangeDAOConfig",
+    "ChangeDAOPolicy",
+    "Bounty",
+    "BountyDone",
+    "Transfer",
+    "Polls",
+    "AddMembers",
+    "FunctionCalls",
+    "UpgradeSelf",
+    "UpgradeRemote",
+    "setVoteToken",
+  ];
+
+  function handleSaveAndNext() {
+    setData((prev) => ({
+      ...prev,
+      step4: inputData,
+    }));
+
+    setActiveStep(4);
+  }
+
+  function toggleCheckbox(step, groupName, permissionName) {
+    const updatedInputData = {
+      ...inputData,
+      [step]: {
+        ...inputData[step],
+        [groupName]: {
+          ...inputData[step][groupName],
+          [permissionName]: !inputData[step][groupName][permissionName],
+        },
+      },
+    };
+
+    // Update the state
+    setInputData(updatedInputData);
+  }
 
   return (
     <React.Fragment>
@@ -39,93 +107,53 @@ const Step4 = ({ data, setData, setActiveStep }) => {
 
         {activeStage === 0 && (
           <React.Fragment>
-            <section className={className + "__table w-full overflow-x-auto"}>
-              <div className="heading flex flex-row items-center justify-between p-4">
-                <p className="font-semibold w-2/5">Actions</p>
-                <p className="font-semibold">Council</p>
-                <p className="font-semibold">All</p>
-              </div>
+            <table className="table-auto">
+              <thead>
+                <tr>
+                  <th className="font-semibold w-2/5 p-4 flex justify-left">
+                    Actions
+                  </th>
+                  {Object.keys(inputData.proposal).map((groupName, index) => (
+                    <th key={index} className="font-semibold p-4">
+                      {groupName}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
 
-              <div className="body bg-white p-3 rounded-2xl">
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">
-                    Change DAO Config
-                  </li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">
-                    Change DAO Policy
-                  </li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">Bounty</li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">Bounty Done</li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">Transfer</li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">Polls</li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">Add Members</li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">
-                    Function Call
-                  </li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">
-                    Upgrade Self
-                  </li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">
-                    Upgrade Remote
-                  </li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">
-                    Set Vote Token
-                  </li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-              </div>
-            </section>
+              <tbody>
+                {permissionList.map((permissionName, permissionIndex) => (
+                  <tr key={permissionIndex}>
+                    <td className="w-2/5 font-semibold list-disc p-4">
+                      {permissionName}
+                    </td>
+
+                    {Object.keys(inputData.proposal).map(
+                      (groupName, groupIndex) => (
+                        <td>
+                          <div className="flex justify-center">
+                            <input
+                              key={groupIndex}
+                              type="checkbox"
+                              checked={
+                                inputData["proposal"][groupName][permissionName]
+                              }
+                              onChange={() =>
+                                toggleCheckbox(
+                                  "proposal",
+                                  groupName,
+                                  permissionName
+                                )
+                              }
+                            />
+                          </div>
+                        </td>
+                      )
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
             <section className="flex w-full justify-end items-center">
               <button
@@ -141,93 +169,53 @@ const Step4 = ({ data, setData, setActiveStep }) => {
 
         {activeStage === 1 && (
           <React.Fragment>
-            <section className={className + "__table w-full overflow-x-auto"}>
-              <div className="heading flex flex-row items-center justify-between p-4">
-                <p className="font-semibold w-2/5">Actions</p>
-                <p className="font-semibold">Council</p>
-                <p className="font-semibold">All</p>
-              </div>
+            <table class="table-auto">
+              <thead>
+                <tr>
+                  <th className="font-semibold w-2/5 p-4 flex justify-left">
+                    Actions
+                  </th>
+                  {Object.keys(inputData.voting).map((groupName, index) => (
+                    <th key={index} className="font-semibold p-4">
+                      {groupName}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
 
-              <div className="body bg-white p-3 rounded-2xl">
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">
-                    Change DAO Config
-                  </li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">
-                    Change DAO Policy
-                  </li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">Bounty</li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">Bounty Done</li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">Transfer</li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">Polls</li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">Add Members</li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">
-                    Function Call
-                  </li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">
-                    Upgrade Self
-                  </li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">
-                    Upgrade Remote
-                  </li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-                <hr />
-                <div className="row flex flex-row items-center justify-between p-4">
-                  <li className="w-2/5 font-semibold list-disc">
-                    Set Vote Token
-                  </li>
-                  <input type="checkbox" name="council" checked={true} />
-                  <input type="checkbox" name="all" />
-                </div>
-              </div>
-            </section>
+              <tbody>
+                {permissionList.map((permissionName, permissionIndex) => (
+                  <tr key={permissionIndex}>
+                    <td className="w-2/5 font-semibold list-disc p-4">
+                      {permissionName}
+                    </td>
+
+                    {Object.keys(inputData.voting).map(
+                      (groupName, groupIndex) => (
+                        <td>
+                          <div className="flex justify-center">
+                            <input
+                              key={groupIndex}
+                              type="checkbox"
+                              checked={
+                                inputData["voting"][groupName][permissionName]
+                              }
+                              onChange={() =>
+                                toggleCheckbox(
+                                  "voting",
+                                  groupName,
+                                  permissionName
+                                )
+                              }
+                            />
+                          </div>
+                        </td>
+                      )
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
             <section className="flex w-full justify-end items-center">
               <button
@@ -256,8 +244,10 @@ const Step4 = ({ data, setData, setActiveStep }) => {
         </button>
         <button
           type="submit"
-          onClick={() => setActiveStep(4)}
-          className="flex m-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white"
+          onClick={handleSaveAndNext}
+          disabled={activeStage == 0 ? true : false}
+          className={`flex m-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white ${activeStage == 0 ? "opacity-50" : "opacity-100"
+            }`}
         >
           Save & Next <FaArrowRightLong />
         </button>
