@@ -1,0 +1,29 @@
+@media only screen and (max-width: 450px) {
+  .my-profile {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+  }
+  #lottie-bigCircle {
+    height: 78px !important;
+    width: 78px !important;
+  }
+  #lottie-smallCircle {
+    height: 30px !important;
+    width: 30px !important;
+  }
+  #lottie-mediumCircle {
+    height: 42px !important;
+    width: 42px !important;
+  }
+  .hero-container {
+    position: relative;
+    height: 18vh;
+  }
+  .edit-pen {
+    margin: auto;
+  }
+  .user-acc-info {
+    display: none;
+  }
+}
