@@ -22,6 +22,7 @@ type DaoInput = record {
   purpose : text;
   required_votes : int8;
 };
+type GroupList = record { users : vec principal };
 type ProposalInput = record {
   proposal_receiver_id : text;
   created_by : text;
@@ -48,11 +49,12 @@ type Proposals = record {
   comments_list : vec text;
   required_votes : nat64;
 };
+type Result = variant { Ok : GroupList; Err : text };
 service : (DaoInput) -> {
+  add_member_to_group : (text, principal) -> (text);
   create_proposal : (ProposalInput) -> (text);
   get_all_proposals : () -> (vec record { text; Proposals }) query;
-  get_dao_detail : () -> (vec record { principal; Dao }) query;
-  get_dao_detail_object : () -> (Dao) query;
+  get_dao_detail : () -> (Dao) query;
+  get_members_of_group : (text) -> (Result) query;
   get_proposal_by_id : (text) -> (Proposals) query;
-  greet : (text) -> (text) query;
 }

@@ -9,7 +9,7 @@ mod state_handler;
 use state_handler::State;
 mod memory;
 // use memory::Memory; 
-mod proposal_functions;
+mod functions;
 use std::collections::HashMap;
 // #[macro_use]
 extern crate ic_cdk_macros;
@@ -27,35 +27,38 @@ thread_local! {
 
 
 
-#[init]  
-async fn init(dao_input:DaoInput) { 
+#[init]
+async fn init(dao_input: DaoInput) { 
     let principal_id = api::caller();
-    let new_dao=Dao{
-        dao_id:principal_id,
-        dao_name:dao_input.dao_name,
-        purpose:dao_input.purpose,
-        daotype:dao_input.daotype,
-        link_of_document:dao_input.link_of_document,
-        cool_down_period:dao_input.cool_down_period,
-        tokenissuer:dao_input.tokenissuer,
-        linksandsocials:dao_input.linksandsocials,
-        group_name:Vec::new(),
-        groups_count:0,
-        required_votes:dao_input.required_votes, 
+    
+    
+
+    let new_dao = Dao {
+        dao_id: principal_id,
+        dao_name: dao_input.dao_name,
+        purpose: dao_input.purpose,
+        daotype: dao_input.daotype,
+        link_of_document: dao_input.link_of_document,
+        cool_down_period: dao_input.cool_down_period,
+        tokenissuer: dao_input.tokenissuer,
+        linksandsocials: dao_input.linksandsocials,
+        group_name: vec!["council".to_string()],
+        groups_count: 1,
+        required_votes: dao_input.required_votes,
     };
+
+    let council_list = GroupList {
+        users: dao_input.members,
+    };
+
     with_state(|state| {
         state.dao = new_dao.clone();
+        state.groups.insert("council".to_string(), council_list);
     }).await;
-    with_state(|state| state.dao_detail.insert(principal_id,new_dao)).await;
-
-   
 }
 
 
-#[query]
-fn greet(name: String) -> String {
-    format!("Hello, {}!", name)
-}
+
 
 
 #[pre_upgrade]

@@ -62,6 +62,12 @@ pub struct DaoInput{
 
 }
 
+#[derive(Clone,CandidType,Serialize,Deserialize)]
+pub struct GroupList{
+    pub users:Vec<Principal>,
+
+}
+
 
 
 

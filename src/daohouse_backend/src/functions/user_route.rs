@@ -119,7 +119,22 @@ pub async fn create_dao( dao_detail: DaoInput) -> Result<String,String> {
         trap("Anonymous principal not allowed to make calls.")
     }
 
-    let dao_detail_bytes: Vec<u8> = match encode_one(&dao_detail) {
+    let mut updated_members = dao_detail.members.clone();
+    updated_members.push(principal_id);
+
+    let update_dau_detail=DaoInput{
+        dao_name:dao_detail.dao_name,
+        purpose:dao_detail.purpose,
+        daotype:dao_detail.daotype,
+        link_of_document:dao_detail.link_of_document,
+        cool_down_period:dao_detail.cool_down_period,
+        members:updated_members,
+        tokenissuer:dao_detail.tokenissuer,
+        linksandsocials:dao_detail.linksandsocials,
+        required_votes:dao_detail.required_votes,
+    };
+
+    let dao_detail_bytes: Vec<u8> = match encode_one(&update_dau_detail) {
         Ok(bytes) => bytes,
         Err(e) => return Err(format!("Failed to serialize DaoInput: {}", e)),
     };

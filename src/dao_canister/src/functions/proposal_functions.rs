@@ -25,13 +25,9 @@ async fn get_proposal_by_id(proposal_id: String) -> Proposals {
     with_state(|state| state.proposals.get(&proposal_id).unwrap().clone()).await
 }
 
-#[query]
-async fn get_dao_detail() -> HashMap<Principal, Dao> {
-    with_state(|state| state.dao_detail.clone()).await
-}
 
 #[query]
-async fn get_dao_detail_object() -> Dao {
+async fn get_dao_detail() -> Dao {
     with_state(|state| state.dao.clone()).await
 }
 

@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use candid::Principal;
 use serde::{Serialize,Deserialize};
-use crate::types::{Proposals,Dao};
+use crate::types::{Proposals,Dao,GroupList};
 // use std::collections::BTreeMap;
 
 
@@ -9,8 +9,9 @@ use crate::types::{Proposals,Dao};
 pub struct State {
 
     pub proposals : HashMap<String, Proposals>,
-    pub dao_detail : HashMap<Principal, Dao>,
-    pub dao:Dao
+    pub dao:Dao,
+
+    pub groups:HashMap<String,GroupList>
 
 
     // pub users: HashMap<Principal, User>,
@@ -21,7 +22,6 @@ impl State {
         Self {
 
             proposals: HashMap::new(),
-            dao_detail: HashMap::new(),
             dao: Dao {
                 dao_id: Principal::anonymous(), 
                 dao_name: String::from("Example DAO"),
@@ -34,7 +34,11 @@ impl State {
                 required_votes:0,
                 groups_count:0,
                 group_name:Vec::new(),
-            }
+            },
+
+            groups:HashMap::new(),
+
+
             
                 
         }
