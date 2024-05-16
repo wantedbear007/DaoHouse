@@ -3,8 +3,8 @@ import proposals from "../../../assets/proposals.png"
 import SearchProposals from '../../Components/Proposals/SearchProposals';
 import { BsPlusLg } from 'react-icons/bs';
 import ProposalList from '../../Components/Proposals/ProposalList';
-import { proposalsArray } from '../../Components/Proposals/proposals';
 import { useNavigate } from 'react-router-dom';
+import { proposalsArray } from '../../Components/Proposals/proposalsData';
 
 const Proposals = () => {
     const [Recent, setRecent] = useState(true);
@@ -79,7 +79,7 @@ const Proposals = () => {
                     className + "__proposalsCard  bg-[#c8ced3] gap-8 flex flex-col w-full"
                 }
             >
-                <ProposalList proposals={proposalsArray} />
+                <ProposalList />
             </div>
 
         </div>

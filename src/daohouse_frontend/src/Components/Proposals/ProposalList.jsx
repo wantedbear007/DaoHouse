@@ -1,12 +1,13 @@
 import React from 'react';
 import ProposalCard from './ProposalCard';
+import { proposalsArray } from './proposalsData';
 
-const ProposalList = ({ proposals }) => {
+const ProposalList = () => {
     return (
         <div className=" w-full px-[4rem]">
-            {proposals.map((proposal, index) => (
-                <div className='my-8'>
-                    <ProposalCard key={index} proposal={proposal} />
+            {proposalsArray.map((proposal, index) => (
+                <div className='my-8' key={index} >
+                    <ProposalCard proposal={proposal} />
                 </div>
             ))}
         </div>
