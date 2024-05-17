@@ -1,13 +1,14 @@
-import React from 'react';
+import React from "react";
 
 const DaoCard = ({ name, funds, members, groups, proposals }) => {
   return (
-    <div className="bg-[#F4F2EC] rounded-lg shadow-lg p-6 rounded-lg">
-      <div className="flex justify-between items-center mb-4">
-        <div className="w-[207px] h-[120px] bg-zinc-300 rounded"></div>
-        <h2 className="text-2xl font-semibold flex-1 mb-auto ml-4">{name}</h2>
+    <div className="bg-[#F4F2EC] rounded-lg shadow-lg tablet:p-6 big_phone:p-3 small_phone:p-5 p-3 rounded-lg">
+      <div className="flex justify-start items-start mb-4 gap-4">
+        <div className="mobile:w-[207px] mobile:h-[120px] w-[150px] h-[70px] bg-zinc-300 rounded"></div>
+        <h2 className="mobile:text-2xl text-lg font-semibold">{name}</h2>
       </div>
-      <div className="grid grid-cols-4 gap-4 text-center mb-4 bg-white p-4 rounded-lg">
+
+      <div className="big_phone:grid hidden grid-cols-4 text-center mb-4 bg-white tablet:p-4 pb-4 p-2 rounded-lg">
         <div>
           <p className="font-bold">{funds}</p>
           <p className="text-sm text-zinc-600">DAO Funds</p>
@@ -25,9 +26,32 @@ const DaoCard = ({ name, funds, members, groups, proposals }) => {
           <p className="text-sm text-zinc-600">Active Proposals</p>
         </div>
       </div>
+
+      <div className="big_phone:hidden grid grid-cols-2 text-center my-4 small_phone:gap-4 gap-2">
+        <div className="bg-white rounded-lg py-4">
+          <p className="font-bold text-dark-green">{funds}</p>
+          <p className="text-sm text-dark-green">DAO Funds</p>
+        </div>
+        <div className="bg-white rounded-lg py-4">
+          <p className="font-bold text-dark-green">{members}</p>
+          <p className="text-sm text-dark-green">Members</p>
+        </div>
+        <div className="bg-white rounded-lg py-4">
+          <p className="font-bold text-dark-green">{groups}</p>
+          <p className="text-sm text-dark-green">Groups</p>
+        </div>
+        <div className="bg-white rounded-lg py-4">
+          <p className="font-bold text-dark-green">{proposals}</p>
+          <p className="text-sm text-dark-green">Active Proposals</p>
+        </div>
+      </div>
       <div className="flex justify-between gap-2">
-        <button className="flex-1 bg-transparent border-2 border-[#0E3746] text-[#0E3746] px-8 py-2 rounded-[3rem]">View Profile</button>
-        <button className="flex-1 bg-[#0E3746] border-2 border-[#0E3746] text-white px-8 py-2 rounded-[3rem]">Join DAO</button>
+        <button className="flex-1 bg-transparent border-2 border-dark-green text-dark-green p-2 rounded-[3rem] small_phone:text-base text-sm">
+          View Profile
+        </button>
+        <button className="flex-1 bg-dark-green border-2 border-dark-green text-white p-2 rounded-[3rem] small_phone:text-base text-sm">
+          Join DAO
+        </button>
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ const TopComponent = ({ showButtons, showAll, setShowAll }) => {
         <div
             className={
                 className +
-                "__filter w-100 h-[25vh] p-20 flex flex-col items-start justify-center"
+                "__filter w-100 mobile:h-[25vh] h-[17vh] big_phone:p-20 small_phone:p-10 p-4 flex flex-col items-start justify-center"
             }
             style={{
                 backgroundImage: `url("${daobg}")`,
@@ -17,7 +17,7 @@ const TopComponent = ({ showButtons, showAll, setShowAll }) => {
                 backgroundPosition: "center",
             }}
         >
-            <h1 className="text-5xl p-3 text-white">DAOs</h1>
+            <h1 className="mobile:text-5xl text-3xl p-3 text-white">DAOs</h1>
 
             {showButtons &&
                 <div
@@ -26,14 +26,14 @@ const TopComponent = ({ showButtons, showAll, setShowAll }) => {
                     }
                 >
                     <button
-                        className={`px-6 py-2 text-lg text-white ${!showAll ? "" : "shadow-lg font-semibold"
+                        className={`px-6 py-2 mobile:text-lg text-sm text-white ${!showAll ? "" : "shadow-lg font-semibold"
                             }`}
                         onClick={() => setShowAll(true)}
                     >
                         All
                     </button>
                     <button
-                        className={`px-6 py-2 text-lg text-white ${showAll ? "" : "shadow-lg font-semibold"
+                        className={`px-6 py-2 mobile:text-lg text-sm text-white ${showAll ? "" : "shadow-lg font-semibold"
                             }`}
                         onClick={() => setShowAll(false)}
                     >

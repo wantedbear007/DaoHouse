@@ -92,7 +92,7 @@ const Navbar = () => {
     <nav>
       <div className="bg-[#DADEE4] shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50">
         <div className="tablet:px-20 small_phone:px-8 px-4 small_phone:py-5 py-3 flex justify-between items-center w-full">
-          <div className="big_tablet:flex items-center tablet:space-x-8 space-x-4 hidden ">
+          <div className="big_phone:flex items-center tablet:space-x-8 space-x-4 hidden ">
             {menuItems.map((item, index) => (
               <div
                 key={index}
@@ -118,13 +118,13 @@ const Navbar = () => {
             <div className="flex items-center tablet:space-x-4 space-x-2">
               <button
                 onClick={handleLoginModalOpen}
-                className="mobile:px-8 px-4 py-2 rounded-[27.5px] bg-[#0E3746] text-white whitespace-nowrap big_tablet:text-base small_phone:text-sm text-xs"
+                className="mobile:px-8 px-4 py-2 rounded-[27.5px] bg-[#0E3746] text-white whitespace-nowrap big_phone:text-base small_phone:text-sm text-xs"
               >
                 {isLoading ? "Connecting" : "Sign In"}
               </button>
               <button
                 onClick={handleLoginModalOpen}
-                className="mobile:px-8 px-4 py-2 rounded-[27.5px] bg-[#FFFFFF] big_tablet:text-base small_phone:text-sm text-xs"
+                className="mobile:px-8 px-4 py-2 rounded-[27.5px] bg-[#FFFFFF] big_phone:text-base small_phone:text-sm text-xs"
               >
                 Connect
               </button>

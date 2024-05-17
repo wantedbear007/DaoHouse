@@ -7,6 +7,9 @@ module.exports = {
         full: "100%",
         "-full": "-100%",
       },
+      colors: {
+        'dark-green': "#0E3746"
+      },
       scale: {
         90: "0.9",
       },
@@ -22,8 +25,8 @@ module.exports = {
       screens: {
         small_phone: "400px",
         mobile: "500px",
-        big_tablet: "800px",
-        tablet: "1050px",
+        big_phone: "800px",
+        tablet: "1000px",
         laptop: "1280px",
         desktop: "1440px",
       },
