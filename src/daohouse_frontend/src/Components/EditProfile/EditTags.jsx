@@ -4,7 +4,7 @@ import Xtag from "../../../assets/Xtag.png";
 const EditTags = ({ editTags }) => {
   return (
     <div className="bg-[#FFFFFF] md:text-[16px] text-[12px] font-normal text-[#646464] md:py-3 md:px-5 p-3 my-2 rounded-lg">
-      <div className="flex flex-wrap">
+      <div className="flex flex-wrap items-center">
         {editTags.map((editTag, index) => (
           <span
             key={index}
@@ -18,10 +18,13 @@ const EditTags = ({ editTags }) => {
             <img
               src={Xtag}
               alt="cross-icon"
-              className="ml-8 mr-4 w-[10px] cursor-pointer"
+              className="md:ml-8 ml-3 md:mr-4 mr-3 cursor-pointer"
             />
           </span>
         ))}
+        <p className="text-[#05212C] font-semibold ml-5 cursor-pointer">
+          Add more
+        </p>
       </div>
     </div>
   );

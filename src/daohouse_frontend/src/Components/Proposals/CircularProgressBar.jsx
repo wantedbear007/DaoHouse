@@ -1,7 +1,7 @@
 export const CircularProgressBar = ({ percentage, color }) => {
 
-    const radius = 20;
-    const strokeWidth = 3;
+    const radius = 30;
+    const strokeWidth = 5;
     const normalizedRadius = radius - strokeWidth / 2;
     const circumference = normalizedRadius * 2 * Math.PI;
     const progress = ((100 - percentage) / 100) * circumference;
