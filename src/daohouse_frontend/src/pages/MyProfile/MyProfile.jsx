@@ -119,7 +119,7 @@ const MyProfile = ({ childComponent }) => {
       <div
         className={
           className +
-          "__mainComponent bg-[#c8ced3] md:py-8 md:px-8 flex md:flex-row gap-2 flex-col w-full user-container"
+          "__mainComponent bg-[#c8ced3] big_phone:py-8 big_phone:pb-20 py-6 md:px-8 flex md:flex-row gap-2 flex-col w-full user-container"
         }
       >
         {/* Left side content */}
@@ -163,7 +163,7 @@ const MyProfile = ({ childComponent }) => {
             <div className="flex items-start md:ml-[-90px] relative">
               <div>
                 <img
-                  className="rounded-md md:w-full  w-[69px] mt-[-20px] z-50"
+                  className="rounded-md md:w-full  min-w-[69px] mt-[-20px] z-50"
                   src={MyProfileImage}
                   alt="profile-pic"
                   style={{
