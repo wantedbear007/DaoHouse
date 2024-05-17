@@ -7,12 +7,12 @@ const Followers = () => {
 
   return (
     <div className={className + "w-full"}>
-      <div className="md:ml-10 mx-5 md:mt-12 mt-5">
-        <h3 className="text-[#05212C] md:text-[24px] text-[18px] md:font-bold font-semibold ml-4">
+      <div className="tablet:ml-10 mx-5 tablet:mt-12 mt-5">
+        <h3 className="text-[#05212C] tablet:text-[24px] text-[18px] tablet:font-bold font-semibold ml-4">
           Followers
         </h3>
 
-        <div className="md:mt-4 mt-2 flex flex-row gap-4">
+        <div className="tablet:mt-4 mt-2 flex flex-row gap-4">
           <div className="w-3/5 max-h-[300px] p-4 bg-[#F4F2EC] rounded-lg flex flex-col gap-5 overflow-y-auto">
             {followersList.map(({ userName, key, image }) => (
               <div
@@ -51,11 +51,11 @@ const Followers = () => {
                 className="w-full flex flex-row items-center justify-between"
               >
                 <div className="flex flex-row items-center">
-                  <div className="flex flex-row big_phone:gap-4 gap-2 items-center">
+                  <div className="flex flex-row tablet:gap-4 gap-2 items-center">
                     <img
                       src={image}
                       alt="Follower"
-                      className="big_phone:w-10 w-8 h-full object-contain rounded-[50%]"
+                      className="tablet:w-10 w-8 h-full object-contain rounded-[50%]"
                     />
 
                     <section className="flex flex-col items-start">
@@ -65,7 +65,7 @@ const Followers = () => {
                   </div>
                 </div>
 
-                <RxArrowTopRight className="big_phone:text-2xl text-lg" />
+                <RxArrowTopRight className="tablet:text-2xl text-lg" />
               </div>
             ))}
           </div>
