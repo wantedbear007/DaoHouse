@@ -16,18 +16,20 @@ const Step4 = ({ data, setData, setActiveStep }) => {
   }
   function theList() {
     const list = groups.reduce((acc, group) => {
+      const flag = group == "Council" ? true : false
+
       acc[group] = {
-        ChangeDAOConfig: false,
-        ChangeDAOPolicy: false,
-        Bounty: false,
-        BountyDone: false,
-        Transfer: false,
-        Polls: false,
-        AddMembers: false,
-        FunctionCalls: false,
-        UpgradeSelf: false,
-        UpgradeRemote: false,
-        setVoteToken: false,
+        ChangeDAOConfig: flag,
+        ChangeDAOPolicy: flag,
+        Bounty: flag,
+        BountyDone: flag,
+        Transfer: flag,
+        Polls: flag,
+        AddMembers: flag,
+        FunctionCalls: flag,
+        UpgradeSelf: flag,
+        UpgradeRemote: flag,
+        setVoteToken: flag,
       };
       return acc;
     }, {});
@@ -135,6 +137,7 @@ const Step4 = ({ data, setData, setActiveStep }) => {
                             <input
                               key={groupIndex}
                               type="checkbox"
+                              className="cursor-pointer"
                               checked={
                                 inputData["proposal"][groupName][permissionName]
                               }
@@ -169,7 +172,7 @@ const Step4 = ({ data, setData, setActiveStep }) => {
 
         {activeStage === 1 && (
           <React.Fragment>
-            <table class="table-auto">
+            <table className="table-auto">
               <thead>
                 <tr>
                   <th className="font-semibold w-2/5 p-4 flex justify-left">
@@ -197,6 +200,7 @@ const Step4 = ({ data, setData, setActiveStep }) => {
                             <input
                               key={groupIndex}
                               type="checkbox"
+                              className="cursor-pointer"
                               checked={
                                 inputData["voting"][groupName][permissionName]
                               }
