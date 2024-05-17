@@ -10,20 +10,20 @@ const DaoCard = ({ name, funds, members, groups, proposals }) => {
 
       <div className="big_phone:grid hidden grid-cols-4 text-center mb-4 bg-white tablet:p-4 pb-4 p-2 rounded-lg">
         <div>
-          <p className="font-bold">{funds}</p>
-          <p className="text-sm text-zinc-600">DAO Funds</p>
+          <p className="font-bold text-dark-green">{funds}</p>
+          <p className="text-sm text-dark-green">DAO Funds</p>
         </div>
         <div>
-          <p className="font-bold">{members}</p>
-          <p className="text-sm text-zinc-600">Members</p>
+          <p className="font-bold text-dark-green">{members}</p>
+          <p className="text-sm text-dark-green">Members</p>
         </div>
         <div>
-          <p className="font-bold">{groups}</p>
-          <p className="text-sm text-zinc-600">Groups</p>
+          <p className="font-bold text-dark-green">{groups}</p>
+          <p className="text-sm text-dark-green">Groups</p>
         </div>
         <div>
-          <p className="font-bold">{proposals}</p>
-          <p className="text-sm text-zinc-600">Active Proposals</p>
+          <p className="font-bold text-dark-green">{proposals}</p>
+          <p className="text-sm text-dark-green">Active Proposals</p>
         </div>
       </div>
 
