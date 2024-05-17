@@ -1,23 +1,26 @@
 // Importing necessary modules and assets
-import React from "react";
-import MyProfileRectangle from "../../../assets/MyProfileRectangle.png";
-import MyProfileImage from "../../../assets/MyProfile-img.png";
+import React, { useState } from "react";
+import "./MyProfile.css";
+import Lottie from "react-lottie";
+import { Link, useNavigate } from "react-router-dom";
+import { FaArrowRightLong } from "react-icons/fa6";
+
 import EditPen from "../../../assets/edit_pen.png";
+import MyProfileImage from "../../../assets/MyProfile-img.png";
 import BigCircle from "../../../assets/BigCircle.png";
 import MediumCircle from "../../../assets/MediumCircle.png";
 import SmallestCircle from "../../../assets/SmallestCircle.png";
-import { useNavigate } from "react-router-dom";
-import Tags from "../../Components/MyProfile/Tags";
-import PersonalLinksAndContactInfo from "../../Components/MyProfile/PersonalLinksAndContactInfo";
-import Lottie from "react-lottie";
+import MyProfileRectangle from "../../../assets/MyProfileRectangle.png";
 import BigCircleAnimation from "./BigCircleAnimation.json";
 import SmallCircleAnimation from "./SmallCircleAnimation.json";
-import "./MyProfile.css";
 import ProfileTitleDivider from "../../Components/MyProfile/ProfileTitleDivider";
 
 // Main component function
-const MyProfile = () => {
-  const navigate = useNavigate();
+const MyProfile = ({ childComponent }) => {
+  const [activeTab, setActiveTab] = useState(null)
+  const tabButtonsStyle = 'my-1 text-[12px] md:text-[16px] flex flex-row items-center gap-2 hover:text-white'
+  const className = "MyProfile";
+  const navigate = useNavigate()
 
   // Animation options for the big circle
   const defaultOptions = {
@@ -53,10 +56,13 @@ const MyProfile = () => {
 
   // Main return statement
   return (
-    <div className="bg-zinc-200 w-full relative">
+    <div className={className + " bg-zinc-200 w-full relative"}>
       {/* Background image container */}
       <div
-        className="w-full h-[25vh] p-20 flex flex-col items-start justify-center relative hero-container"
+        className={
+          className +
+          "__topComponent w-full h-[25vh] p-20 flex flex-col items-start justify-center relative hero-container"
+        }
         style={{
           backgroundImage: `url("${MyProfileRectangle}")`,
           backgroundRepeat: "no-repeat",
@@ -117,31 +123,50 @@ const MyProfile = () => {
 
         <ProfileTitleDivider title="My Profile" />
       </div>
+
       {/* Main profile content */}
-      <div className="bg-[#c8ced3] md:py-8 md:px-8 flex md:flex-row gap-2 flex-col w-full user-container">
+      <div
+        className={
+          className +
+          "__mainComponent bg-[#c8ced3] md:py-8 md:px-8 flex md:flex-row gap-2 flex-col w-full user-container"
+        }
+      >
         {/* Left side content */}
-        <div className="md:mx-2 mx-5 md:px-20 flex flex-col md:items-start justify-center md:w-[251px] md:h-[620px] rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal md:mt-[-92px] mt-[-30px] z-20">
+        <div
+          className={
+            className +
+            "__mainComponent__leftSide md:mx-2 mx-5 md:px-20 flex flex-col md:items-start justify-center md:w-[251px] md:h-[620px] rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal md:mt-[-92px] mt-[-30px] z-20"
+          }
+        >
           {/* Navigation links */}
           <div
             className="flex md:flex-col flex-row items-start md:justify-center justify-around  gap-y-6 md:mt-[8rem]
           mb-[2rem] mt-[0.5rem] text-base "
           >
-            <p className="my-1 text-[12px] md:text-[16px]">
-              <a href="">My Posts</a>
+            <Link to="/my-profile/my-post" onClick={() => setActiveTab(0)}>
+              <p className={`${tabButtonsStyle} ${activeTab == 0 ? "text-white" : ""}`}>
+                My Posts {activeTab == 0 ? <FaArrowRightLong /> : ""}
+              </p>
+            </Link>
+
+            <p className={`${tabButtonsStyle}  ${activeTab == 1 ? "text-white" : ""}`}>
+              Components {activeTab == 1 ? <FaArrowRightLong /> : ""}
             </p>
-            <p className="my-1 text-[12px] md:text-[16px]">
-              <a href="">Components</a>
-            </p>
-            <p className="my-1 text-[12px] md:text-[16px]">
-              <a href="">Followers</a>
-            </p>
-            <p className="my-1 text-[12px] md:text-[16px]">
-              <a href="">Following</a>
+
+            <Link to="/my-profile/followers" onClick={() => setActiveTab(2)}>
+              <p className={`${tabButtonsStyle} ${activeTab == 2 ? "text-white" : ""}`}>
+                Followers {activeTab == 2 ? <FaArrowRightLong /> : ""}
+              </p>
+            </Link>
+
+            <p className={`${tabButtonsStyle}  ${activeTab == 3 ? "text-white" : ""}`}>
+              Following {activeTab == 3 ? <FaArrowRightLong /> : ""}
             </p>
           </div>
         </div>
+
         {/* Right side content */}
-        <div className="container">
+        <div className={className + "__rightSide w-full"}>
           {/* Profile picture and details */}
           <div className="flex md:justify-between justify-around w-full gap-2 z-50 relative">
             <div className="flex items-start md:ml-[-90px] relative">
@@ -201,67 +226,9 @@ const MyProfile = () => {
               3 <div className=" text-[14px]">Following</div>
             </div>
           </div>
-          {/* About me section */}
-          <div className="md:ml-10 mx-5 md:mt-12 mt-5">
-            <h3 className="text-[#05212C] md:text-[24px] text-[18px] md:font-bold font-semibold ml-4">
-              About Me
-            </h3>
-            <div className="md:mt-4 mt-2 mb-6 bg-[#F4F2EC] p-4 rounded-lg">
-              <p className="md:text-[20px] text-[16px] font-semibold text-[#05212C] md:ml-2 md:mb-3">
-                Description
-              </p>
-              <div className="bg-[#FFFFFF] md:text-[16px] text-[12px] font-normal text-[#646464] p-3 my-2 rounded-lg">
-                I'm a firm believer in the power of kindness and the beauty of
-                diversity, constantly seeking out new perspectives and
-                experiences to broaden my horizons. From hiking through rugged
-                mountain trails to savoring exotic cuisines from around the
-                globe, I thrive on the thrill of adventure and the joy of
-                discovery.
-              </div>
-              <p className="md:text-[20px] text-[16px] font-semibold text-[#05212C] md:ml-2 md:mb-3 mt-6">
-                Tags That Defines You
-              </p>
-              <Tags
-                tags={[
-                  "ICP",
-                  "Blockchain",
-                  "Engineer",
-                  "Digital Artist",
-                  "NFT Artist",
-                  "Decentralization",
-                  "Ethereum",
-                ]}
-              />
-              <p className="md:text-[20px] text-[16px] font-semibold text-[#05212C] ml-2 mb-3 mt-6">
-                Personal Links & Contact Info
-              </p>
-              <PersonalLinksAndContactInfo
-                links={[
-                  { icon: "phone-icon", name: "Phone", value: "0123456789" },
-                  {
-                    icon: "email-icon",
-                    name: "Email",
-                    value: "Emailid.id@email.com",
-                  },
-                  {
-                    icon: "X-icon",
-                    name: "X",
-                    value: "http://www.statholdings.com",
-                  },
-                  {
-                    icon: "telegram-icon",
-                    name: "Telegram",
-                    value: "http://www.groovestreet.com",
-                  },
-                  {
-                    icon: "web-icon",
-                    name: "Web",
-                    value: "http://dummywebsite2.net",
-                  },
-                ]}
-              />
-            </div>
-          </div>
+
+          {/*Child Components */}
+          {childComponent}
         </div>
       </div>
     </div>

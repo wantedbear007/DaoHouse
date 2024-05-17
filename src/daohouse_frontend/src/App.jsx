@@ -8,11 +8,14 @@ import Footer from "./Components/layouts/Footer";
 import FeedPage from "./pages/FeedPage/FeedPage";
 import CreateDao from "./pages/CreateDao/CreateDao";
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Proposals from "./pages/Proposals/Proposals";
-import CreateProposal from "./pages/Proposals/CreateProposal";
 import MyProfile from "./pages/MyProfile/MyProfile";
 import EditProfile from "./pages/EditProfile/EditProfile";
+import CreateProposal from "./pages/Proposals/CreateProposal";
+import MyPosts from "./Components/MyProfile/MyPosts/MyPosts";
+import AboutMe from "./Components/MyProfile/AboutMe/AboutMe";
+import Followers from "./Components/MyProfile/Followers/Followers";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const App = () => {
   return (
@@ -26,8 +29,19 @@ const App = () => {
         <Route path="/create-proposal" element={<CreateProposal />} />
         <Route path="/dao" element={<Dao />} />
         <Route path="/dao/create-dao" element={<CreateDao />} />
-        <Route path="/my-profile" element={<MyProfile />} />
         <Route path="/edit-profile" element={<EditProfile />} />
+        <Route
+          path="/my-profile"
+          element={<MyProfile childComponent={<AboutMe />} />}
+        />
+        <Route
+          path="/my-profile/my-post"
+          element={<MyProfile childComponent={<MyPosts />} />}
+        />
+        <Route
+          path="/my-profile/followers"
+          element={<MyProfile childComponent={<Followers />} />}
+        />
       </Routes>
       <Footer />
     </Router>
