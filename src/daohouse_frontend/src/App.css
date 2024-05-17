@@ -57,3 +57,7 @@ body {
   color: #646464;
   font-weight: 400;
 }
+
+.border-r {
+  border-right-width: 1px;
+}
