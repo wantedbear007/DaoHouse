@@ -78,7 +78,7 @@ const Dao = () => {
         <div
           className={
             className +
-            "__cards px-10 pb-10 bg-[#c8ced3] grid grid-cols-1 md:grid-cols-2 gap-6"
+            "__cards tablet:px-10 px-4 pb-10 bg-[#c8ced3] grid grid-cols-1 big_phone:grid-cols-2 tablet:gap-6 gap-4"
           }
         >
           {joinedDAOs &&
