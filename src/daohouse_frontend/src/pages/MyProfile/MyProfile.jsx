@@ -14,6 +14,9 @@ import BigCircleAnimation from "./BigCircleAnimation.json";
 import SmallCircleAnimation from "./SmallCircleAnimation.json";
 import "./MyProfile.css";
 import ProfileTitleDivider from "../../Components/MyProfile/ProfileTitleDivider";
+import BigCircleComponent from "../../Components/MyProfile/BigCircleComponent";
+import MediumCircleComponent from "../../Components/MyProfile/MediumCircleComponent";
+import SmallCircleComponent from "../../Components/MyProfile/SmallCircleComponent";
 
 // Main component function
 const MyProfile = () => {
@@ -66,11 +69,7 @@ const MyProfile = () => {
       >
         <div className="absolute z-20 top-0 left-0 w-full h-full overflow-x-hidden">
           {/* Big circle image */}
-          <img
-            src={BigCircle}
-            alt="Big Circle"
-            className="absolute  md:w-[96px] md:h-[96px] w-[65px] h-[65px] md:right-[76px] right-[-10px] top-1/2 -translate-y-1/2"
-          />
+          <BigCircleComponent imgSrc={BigCircle} />
 
           {/* Big circle animation */}
           <div className="absolute z-20  md:right-[68px] md:top-1/2 top-[59%] -translate-y-1/2 right-[-50px]">
@@ -81,11 +80,7 @@ const MyProfile = () => {
             />
           </div>
           {/* Smallest circle image */}
-          <img
-            src={SmallestCircle}
-            alt="Small Circle"
-            className="absolute md:w-[43px] md:h-[43px] w-[26px] h-[26px] md:right-[25rem] right-[8.5rem] -translate-y-full md:top-[30%] top-[24%]"
-          />
+          <SmallCircleComponent imgSrc={SmallestCircle} />
 
           {/* Small circle animation */}
           <div className="absolute md:right-[24.75rem] right-[7.1rem] md:top-[30%] top-[33%] -translate-y-[93%]">
@@ -98,11 +93,7 @@ const MyProfile = () => {
           </div>
 
           {/* Medium circle image */}
-          <img
-            src={MediumCircle}
-            alt="Medium Circle"
-            className="absolute w-[36px] h-36[px] md:w-[52px] md:h-[52px] md:right-[40rem] right-[13rem] -translate-y-full md:top-[95%] top-[89%]"
-          />
+          <MediumCircleComponent imgSrc={MediumCircle} />
 
           {/* Medium circle animation */}
           <div className="absolute md:right-[39.71rem] right-[11.6rem] md:top-[95%] top-[97.6%] -translate-y-[93%]">
