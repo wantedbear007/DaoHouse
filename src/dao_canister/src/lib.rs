@@ -1,5 +1,5 @@
 mod types;
-use ic_cdk::{api, init, query, export_candid};
+use ic_cdk::{api, init, export_candid};
 use std::cell::RefCell;
 pub mod proposal_route;
 // use crate::api::call::CallResult;
@@ -30,9 +30,6 @@ thread_local! {
 #[init]
 async fn init(dao_input: DaoInput) { 
     let principal_id = api::caller();
-    
-    
-
     let new_dao = Dao {
         dao_id: principal_id,
         dao_name: dao_input.dao_name,

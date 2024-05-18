@@ -1,5 +1,5 @@
 mod types;
-use ic_cdk::{api, query, export_candid};
+use ic_cdk::{api, export_candid};
 use std::cell::RefCell;
 pub mod routes;
 pub mod functions;
@@ -23,11 +23,6 @@ thread_local! {
 
 pub fn with_state<R>(f: impl FnOnce(&mut State) -> R) -> R {
     STATE.with(|cell| f(&mut cell.borrow_mut()))
-}
-
-#[query]
-fn greet(name: String) -> String {
-    format!("Hello, {}!", name)
 }
 
 

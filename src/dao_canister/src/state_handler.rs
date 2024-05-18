@@ -20,7 +20,6 @@ pub struct State {
 impl State {
     pub fn new() -> Self {
         Self {
-
             proposals: HashMap::new(),
             dao: Dao {
                 dao_id: Principal::anonymous(), 
@@ -35,12 +34,7 @@ impl State {
                 groups_count:0,
                 group_name:Vec::new(),
             },
-
             groups:HashMap::new(),
-
-
-            
-                
         }
     }
 }
