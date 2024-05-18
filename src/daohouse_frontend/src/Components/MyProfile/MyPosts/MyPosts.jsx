@@ -84,7 +84,7 @@ const MyPosts = () => {
                     </span>
                     <span className="flex flex-row gap-2 items-center text-lg">
                       <BiSolidCommentDetail />
-                      {post.share}
+                      {post.shares}
                     </span>
                   </div>
                 </div>
@@ -105,7 +105,7 @@ const postsList = [
     image: image1,
     likes: 10,
     comments: 5,
-    share: 7,
+    shares: 7,
     date: "18/05/2024",
     content: "Lorem ipsum dolor sit, amet consectetur adipisicing elit.",
   },
@@ -114,7 +114,7 @@ const postsList = [
     image: image2,
     likes: 10,
     comments: 5,
-    share: 7,
+    shares: 7,
     date: "18/05/2024",
     content: "Lorem ipsum dolor.",
   },
@@ -123,7 +123,7 @@ const postsList = [
     image: image3,
     likes: 10,
     comments: 5,
-    share: 7,
+    shares: 7,
     date: "18/05/2024",
     content:
       "Lorem ipsum dolor.Voluptatem aspernatur quae perspiciatis doloremque quaerat tempore saepe hic mollitia.",
@@ -133,7 +133,7 @@ const postsList = [
     image: image1,
     likes: 10,
     comments: 5,
-    share: 7,
+    shares: 7,
     date: "18/05/2024",
     content:
       "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatem aspernatur quae perspiciatis doloremque quaerat tempore saepe hic mollitia.",
@@ -143,7 +143,7 @@ const postsList = [
     image: image2,
     likes: 10,
     comments: 5,
-    share: 7,
+    shares: 7,
     date: "18/05/2024",
     content:
       "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatem aspernatur quae perspiciatis doloremque quaerat tempore saepe hic mollitia.",
@@ -153,7 +153,7 @@ const postsList = [
     image: image3,
     likes: 10,
     comments: 5,
-    share: 7,
+    shares: 7,
     date: "18/05/2024",
     content:
       "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatem aspernatur quae perspiciatis doloremque quaerat tempore saepe hic mollitia.",

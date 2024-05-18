@@ -157,15 +157,15 @@ const Post = () => {
                   <section className="w-full flex flex-row items-center justify-evenly">
                     <span className="flex flex-row gap-x-2 items-center text-lg text-dark-green">
                       <FaHeart />
-                      {selectedPost.likes}
+                      {selectedPost.likes} Likes
                     </span>
                     <span className="flex flex-row gap-x-2 items-center text-lg text-dark-green">
                       <FaTelegramPlane />
-                      {selectedPost.comments}
+                      {selectedPost.shares} Shares
                     </span>
                     <span className="flex flex-row gap-x-2 items-center text-lg text-dark-green">
                       <BiSolidCommentDetail />
-                      {selectedPost.share}
+                      {selectedPost.comments} Comments
                     </span>
                   </section>
                 </section>
@@ -180,7 +180,7 @@ const Post = () => {
               </div>
 
               <hr />
-              
+
               <div className={className + "__comments"}>
                 <h1 className="text-dark-green font-semibold text-2xl">
                   Comments
