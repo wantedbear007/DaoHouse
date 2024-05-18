@@ -4,7 +4,6 @@ use std::cell::RefCell;
 pub mod routes;
 pub mod functions;
 use crate::api::call::CallResult;
-mod upgrade;
 use ic_cdk::{ post_upgrade, pre_upgrade};
 mod state_handler;
 use state_handler::State;
@@ -13,20 +12,20 @@ use memory::Memory;
 use std::collections::HashMap;
 use candid:: Principal;
 
+
 // mod user_route;
 // mod post_route;
 
-pub mod testing;
+// pub mod testing;
 
 use types::*;
 
-pub async fn with_state<R>(f: impl FnOnce(&mut State) -> R) -> R {
-    STATE.with(|cell| f(&mut cell.borrow_mut()))
-}
- 
-
 thread_local! {
     static STATE: RefCell<State> = RefCell::new(State::new());
+}
+
+pub fn with_state<R>(f: impl FnOnce(&mut State) -> R) -> R {
+    STATE.with(|cell| f(&mut cell.borrow_mut()))
 }
 
 #[query]
@@ -35,14 +34,14 @@ fn greet(name: String) -> String {
 }
 
 
-#[pre_upgrade]
-fn pre_upgrade() {
-    upgrade::pre_upgrade();
-}
+// #[pre_upgrade]
+// fn pre_upgrade() {
+//     upgrade::pre_upgrade();
+// }
 
-#[post_upgrade]
-fn post_upgrade() {
-    upgrade::post_upgrade();
-}
+// #[post_upgrade]
+// fn post_upgrade() {
+//     upgrade::post_upgrade();
+// }
 
 export_candid!();

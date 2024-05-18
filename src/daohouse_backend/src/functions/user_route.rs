@@ -11,38 +11,38 @@ use ic_cdk::trap;
 
 
 #[update]
-async fn create_profile(profile: Profileinput) -> String {
-    with_state(|state| routes::create_new_profile(state, profile.clone())).await
+async fn create_profile(profile: Profileinput) -> Result<(), String> {
+    with_state(|state| routes::create_new_profile(state, profile.clone()))
 }
 
 #[query]
-async fn get_user_profile() -> Option<UserProfile> {
-    with_state(|state| routes::get_user_profile(state)).await
+async fn get_user_profile() -> Result<UserProfile, String> {
+    with_state(|state| routes::get_user_profile(state))
 }
 
 #[update]
-async fn update_profile(profile: Profileinput) -> String {
-    with_state(|state| routes::update_profile(state, profile.clone())).await
+async fn update_profile(profile: Profileinput) -> Result<(), String> {
+    with_state(|state| routes::update_profile(state, profile.clone()))
 }
 
 #[update]
-async fn delete_profile() -> String {
-    with_state(|state| routes::delete_profile(state)).await
+async fn delete_profile() -> Result<(), String>{
+    with_state(|state| routes::delete_profile(state))
 }
 
 
 #[update]
-async fn follow_user(userid:Principal)->String{
+async fn follow_user(userid:Principal)->Result<(), String>{
     let principal_id = api::caller();
 
-    if with_state(|state| state.user_profile.contains_key(&principal_id)).await {
-        return "User not registered".to_string();
+    if with_state(|state| state.user_profile.contains_key(&principal_id)) {
+        return Err("User not registered".to_string());
     }
 
-    let getuser=with_state(|state| state.user_profile.get(&principal_id).unwrap().clone()).await;
+    let getuser=with_state(|state| state.user_profile.get(&principal_id).unwrap().clone());
 
     if getuser.followers_list.contains(&principal_id) {
-        return "You have already follow this user".to_string();
+        return Err("You have already followed this user".to_string());
     }
 
     let updated_followers_count = getuser.followers_count + 1;
@@ -75,7 +75,7 @@ async fn follow_user(userid:Principal)->String{
 
 
 
-    let getuser2=with_state(|state| state.user_profile.get(&userid).unwrap().clone()).await;
+    let getuser2=with_state(|state| state.user_profile.get(&userid).unwrap().clone());
 
     let updated_following_count = getuser2.followings_count + 1;
     let mut updated_list2 = getuser2.followings_list.clone();
@@ -104,20 +104,21 @@ async fn follow_user(userid:Principal)->String{
 
     };
 
-    with_state(|state|state.user_profile.insert(principal_id, update_user)).await;
-    with_state(|state|state.user_profile.insert(userid, updateuser2)).await;
+    with_state(|state|state.user_profile.insert(principal_id, update_user));
+    with_state(|state|state.user_profile.insert(userid, updateuser2));
 
     
 
-    return "follow user successful".to_string();
+    Ok(())
 }
 
 #[update]
 pub async fn create_dao( dao_detail: DaoInput) -> Result<String,String> {
     let principal_id = api::caller();
     if principal_id == Principal::anonymous() {
-        trap("Anonymous principal not allowed to make calls.")
-    }
+        // trap("Anonymous principal not allowed to make calls.")
+        return Err("Anonymous principal not allowed to make calls.".to_string());
+    };
 
     let mut updated_members = dao_detail.members.clone();
     updated_members.push(principal_id);
@@ -144,7 +145,7 @@ pub async fn create_dao( dao_detail: DaoInput) -> Result<String,String> {
 
     // let user_detail=with_state(|state| state.user_profile.get(&principal_id));
 
-    let mut user_profile_detail =  with_state(|state| state.user_profile.get(&principal_id).unwrap().clone()).await;
+    let mut user_profile_detail =  with_state(|state| state.user_profile.get(&principal_id).unwrap().clone());
     let arg = CreateCanisterArgument {
         settings: None,
     };
@@ -181,7 +182,7 @@ pub async fn create_dao( dao_detail: DaoInput) -> Result<String,String> {
         telegram: user_profile_detail.telegram,
         website: user_profile_detail.website,
     };
-    with_state(|state| {state.user_profile.insert(principal_id, new_profile)}).await;
+    with_state(|state| {state.user_profile.insert(principal_id, new_profile)});
     let arg1 = InstallCodeArgument {
         mode: CanisterInstallMode::Install, 
         canister_id: canister_id_principal, 

@@ -1,5 +1,10 @@
 use candid::{CandidType, Nat, Principal};
 use serde::{Deserialize, Serialize};
+use ic_stable_structures::{storable::Bound,Storable};
+use candid::{ Decode, Encode};
+use serde_bytes;
+use std::borrow::Cow;
+
 
 
 pub type CanisterId = Principal;
@@ -458,7 +463,7 @@ pub struct CanisterInfoResponse {
     pub controllers: Vec<Principal>,
 }
 
-#[derive(Clone, CandidType, Serialize,Deserialize)]
+#[derive(Clone, CandidType, PartialEq, Debug,Serialize,Deserialize)]
 pub struct UserProfile{
     pub user_id: Principal,
     pub email_id: String,
@@ -527,4 +532,40 @@ pub struct PostInput{
     pub post_description:String,
     pub post_img:Vec<i8>,
     
+}
+
+const MAX_VALUE_SIZE: u32 = 600;
+
+
+
+impl Storable for UserProfile{
+    fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    const BOUND: Bound = Bound::Bounded {
+        max_size: MAX_VALUE_SIZE,
+        is_fixed_size: false,
+    };
+}
+
+
+
+impl Storable for PostInfo{
+    fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    const BOUND: Bound = Bound::Bounded {
+        max_size: MAX_VALUE_SIZE,
+        is_fixed_size: false,
+    };
 }
