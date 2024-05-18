@@ -20,10 +20,11 @@ import SmallCircleComponent from "../../Components/MyProfile/SmallCircleComponen
 
 // Main component function
 const MyProfile = ({ childComponent }) => {
-  const [activeTab, setActiveTab] = useState(null)
-  const tabButtonsStyle = 'my-1 text-[12px] md:text-[16px] flex flex-row items-center gap-2 hover:text-white'
+  const [activeTab, setActiveTab] = useState(null);
+  const tabButtonsStyle =
+    "my-1 text-[12px] big_phone:text-[16px] flex flex-row items-center gap-2 hover:text-white";
   const className = "MyProfile";
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // Animation options for the big circle
   const defaultOptions = {
@@ -78,7 +79,7 @@ const MyProfile = ({ childComponent }) => {
           <BigCircleComponent imgSrc={BigCircle} />
 
           {/* Big circle animation */}
-          <div className="absolute z-20  md:right-[68px] md:top-1/2 top-[59%] -translate-y-1/2 right-[-50px]">
+          <div className="absolute z-20  big_phone:right-[68px] big_phone:top-1/2 top-[59%] -translate-y-1/2 right-[-50px]">
             <Lottie
               options={defaultOptions}
               style={{ height: "112px", width: "112px" }}
@@ -89,7 +90,7 @@ const MyProfile = ({ childComponent }) => {
           <SmallCircleComponent imgSrc={SmallestCircle} />
 
           {/* Small circle animation */}
-          <div className="absolute md:right-[24.75rem] right-[7.1rem] md:top-[30%] top-[33%] -translate-y-[93%]">
+          <div className="absolute big_phone:right-[24.75rem] right-[7.1rem] big_phone:top-[30%] top-[33%] -translate-y-[93%]">
             <Lottie
               options={defaultOptions2}
               height={50}
@@ -102,7 +103,7 @@ const MyProfile = ({ childComponent }) => {
           <MediumCircleComponent imgSrc={MediumCircle} />
 
           {/* Medium circle animation */}
-          <div className="absolute md:right-[39.71rem] right-[11.6rem] md:top-[95%] top-[97.6%] -translate-y-[93%]">
+          <div className="absolute big_phone:right-[39.71rem] right-[11.6rem] big_phone:top-[95%] top-[97.6%] -translate-y-[93%]">
             <Lottie
               options={defaultOptions3}
               height={61}
@@ -119,38 +120,51 @@ const MyProfile = ({ childComponent }) => {
       <div
         className={
           className +
-          "__mainComponent bg-[#c8ced3] big_phone:py-8 big_phone:pb-20 py-6 md:px-8 flex md:flex-row gap-2 flex-col w-full user-container"
+          "__mainComponent bg-[#c8ced3] big_phone:py-8 big_phone:pb-20 py-6 big_phone:px-8 flex tablet:flex-row gap-2 flex-col w-full user-container"
         }
       >
         {/* Left side content */}
         <div
           className={
             className +
-            "__mainComponent__leftSide md:mx-2 mx-5 md:px-20 flex flex-col md:items-start justify-center md:w-[251px] md:h-[620px] rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal md:mt-[-92px] mt-[-30px] z-20"
+            "__mainComponent__leftSide tablet:mx-2 mx-5 tablet:px-20 flex flex-col tablet:items-start justify-center tablet:w-[251px] tablet:h-[620px] rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal tablet:mt-[-92px] mt-[-30px] z-20"
           }
         >
           {/* Navigation links */}
-          <div
-            className="flex md:flex-col flex-row items-start md:justify-center justify-around  gap-y-6 md:mt-[8rem]
-          mb-[2rem] mt-[0.5rem] text-base "
-          >
+          <div className="flex tablet:flex-col flex-row items-start tablet:justify-center justify-around gap-y-6 mb-[2rem] mt-[1rem] text-base ">
             <Link to="/my-profile/my-post" onClick={() => setActiveTab(0)}>
-              <p className={`${tabButtonsStyle} ${activeTab == 0 ? "text-white" : ""}`}>
+              <p
+                className={`${tabButtonsStyle} ${
+                  activeTab == 0 ? "text-white" : ""
+                }`}
+              >
                 My Posts {activeTab == 0 ? <FaArrowRightLong /> : ""}
               </p>
             </Link>
 
-            <p className={`${tabButtonsStyle}  ${activeTab == 1 ? "text-white" : ""}`}>
+            <p
+              className={`${tabButtonsStyle}  ${
+                activeTab == 1 ? "text-white" : ""
+              }`}
+            >
               Components {activeTab == 1 ? <FaArrowRightLong /> : ""}
             </p>
 
             <Link to="/my-profile/followers" onClick={() => setActiveTab(2)}>
-              <p className={`${tabButtonsStyle} ${activeTab == 2 ? "text-white" : ""}`}>
+              <p
+                className={`${tabButtonsStyle} ${
+                  activeTab == 2 ? "text-white" : ""
+                }`}
+              >
                 Followers {activeTab == 2 ? <FaArrowRightLong /> : ""}
               </p>
             </Link>
 
-            <p className={`${tabButtonsStyle}  ${activeTab == 3 ? "text-white" : ""}`}>
+            <p
+              className={`${tabButtonsStyle}  ${
+                activeTab == 3 ? "text-white" : ""
+              }`}
+            >
               Following {activeTab == 3 ? <FaArrowRightLong /> : ""}
             </p>
           </div>
@@ -159,11 +173,11 @@ const MyProfile = ({ childComponent }) => {
         {/* Right side content */}
         <div className={className + "__rightSide w-full"}>
           {/* Profile picture and details */}
-          <div className="flex md:justify-between justify-around w-full gap-2 z-50 relative">
-            <div className="flex items-start md:ml-[-90px] relative">
+          <div className="flex tablet:justify-between justify-around w-full gap-2 z-50 relative">
+            <div className="flex items-start tablet:ml-[-90px] relative">
               <div>
                 <img
-                  className="rounded-md md:w-full  min-w-[69px] mt-[-20px] z-50"
+                  className="rounded-tablet tablet:w-full  min-w-[69px] mt-[-20px] z-50"
                   src={MyProfileImage}
                   alt="profile-pic"
                   style={{
@@ -173,48 +187,48 @@ const MyProfile = ({ childComponent }) => {
                 />
               </div>
               <div className="ml-5">
-                <h2 className="md:text-[32px] text-[18px] md:font-normal font-medium text-left text-[#05212C]">
+                <h2 className="tablet:text-[32px] text-[18px] tablet:font-normal font-medium text-left text-[#05212C]">
                   Username.user
                 </h2>
-                <p className="text-[12px] md:text-[16px] font-normal text-left text-[#646464]">
+                <p className="text-[12px] tablet:text-[16px] font-normal text-left text-[#646464]">
                   gmail@gmail.xyz
                 </p>
-                <div className="flex justify-between mt-3">
-                  <span className="md:mr-5 md:text-[32px] font-normal text-[#05212C] user-acc-info">
-                    6 <span className=" md:text-[16px] mx-1">Posts</span>
+                <div className="tablet:flex hidden justify-between mt-3">
+                  <span className="tablet:mr-5 tablet:text-[32px] font-normal text-[#05212C] user-acc-info">
+                    6 <span className=" tablet:text-[16px] mx-1">Posts</span>
                   </span>
-                  <span className="md:mx-5 md:text-[32px] font-normal text-[#05212C] user-acc-info">
-                    3 <span className=" md:text-[16px] mx-1">Followers</span>
+                  <span className="tablet:mx-5 tablet:text-[32px] font-normal text-[#05212C] user-acc-info">
+                    3<span className=" tablet:text-[16px] mx-1">Followers</span>
                   </span>
-                  <span className="md:mx-5 md:text-[32px] font-normal text-[#05212C] user-acc-info">
-                    3 <span className=" md:text-[16px] mx-1">Following</span>
+                  <span className="tablet:mx-5 tablet:text-[32px] font-normal text-[#05212C] user-acc-info">
+                    3<span className=" tablet:text-[16px] mx-1">Following</span>
                   </span>
                 </div>
               </div>
             </div>
-            <div className="flex justify-end gap-4 md:mt-4 md:mr-4">
+            <div className="flex justify-end gap-4 tablet:mt-4 tablet:mr-4">
               <button
                 onClick={() => navigate("/edit-profile")}
-                className="bg-white text-[16px] text-[#05212C] gap-1  shadow-xl md:py-4 md:px-3 rounded-[27px] md:w-[181px] md:h-[40px] w-[2.5rem] h-[2.5rem] md:flex items-center space-x-4 rounded-2xl"
+                className="bg-white text-[16px] text-[#05212C] gap-1  shadow-xl tablet:py-4 tablet:px-3 rounded-[27px] tablet:w-[181px] tablet:h-[40px] w-[2.5rem] h-[2.5rem] tablet:flex items-center space-x-4 rounded-2xl"
               >
                 <img
                   src={EditPen}
                   alt="edit"
-                  className="md:mr-2 h-4 w-4 edit-pen"
+                  className="tablet:mr-2 h-4 w-4 edit-pen"
                 />
                 <span className="hidden sm:inline">Edit Profile</span>
               </button>
             </div>
           </div>
-          <div className="flex justify-start mx-6 mt-3 md:hidden text-center">
-            <div className="text-[24px] font-normal text-[#05212C] mx-4 ">
-              6 <div className=" text-[14px]">Posts</div>
+          <div className="flex justify-start gap-12 p-4 mx-6 mt-3 tablet:hidden text-center">
+            <div className="text-4xl font-semibold text-[#05212C]">
+              6 <div className="text-[14px] font-normal">Posts</div>
             </div>
-            <div className=" text-[24px] font-normal text-[#05212C] mx-4 ">
-              3 <div className=" text-[14px]">Followers</div>
+            <div className=" text-4xl font-semibold text-[#05212C]">
+              3 <div className="text-[14px] font-normal">Followers</div>
             </div>
-            <div className=" text-[24px] font-normal text-[#05212C] mx-4">
-              3 <div className=" text-[14px]">Following</div>
+            <div className=" text-4xl font-semibold text-[#05212C]">
+              3 <div className="text-[14px] font-normal">Following</div>
             </div>
           </div>
 
