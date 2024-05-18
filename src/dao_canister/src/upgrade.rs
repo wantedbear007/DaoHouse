@@ -16,6 +16,7 @@ pub async fn pre_upgrade() {
     writer.write(&state_bytes).unwrap()
 }
 
+
 pub fn post_upgrade() {
     let memory = memory::get_upgrades_memory();
 

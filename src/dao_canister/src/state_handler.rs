@@ -10,9 +10,8 @@ pub struct State {
 
     pub proposals : HashMap<String, Proposals>,
     pub dao:Dao,
-
     pub groups:HashMap<String,GroupList>
-
+    
 
     // pub users: HashMap<Principal, User>,
 }
