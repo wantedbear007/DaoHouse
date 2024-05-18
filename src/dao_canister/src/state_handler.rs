@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use candid::Principal;
 use serde::{Serialize,Deserialize};
-use crate::types::{Proposals,Dao,GroupList};
+use crate::{types::{Dao, GroupList, Proposals}, Votingandpermissions};
 // use std::collections::BTreeMap;
 
 
@@ -10,8 +10,9 @@ pub struct State {
 
     pub proposals : HashMap<String, Proposals>,
     pub dao:Dao,
+    pub permision:Votingandpermissions,
     pub groups:HashMap<String,GroupList>
-    
+
 
     // pub users: HashMap<Principal, User>,
 }
@@ -33,6 +34,23 @@ impl State {
                 groups_count:0,
                 group_name:Vec::new(),
             },
+
+            permision:Votingandpermissions{
+                changedao_config: "council".to_string(),
+                changedao_policy: "council".to_string(),
+                bounty: "council".to_string(),
+                bountydone: "council".to_string(),
+                transfer: "council".to_string(),
+                polls: "council".to_string(),
+                removemembers: "council".to_string(),
+                addmembers: "council".to_string(),
+                functioncall: "council".to_string(),
+                upgradeself: "council".to_string(),
+                upgraderemote: "council".to_string(),
+                setvotetoken: "council".to_string(),
+                votingpermision: "council".to_string(),
+            },
+
             groups:HashMap::new(),
         }
     }

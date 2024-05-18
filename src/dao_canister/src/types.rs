@@ -69,6 +69,24 @@ pub struct GroupList{
 }
 
 
+#[derive(Clone,CandidType,Serialize,Deserialize)]
+pub struct Votingandpermissions{
+    pub changedao_config:String,
+    pub changedao_policy:String,
+    pub bounty:String,
+    pub bountydone:String,
+    pub transfer:String,
+    pub polls:String,
+    pub removemembers:String,
+    pub addmembers:String,
+    pub functioncall:String,
+    pub upgradeself:String,
+    pub upgraderemote:String,
+    pub setvotetoken:String,
+    pub votingpermision:String, 
+}
+
+
 
 
 
