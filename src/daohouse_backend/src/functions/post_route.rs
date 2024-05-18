@@ -1,13 +1,11 @@
 
 // use std::collections::BTreeMap;
 
-use crate::memory::Memory;
 use crate::types::{PostInfo,PostInput};
 use crate::{routes, with_state};
 use ic_cdk::{query, update};
 use ic_cdk::api;
 use sha2::{Digest, Sha256};
-use ic_stable_structures::{StableBTreeMap,BTreeMap};
 use ic_cdk::api::management_canister::main::raw_rand;
 use candid:: Principal;
 

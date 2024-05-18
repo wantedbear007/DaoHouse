@@ -129,5 +129,5 @@ dfx canister call daohouse_backend create_dao '(record {
 
 
 
-# dfx canister call br5f7-7uaaa-aaaaa-qaaca-cai add_member_to_group '("council", principal "lebve-ee3za-txcur-xbw36-ujg7l-gpofb-x6onu-cuxxs-kx2fx-mlklc-bqe")'
+# dfx canister call bw4dl-smaaa-aaaaa-qaacq-cai add_member_to_group '("council", principal "lebve-ee3za-txcur-xbw36-ujg7l-gpofb-x6onu-cuxxs-kx2fx-mlklc-bqe")'
 

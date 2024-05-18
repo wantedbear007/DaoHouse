@@ -1,9 +1,6 @@
 use crate::State;
-use candid:: Principal;
 use crate::types::{PostInfo, PostInput};
-use ic_cdk::api;
-use crate::Memory;
-use ic_stable_structures::StableBTreeMap;
+
 
 pub fn create_new_post(state: &mut State, post_id: String, postdetail: PostInput) -> Result<String, String> {
     let new_post = PostInfo {

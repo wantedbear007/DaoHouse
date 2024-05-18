@@ -2,12 +2,12 @@ use crate::types::{DaoInput, Profileinput, UserProfile};
 use crate::{routes, with_state};
 use ic_cdk::{query, update};
 use crate::types::{CreateCanisterArgument,CanisterInstallMode,CanisterIdRecord,CreateCanisterArgumentExtended,InstallCodeArgument,InstallCodeArgumentExtended};
-use crate::api::call::{call, call_with_payment128, CallResult};
+use crate::api::call::{ call_with_payment128, CallResult};
 use crate::api::canister_version;
 use ic_cdk::api;
 use candid::{Principal, encode_one};
 use ic_cdk::println;
-use ic_cdk::trap;
+// use ic_cdk::trap;
 
 
 #[update]

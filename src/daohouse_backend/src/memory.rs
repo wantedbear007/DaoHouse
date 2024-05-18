@@ -5,7 +5,7 @@ use std::cell::RefCell;
 const POST_DATA: MemoryId = MemoryId::new(0);
 
 
-const user_data:MemoryId=MemoryId::new(1);
+const USER_DATA:MemoryId=MemoryId::new(1);
 
 pub type Memory = VirtualMemory<DefaultMemoryImpl>;
 
@@ -23,5 +23,5 @@ pub fn get_postdata_memory() -> Memory {
 
 
 pub fn get_user_memory() -> Memory {
-    MEMORY_MANAGER.with(|m| m.borrow().get(user_data))
+    MEMORY_MANAGER.with(|m| m.borrow().get(USER_DATA))
 }

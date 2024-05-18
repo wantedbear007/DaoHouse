@@ -2,7 +2,6 @@
 use ic_stable_structures::StableBTreeMap;
 use crate::Memory;
 use candid::Principal;
-use serde::{Serialize,Deserialize};
 use crate::types::{UserProfile,PostInfo};
 // use std::collections::BTreeMap;
 
