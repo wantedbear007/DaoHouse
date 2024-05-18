@@ -6,8 +6,6 @@ import { BiSolidCommentDetail } from "react-icons/bi";
 import commentUser from "../../../assets/commentUser.jpg";
 
 const Comments = () => {
-  const [reply, setReply] = useState("");
-
   const className = "Post__Comments";
 
   return (
