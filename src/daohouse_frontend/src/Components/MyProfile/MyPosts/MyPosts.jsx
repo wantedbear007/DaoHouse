@@ -27,7 +27,10 @@ const MyPosts = () => {
                 <div
                   className="post relative w-full"
                   onMouseEnter={() => setHoverIndex(index)}
-                  onMouseLeave={() => setHoverIndex(null)}
+                  onMouseLeave={() => {
+                    setHoverIndex(null);
+                    setReadMoreIndex(null);
+                  }}
                 >
                   <img
                     src={image}
