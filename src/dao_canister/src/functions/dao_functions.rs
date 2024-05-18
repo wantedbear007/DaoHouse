@@ -1,5 +1,5 @@
 use crate::{proposal_route, with_state, GroupList};
-use candid::{types::principal, Principal};
+use candid:: Principal;
 use ic_cdk::{query, update};
 use ic_cdk::api;
 

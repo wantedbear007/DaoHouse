@@ -3,7 +3,6 @@ use crate::types::{ProposalInput,Proposals,Dao};
 use sha2::{Digest, Sha256};
 use crate::{proposal_route, with_state};
 use ic_cdk::{query, update};
-use candid::Principal;
 use std::collections::HashMap;
 
 
