@@ -90,7 +90,7 @@ const Navbar = () => {
 
   return (
     <nav>
-      <div className="bg-[#DADEE4] shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50">
+      <div className="bg-bg-color shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50">
         <div className="tablet:px-20 small_phone:px-8 px-4 small_phone:py-5 py-3 flex justify-between items-center w-full">
           <div className="big_phone:flex items-center tablet:space-x-8 space-x-4 hidden ">
             {menuItems.map((item, index) => (

@@ -8,7 +8,8 @@ module.exports = {
         "-full": "-100%",
       },
       colors: {
-        'dark-green': "#0E3746"
+        'dark-green': "#0E3746",
+        'bg-color': '#DADEE4'
       },
       scale: {
         90: "0.9",

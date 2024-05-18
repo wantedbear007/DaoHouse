@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ProfileTitleDivider from "../../Components/MyProfile/ProfileTitleDivider";
+import ProfileTitleDivider from "../../Components/ProfileTitleDivider/ProfileTitleDivider";
 import MyProfileRectangle from "../../../assets/MyProfileRectangle.png";
 import MyProfileImage from "../../../assets/MyProfile-img.png";
 import UploadIcon from "../../../assets/upload-icon.png";
@@ -8,9 +8,9 @@ import MediumCircle from "../../../assets/MediumCircle.png";
 import SmallestCircle from "../../../assets/SmallestCircle.png";
 import EditTags from "../../Components/EditProfile/EditTags";
 import EditPersonalLinksAndContactInfo from "./EditPersonalLinksAndContactInfo";
-import BigCircleComponent from "../../Components/MyProfile/BigCircleComponent";
-import SmallCircleComponent from "../../Components/MyProfile/SmallCircleComponent";
-import MediumCircleComponent from "../../Components/MyProfile/MediumCircleComponent";
+import BigCircleComponent from "../../Components/Circles/BigCircleComponent";
+import SmallCircleComponent from "../../Components/Circles/SmallCircleComponent";
+import MediumCircleComponent from "../../Components/Circles/MediumCircleComponent";
 import SuccessModal from "../../Components/EditProfile/SuccessModal";
 
 const EditProfile = () => {

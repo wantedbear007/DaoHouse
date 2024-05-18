@@ -13,18 +13,18 @@ import SmallestCircle from "../../../assets/SmallestCircle.png";
 import MyProfileRectangle from "../../../assets/MyProfileRectangle.png";
 import BigCircleAnimation from "./BigCircleAnimation.json";
 import SmallCircleAnimation from "./SmallCircleAnimation.json";
-import ProfileTitleDivider from "../../Components/MyProfile/ProfileTitleDivider";
-import BigCircleComponent from "../../Components/MyProfile/BigCircleComponent";
-import MediumCircleComponent from "../../Components/MyProfile/MediumCircleComponent";
-import SmallCircleComponent from "../../Components/MyProfile/SmallCircleComponent";
+import ProfileTitleDivider from "../../Components/ProfileTitleDivider/ProfileTitleDivider";
+import BigCircleComponent from "../../Components/Circles/BigCircleComponent";
+import MediumCircleComponent from "../../Components/Circles/MediumCircleComponent";
+import SmallCircleComponent from "../../Components/Circles/SmallCircleComponent";
 
 // Main component function
 const MyProfile = ({ childComponent }) => {
-  const [activeTab, setActiveTab] = useState(null);
+  const [activeTab, setActiveTab] = useState(0);
+  const navigate = useNavigate();
+  const className = "MyProfile";
   const tabButtonsStyle =
     "my-1 text-[12px] big_phone:text-[16px] flex flex-row items-center gap-2 hover:text-white";
-  const className = "MyProfile";
-  const navigate = useNavigate();
 
   // Animation options for the big circle
   const defaultOptions = {
@@ -127,46 +127,47 @@ const MyProfile = ({ childComponent }) => {
         <div
           className={
             className +
-            "__mainComponent__leftSide tablet:mx-2 mx-5 tablet:px-20 flex flex-col tablet:items-start justify-center tablet:w-[251px] tablet:h-[620px] rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal tablet:mt-[-92px] mt-[-30px] z-20"
+            "__mainComponent__leftSide tablet:mx-2 mx-5 tablet:px-20 flex flex-col tablet:items-start justify-center tablet:w-[251px] tablet:h-[620px] rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal tablet:mt-[-80px] mt-[-30px] z-20"
           }
         >
           {/* Navigation links */}
-          <div className="flex tablet:flex-col flex-row items-start tablet:justify-center justify-around gap-y-6 mb-[2rem] mt-[1rem] text-base ">
-            <Link to="/my-profile/my-post" onClick={() => setActiveTab(0)}>
+          <div className="flex tablet:flex-col flex-row items-start tablet:justify-center justify-around gap-y-6 mt-[5rem] text-base text-nowrap">
+            <Link to="/my-profile" onClick={() => setActiveTab(0)}>
               <p
-                className={`${tabButtonsStyle} ${
-                  activeTab == 0 ? "text-white" : ""
-                }`}
+                className={`${tabButtonsStyle}  ${activeTab == 0 ? "text-white" : ""
+                  }`}
               >
-                My Posts {activeTab == 0 ? <FaArrowRightLong /> : ""}
+                Overview {activeTab == 0 ? <FaArrowRightLong /> : ""}
               </p>
             </Link>
 
-            <p
-              className={`${tabButtonsStyle}  ${
-                activeTab == 1 ? "text-white" : ""
-              }`}
-            >
-              Components {activeTab == 1 ? <FaArrowRightLong /> : ""}
-            </p>
+            <Link to="/my-profile/my-post" onClick={() => setActiveTab(1)}>
+              <p
+                className={`${tabButtonsStyle} ${activeTab == 1 ? "text-white" : ""
+                  }`}
+              >
+                My Posts {activeTab == 1 ? <FaArrowRightLong /> : ""}
+              </p>
+            </Link>
+
 
             <Link to="/my-profile/followers" onClick={() => setActiveTab(2)}>
               <p
-                className={`${tabButtonsStyle} ${
-                  activeTab == 2 ? "text-white" : ""
-                }`}
+                className={`${tabButtonsStyle} ${activeTab == 2 ? "text-white" : ""
+                  }`}
               >
                 Followers {activeTab == 2 ? <FaArrowRightLong /> : ""}
               </p>
             </Link>
 
-            <p
-              className={`${tabButtonsStyle}  ${
-                activeTab == 3 ? "text-white" : ""
-              }`}
-            >
-              Following {activeTab == 3 ? <FaArrowRightLong /> : ""}
-            </p>
+            <Link to="/my-profile/following" onClick={() => setActiveTab(3)}>
+              <p
+                className={`${tabButtonsStyle}  ${activeTab == 3 ? "text-white" : ""
+                  }`}
+              >
+                Following {activeTab == 3 ? <FaArrowRightLong /> : ""}
+              </p>
+            </Link>
           </div>
         </div>
 
