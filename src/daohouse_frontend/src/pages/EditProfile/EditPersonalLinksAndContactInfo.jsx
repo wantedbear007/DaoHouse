@@ -1,6 +1,6 @@
 import React from "react";
 
-const EditPersonalLinksAndContactInfo = () => {
+const EditPersonalLinksAndContactInfo = ({ handleSaveChangesClick }) => {
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
       <div className="mb-4 flex flex-col">
@@ -110,10 +110,13 @@ const EditPersonalLinksAndContactInfo = () => {
         </div>
       </div>
       <div className="flex justify-center gap-5 mt-8 md:text-[16px] text-[12px] md:hidden">
-        <button className="py-2 px-9 border border-[#0E3746] hover:bg-[#0E3746] hover:text-white rounded-[27px] transition duration-200 ease-in-out">
+        <button className="py-2 w-[126px] border border-[#0E3746] hover:bg-[#0E3746] hover:text-white rounded-[27px] transition duration-200 ease-in-out">
           Discard
         </button>
-        <button className="py-2 px-9 border border-[#0E3746] bg-[#0E3746] text-white  hover:bg-[#0E37464D] rounded-[27px] transition duration-200 ease-in-out">
+        <button
+          onClick={handleSaveChangesClick}
+          className="py-2 w-[126px] border border-[#0E3746] bg-[#0E3746] text-white  hover:bg-[#0E37464D] hover:border-[#0E37464D] rounded-[27px] transition duration-200 ease-in-out"
+        >
           Save Changes
         </button>
       </div>
