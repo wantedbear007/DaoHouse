@@ -1,8 +1,10 @@
 import React from "react";
 
 const Tags = ({ tags }) => {
+  const className = "Tags";
+
   return (
-    <div className="bg-[#FFFFFF] md:text-[16px] text-[12px] font-normal text-[#646464] md:p-2 p-3 my-2 rounded-lg">
+    <div className={className + " bg-[#FFFFFF] md:text-[16px] text-[12px] font-normal text-[#646464] md:p-2 p-3 my-2 rounded-lg"}>
       <div className="flex flex-wrap">
         {tags.map((tag, index) => (
           <span
