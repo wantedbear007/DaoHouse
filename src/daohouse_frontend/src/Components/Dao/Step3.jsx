@@ -4,7 +4,7 @@ import { FaSquarePlus } from "react-icons/fa6";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
-const Step3 = ({ setData, setActiveStep, Step4Ref }) => {
+const Step3 = ({ setData, setActiveStep, Step4Ref , Step1Ref }) => {
   const [count, setCount] = useState(1);
   const [showMemberNameInput, setShowMemberNameInput] = useState(false);
   const [showCouncilNameInput, setShowCouncilNameInput] = useState(false);
@@ -26,11 +26,24 @@ const Step3 = ({ setData, setActiveStep, Step4Ref }) => {
 
     setActiveStep(3);
 
-    console.log(Step4Ref.current.offsetLeft);
+    try {
+      document.querySelector('.CreateDAO__steps').scrollTo({
+        left: Step4Ref.current.offsetLeft - 50,
+        behavior: "smooth",
+      });
+    } catch (err) {
+      console.log("The Scroll Error says: ", err.message);
+    }
+  }
+
+  function handleBack() {
+    setActiveStep(1);
+
+    console.log("back", Step1Ref);
 
     try {
       document.querySelector('.CreateDAO__steps').scrollTo({
-        left: Step4Ref.current.offsetLeft,
+        left: 0,
         behavior: "smooth",
       });
     } catch (err) {
@@ -321,7 +334,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref }) => {
         }
       >
         <button
-          onClick={() => setActiveStep(1)}
+          onClick={handleBack}
           className="flex m-4 flex-row items-center gap-2 border border-[#0E3746] hover:bg-[#0E3746] text-[#0E3746] hover:text-white transition px-4 py-2 rounded-[2rem]"
         >
           <FaArrowLeftLong /> Back

@@ -24,6 +24,7 @@ const CreateDao = () => {
     },
   });
 
+  const Step1Ref = useRef(null);
   const Step4Ref = useRef(null);
 
   const Form = () => {
@@ -38,7 +39,7 @@ const CreateDao = () => {
         );
       case 2:
         return (
-          <Step3 setData={setData} setActiveStep={setActiveStep} Step4Ref={Step4Ref} />
+          <Step3 setData={setData} setActiveStep={setActiveStep} Step1Ref={Step1Ref} Step4Ref={Step4Ref} />
         );
       case 3:
         return (
@@ -83,7 +84,7 @@ const CreateDao = () => {
           {steps.map(({ step, name }, index) => (
             <div
               key={index}
-              ref={index >= 3 ? Step4Ref : null}
+              ref={index >=3 ? Step4Ref : Step1Ref}
               className={
                 "flex mobile:flex-row flex-col py-4 items-center gap-2 " +
                 `${activeStep >= index ? "opacity-100" : "opacity-50"}`
