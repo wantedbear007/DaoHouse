@@ -39,8 +39,6 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
   function handleBack() {
     setActiveStep(1);
 
-    console.log("back", Step1Ref);
-
     try {
       document.querySelector('.CreateDAO__steps').scrollTo({
         left: 0,
