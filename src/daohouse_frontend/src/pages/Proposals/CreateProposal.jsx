@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import proposals from "../../../assets/proposals.png"
 import createProposal from "../../../assets/createProposal.png"
-import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
 import ReactQuill from 'react-quill';
 import { quillFormats, quillModules } from '../../uitls/quilConfig';
+import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
 
 
 function CreateProposal() {
@@ -24,6 +24,7 @@ function CreateProposal() {
 
     const handleProposalTypeChange = (value) => {
         setProposalType(value);
+        setDropdownOpen(!dropdownOpen)
     };
 
     const handleProposalDescriptionChange = (event) => {
@@ -34,50 +35,52 @@ function CreateProposal() {
         event.preventDefault();
     };
 
+
     const renderAdditionalFields = () => {
         switch (proposalType) {
             case 'Transfer':
                 return (
                     <div>
                         <label className="block mb-2 font-semibold text-xl">Recipient</label>
-                        <input type="text" placeholder="Specify Account if any" className="w-full px-4 py-2 mb-4 border rounded-md" /><br />
+                        <input type="text" placeholder="Specify Account if any" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" /><br />
                         <label className="block mb-2 font-semibold text-xl">Token</label>
-                        <select className="w-full px-4 py-2 mb-4 border rounded-md">
+                        <select className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent">
                             {/* Options for token */}
                         </select><br />
-                        <label className="block mb-2 font-semibold text-xl" >Amount</label>
-                        <input type="number" placeholder="Write here number type input" className="w-full px-4 py-2 mb-4 border rounded-md" /><br />
+                        <label className="block mb-2 font-semibold text-xl">Amount</label>
+                        <input type="number" placeholder="Write here number type input" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" /><br />
                     </div>
                 );
             case 'Function Call':
                 return (
                     <div>
                         <label className="block mb-2 font-semibold text-xl">Contract</label>
-                        <input type="text" className="w-full px-4 py-2 mb-4 border rounded-md" /><br />
+                        <input type="text" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" /><br />
                         <label className="block mb-2 font-semibold text-xl">Method</label>
-                        <input type="text" className="w-full px-4 py-2 mb-4 border rounded-md" /><br />
+                        <input type="text" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" /><br />
                         <label className="block mb-2 font-semibold text-xl">Arguments (JSON)</label>
-                        <input type="text" className="w-full px-4 py-2 mb-4 border rounded-md" /><br />
+                        <input type="text" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" /><br />
                         <label className="block mb-2 font-semibold text-xl">Gas (Tgas)</label>
-                        <input type="text" className="w-full px-4 py-2 mb-4 border rounded-md" /><br />
+                        <input type="text" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" /><br />
                         <label className="block mb-2 font-semibold text-xl">Deposit</label>
-                        <input type="text" className="w-full px-4 py-2 mb-4 border rounded-md" /><br />
+                        <input type="text" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" /><br />
                     </div>
                 );
             case 'Add Member':
             case 'Remove Member':
                 return (
-                    <div>
+                    <div className='flex flex-wrap flex-row w-full'>
                         <label className="block mb-2 font-semibold text-xl">Account ID</label>
-                        <input type="text" className="w-full px-4 py-2 mb-4 border rounded-md" /><br />
+                        <input type="text" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" /><br />
                         <label className="block mb-2 font-semibold text-xl">Role</label>
-                        <input type="text" className="w-full px-4 py-2 mb-4 border rounded-md" /><br />
+                        <input type="text" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" /><br />
                     </div>
                 );
             default:
                 return null;
         }
     };
+
     return (
         <div className="bg-zinc-200 w-full">
             <div
@@ -105,12 +108,12 @@ function CreateProposal() {
                     <h1 className="text-xl font-semibold mb-4">Proposal Type</h1>
                     <div className="mb-6 max-w-6xl relative">
                         <div
-                            className="mt-1 block bg-transparent w-full pl-3 pr-10 py-2 text-base border border-gray-300 border-opacity-30 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md cursor-pointer flex items-center justify-between"
+                            className="mt-1 block bg-transparent w-full rounded-xl  pl-3 pr-10 py-3 text-base border border-[#aba9a5] border-opacity-30 focus:outline-none focus:ring-indigo-500 focus:border-[#aba9a5] sm:text-sm rounded-md cursor-pointer flex items-center justify-between"
                             onClick={() => setDropdownOpen(!dropdownOpen)}
                         >
                             {proposalType || "Select Type here"}
                             <span className="ml-2">
-                                {dropdownOpen ? <AiOutlineUp color='#7a7976' /> : <AiOutlineDown color='#7a7976' />}
+                                {dropdownOpen ? <BsChevronUp color='#7a7976' /> : <BsChevronDown color='#7a7976' />}
                             </span>
                         </div>
                         {dropdownOpen && (
@@ -130,7 +133,9 @@ function CreateProposal() {
                         )}
                     </div>
 
-                    {renderAdditionalFields()}
+                    <div className='max-w-6xl'>
+                        {renderAdditionalFields()}
+                    </div>
 
                     <div className='my-4'>
                         <h1 className="text-xl font-semibold mb-4">Proposal Description</h1>
