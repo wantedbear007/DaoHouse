@@ -16,7 +16,7 @@ const Step4 = ({ data, setData, setActiveStep }) => {
   }
   function theList() {
     const list = groups.reduce((acc, group) => {
-      const flag = group == "Council" ? true : false
+      const flag = group == "Council" ? true : false;
 
       acc[group] = {
         ChangeDAOConfig: flag,
@@ -81,27 +81,35 @@ const Step4 = ({ data, setData, setActiveStep }) => {
       <div
         className={
           className +
-          "__form w-full bg-[#F4F2EC] p-10 rounded-lg flex flex-col gap-4"
+          "__form w-full bg-[#F4F2EC] big_phone:p-10 small_phone:p-4 p-2 big_phone:mx-4 mx-0 rounded-lg flex flex-col gap-4"
         }
       >
-        <ul className={className + "__steps flex flex-row gap-8 px-4"}>
+        <ul
+          className={
+            className + "__steps flex flex-row mobile:gap-8 gap-6 px-4"
+          }
+        >
           <li
-            className={`list-disc text-lg font-semibold ${activeStage == 0 ? "" : "opacity-50"
-              }`}
+            className={`list-disc mobile:text-lg text-sm font-semibold ${
+              activeStage == 0 ? "" : "opacity-50"
+            }`}
           >
             Proposal Creation
           </li>
           <li
-            className={`list-disc text-lg font-semibold ${activeStage == 1 ? "" : "opacity-50"
-              }`}
+            className={`list-disc mobile:text-lg text-sm font-semibold ${
+              activeStage == 1 ? "" : "opacity-50"
+            }`}
           >
             Voting Permission
           </li>
         </ul>
 
         <section>
-          <p className="font-semibold">Select Rights</p>
-          <p className="text-slate-700">
+          <p className="font-semibold mobile:text-base text-sm">
+            Select Rights
+          </p>
+          <p className="text-slate-500 mobile:text-base text-xs">
             Decide what permissions you want to give to DAO groups for creating
             things. You can adjust this later in settings.
           </p>
@@ -112,11 +120,14 @@ const Step4 = ({ data, setData, setActiveStep }) => {
             <table className="table-auto">
               <thead>
                 <tr>
-                  <th className="font-semibold w-2/5 p-4 flex justify-left">
+                  <th className="font-semibold big_phone:w-2/5 big_phone:p-4 p-2 pb-4 flex justify-left mobile:text-base text-sm">
                     Actions
                   </th>
                   {Object.keys(inputData.proposal).map((groupName, index) => (
-                    <th key={index} className="font-semibold p-4">
+                    <th
+                      key={index}
+                      className="font-semibold big_phone:p-4 p-2 pb-4 big_phone:text-base text-sm"
+                    >
                       {groupName}
                     </th>
                   ))}
@@ -125,8 +136,11 @@ const Step4 = ({ data, setData, setActiveStep }) => {
 
               <tbody>
                 {permissionList.map((permissionName, permissionIndex) => (
-                  <tr key={permissionIndex}>
-                    <td className="w-2/5 font-semibold list-disc p-4">
+                  <tr
+                    key={permissionIndex}
+                    className="border-b border-slate-200"
+                  >
+                    <td className="big_phone:w-2/5 font-semibold list-disc big_phone:p-4 py-4 p-2 big_phone:text-base text-sm">
                       {permissionName}
                     </td>
 
@@ -162,7 +176,7 @@ const Step4 = ({ data, setData, setActiveStep }) => {
               <button
                 type="submit"
                 onClick={() => setActiveStage(1)}
-                className="flex m-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white"
+                className="flex m-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white mobile:text-base text-sm"
               >
                 Next
               </button>
@@ -175,11 +189,14 @@ const Step4 = ({ data, setData, setActiveStep }) => {
             <table className="table-auto">
               <thead>
                 <tr>
-                  <th className="font-semibold w-2/5 p-4 flex justify-left">
+                  <th className="font-semibold big_phone:w-2/5 big_phone:p-4 py-4 px-2 flex justify-left mobile:text-base text-sm">
                     Actions
                   </th>
                   {Object.keys(inputData.voting).map((groupName, index) => (
-                    <th key={index} className="font-semibold p-4">
+                    <th
+                      key={index}
+                      className="font-semibold big_phone:p-4 py-4 px-2 big_phone:text-base text-sm"
+                    >
                       {groupName}
                     </th>
                   ))}
@@ -188,8 +205,11 @@ const Step4 = ({ data, setData, setActiveStep }) => {
 
               <tbody>
                 {permissionList.map((permissionName, permissionIndex) => (
-                  <tr key={permissionIndex}>
-                    <td className="w-2/5 font-semibold list-disc p-4">
+                  <tr
+                    key={permissionIndex}
+                    className="border-b border-slate-200"
+                  >
+                    <td className="big_phone:w-2/5 font-semibold list-disc big_phone:p-4 py-4 p-2 big_phone:text-base text-sm">
                       {permissionName}
                     </td>
 
@@ -225,7 +245,7 @@ const Step4 = ({ data, setData, setActiveStep }) => {
               <button
                 type="submit"
                 onClick={() => setActiveStage(0)}
-                className="flex m-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white"
+                className="flex m-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white mobile:text-base text-sm"
               >
                 Back
               </button>
@@ -237,12 +257,12 @@ const Step4 = ({ data, setData, setActiveStep }) => {
       <div
         className={
           className +
-          "__submitButton w-full flex flex-row items-center justify-end"
+          "__submitButton w-full flex flex-row items-center mobile:justify-end justify-between"
         }
       >
         <button
           onClick={() => setActiveStep(2)}
-          className="flex m-4 flex-row items-center gap-2 border border-[#0E3746] hover:bg-[#0E3746] text-[#0E3746] hover:text-white transition px-4 py-2 rounded-[2rem]"
+          className="flex mobile:m-4 my-4 flex-row items-center gap-2 border border-[#0E3746] hover:bg-[#0E3746] text-[#0E3746] hover:text-white mobile:text-base text-sm transition px-4 py-2 rounded-[2rem]"
         >
           <FaArrowLeftLong /> Back
         </button>
@@ -250,8 +270,9 @@ const Step4 = ({ data, setData, setActiveStep }) => {
           type="submit"
           onClick={handleSaveAndNext}
           disabled={activeStage == 0 ? true : false}
-          className={`flex m-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white ${activeStage == 0 ? "opacity-50" : "opacity-100"
-            }`}
+          className={`flex mobile:m-4 my-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white mobile:text-base text-sm ${
+            activeStage == 0 ? "opacity-50" : "opacity-100"
+          }`}
         >
           Save & Next <FaArrowRightLong />
         </button>

@@ -63,7 +63,7 @@ const CreateDao = () => {
       <TopComponent showButtons={false} />
 
       {/** Heading */}
-      <div className={className + " bg-[#c8ced3] mobile:py-8 py-4 mobile:px-10 px-6"}>
+      <div className={className + " bg-[#c8ced3] mobile:py-8 py-4 mobile:px-10 px-5"}>
         <div className={className + "__label py-2 mobile:px-4 px-2 w-full"}>
           <div className="phone:text-4xl text-2xl flex flex-row items-center gap-4">
             Create DAO
@@ -84,7 +84,7 @@ const CreateDao = () => {
           {steps.map(({ step, name }, index) => (
             <div
               key={index}
-              ref={index >=3 ? Step4Ref : Step1Ref}
+              ref={index >= 3 ? Step4Ref : Step1Ref}
               className={
                 "flex mobile:flex-row flex-col py-4 items-center gap-2 " +
                 `${activeStep >= index ? "opacity-100" : "opacity-50"}`
@@ -103,7 +103,7 @@ const CreateDao = () => {
                   <p className="text-center mobile:text-base text-xs">{step}</p>
                 </div>
               ) : (
-                <FaCircleCheck className="text-2xl text-[#0E3746]" />
+                <FaCircleCheck className="mobile:text-2xl text-[1.2rem] text-[#0E3746]" />
               )}
               <span className="text-nowrap mobile:text-base text-xs">{name}</span>
             </div>
