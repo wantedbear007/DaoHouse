@@ -26,7 +26,7 @@ const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug }) => {
   return (
     <>
       {isOpen && (
-        <div className="fixed min-w-[361px] top-0 left-0 w-full h-full bg-black bg-opacity-40 flex justify-center items-center z-50">
+        <div className="fixed min-w-[361px] top-0 left-0 w-full h-full bg-black bg-opacity-40 flex justify-center items-center z-[100]">
           <div className="fixed inset-0 flex items-center justify-center bg-[#1d2026bf] bg-opacity-75">
             <div className="bg-[#AAC8D6] p-2 rounded-lg shadow-lg w-72">
               <div className="flex justify-center items-center mb-2 border-b-2 border-white relative">
@@ -40,11 +40,15 @@ const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug }) => {
                 <button
                   key={index}
                   onClick={button.onClick}
-                  className={`flex items-center  justify-start w-full p-2 mb-2 ${button.textColor} border-2 border-[#4993B0] ${button.hoverColor} rounded-lg`}
+                  className={`flex items-center justify-start w-full p-2 mb-2 ${button.textColor} border-2 border-[#4993B0] ${button.hoverColor} rounded-lg`}
                 >
                   
+                 
+
+                  <div className='w-fit text-center mx-auto inline-flex'>
                   <img src={button.icon} alt={button.label} className="w-6 h-6 mr-2" />
                   {button.label}
+                  </div>
                 </button>
               ))}
               </div>
