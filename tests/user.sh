@@ -14,16 +14,16 @@
 
 
 # # creare_profile function
-# test1=$(dfx canister call daohouse_backend create_profile '(record {
-#     email_id = "harshit@gmail.com";
-#     profile_img = vec {104};  
-#     username = "harshit123";
-#     description = "This is a sample profile description.";
-#     contact_number = "123-456-7890";
-#     twitter_id = "@harshit_twitter";
-#     telegram = "@harshit_telegram";
-#     website = "https://harshitwebsite.com";
-# })')
+    test1=$(dfx canister call daohouse_backend create_profile '(record {
+        email_id = "harshit@gmail.com";
+        profile_img = vec {104};  
+        username = "harshit123";
+        description = "This is a sample profile description.";
+        contact_number = "123-456-7890";
+        twitter_id = "@harshit_twitter";
+        telegram = "@harshit_telegram";
+        website = "https://harshitwebsite.com";
+    })')
 
 
 # echo $test1
@@ -117,24 +117,32 @@ dfx deploy daohouse_backend
 
 
 
-# dfx canister call daohouse_backend create_dao '(record {
-#     dao_name = "Sample DAO";
-#     purpose = "To manage community projects";
-#     daotype = "Non-profit";
-#     link_of_document = "https://example.com/charter.pdf";
-#     cool_down_period = "7 days";
-#     members=vec{
-#         principal "aaaaa-aa";
-#     };
-#     tokenissuer="sample";
-#     linksandsocials=vec{
-#         "https://twitter.com/sampledao";
-#     };
-#     required_votes=100;
+dfx canister call daohouse_backend create_dao '(record {
+    dao_name = "Sample DAO";
+    purpose = "To manage community projects";
+    daotype = "Non-profit";
+    link_of_document = "https://example.com/charter.pdf";
+    cool_down_period = "7 days";
+    members=vec{
+        principal "aaaaa-aa";
+    };
+    tokenissuer="sample";
+    linksandsocials=vec{
+        "https://twitter.com/sampledao";
+    };
+    required_votes=100;
 
-# })'
+})'
 
 
 
-# dfx canister call bw4dl-smaaa-aaaaa-qaacq-cai add_member_to_group '("council", principal "lebve-ee3za-txcur-xbw36-ujg7l-gpofb-x6onu-cuxxs-kx2fx-mlklc-bqe")'
+# dfx canister call b77ix-eeaaa-aaaaa-qaada-cai add_member_to_group '("council", principal "lebve-ee3za-txcur-xbw36-ujg7l-gpofb-x6onu-cuxxs-kx2fx-mlklc-bqe")'
 
+dfx canister call b77ix-eeaaa-aaaaa-qaada-cai remove_member_from_group '("council", principal "e4gcc-67d6k-sf24x-pxcy3-6rq3v-ymzl7-ryzv4-jvgp5-irgrk-6aoru-xae")'
+
+dfx canister call b77ix-eeaaa-aaaaa-qaada-cai remove_member_from_group '("council", principal "lebve-ee3za-txcur-xbw36-ujg7l-gpofb-x6onu-cuxxs-kx2fx-mlklc-bqe")'
+
+# e4gcc-67d6k-sf24x-pxcy3-6rq3v-ymzl7-ryzv4-jvgp5-irgrk-6aoru-xae
+
+
+remove_member_from_group

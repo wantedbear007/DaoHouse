@@ -2,7 +2,6 @@
 use crate::State;
 
 use ic_cdk::api;
-use std::collections::HashMap;
 use crate::types::{ProposalInput,Proposals};
 
 
@@ -37,7 +36,7 @@ pub fn create_new_proposal(state: &mut State, proposal: ProposalInput,proposal_i
 }
 
 
-pub fn get_all_proposals(state:&State)-> HashMap<String, Proposals>{
-    return state.proposals.clone();
-}
+// pub fn get_all_proposals(state:&State)-> HashMap<String, Proposals>{
+//     return state.proposals;
+// }
 

@@ -68,7 +68,6 @@ service : {
   get_all_posts : () -> (vec record { text; PostInfo }) query;
   get_post_byid : (text) -> (Result_2) query;
   get_user_profile : () -> (Result_3) query;
-  greet : (text) -> (text) query;
   like_post : (text) -> (Result);
   update_profile : (Profileinput) -> (Result_1);
 }

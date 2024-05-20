@@ -1,17 +1,16 @@
-use std::collections::HashMap;
+use crate::Memory;
 use candid::Principal;
-use serde::{Serialize,Deserialize};
-use crate::{types::{Dao, GroupList, Proposals}, Votingandpermissions};
+use ic_stable_structures::StableBTreeMap;
+use crate::types::{Dao, GroupList, Proposals, Votingandpermissions};
 // use std::collections::BTreeMap;
 
 
-#[derive(Serialize,Deserialize)]
 pub struct State {
 
-    pub proposals : HashMap<String, Proposals>,
+    pub proposals : StableBTreeMap<String, Proposals,Memory>,
     pub dao:Dao,
     pub permision:Votingandpermissions,
-    pub groups:HashMap<String,GroupList>
+    pub groups:StableBTreeMap<String,GroupList,Memory>
 
 
     // pub users: HashMap<Principal, User>,
@@ -20,7 +19,7 @@ pub struct State {
 impl State {
     pub fn new() -> Self {
         Self {
-            proposals: HashMap::new(),
+            proposals: init_user_data(),
             dao: Dao {
                 dao_id: Principal::anonymous(), 
                 dao_name: String::from("Example DAO"),
@@ -51,7 +50,7 @@ impl State {
                 votingpermision: "council".to_string(),
             },
 
-            groups:HashMap::new(),
+            groups:init_pool_data(),
         }
     }
 }
@@ -60,4 +59,13 @@ impl Default for State {
     fn default() -> Self {
         State::new()
     }
+}
+
+
+fn init_user_data() -> StableBTreeMap<String, Proposals,Memory> {
+    StableBTreeMap::init(crate::memory::get_postdata_memory())
+
+}
+fn init_pool_data() -> StableBTreeMap<String,GroupList,Memory> {
+    StableBTreeMap::init(crate::memory::get_pool_data_memory())
 }

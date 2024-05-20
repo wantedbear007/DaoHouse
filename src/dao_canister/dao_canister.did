@@ -53,8 +53,8 @@ type Result = variant { Ok : GroupList; Err : text };
 service : (DaoInput) -> {
   add_member_to_group : (text, principal) -> (text);
   create_proposal : (ProposalInput) -> (text);
-  get_all_proposals : () -> (vec record { text; Proposals }) query;
   get_dao_detail : () -> (Dao) query;
   get_members_of_group : (text) -> (Result) query;
   get_proposal_by_id : (text) -> (Proposals) query;
+  remove_member_from_group : (text, principal) -> (text);
 }

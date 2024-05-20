@@ -3,12 +3,12 @@ use ic_cdk::{api, init, export_candid};
 use std::{cell::RefCell, fs::Permissions};
 pub mod proposal_route;
 // use crate::api::call::CallResult;
-mod upgrade;
-use ic_cdk::{ post_upgrade, pre_upgrade};
+// mod upgrade;
+// use ic_cdk::{ post_upgrade, pre_upgrade};
 mod state_handler;
 use state_handler::State;
 mod memory;
-// use memory::Memory; 
+use memory::Memory; 
 mod functions;
 use std::collections::HashMap;
 // #[macro_use]
@@ -16,13 +16,12 @@ extern crate ic_cdk_macros;
 use types::*;
 use candid::Principal;
 
-pub async fn with_state<R>(f: impl FnOnce(&mut State) -> R) -> R {
-    STATE.with(|cell| f(&mut cell.borrow_mut()))
-}
- 
-
 thread_local! {
     static STATE: RefCell<State> = RefCell::new(State::new());
+}
+
+pub fn with_state<R>(f: impl FnOnce(&mut State) -> R) -> R {
+    STATE.with(|cell| f(&mut cell.borrow_mut()))
 }
 
 
@@ -68,21 +67,21 @@ async fn init(dao_input: DaoInput) {
         state.dao = new_dao.clone();
         state.permision = permission.clone();
         state.groups.insert("council".to_string(), council_list);
-    }).await;
+    });
 }
 
 
 
 
 
-#[pre_upgrade]
-fn pre_upgrade() {
-    upgrade::pre_upgrade();
-}
+// #[pre_upgrade]
+// fn pre_upgrade() {
+//     upgrade::pre_upgrade();
+// }
 
-#[post_upgrade]
-fn post_upgrade() {
-    upgrade::post_upgrade();
-}
+// #[post_upgrade]
+// fn post_upgrade() {
+//     upgrade::post_upgrade();
+// }
 
 export_candid!();

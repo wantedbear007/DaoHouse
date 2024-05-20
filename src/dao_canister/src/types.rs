@@ -1,4 +1,7 @@
-use candid::{CandidType, Principal};
+use candid::{CandidType, Principal, Decode, Encode};
+use ic_stable_structures::{storable::Bound, Storable};
+// use serde::Deserialize;
+use std::borrow::Cow;
 use serde::{Deserialize, Serialize};
 
 
@@ -86,6 +89,41 @@ pub struct Votingandpermissions{
     pub votingpermision:String, 
 }
 
+
+
+const MAX_VALUE_SIZE: u32 = 600;
+
+impl Storable for Proposals {
+    fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    const BOUND: Bound = Bound::Bounded {
+        max_size: MAX_VALUE_SIZE,
+        is_fixed_size: false,
+    };
+}
+
+
+
+impl Storable for GroupList {
+    fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    const BOUND: Bound = Bound::Bounded {
+        max_size: MAX_VALUE_SIZE,
+        is_fixed_size: false,
+    };
+}
 
 
 
