@@ -43,12 +43,21 @@ function CreateProposal() {
                     <div>
                         <label className="block mb-2 font-semibold text-xl">Recipient</label>
                         <input type="text" placeholder="Specify Account if any" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" /><br />
-                        <label className="block mb-2 font-semibold text-xl">Token</label>
-                        <select className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent">
-                            {/* Options for token */}
-                        </select><br />
-                        <label className="block mb-2 font-semibold text-xl">Amount</label>
-                        <input type="number" placeholder="Write here number type input" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" /><br />
+                        <div className="flex flex-wrap flex-row w-full gap-4">
+
+                            <div className="flex-1">
+
+                                <label className="block mb-2 font-semibold text-xl">Token</label>
+                                <select className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent">
+                                    {/* Options for token */}
+                                </select>
+                            </div>
+                            <div className="flex-1">
+                                <label className="block mb-2 font-semibold text-xl">Amount</label>
+
+                                <input type="number" placeholder="Write here number type input" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" />
+                            </div>
+                        </div>
                     </div>
                 );
             case 'Function Call':
@@ -60,20 +69,30 @@ function CreateProposal() {
                         <input type="text" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" /><br />
                         <label className="block mb-2 font-semibold text-xl">Arguments (JSON)</label>
                         <input type="text" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" /><br />
-                        <label className="block mb-2 font-semibold text-xl">Gas (Tgas)</label>
-                        <input type="text" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" /><br />
-                        <label className="block mb-2 font-semibold text-xl">Deposit</label>
-                        <input type="text" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" /><br />
+                        <div className="flex flex-wrap flex-row w-full gap-4">
+                            <div className="flex-1">
+                                <label className="block mb-2 font-semibold text-xl">Gas (Tgas)</label>
+                                <input type="text" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" />
+                            </div>
+                            <div className="flex-1">
+                                <label className="block mb-2 font-semibold text-xl">Deposit</label>
+                                <input type="text" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" />
+                            </div>
+                        </div>
                     </div>
                 );
             case 'Add Member':
             case 'Remove Member':
                 return (
-                    <div className='flex flex-wrap flex-row w-full'>
-                        <label className="block mb-2 font-semibold text-xl">Account ID</label>
-                        <input type="text" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" /><br />
-                        <label className="block mb-2 font-semibold text-xl">Role</label>
-                        <input type="text" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" /><br />
+                    <div className="flex flex-wrap flex-row w-full gap-4">
+                        <div className="flex-1">
+                            <label className="block mb-2 font-semibold text-xl">Account ID</label>
+                            <input type="text" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" />
+                        </div>
+                        <div className="flex-1">
+                            <label className="block mb-2 font-semibold text-xl">Role</label>
+                            <input type="text" className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent" />
+                        </div>
                     </div>
                 );
             default:
@@ -155,7 +174,7 @@ function CreateProposal() {
 
                     <div className="flex justify-center my-8">
                         <button
-                            className="bg-[#0E3746] hover:bg-[#819499] text-white font-normal text-center rounded-full text-[16px] py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            className="bg-[#0E3746] hover:bg-[#819499] text-white font-normal text-center rounded-full text-[16px] py-2 px-6 rounded focus:outline-none focus:shadow-outline"
                             type="submit"
                             onClick={handleSubmit}
                         >
