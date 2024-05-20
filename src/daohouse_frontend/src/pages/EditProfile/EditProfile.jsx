@@ -8,6 +8,7 @@ import MediumCircle from "../../../assets/MediumCircle.png";
 import SmallestCircle from "../../../assets/SmallestCircle.png";
 import EditTags from "../../Components/EditProfile/EditTags";
 import EditPersonalLinksAndContactInfo from "./EditPersonalLinksAndContactInfo";
+
 import BigCircleComponent from "../../Components/Circles/BigCircleComponent";
 import SmallCircleComponent from "../../Components/Circles/SmallCircleComponent";
 import MediumCircleComponent from "../../Components/Circles/MediumCircleComponent";
@@ -69,7 +70,7 @@ const EditProfile = () => {
               onClick={() => navigate("/remove-icon")}
               className="md:text-[16px] text-[12px] text-[#9F9F9F] shadow-xl md:h-[50px] h-[40px] md:px-6 px-4 rounded-[27px] border-solid border border-[#9F9F9F] flex items-center"
             >
-              Remove <span className="hidden sm:inline-block">Photo</span>
+              Remove<span className="hidden sm:inline-block ml-1">Photo</span>
             </button>
           </div>
 

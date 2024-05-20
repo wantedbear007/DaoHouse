@@ -4,7 +4,7 @@ import { FaSquarePlus } from "react-icons/fa6";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
-const Step3 = ({ setData, setActiveStep }) => {
+const Step3 = ({ setData, setActiveStep, Step4Ref }) => {
   const [count, setCount] = useState(1);
   const [showMemberNameInput, setShowMemberNameInput] = useState(false);
   const [showCouncilNameInput, setShowCouncilNameInput] = useState(false);
@@ -25,6 +25,17 @@ const Step3 = ({ setData, setActiveStep }) => {
     }));
 
     setActiveStep(3);
+
+    console.log(Step4Ref.current.offsetLeft);
+
+    try {
+      document.querySelector('.CreateDAO__steps').scrollTo({
+        left: Step4Ref.current.offsetLeft,
+        behavior: "smooth",
+      });
+    } catch (err) {
+      console.log("The Scroll Error says: ", err.message);
+    }
   }
 
   const handleGroupAdding = () => {

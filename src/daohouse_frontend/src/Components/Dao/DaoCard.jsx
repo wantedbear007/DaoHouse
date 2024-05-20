@@ -1,6 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const DaoCard = ({ name, funds, members, groups, proposals }) => {
+  const navigate = useNavigate();
+
+  const goToDaoProfile = () => {
+    navigate("/dao/profile");
+  };
+
   return (
     <div className="bg-[#F4F2EC] rounded-lg shadow-lg tablet:p-6 big_phone:p-3 small_phone:p-5 p-3 rounded-lg">
       <div className="flex justify-start items-start mb-4 gap-4">
@@ -46,7 +53,10 @@ const DaoCard = ({ name, funds, members, groups, proposals }) => {
         </div>
       </div>
       <div className="flex justify-between gap-2">
-        <button className="flex-1 bg-transparent border-2 border-dark-green text-dark-green p-2 rounded-[3rem] small_phone:text-base text-sm">
+        <button
+          onClick={goToDaoProfile}
+          className="flex-1 bg-transparent border-2 border-dark-green text-dark-green p-2 rounded-[3rem] small_phone:text-base text-sm"
+        >
           View Profile
         </button>
         <button className="flex-1 bg-dark-green border-2 border-dark-green text-white p-2 rounded-[3rem] small_phone:text-base text-sm">

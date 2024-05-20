@@ -19,6 +19,7 @@ import MyPosts from "./Components/MyProfile/MyPosts/MyPosts";
 import AboutMe from "./Components/MyProfile/AboutMe/AboutMe";
 import Followers from "./Components/MyProfile/Followers/Followers";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import DaoProfile from "./pages/DaoProfile/DaoProfile";
 
 const App = () => {
   return (
