@@ -36,21 +36,18 @@ const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug }) => {
                 </button>
               </div>
               <div className='flex items-center justify-center flex-col mt-3'>
-              {buttons.map((button, index) => (
-                <button
-                  key={index}
-                  onClick={button.onClick}
-                  className={`flex items-center justify-start w-full p-2 mb-2 ${button.textColor} border-2 border-[#4993B0] ${button.hoverColor} rounded-lg`}
-                >
-                  
-                 
-
-                  <div className='w-fit text-center mx-auto inline-flex'>
-                  <img src={button.icon} alt={button.label} className="w-6 h-6 mr-2" />
-                  {button.label}
-                  </div>
-                </button>
-              ))}
+                {buttons.map((button, index) => (
+                  <button
+                    key={index}
+                    onClick={button.onClick}
+                    className={`flex items-center justify-start w-full p-2 mb-2 ${button.textColor} border-2 border-[#4993B0] ${button.hoverColor} rounded-lg`}
+                  >
+                    <div className='w-fit text-center mx-auto inline-flex '>
+                      <img src={button.icon} alt={button.label} className="w-6 h-6 mr-2" />
+                      <span className='w-[7rem] truncate text-left'>{button.label}</span>
+                    </div>
+                  </button>
+                ))}
               </div>
             </div>
           </div>
