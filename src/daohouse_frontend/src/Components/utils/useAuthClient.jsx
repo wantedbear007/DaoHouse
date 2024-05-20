@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthClient } from "@dfinity/auth-client";
-import { createActor } from "../../../../declarations/daohouse_backend/index";
+import { createActor, idlFactory as BackendidlFactory } from "../../../../declarations/daohouse_backend/index";
+import { Principal } from "@dfinity/candid/lib/cjs/idl";
 
 const AuthContext = createContext();
 
@@ -27,24 +28,17 @@ export const useAuthClient = () => {
     process.env.CANISTER_ID_DAOHOUSE_FRONTEND ||
     process.env.FRONTEND_CANISTER_CANISTER_ID;
 
-  const clientInfo = async (client) => {
+  const clientInfo = async (client, identity) => {
     const isAuthenticated = await client.isAuthenticated();
-    const identity = client.getIdentity();
     const principal = identity.getPrincipal();
     setAuthClient(client);
     setIsAuthenticated(isAuthenticated);
     setIdentity(identity);
     setPrincipal(principal);
-
-    if (
-      isAuthenticated &&
-      identity &&
-      principal &&
-      principal.isAnonymous() === false
-    ) {
-      let backendActor = createActor(backendCanisterId, {
-        agentOptions: { identity: identity },
-      });
+    console.log("HERE IN CLIENTINFO");
+    if (isAuthenticated && identity && principal && principal.isAnonymous() === false) {
+      console.log("HERE IN IF");
+      const backendActor = createActor(backendCanisterId, { agentOptions: { identity: identity } });
       setBackendActor(backendActor);
     }
 
@@ -52,12 +46,71 @@ export const useAuthClient = () => {
   };
 
   console.log({ backendActor });
+  console.log({ principal });
+  if (principal !== null) {
+    console.log("principal", Principal.valueToString(principal));
+  }
+
+
+  // useEffect(() => {
+  //   console.log("IC", window.ic);
+  //   console.log("PLUG", window.ic.plug);
+  //   console.log("sessionData", window.ic.plug.sessionManager.sessionData);
+  //   (async () => {
+  //     console.log("IsConnected", await window.ic.plug.isConnected());
+  //     const authClient = await AuthClient.create();
+  //     clientInfo(authClient, authClient.getIdentity());
+  //   })();
+  // }, []);
 
   useEffect(() => {
-    (async () => {
+    const initializeAuth = async () => {
+      console.log("IC", window.ic);
+      console.log("PLUG", window.ic.plug);
       const authClient = await AuthClient.create();
-      clientInfo(authClient);
-    })();
+      clientInfo(authClient, authClient.getIdentity());
+
+      if (window.ic?.plug) {
+        const isPlugConnected = await window.ic.plug.isConnected();
+        if (isPlugConnected) {
+          // Ensure agent is available and principal is retrieved
+          if (!window.ic.plug.agent) {
+            await window.ic.plug.createAgent();
+          }
+          const principal = await window.ic.plug.agent.getPrincipal();
+          console.log("plugID", principal.toText());
+
+          console.log("Plug wallet is connected.");
+          console.log(window.ic.plug);
+          console.log(window.ic.plug.principalId);
+          console.log(window.ic.plug.agent);
+          console.log(window.ic.plug);
+          // console.log(await window.ic.plug.sessionManager.sessionData.agent._identity);
+          // Retrieve the principal ID
+          // const principal = window.ic.plug.sessionManager.sessionData.principalId;
+          // console.log("plugID", principal);
+          console.log(backendCanisterId);
+
+          // Create the backend actor
+          const backendActor = await window.ic.plug.createActor({
+            canisterId: backendCanisterId,
+            interfaceFactory: BackendidlFactory,
+          });
+
+          setBackendActor(backendActor);
+          setIdentity(window.ic.plug);
+          setIsAuthenticated(true);
+          setPrincipal(principal);
+          console.log("Integration actor initialized successfully.");
+          console.log({ backendActor });
+          console.log(window.ic);
+        } else {
+          console.log("Plug wallet is not connected.");
+        }
+      }
+    };
+
+    initializeAuth();
   }, []);
 
   const login = async () => {
@@ -66,17 +119,17 @@ export const useAuthClient = () => {
         if (
           authClient.isAuthenticated() &&
           (await authClient.getIdentity().getPrincipal().isAnonymous()) ===
-            false
+          false
         ) {
-          resolve(clientInfo(authClient));
+          resolve(clientInfo(authClient, authClient.getIdentity()));
         } else {
           await authClient.login({
             identityProvider:
               process.env.DFX_NETWORK === "ic"
                 ? "https://identity.ic0.app/"
-                : `http://br5f7-7uaaa-aaaaa-qaaca-cai.localhost:4943`,
+                : "http://br5f7-7uaaa-aaaaa-qaaca-cai.localhost:4943",
             onError: (error) => reject(error),
-            onSuccess: () => resolve(clientInfo(authClient)),
+            onSuccess: () => resolve(clientInfo(authClient, authClient.getIdentity())),
           });
         }
       } catch (error) {
@@ -86,59 +139,73 @@ export const useAuthClient = () => {
   };
 
   const signInPlug = async () => {
+    if (!window.ic?.plug) {
+      console.error("Plug wallet is not available.");
+      return;
+    }
+
+    const whitelist = [frontendCanisterId, backendCanisterId];
+    const hasAllowed = await window.ic.plug.requestConnect({
+      whitelist,
+    });
+
+    if (!hasAllowed) {
+      console.error("Connection was refused.");
+      return;
+    }
+
+    console.log("Plug wallet is connected.");
+
     try {
-      const whitelist = [frontendCanisterId, backendCanisterId];
-      const isConnected = await window?.ic?.plug?.requestConnect({
-        whitelist,
+      // Retrieve the principal ID
+      const principal = await window.ic.plug.agent.getPrincipal();
+      console.log("plugID", principal.toText());
+      console.log(backendCanisterId);
+
+      // Create the backend actor
+      const backendActor = await window.ic.plug.createActor({
+        canisterId: backendCanisterId,
+        interfaceFactory: BackendidlFactory,
       });
 
-      if (!isConnected) {
-        console.log("User denied the connection request.");
-        return;
-      }
+      setBackendActor(backendActor);
+      console.log(window.ic.plug.sessionManager)
 
-      console.log(isConnected, "User is connected.");
-
-      try {
-        const plugBalances = await window.ic.plug.requestBalance();
-        const icpBalance = plugBalances[0].amount || 0;
-        // const plugAgent = await window.ic.plug.agent;
-        // const principal = await plugAgent.getPrincipal();
-        const principal = await window.ic?.plug?.principalId;
-        console.log({ plugBalances, icpBalance, principal });
-        console.log(window.ic);
-      } catch (error) {
-        console.error("Error fetching plugBalances and plugAgent:", error);
-      }
-
-      setIdentity(window.ic?.principalId);
+      // Additional logic if needed
+      setIdentity(principal);
       setIsAuthenticated(true);
-      setPrincipal(window.ic?.principalId);
+      setPrincipal(principal);
 
-      // Create the actor
-      const actor = createActor(backendCanisterId, {
-        agentOptions: { identity: window.ic?.principalId },
-      });
+      // Call clientInfo to update the state
+      await clientInfo({ isAuthenticated: () => true, getIdentity: () => ({ getPrincipal: () => principal }) }, principal);
 
-      console.log({ actor });
+      console.log("Integration actor initialized successfully.");
+      console.log({ backendActor });
+      console.log(window.ic);
+    } catch (e) {
+      console.error("Failed to initialize the actor with Plug.", e);
+    }
 
-      // Set backendActor state
-      setBackendActor(actor);
+  }
 
-      // actor.createUser(await  window.ic?.plug?.principalId, "plug", 0).then(user => {
-      //     setActor(actor);
-
-      //     setUser(user[0]);
-      // navigate("/profile/" + user[0].id.toString());
-      // });
-    } catch (error) {
-      // If there's an error, user is not connected
-      console.error("Error connecting:", error);
+  const disconnectPlug = async () => {
+    if (window.ic?.plug) {
+      try {
+        await window.ic.plug.disconnect();
+        setIsAuthenticated(false);
+        setIdentity(null);
+        setPrincipal(null);
+        setBackendActor(null);
+        console.log("Disconnected from Plug wallet.");
+      } catch (error) {
+        console.error("Failed to disconnect from Plug wallet:", error);
+      }
     }
   };
 
   const logout = async () => {
     await authClient?.logout();
+    disconnectPlug()
   };
 
   return {
