@@ -16,6 +16,7 @@ import MyPosts from "./Components/MyProfile/MyPosts/MyPosts";
 import AboutMe from "./Components/MyProfile/AboutMe/AboutMe";
 import Followers from "./Components/MyProfile/Followers/Followers";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import DaoProfile from "./pages/DaoProfile/DaoProfile";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
         <Route path="/create-proposal" element={<CreateProposal />} />
         <Route path="/dao" element={<Dao />} />
         <Route path="/dao/create-dao" element={<CreateDao />} />
+        <Route path="/dao/profile/:tab?" element={<DaoProfile />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route
           path="/my-profile"
