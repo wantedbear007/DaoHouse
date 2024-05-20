@@ -11,6 +11,7 @@ import BigCircle from "../../../assets/BigCircle.png";
 import MediumCircle from "../../../assets/MediumCircle.png";
 import SmallestCircle from "../../../assets/SmallestCircle.png";
 import MyProfileRectangle from "../../../assets/MyProfileRectangle.png";
+
 import BigCircleAnimation from "./BigCircleAnimation.json";
 import SmallCircleAnimation from "./SmallCircleAnimation.json";
 import ProfileTitleDivider from "../../Components/ProfileTitleDivider/ProfileTitleDivider";
