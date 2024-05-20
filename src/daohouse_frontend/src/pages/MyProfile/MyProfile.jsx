@@ -11,12 +11,12 @@ import BigCircle from "../../../assets/BigCircle.png";
 import MediumCircle from "../../../assets/MediumCircle.png";
 import SmallestCircle from "../../../assets/SmallestCircle.png";
 import MyProfileRectangle from "../../../assets/MyProfileRectangle.png";
-import BigCircleAnimation from "./BigCircleAnimation.json";
-import SmallCircleAnimation from "./SmallCircleAnimation.json";
+import BigCircleAnimation from "../../Components/Ellipse-Animation/BigCircle/BigCircleAnimation.json";
+import SmallCircleAnimation from "../../Components/Ellipse-Animation/SmallCircle/SmallCircleAnimation.json";
 import ProfileTitleDivider from "../../Components/MyProfile/ProfileTitleDivider";
-import BigCircleComponent from "../../Components/MyProfile/BigCircleComponent";
-import MediumCircleComponent from "../../Components/MyProfile/MediumCircleComponent";
-import SmallCircleComponent from "../../Components/MyProfile/SmallCircleComponent";
+import BigCircleComponent from "../../Components/Ellipse-Animation/BigCircle/BigCircleComponent";
+import MediumCircleComponent from "../../Components/Ellipse-Animation/MediumCircle/MediumCircleComponent";
+import SmallCircleComponent from "../../Components/Ellipse-Animation/SmallCircle/SmallCircleComponent";
 
 // Main component function
 const MyProfile = ({ childComponent }) => {
