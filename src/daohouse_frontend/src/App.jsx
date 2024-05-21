@@ -1,5 +1,7 @@
 import React from "react";
 // import Login from './Components/Auth/Login';
+
+import PostProvider from './PostProvider'
 import Dao from "./pages/dao/Dao";
 import Dashboard from "../src/pages/Home/Dashboard";
 import Navbar from "./Components/layouts/Navbar";
@@ -9,6 +11,7 @@ import FeedPage from "./pages/FeedPage/FeedPage";
 import CreateDao from "./pages/CreateDao/CreateDao";
 
 import Proposals from "./pages/Proposals/Proposals";
+import Post from "./pages/Post/Post";
 import MyProfile from "./pages/MyProfile/MyProfile";
 import EditProfile from "./pages/EditProfile/EditProfile";
 import CreateProposal from "./pages/Proposals/CreateProposal";
@@ -20,33 +23,40 @@ import DaoProfile from "./pages/DaoProfile/DaoProfile";
 
 const App = () => {
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/*" element={<Error404 />} />
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/social-feed" element={<FeedPage />} />
-        <Route path="/proposals" element={<Proposals />} />
-        <Route path="/create-proposal" element={<CreateProposal />} />
-        <Route path="/dao" element={<Dao />} />
-        <Route path="/dao/create-dao" element={<CreateDao />} />
-        <Route path="/dao/profile/:tab?" element={<DaoProfile />} />
-        <Route path="/edit-profile" element={<EditProfile />} />
-        <Route
-          path="/my-profile"
-          element={<MyProfile childComponent={<AboutMe />} />}
-        />
-        <Route
-          path="/my-profile/my-post"
-          element={<MyProfile childComponent={<MyPosts />} />}
-        />
-        <Route
-          path="/my-profile/followers"
-          element={<MyProfile childComponent={<Followers />} />}
-        />
-      </Routes>
-      <Footer />
-    </Router>
+    <PostProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/*" element={<Error404 />} />
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/social-feed" element={<FeedPage />} />
+          <Route path="/proposals" element={<Proposals />} />
+          <Route path="/create-proposal" element={<CreateProposal />} />
+          <Route path="/dao" element={<Dao />} />
+          <Route path="/dao/create-dao" element={<CreateDao />} />
+          <Route path="/edit-profile" element={<EditProfile />} />
+          <Route path="/post/:postID" element={<Post />}
+          />
+          <Route
+            path="/my-profile"
+            element={<MyProfile childComponent={<AboutMe />} />}
+          />
+          <Route
+            path="/my-profile/my-post"
+            element={<MyProfile childComponent={<MyPosts />} />}
+          />
+          <Route
+            path="/my-profile/followers"
+            element={<MyProfile childComponent={<Followers />} />}
+          />
+          <Route
+            path="/my-profile/following"
+            element={<MyProfile childComponent={<Followers />} />}
+          />
+        </Routes>
+        <Footer />
+      </Router>
+    </PostProvider>
   );
 };
 

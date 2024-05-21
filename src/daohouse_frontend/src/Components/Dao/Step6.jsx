@@ -34,12 +34,12 @@ const Step6 = ({ data, setData, setActiveStep }) => {
       <div
         className={
           className +
-          "__form w-full bg-[#F4F2EC] p-10 rounded-lg flex flex-col gap-4"
+          "__form w-full bg-[#F4F2EC] big_phone:p-10 mobile:p-6 p-3 big_phone:mx-4 mx-0 rounded-lg flex flex-col gap-4"
         }
       >
-        <p>Set Profile Picture</p>
+        <p className="mobile:text-base text-sm font-semibold">Set Profile Picture</p>
 
-        <div className="uploadImage flex flex-row items-center justify-start gap-4">
+        <div className="uploadImage flex big_phone:flex-row flex-col items-center justify-start gap-4">
           <img
             src={fileURL}
             alt="Image"
@@ -48,7 +48,7 @@ const Step6 = ({ data, setData, setActiveStep }) => {
 
           <label
             htmlFor="profile"
-            className="flex cursor-pointer m-4 flex-row items-center gap-2 bg-white px-4 py-2 rounded-[2rem] text-black shadow-xl"
+            className="flex mobile:text-base text-xs font-semibold cursor-pointer mobile:m-4 m-2 flex-row items-center gap-2 bg-white px-4 py-2 rounded-[2rem] text-black shadow-xl"
             onClick={handleFileInput}
           >
             <FiUpload /> Upload New Photo
@@ -67,19 +67,19 @@ const Step6 = ({ data, setData, setActiveStep }) => {
       <div
         className={
           className +
-          "__submitButton w-full flex flex-row items-center justify-end"
+          "__submitButton w-full flex flex-row items-center mobile:justify-end justify-between"
         }
       >
         <button
           onClick={() => setActiveStep(4)}
-          className="flex m-4 flex-row items-center gap-2 border border-[#0E3746] hover:bg-[#0E3746] text-[#0E3746] hover:text-white transition px-4 py-2 rounded-[2rem]"
+          className="flex mobile:m-4 my-4 flex-row items-center gap-2 border border-[#0E3746] hover:bg-[#0E3746] text-[#0E3746] hover:text-white mobile:text-base text-sm transition px-4 py-2 rounded-[2rem]"
         >
           <FaArrowLeftLong /> Back
         </button>
         <button
           type="submit"
           onClick={createDAO}
-          className="flex m-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white"
+          className="flex mobile:m-4 my-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white mobile:text-base text-sm"
         >
           Create DAO
         </button>
