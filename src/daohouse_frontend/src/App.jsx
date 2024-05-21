@@ -17,6 +17,9 @@ import AboutMe from "./Components/MyProfile/AboutMe/AboutMe";
 import Followers from "./Components/MyProfile/Followers/Followers";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DaoProfile from "./pages/DaoProfile/DaoProfile";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 const App = () => {
   return (
@@ -46,6 +49,8 @@ const App = () => {
         />
       </Routes>
       <Footer />
+      <ToastContainer />
+
     </Router>
   );
 };

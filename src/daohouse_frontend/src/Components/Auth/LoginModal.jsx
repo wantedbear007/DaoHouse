@@ -30,7 +30,7 @@ const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug }) => {
           <div className="fixed inset-0 flex items-center justify-center bg-[#1d2026bf] bg-opacity-75">
             <div className="bg-[#AAC8D6] p-2 rounded-lg shadow-lg w-72">
               <div className="flex justify-center items-center mb-2 border-b-2 border-white relative">
-                <span className="text-white font-medium">Connect With</span>
+                <span className="text-[#0E3746] font-medium">Connect With</span>
                 <button onClick={onClose} className="absolute right-0 text-gray-400 hover:text-gray-600">
                   <FaTimes color='#0E3746' />
                 </button>
@@ -44,7 +44,7 @@ const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug }) => {
                   >
                     <div className='w-fit text-center mx-auto inline-flex '>
                       <img src={button.icon} alt={button.label} className="w-6 h-6 mr-2" />
-                      <span className='w-[7rem] truncate text-left'>{button.label}</span>
+                      <span className='w-[7rem] text-[#0E3746] truncate text-left'>{button.label}</span>
                     </div>
                   </button>
                 ))}
