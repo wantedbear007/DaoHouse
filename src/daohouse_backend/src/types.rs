@@ -1,5 +1,10 @@
 use candid::{CandidType, Nat, Principal};
 use serde::{Deserialize, Serialize};
+use ic_stable_structures::{storable::Bound,Storable};
+use candid::{ Decode, Encode};
+use serde_bytes;
+use std::borrow::Cow;
+
 
 
 pub type CanisterId = Principal;
@@ -458,13 +463,25 @@ pub struct CanisterInfoResponse {
     pub controllers: Vec<Principal>,
 }
 
-#[derive(Clone, CandidType, Serialize,Deserialize)]
+#[derive(Clone, CandidType, PartialEq, Debug,Serialize,Deserialize)]
 pub struct UserProfile{
     pub user_id: Principal,
     pub email_id: String,
     pub profile_img: Vec<i8>,
     pub username: String,
     pub dao_ids: Vec<String>,
+    pub post_count:u32,
+    pub post_id:Vec<String>,
+    pub followers_count:u32,
+    pub followers_list:Vec<Principal>,
+    pub followings_count:u32,
+    pub followings_list:Vec<Principal>,
+    pub description:String,
+    pub tag_defines:Vec<String>,
+    pub contact_number:String,
+    pub twitter_id:String,
+    pub telegram:String,
+    pub website:String,
 }
 
 
@@ -473,15 +490,82 @@ pub struct Profileinput{
     pub email_id: String,
     pub profile_img: Vec<i8>,
     pub username: String,
+    pub description:String,
+    pub contact_number:String,
+    pub twitter_id:String,
+    pub telegram:String,
+    pub website:String,
+
 } 
 
 #[derive(Clone,CandidType,Serialize,Deserialize)]
 pub struct DaoInput{
     pub dao_name:String,
     pub purpose:String,
+    pub daotype:String,
     pub link_of_document:String,
     pub cool_down_period:String,
-    pub members:Vec<String>,
+    pub members:Vec<Principal>,
+    pub tokenissuer:String,
+    pub linksandsocials:Vec<String>,
+    pub required_votes:i8,
+
 }
 
 
+#[derive(Clone,CandidType,Serialize,Deserialize)]
+pub struct PostInfo{
+    pub post_id:String,
+    pub post_title:String,
+    pub post_description:String,
+    pub post_img:Vec<i8>,
+    pub post_created_at:String,
+    pub like_count:u32,
+    pub like_id_list:Vec<Principal>,
+    pub comment_count:u32,
+    pub comment_list:Vec<String>,  
+}
+
+#[derive(Clone,CandidType,Serialize,Deserialize)]
+pub struct PostInput{
+    pub post_title:String,
+    pub post_description:String,
+    pub post_img:Vec<i8>,
+    
+}
+
+const MAX_VALUE_SIZE: u32 = 600;
+
+
+
+impl Storable for UserProfile{
+    fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    const BOUND: Bound = Bound::Bounded {
+        max_size: MAX_VALUE_SIZE,
+        is_fixed_size: false,
+    };
+}
+
+
+
+impl Storable for PostInfo{
+    fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    const BOUND: Bound = Bound::Bounded {
+        max_size: MAX_VALUE_SIZE,
+        is_fixed_size: false,
+    };
+}

@@ -19,4 +19,6 @@ base64 = "0.13.0"
 ic-stable-structures = "0.6.2"
 ciborium = { git = "https://github.com/enarx/ciborium", rev = "e719537c99b564c3674a56defe53713c702c6f46" }
 ic-cdk-macros = "0.8.4"
+getrandom = { version = "0.2", features = ["js"] }
+sha2 = "0.9.8"
 
