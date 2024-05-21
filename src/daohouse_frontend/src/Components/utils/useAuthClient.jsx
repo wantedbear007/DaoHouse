@@ -45,28 +45,16 @@ export const useAuthClient = () => {
     return true;
   };
 
-  console.log({ backendActor });
-  console.log({ principal });
+
   if (principal !== null) {
     console.log("principal", Principal.valueToString(principal));
   }
 
 
-  // useEffect(() => {
-  //   console.log("IC", window.ic);
-  //   console.log("PLUG", window.ic.plug);
-  //   console.log("sessionData", window.ic.plug.sessionManager.sessionData);
-  //   (async () => {
-  //     console.log("IsConnected", await window.ic.plug.isConnected());
-  //     const authClient = await AuthClient.create();
-  //     clientInfo(authClient, authClient.getIdentity());
-  //   })();
-  // }, []);
 
   useEffect(() => {
     const initializeAuth = async () => {
-      console.log("IC", window.ic);
-      console.log("PLUG", window.ic.plug);
+
       const authClient = await AuthClient.create();
       clientInfo(authClient, authClient.getIdentity());
 
@@ -78,18 +66,7 @@ export const useAuthClient = () => {
             await window.ic.plug.createAgent();
           }
           const principal = await window.ic.plug.agent.getPrincipal();
-          console.log("plugID", principal.toText());
 
-          console.log("Plug wallet is connected.");
-          console.log(window.ic.plug);
-          console.log(window.ic.plug.principalId);
-          console.log(window.ic.plug.agent);
-          console.log(window.ic.plug);
-          // console.log(await window.ic.plug.sessionManager.sessionData.agent._identity);
-          // Retrieve the principal ID
-          // const principal = window.ic.plug.sessionManager.sessionData.principalId;
-          // console.log("plugID", principal);
-          console.log(backendCanisterId);
 
           // Create the backend actor
           const backendActor = await window.ic.plug.createActor({
@@ -101,9 +78,7 @@ export const useAuthClient = () => {
           setIdentity(window.ic.plug);
           setIsAuthenticated(true);
           setPrincipal(principal);
-          console.log("Integration actor initialized successfully.");
-          console.log({ backendActor });
-          console.log(window.ic);
+
         } else {
           console.log("Plug wallet is not connected.");
         }
@@ -141,6 +116,7 @@ export const useAuthClient = () => {
   const signInPlug = async () => {
     if (!window.ic?.plug) {
       console.error("Plug wallet is not available.");
+      window.open("https://plugwallet.ooo", "_blank");
       return;
     }
 
