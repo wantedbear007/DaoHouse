@@ -44,7 +44,7 @@ const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug }) => {
                   >
                     <div className='w-fit text-center mx-auto inline-flex '>
                       <img src={button.icon} alt={button.label} className="w-6 h-6 mr-2" />
-                      <span className='w-[7rem] text-[#0E3746] truncate text-left'>{button.label}</span>
+                      <span className='w-[7rem] text-[#0E3746] hover:text-white truncate text-left'>{button.label}</span>
                     </div>
                   </button>
                 ))}
