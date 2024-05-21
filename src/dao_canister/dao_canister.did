@@ -1,1 +1,60 @@
-service : { greet : (text) -> (text) query }
+type Dao = record {
+  dao_id : principal;
+  linksandsocials : vec text;
+  daotype : text;
+  dao_name : text;
+  groups_count : nat64;
+  link_of_document : text;
+  tokenissuer : text;
+  group_name : vec text;
+  cool_down_period : text;
+  purpose : text;
+  required_votes : int8;
+};
+type DaoInput = record {
+  members : vec principal;
+  linksandsocials : vec text;
+  daotype : text;
+  dao_name : text;
+  link_of_document : text;
+  tokenissuer : text;
+  cool_down_period : text;
+  purpose : text;
+  required_votes : int8;
+};
+type GroupList = record { users : vec principal };
+type ProposalInput = record {
+  proposal_receiver_id : text;
+  created_by : text;
+  proposal_amount : text;
+  proposal_title : text;
+  proposal_description : text;
+};
+type Proposals = record {
+  share_count : nat64;
+  proposal_expired_at : text;
+  proposal_submitted_at : text;
+  proposal_receiver_id : text;
+  proposal_approved_votes : nat64;
+  created_by : principal;
+  proposal_amount : text;
+  proposal_rejected_votes : nat64;
+  proposal_title : text;
+  rejected_votes_list : vec text;
+  proposal_description : text;
+  proposal_id : text;
+  proposal_status : text;
+  approved_votes_list : vec text;
+  comments : nat64;
+  comments_list : vec text;
+  required_votes : nat64;
+};
+type Result = variant { Ok : GroupList; Err : text };
+service : (DaoInput) -> {
+  add_member_to_group : (text, principal) -> (text);
+  create_proposal : (ProposalInput) -> (text);
+  get_dao_detail : () -> (Dao) query;
+  get_members_of_group : (text) -> (Result) query;
+  get_proposal_by_id : (text) -> (Proposals) query;
+  remove_member_from_group : (text, principal) -> (text);
+}

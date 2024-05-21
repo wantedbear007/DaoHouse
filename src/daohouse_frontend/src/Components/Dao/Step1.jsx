@@ -54,11 +54,11 @@ const Step1 = ({ setData, setActiveStep }) => {
       <div
         className={
           className +
-          "__form bg-[#F4F2EC] p-10 mx-4 rounded-lg flex flex-col gap-4"
+          "__form bg-[#F4F2EC] mobile:p-10 small_phone:p-6 p-4 big_phone:mx-4 mx-0 rounded-lg flex flex-col mobile:gap-4 gap-2"
         }
       >
         {/** DAO Identifier */}
-        <label htmlFor="name" className="font-semibold">
+        <label htmlFor="name" className="font-semibold mobile:text-base text-sm">
           DAO Identifier*
         </label>
         <input
@@ -67,12 +67,12 @@ const Step1 = ({ setData, setActiveStep }) => {
           required
           value={inputData.DAOIdentifier}
           placeholder="Enter DAO Name"
-          className="rounded-lg p-3"
+          className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"
           onChange={handleChange}
         />
 
         {/** Purpose of DAO */}
-        <label htmlFor="purpose" className="font-semibold">
+        <label htmlFor="purpose" className="font-semibold mobile:text-base text-sm">
           Purpose of DAO
         </label>
         <textarea
@@ -80,12 +80,12 @@ const Step1 = ({ setData, setActiveStep }) => {
           name="Purpose"
           value={inputData.Purpose}
           placeholder="Specify the primary purpose or objectives the DAO aims to achieve, such as governance, funding, community building,"
-          className="rounded-lg p-3"
+          className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"
           onChange={handleChange}
         />
 
         {/** DAO Type */}
-        <label htmlFor="type" className="font-semibold">
+        <label htmlFor="type" className="font-semibold mobile:text-base text-sm">
           DAO Type
         </label>
         <input
@@ -93,66 +93,68 @@ const Step1 = ({ setData, setActiveStep }) => {
           type="text"
           value={inputData.DAOType}
           name="DAOType"
-          className="rounded-lg p-3"
+          className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"
         />
 
         {/** DAO Token */}
-        <div className="flex flex-row gap-4 items-center">
-          <p htmlFor="type" className="font-semibold">
+        <div className="flex mobile:flex-row flex-col mobile:gap-4 gap-2 mobile:items-center items-start">
+          <p htmlFor="type" className="font-semibold mobile:text-base text-sm">
             DAO Token*
           </p>
 
-          <button
-            className={
-              `${inputData.exisitingToken
-                ? "bg-[#0E3746] text-white"
-                : "border border-[#0E3746]"
-              }` + " p-2 rounded-lg transition"
-            }
-            onClick={() => handlenewTokenFlag(true)}
-          >
-            New Token
-          </button>
-          <button
-            className={
-              `${!inputData.exisitingToken
-                ? "bg-[#0E3746] text-white"
-                : "border border-[#0E3746]"
-              }` + " p-2 border border-[#0E3746] rounded-lg transition"
-            }
-            onClick={() => handlenewTokenFlag(false)}
-          >
-            Existing Token
-          </button>
+          <div className="flex flex-row gap-2">
+            <button
+              className={
+                `${inputData.exisitingToken
+                  ? "bg-[#0E3746] text-white"
+                  : "border border-[#0E3746]"
+                }` + " mobile:p-2 px-4 py-1 mobile:rounded-lg rounded-md transition mobile:text-base text-sm"
+              }
+              onClick={() => handlenewTokenFlag(true)}
+            >
+              New Token
+            </button>
+            <button
+              className={
+                `${!inputData.exisitingToken
+                  ? "bg-[#0E3746] text-white"
+                  : "border border-[#0E3746]"
+                }` + " mobile:p-2 px-4 py-1 border border-[#0E3746] mobile:rounded-lg rounded-md transition mobile:text-base text-sm"
+              }
+              onClick={() => handlenewTokenFlag(false)}
+            >
+              Existing Token
+            </button>
+          </div>
         </div>
 
-        <div className="flex flex-row gap-4">
-          <div className="flex flex-col w-1/2 gap-4">
-            <label htmlFor="tokenName">Token Name</label>
+        <div className="flex mobile:flex-row flex-col mobile:gap-4 gap-2">
+          <div className="flex flex-col mobile:w-1/2 mobile:gap-4 gap-2">
+            <label htmlFor="tokenName" className="font-semibold mobile:text-base text-xs">Token Name</label>
             <input
               required
               type="text"
               name="tokenName"
               value={inputData.tokenName}
               onChange={handleChange}
-              className="rounded-lg p-3"
+              className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"
             />
           </div>
-          <div className="flex flex-col w-1/2 gap-4">
-            <label htmlFor="tokenSymbol">Token Symbol</label>
+          <div className="flex flex-col mobile:w-1/2 mobile:gap-4 gap-2">
+            <label htmlFor="tokenSymbol" className="font-semibold mobile:text-base text-xs">Token Symbol</label>
             <input
               required
               type="text"
               name="tokenSymbol"
               value={inputData.tokenSymbol}
               onChange={handleChange}
-              className="rounded-lg p-3"
+              className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"
             />
           </div>
         </div>
 
         {/** Initial Token Supply */}
-        <label htmlFor="initialTokenSupply" className="font-semibold">
+        <label htmlFor="initialTokenSupply" className="font-semibold mobile:text-base text-sm">
           Initial Token Supply
         </label>
         <input
@@ -161,7 +163,7 @@ const Step1 = ({ setData, setActiveStep }) => {
           value={inputData.initialTokenSupply}
           name="initialTokenSupply"
           placeholder="Enter number of tokens to be minted"
-          className="rounded-lg p-3"
+          className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"
         />
       </div>
 
@@ -174,7 +176,7 @@ const Step1 = ({ setData, setActiveStep }) => {
         <button
           type="submit"
           onClick={handleSaveAndNext}
-          className="flex m-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white"
+          className="flex mobile:m-4 my-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white mobile:text-base text-sm"
         >
           Save & Next <FaArrowRightLong />
         </button>

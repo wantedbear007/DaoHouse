@@ -58,32 +58,32 @@ pub async fn stored_chunks(arg: StoredChunksArgument) -> CallResult<(Vec<ChunkHa
     call(Principal::management_canister(), "stored_chunks", (arg,)).await
 }
 
-// #[update]
-// pub async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
-//     // let wasm_base64: &str = "3831fb07143cd43c3c51f770342d2b7d0a594311529f5503587bf1544ccd44be";
-//     // let wasm_module_sample: Vec<u8> = base64::decode(wasm_base64).expect("Decoding failed");
+#[update]
+pub async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
+    // let wasm_base64: &str = "3831fb07143cd43c3c51f770342d2b7d0a594311529f5503587bf1544ccd44be";
+    // let wasm_module_sample: Vec<u8> = base64::decode(wasm_base64).expect("Decoding failed");
 
-//     let wasm_module_sample: Vec<u8> = include_bytes!("/home/harshit/Desktop/company/experiment/DaoHouse/.dfx/local/canisters/daohouse_backend/daohouse_backend.wasm").to_vec();
+    let wasm_module_sample: Vec<u8> = include_bytes!("/home/harshit/Desktop/company/experiment/DaoHouse/.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
     
     
-//     let cycles: u128 = 10_000_000_000; 
+    let cycles: u128 = 10_000_000_000; 
     
-//     let extended_arg = InstallCodeArgumentExtended {
-//         mode: arg.mode,
-//         canister_id: arg.canister_id,
-//         wasm_module: wasm_module_sample,
-//         arg: arg.arg,
-//         sender_canister_version: Some(canister_version()),
-//     };
+    let extended_arg = InstallCodeArgumentExtended {
+        mode: arg.mode,
+        canister_id: arg.canister_id,
+        wasm_module: wasm_module_sample,
+        arg: arg.arg,
+        sender_canister_version: Some(canister_version()),
+    };
     
    
-//     call_with_payment128(
-//         Principal::management_canister(),
-//         "install_code",
-//         (extended_arg,),
-//         cycles, // Provide the increased cycles here
-//     ).await
-// }
+    call_with_payment128(
+        Principal::management_canister(),
+        "install_code",
+        (extended_arg,),
+        cycles, // Provide the increased cycles here
+    ).await
+}
 
 
 #[update]

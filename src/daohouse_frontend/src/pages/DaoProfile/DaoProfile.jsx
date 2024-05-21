@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Lottie from "react-lottie";
 import BigCircleComponent from "../../Components/Ellipse-Animation/BigCircle/BigCircleComponent";
 import SmallCircleComponent from "../../Components/Ellipse-Animation/SmallCircle/SmallCircleComponent";
@@ -10,7 +11,7 @@ import MediumCircle from "../../../assets/MediumCircle.png";
 import SmallestCircle from "../../../assets/SmallestCircle.png";
 import MyProfileRectangle from "../../../assets/MyProfileRectangle.png";
 import ProposalsContent from "../../Components/DaoProfile/ProposalsContent";
-import { useNavigate } from "react-router-dom";
+import FeedsContent from "../../Components/DaoProfile/FeedsContent";
 
 const DaoProfile = () => {
   const className = "DaoProfile";
@@ -269,6 +270,7 @@ const DaoProfile = () => {
           </a>
         </div>
         {activeLink === "proposals" && <ProposalsContent />}
+        {activeLink === "feeds" && <FeedsContent />}
       </div>
     </div>
   );

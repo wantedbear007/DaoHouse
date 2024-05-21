@@ -4,7 +4,7 @@ import { FaSquarePlus } from "react-icons/fa6";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
-const Step3 = ({ setData, setActiveStep }) => {
+const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
   const [count, setCount] = useState(1);
   const [showMemberNameInput, setShowMemberNameInput] = useState(false);
   const [showCouncilNameInput, setShowCouncilNameInput] = useState(false);
@@ -25,6 +25,28 @@ const Step3 = ({ setData, setActiveStep }) => {
     }));
 
     setActiveStep(3);
+
+    try {
+      document.querySelector('.CreateDAO__steps').scrollTo({
+        left: Step4Ref.current.offsetLeft - 50,
+        behavior: "smooth",
+      });
+    } catch (err) {
+      console.log("The Scroll Error says: ", err.message);
+    }
+  }
+
+  function handleBack() {
+    setActiveStep(1);
+
+    try {
+      document.querySelector('.CreateDAO__steps').scrollTo({
+        left: 0,
+        behavior: "smooth",
+      });
+    } catch (err) {
+      console.log("The Scroll Error says: ", err.message);
+    }
   }
 
   const handleGroupAdding = () => {
@@ -132,14 +154,14 @@ const Step3 = ({ setData, setActiveStep }) => {
       <div
         className={
           className +
-          "__form bg-[#F4F2EC] p-10 mx-4 rounded-lg flex flex-col gap-4"
+          "__form bg-[#F4F2EC] big_phone:p-10 small_phone:p-6 p-4 big_phone:mx-4 mx-0 rounded-lg flex flex-col gap-4"
         }
       >
         {/**Texts */}
         <div className="flex flex-row items-start justify-between">
-          <section className="w-11/12">
+          <section className="w-11/12 flex flex-col gap-y-2">
             <h2 className="font-semibold">Add Groups & Members</h2>
-            <p>
+            <p className="big_phone:text-base mobile:text-sm text-xs">
               You can add members and assign them various roles as per your
               decisions and also Add members to your DAO for providing them
               specific roles in future
@@ -149,7 +171,7 @@ const Step3 = ({ setData, setActiveStep }) => {
           {/**Button to add Groups */}
           <button
             onClick={handleGroupAdding}
-            className="bg-white w-10 h-10 text-lg flex items-center justify-center rounded-[50%]"
+            className="bg-white w-10 h-10 m-2 text-lg flex items-center justify-center rounded-[50%]"
           >
             <FaPlus />
           </button>
@@ -159,25 +181,25 @@ const Step3 = ({ setData, setActiveStep }) => {
         <div className="bg-[#E9EAEA] rounded-lg">
           {
             <React.Fragment>
-              <section className="w-full py-2 px-8 flex flex-row items-center justify-between border-b-2 border-[#b4b4b4]">
-                <h2 className="font-semibold">Council</h2>
+              <section className="w-full py-2 mobile:px-8 p-2 pl-4 flex flex-row items-center justify-between border-b-2 border-[#b4b4b4]">
+                <h2 className="font-semibold mobile:text-base text-sm">Council</h2>
 
                 {/**Council Add Member button */}
                 <button
                   onClick={handleCouncilMemAdding}
-                  className="flex flex-row items-center gap-1 text-[#229ED9] bg-white p-2 rounded-md"
+                  className="flex flex-row items-center gap-1 text-[#229ED9] bg-white mobile:p-2 p-1 rounded-md"
                 >
                   <AddMemberButton />
                 </button>
               </section>
 
               {/**Show Council members or take input */}
-              <section className="py-4 px-8 transition">
+              <section className="py-4 mobile:px-8 p-2 pl-4 transition">
                 {showCouncilNameInput ? (
                   <input
                     type="text"
                     name="memberName"
-                    className="p-2 rounded-md border border-slate-500"
+                    className="mobile:p-2 p-1 mobile:text-base text-sm rounded-md border border-slate-500"
                     placeholder="Enter Member Name"
                     onKeyDown={(e) =>
                       handleCouncilMemberName(e.target.value, e)
@@ -190,7 +212,7 @@ const Step3 = ({ setData, setActiveStep }) => {
                   list
                     .find((item) => item.name === "Council")
                     .members.map((name, userIndex) => (
-                      <p key={userIndex}>{name}</p>
+                      <p key={userIndex} className="mobile:text-base text-sm">{name}</p>
                     ))
                 )}
               </section>
@@ -199,12 +221,12 @@ const Step3 = ({ setData, setActiveStep }) => {
         </div>
 
         {/**List of all Groups */}
-        <div className={className + "__container w-full"}>
+        <div className={className + "__container w-full flex flex-col gap-2"}>
           {/**Removing the Council group and considering rest */}
           {list.slice(1).map((item, index) => (
             <div
               key={index}
-              className={`flex flex-col my-2 bg-white rounded-lg ${addMemberIndex === item.index || item.name == "All"
+              className={`flex flex-col bg-white rounded-lg ${addMemberIndex === item.index || item.name == "All"
                 ? ""
                 : "cursor-pointer transition"
                 }`}
@@ -213,7 +235,7 @@ const Step3 = ({ setData, setActiveStep }) => {
               {/**The section that appears */}
               <section
                 key={index}
-                className={`w-full py-2 px-8 flex ${addMemberIndex === item.index
+                className={`w-full py-2 p-2 pl-4 flex ${addMemberIndex === item.index
                   ? "border-b-2 border-[#b4b4b4]"
                   : "rounded-lg"
                   } items-center justify-between`}
@@ -232,20 +254,19 @@ const Step3 = ({ setData, setActiveStep }) => {
                   />
                 ) : (
                   <p
-                    className="font-semibold py-1 cursor-pointer"
+                    className="font-semibold py-1 cursor-pointer mobile:text-base text-sm"
                     onDoubleClick={() => handleShowGroupNameInput(item.index)}
                   >
                     {item.name}
                   </p>
                 )}
 
-                <div className={className + "__buttons flex flex-row gap-4"}>
+                <div className={className + "__buttons flex flex-row small_phone:gap-4 gap-2"}>
                   {/**Add member button...All group can't add members in it */}
                   {item.name !== "All" && (
                     <button
                       onClick={() => handleMemberAdding(item.index)}
-                      className={`flex flex-row items-center gap-1 text-[#229ED9] bg-slate-200
-                          p-2 rounded-md`}
+                      className={`flex flex-row items-center gap-1 text-[#229ED9] bg-slate-200 mobile:p-2 p-1 rounded-md`}
                     >
                       <AddMemberButton />
                     </button>
@@ -253,19 +274,19 @@ const Step3 = ({ setData, setActiveStep }) => {
 
                   {/**Delete the Group */}
                   <button onClick={() => deleteGroup(item.index)}>
-                    <MdOutlineDeleteOutline className="text-red-500 text-2xl" />
+                    <MdOutlineDeleteOutline className="text-red-500 mobile:text-2xl text-lg" />
                   </button>
                 </div>
               </section>
 
               {/**The section that is hidden and open-ups with members names */}
               {addMemberIndex === item.index && (
-                <section className="py-4 px-8 gap-2 flex flex-col items-start">
+                <section className="p-4 gap-2 flex flex-col items-start">
                   {showMemberNameInput ? (
                     <input
                       type="text"
                       name="memberName"
-                      className="p-2 rounded-md border border-slate-500"
+                      className="mobile:p-2 p-1 mobile:text-base text-sm rounded-md border border-slate-500"
                       placeholder="Enter Member Name"
                       onKeyDown={(e) => handleNameEnter(e.target.value, e)}
                       onBlur={(e) => {
@@ -278,10 +299,10 @@ const Step3 = ({ setData, setActiveStep }) => {
                     item.members.map((memberName, userIndex) => (
                       <div
                         key={userIndex}
-                        className="oneUser flex flex-row gap-8 w-full items-center"
+                        className="oneUser flex flex-row mobile:gap-8 gap-4 w-full items-center"
                       >
                         {/**MemberName */}
-                        <p className="text-slate-500 text-base w-[25%] whitespace-nowrap text-ellipsis overflow-hidden">
+                        <p className="text-slate-500 mobile:text-base text-sm mobile:w-[25%] w-[40%] whitespace-nowrap text-ellipsis overflow-hidden">
                           {memberName}
                         </p>
 
@@ -289,7 +310,7 @@ const Step3 = ({ setData, setActiveStep }) => {
                           onClick={() =>
                             handleRemoveMember(item.index, memberName)
                           }
-                          className="border border-cyan-800 px-4 text-sm rounded-md text-cyan-800"
+                          className="border border-cyan-800 mobile:px-4 px-2 mobile:text-sm text-xs rounded-md text-cyan-800"
                         >
                           Remove
                         </button>
@@ -306,19 +327,19 @@ const Step3 = ({ setData, setActiveStep }) => {
       <div
         className={
           className +
-          "__submitButton w-full flex flex-row items-center justify-end"
+          "__submitButton w-full flex flex-row items-center mobile:justify-end justify-between"
         }
       >
         <button
-          onClick={() => setActiveStep(1)}
-          className="flex m-4 flex-row items-center gap-2 border border-[#0E3746] hover:bg-[#0E3746] text-[#0E3746] hover:text-white transition px-4 py-2 rounded-[2rem]"
+          onClick={handleBack}
+          className="flex mobile:m-4 my-4 flex-row items-center gap-2 border border-[#0E3746] hover:bg-[#0E3746] text-[#0E3746] hover:text-white mobile:text-base text-sm transition px-4 py-2 rounded-[2rem]"
         >
           <FaArrowLeftLong /> Back
         </button>
         <button
           type="submit"
           onClick={handleSaveAndNext}
-          className="flex m-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white"
+          className="flex mobile:m-4 my-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white mobile:text-base text-sm"
         >
           Save & Next <FaArrowRightLong />
         </button>
@@ -333,7 +354,7 @@ const AddMemberButton = () => {
   return (
     <React.Fragment>
       <FaSquarePlus className="text-[#229ED9] text-lg" />
-      <p className="text-sm font-semibold">Add Members</p>
+      <p className="mobile:text-sm text-xs font-semibold">Add Members</p>
     </React.Fragment>
   );
 };

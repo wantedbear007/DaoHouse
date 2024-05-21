@@ -1,6 +1,6 @@
 import React from "react";
 import Tags from "../../../Components/MyProfile/Tags";
-import PersonalLinksAndContactInfo from "../../../Components/MyProfile/PersonalLinksAndContactInfo";
+import PersonalLinksAndContactInfo from "../PersonalLinksAndContactInfo";
 
 const AboutMe = () => {
   const className = "AboutMe";
