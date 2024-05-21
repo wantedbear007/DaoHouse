@@ -1,6 +1,24 @@
-import textAreaIcon from "../../../assets/feeds-text-area-opt.png";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const FeedsContent = () => {
+  const toolbarModules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [{ align: [] }],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ indent: "-1" }, { indent: "+1" }],
+      ["link", "image"],
+      ["clean"],
+      ["undo", "redo"],
+    ],
+  };
+
+  const handleImageUpload = () => {
+    console.log("Image upload triggered");
+  };
+
   return (
     <div className="mt-6">
       <div className="flex items-center justify-between">
@@ -37,18 +55,14 @@ const FeedsContent = () => {
         <div className="px-4 pt-4">
           <div className="bg-white h-[260px] rounded-[10px]">
             <div
-              className="bg-[#F5F5F5] rounded-[10px] p-1"
+              className="bg-[#F5F5F5] rounded-[10px] p-1 h-11"
               style={{ boxShadow: "0px 3px 6px 0px rgba(0, 0, 0, 0.26)" }}
             >
-              <img src={textAreaIcon} alt="" />
-            </div>
-            <div className="p-3">
-              <textarea
-                className="w-full p-2"
-                name=""
-                id=""
-                rows="7"
-              ></textarea>
+              <ReactQuill
+                modules={toolbarModules}
+                theme="snow"
+                onChange={handleImageUpload}
+              />
             </div>
           </div>
         </div>
