@@ -500,7 +500,7 @@ dependencies = [
  "ciborium",
  "getrandom",
  "ic-cdk",
- "ic-cdk-macros 0.13.2",
+ "ic-cdk-macros 0.13.3",
  "ic-cdk-timers",
  "ic-stable-structures",
  "serde",
@@ -1559,7 +1559,7 @@ dependencies = [
  "once_cell",
  "proc-macro2",
  "quote",
- "syn 2.0.60",
+ "syn 2.0.63",
  "wasm-bindgen-shared",
 ]
 
@@ -1581,7 +1581,7 @@ checksum = "e94f17b526d0a461a191c78ea52bbce64071ed5c04c9ffe424dcb38f74171bb7"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.60",
+ "syn 2.0.63",
  "wasm-bindgen-backend",
  "wasm-bindgen-shared",
 ]
