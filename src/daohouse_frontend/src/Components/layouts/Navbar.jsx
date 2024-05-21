@@ -30,6 +30,8 @@ const Navbar = () => {
     { label: "Proposals", route: "/proposals" },
   ];
 
+
+
   // Function to handle login
   const handleLogin = async () => {
     setIsLoading(true);
@@ -88,6 +90,13 @@ const Navbar = () => {
   //   createAndFetchUserProfile();
   // }, [backendActor, principal]);
 
+  const dropdownItems = [
+    { label: "Profile", route: "/my-profile", icon: <FaUser className="mr-2" /> },
+    { label: "Settings", route: "/settings", icon: <FaCog className="mr-2" /> },
+    { label: "Logout", onClick: handleLogout, icon: <FaSignOutAlt className="mr-2" /> },
+  ];
+
+
   return (
     <nav>
       <div className="bg-bg-color shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50">
@@ -101,8 +110,8 @@ const Navbar = () => {
                 <Link
                   to={item.route}
                   className={`hover:text-[#05212C] hover:font-medium cursor-pointer text-[16px] text-[#829095] ${location.pathname === item.route
-                      ? "font-semibold border-b-2 border-[#05212C] text-black"
-                      : "border-transparent border-b-0.5"
+                    ? "font-semibold border-b-2 border-[#05212C] text-black"
+                    : "border-transparent border-b-0.5"
                     }`}
                 >
                   {item.label}
@@ -146,21 +155,18 @@ const Navbar = () => {
                 <LuChevronDown />
                 {dropdownVisible && (
                   <div className="absolute top-full right-0 bg-white rounded-md border border-gray-300 shadow-md py-2 w-40">
-                    <button className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
-                      <FaUser className="mr-2" />
-                      <span>Profile</span>
-                    </button>
-                    <button className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
-                      <FaCog className="mr-2" />
-                      <span>Settings</span>
-                    </button>
-                    <button
-                      onClick={handleLogout}
-                      className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
-                    >
-                      <FaSignOutAlt className="mr-2" />
-                      <span>Logout</span>
-                    </button>
+                    {dropdownItems.map((item, index) => (
+                      <Link
+                        key={index}
+                        to={item.route || "#"}
+                        onClick={item.onClick}
+                        className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                      >
+                        {item.icon}
+                        <span>{item.label}</span>
+                      </Link>
+                    ))}
+                   
                   </div>
                 )}
               </div>
