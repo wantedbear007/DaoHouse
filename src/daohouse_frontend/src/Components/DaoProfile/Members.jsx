@@ -37,7 +37,7 @@ const Members = () => {
               <input
                 type="search"
                 name="groups"
-                className="pl-10 w-[400px] rounded-[2rem] p-2 bg-[#F4F2EC] border border-[#AAC8D6]"
+                className="w-[400px] rounded-[2rem] py-2 pl-10 bg-[#F4F2EC] border border-[#AAC8D6]"
                 placeholder="Search by Propposal ID"
               />
               <LuSearch className="ml-4 absolute text-slate-400" />
