@@ -21,7 +21,6 @@ import Followers from "./Components/MyProfile/Followers/Followers";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DaoProfile from "./pages/DaoProfile/DaoProfile";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
 import "react-quill/dist/quill.snow.css";
 
 const App = () => {

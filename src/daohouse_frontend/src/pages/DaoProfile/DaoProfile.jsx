@@ -12,6 +12,7 @@ import SmallestCircle from "../../../assets/SmallestCircle.png";
 import MyProfileRectangle from "../../../assets/MyProfileRectangle.png";
 import ProposalsContent from "../../Components/DaoProfile/ProposalsContent";
 import FeedsContent from "../../Components/DaoProfile/FeedsContent";
+import Members from "../../Components/DaoProfile/Members";
 
 const DaoProfile = () => {
   const className = "DaoProfile";
@@ -44,6 +45,7 @@ const DaoProfile = () => {
       id: "lottie-smallCircle",
     },
   };
+
   // Animation options for the medium circle
   const defaultOptions3 = {
     loop: true,
@@ -176,11 +178,10 @@ const DaoProfile = () => {
               e.preventDefault();
               handleClick("proposals");
             }}
-            className={`cursor-pointer ${
-              activeLink === "proposals"
+            className={`cursor-pointer ${activeLink === "proposals"
                 ? "underline text-[#0E3746]"
                 : "text-[#0E37464D]"
-            }`}
+              }`}
           >
             Proposals
           </a>
@@ -190,11 +191,10 @@ const DaoProfile = () => {
               e.preventDefault();
               handleClick("feeds");
             }}
-            className={`cursor-pointer ${
-              activeLink === "feeds"
+            className={`cursor-pointer ${activeLink === "feeds"
                 ? "underline text-[#0E3746]"
                 : "text-[#0E37464D]"
-            }`}
+              }`}
           >
             Feeds
           </a>
@@ -204,11 +204,10 @@ const DaoProfile = () => {
               e.preventDefault();
               handleClick("funds");
             }}
-            className={`cursor-pointer ${
-              activeLink === "funds"
+            className={`cursor-pointer ${activeLink === "funds"
                 ? "underline text-[#0E3746]"
                 : "text-[#0E37464D]"
-            }`}
+              }`}
           >
             Funds
           </a>
@@ -218,11 +217,10 @@ const DaoProfile = () => {
               e.preventDefault();
               handleClick("member_policy");
             }}
-            className={`cursor-pointer ${
-              activeLink === "member_policy"
+            className={`cursor-pointer ${activeLink === "member_policy"
                 ? "underline text-[#0E3746]"
                 : "text-[#0E37464D]"
-            }`}
+              }`}
           >
             Member & Policy
           </a>
@@ -232,11 +230,10 @@ const DaoProfile = () => {
               e.preventDefault();
               handleClick("followers");
             }}
-            className={`cursor-pointer ${
-              activeLink === "followers"
+            className={`cursor-pointer ${activeLink === "followers"
                 ? "underline text-[#0E3746]"
                 : "text-[#0E37464D]"
-            }`}
+              }`}
           >
             Followers
           </a>
@@ -246,11 +243,10 @@ const DaoProfile = () => {
               e.preventDefault();
               handleClick("bounties");
             }}
-            className={`cursor-pointer ${
-              activeLink === "bounties"
+            className={`cursor-pointer ${activeLink === "bounties"
                 ? "underline text-[#0E3746]"
                 : "text-[#0E37464D]"
-            }`}
+              }`}
           >
             Bounties
           </a>
@@ -260,17 +256,17 @@ const DaoProfile = () => {
               e.preventDefault();
               handleClick("settings");
             }}
-            className={`cursor-pointer ${
-              activeLink === "settings"
+            className={`cursor-pointer ${activeLink === "settings"
                 ? "underline text-[#0E3746]"
                 : "text-[#0E37464D]"
-            }`}
+              }`}
           >
             Settings
           </a>
         </div>
         {activeLink === "proposals" && <ProposalsContent />}
         {activeLink === "feeds" && <FeedsContent />}
+        {activeLink === "member_policy" && <Members />}
       </div>
     </div>
   );
