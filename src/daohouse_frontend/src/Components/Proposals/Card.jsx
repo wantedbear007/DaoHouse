@@ -3,6 +3,7 @@ import avatar from "../../../assets/avatar.png";
 import { CircularProgressBar } from "./CircularProgressBar";
 import SmallCard from "./SmallCard";
 import { buttons, gridItems, sectionsData } from "./proposalsData";
+import { CircularProgressBarMobile } from "./CircularProgressBarMobile";
 
 export default function Card({ proposal }) {
   return (
@@ -17,7 +18,8 @@ export default function Card({ proposal }) {
               <p className="text-sm text-white ">username</p>
             </div>
           </div>
-          <div className="p-3 mx-4">
+
+          <div className="p-3 mx-4 md:block hidden">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <CircularProgressBar percentage={25} color="#4CAF50" />;
@@ -30,8 +32,26 @@ export default function Card({ proposal }) {
             </div>
             <div className="mt-1 "></div>
           </div>
+
+          <div
+            className={`w-fit  ${
+              proposal.status === "Rejected"
+                ? "bg-[#D85032]"
+                : proposal.status === "Approved"
+                ? "bg-[#4FB565]"
+                : proposal.status === "In Progress"
+                ? "bg-[#4993B0]"
+                : ""
+            } ml-auto text-white text-xs font-semibold rounded-full my-4 mx-4 px-3 py-1 inline-block md:hidden`}
+          >
+            {" "}
+            <span className="text-[#34342a] text-[16px]">
+              {proposal.status === "In Progress" && <span>• •</span>}
+            </span>{" "}
+            {proposal.status}
+          </div>
         </div>
-        <div className="flex gap-4 text-xs py-2 px-6  bg-[#AAC8D6] rounded-b-lg">
+        <div className="md:flex gap-4 text-xs py-2 px-6  bg-[#AAC8D6] rounded-b-lg hidden">
           {gridItems.map((item, index) => (
             <div
               key={index}
@@ -76,25 +96,25 @@ export default function Card({ proposal }) {
         <div className="p-4">
           <div className="flex flex-col right-card flex-1 relative">
             <div className="flex items-center justify-start ">
-              <div className="font-bold text-xl text-[#229ED9]  mb-2 p-2">
+              <div className="font-bold text-xl text-[#229ED9]  mb-2 p-2 hidden md:block">
                 Transfer
               </div>
-              <span className="border-r-2 h-6 border-[#229ED9] mx-2" />
-              <div className="font-semibold text-[16px] text-[#229ED9] mb-2 p-2">
+              <span className="border-r-2 h-6 border-[#229ED9] mx-2 hidden md:block" />
+              <div className="font-semibold md:text-[16px] text-[14px] text-[#229ED9] mb-2 p-2">
                 Proposal ID: #{proposal.id}
               </div>
             </div>
 
             {proposal.description.map((paragraph, index) => (
               <p
-                className="mx-4 text-black text-[16px] font-normal my-3"
+                className="mx-4 text-black text-[12px] md:text-[16px] font-normal my-3"
                 key={index}
               >
                 {paragraph}
               </p>
             ))}
 
-            <div className="flex justify-start items-center gap-2">
+            <div className="md:flex justify-start items-center gap-2 hidden">
               {sectionsData.map((section, index) => (
                 <SmallCard
                   key={index}
@@ -104,20 +124,79 @@ export default function Card({ proposal }) {
                 />
               ))}
             </div>
-            <div className="mt-4 absolute right-4 text-right text-sm text-white bg-[#4993B0] w-fit px-2 py-1 rounded-2xl">
+            <div className="flex justify-start items-center gap-2 md:hidden">
+              {sectionsData.slice(0, 1).map((section, index) => (
+                <SmallCard
+                  key={index}
+                  title={section.title}
+                  input1={section.input1}
+                  input2={section.input2}
+                />
+              ))}
+            </div>
+            <div className="md:mt-4 mt-2 absolute right-4 text-right md:text-sm text-[10px] text-white bg-[#4993B0] w-fit px-2 py-1 rounded-2xl">
               {proposal.timeLeft}
             </div>
           </div>
+          <div className="flex gap-2 text-xs py-2 px-2 rounded-b-lg flex-wrap md:hidden">
+            {gridItems.map((item, index) => (
+              <div
+                key={index}
+                className="text-black py-2 rounded-md text-nowrap"
+              >
+                <span className="font-bold text-[12px] text-nowrap	">
+                  {" "}
+                  • {item.label}
+                </span>
+                <br />
+                <div className="text-nowrap	py-1 text-[16px] mx-2">
+                  <span className=" text-[12px]"> {item.value}</span>
 
-          <div className="dark:border-zinc-700 py-2 flex justify-start gap-4 text-zinc-500 dark:text-zinc-400">
+                  {item.time && (
+                    <span className="text-[#55646b] mx-1 text-[10px]">
+                      {" "}
+                      {item.time}
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="p-2 md:hidden">
+            <div className="flex items-center space-x-8">
+              <div className="flex items-center space-x-3">
+                <CircularProgressBarMobile percentage={25} color="#4CAF50" />
+                <span className="text-base text-black">3 votes</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <CircularProgressBarMobile percentage={1} color="red" />
+                <span className="text-base text-black">0 votes</span>
+              </div>
+            </div>
+            <div className="mt-1 "></div>
+          </div>
+
+          <div className="flex justify-start items-center gap-2 md:hidden">
+            {sectionsData.slice(1, 2).map((section, index) => (
+              <SmallCard
+                key={index}
+                title={section.title}
+                input1={section.input1}
+                input2={section.input2}
+              />
+            ))}
+          </div>
+
+          <div className="dark:border-zinc-700 py-2 flex md:justify-start justify-around gap-4 text-zinc-500 dark:text-zinc-400">
             {buttons.map((button, index) => (
               <React.Fragment key={index}>
-                <button className="flex items-center space-x-2 mx-4">
+                <button className="flex flex-col sm:flex-row items-center justify-center sm:space-x-2 md:mx-4">
                   {button.icon}
                   <span className="text-black text-[14px]">{button.text}</span>
                 </button>
                 {index !== buttons.length - 1 && (
-                  <span className="border-r h-6 border-black mx-2" />
+                  <span className="border-r h-6 border-black mx-2 hidden md:block" />
                 )}
               </React.Fragment>
             ))}
