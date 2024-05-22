@@ -27,8 +27,8 @@ function CreateProposal() {
         setDropdownOpen(!dropdownOpen)
     };
 
-    const handleProposalDescriptionChange = (event) => {
-        setProposalDescription(event.target.value);
+  const handleProposalDescriptionChange = (value) => {
+        setProposalDescription(value);
     };
 
     const handleSubmit = (event) => {
