@@ -67,6 +67,11 @@ body {
   border-right-width: 1px;
 }
 
+.proposal-editor {
+  position: relative;
+  min-height: 200px;
+}
+
 .proposal-editor .ql-toolbar {
   display: flex;
   flex-direction: column;
@@ -79,8 +84,9 @@ body {
   height: 100%;
   padding: 10px;
   max-width: 50px;
-  margin: 01px;
+  margin: 1px;
   gap: 10px;
+  z-index: 10;
 }
 
 .proposal-editor .ql-container .ql-editor {
