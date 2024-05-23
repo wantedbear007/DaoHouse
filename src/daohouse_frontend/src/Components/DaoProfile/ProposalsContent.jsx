@@ -10,21 +10,23 @@ const ProposalsContent = () => {
   return (
     <div className="mt-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-[24px] font-bold">Proposals</h1>
+        <h1 className="lg:text-[24px] md:text-[18px] text-[16px] font-bold">
+          Proposals
+        </h1>
         <button
           onClick={() => {
             Navigate("/create-proposal");
           }}
-          className="flex justify-center items-center text-[16px] relative w-[220px] h-[50px] bg-white rounded-full"
+          className="flex justify-center items-center text-[16px] relative lg:w-[220px] lg:h-[50px] md:w-[185px] md:h-[46px] w-[30px] h-[30px] bg-white rounded-full"
           style={{
             boxShadow:
               "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
           }}
         >
-          <span className="absolute text-[35px] font-thin left-5 bottom-[1px] ">
+          <span className="md:absolute md:text-[35px] text-[28px] font-thin lg:left-5 lg:bottom-[1px] md:left-4 md:bottom-[0.1%] md:mb-0 mb-[20%] ">
             +
           </span>
-          <span className="ml-6">Create Proposals</span>
+          <span className="ml-6 hidden md:block">Create Proposals</span>
         </button>
       </div>
       <div className="bg-[#F4F2EC] pt-3 pb-8 mt-4 mb-8 rounded-[10px]">
