@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./DaoProfile.scss"
+import "./DaoProfile.scss";
 import { useNavigate } from "react-router-dom";
 import Lottie from "react-lottie";
 import BigCircleComponent from "../../Components/Ellipse-Animation/BigCircle/BigCircleComponent";
@@ -14,6 +14,7 @@ import MyProfileRectangle from "../../../assets/MyProfileRectangle.png";
 import ProposalsContent from "../../Components/DaoProfile/ProposalsContent";
 import FeedsContent from "../../Components/DaoProfile/FeedsContent";
 import Members from "../../Components/DaoProfile/Members";
+import FollowersContent from "../../Components/DaoProfile/FollowersContent";
 
 const DaoProfile = () => {
   const className = "DaoProfile";
@@ -170,16 +171,22 @@ const DaoProfile = () => {
             </button>
           </div>
         </div>
-        <div className={className + "__navs w-full flex flex-row overflow-auto justify-between mt-8 w-[60%] gap-6"}>
+        <div
+          className={
+            className +
+            "__navs w-full flex flex-row overflow-auto justify-between mt-8 w-[60%] gap-6"
+          }
+        >
           <button
             onClick={(e) => {
               e.preventDefault();
               handleClick("proposals");
             }}
-            className={`cursor-pointer text-nowrap ${activeLink === "proposals"
-              ? "underline text-[#0E3746]"
-              : "text-[#0E37464D]"
-              }`}
+            className={`cursor-pointer text-nowrap ${
+              activeLink === "proposals"
+                ? "underline text-[#0E3746]"
+                : "text-[#0E37464D]"
+            }`}
           >
             Proposals
           </button>
@@ -188,10 +195,11 @@ const DaoProfile = () => {
               e.preventDefault();
               handleClick("feeds");
             }}
-            className={`cursor-pointer text-nowrap ${activeLink === "feeds"
-              ? "underline text-[#0E3746]"
-              : "text-[#0E37464D]"
-              }`}
+            className={`cursor-pointer text-nowrap ${
+              activeLink === "feeds"
+                ? "underline text-[#0E3746]"
+                : "text-[#0E37464D]"
+            }`}
           >
             Feeds
           </button>
@@ -200,10 +208,11 @@ const DaoProfile = () => {
               e.preventDefault();
               handleClick("funds");
             }}
-            className={`cursor-pointer text-nowrap ${activeLink === "funds"
-              ? "underline text-[#0E3746]"
-              : "text-[#0E37464D]"
-              }`}
+            className={`cursor-pointer text-nowrap ${
+              activeLink === "funds"
+                ? "underline text-[#0E3746]"
+                : "text-[#0E37464D]"
+            }`}
           >
             Funds
           </button>
@@ -212,10 +221,11 @@ const DaoProfile = () => {
               e.preventDefault();
               handleClick("member_policy");
             }}
-            className={`cursor-pointer text-nowrap ${activeLink === "member_policy"
-              ? "underline text-[#0E3746]"
-              : "text-[#0E37464D]"
-              }`}
+            className={`cursor-pointer text-nowrap ${
+              activeLink === "member_policy"
+                ? "underline text-[#0E3746]"
+                : "text-[#0E37464D]"
+            }`}
           >
             Member & Policy
           </button>
@@ -224,10 +234,11 @@ const DaoProfile = () => {
               e.preventDefault();
               handleClick("followers");
             }}
-            className={`cursor-pointer text-nowrap ${activeLink === "followers"
-              ? "underline text-[#0E3746]"
-              : "text-[#0E37464D]"
-              }`}
+            className={`cursor-pointer text-nowrap ${
+              activeLink === "followers"
+                ? "underline text-[#0E3746]"
+                : "text-[#0E37464D]"
+            }`}
           >
             Followers
           </button>
@@ -236,10 +247,11 @@ const DaoProfile = () => {
               e.preventDefault();
               handleClick("bounties");
             }}
-            className={`cursor-pointer text-nowrap ${activeLink === "bounties"
-              ? "underline text-[#0E3746]"
-              : "text-[#0E37464D]"
-              }`}
+            className={`cursor-pointer text-nowrap ${
+              activeLink === "bounties"
+                ? "underline text-[#0E3746]"
+                : "text-[#0E37464D]"
+            }`}
           >
             Bounties
           </button>
@@ -248,10 +260,11 @@ const DaoProfile = () => {
               e.preventDefault();
               handleClick("settings");
             }}
-            className={`cursor-pointer text-nowrap ${activeLink === "settings"
-              ? "underline text-[#0E3746]"
-              : "text-[#0E37464D]"
-              }`}
+            className={`cursor-pointer text-nowrap ${
+              activeLink === "settings"
+                ? "underline text-[#0E3746]"
+                : "text-[#0E37464D]"
+            }`}
           >
             Settings
           </button>
@@ -259,8 +272,9 @@ const DaoProfile = () => {
         {activeLink === "proposals" && <ProposalsContent />}
         {activeLink === "feeds" && <FeedsContent />}
         {activeLink === "member_policy" && <Members />}
+        {activeLink === "followers" && <FollowersContent />}
       </div>
-    </div >
+    </div>
   );
 };
 
