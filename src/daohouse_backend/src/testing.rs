@@ -63,7 +63,7 @@ pub async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
     // let wasm_base64: &str = "3831fb07143cd43c3c51f770342d2b7d0a594311529f5503587bf1544ccd44be";
     // let wasm_module_sample: Vec<u8> = base64::decode(wasm_base64).expect("Decoding failed");
 
-    let wasm_module_sample: Vec<u8> = include_bytes!("/home/khushalitrivedi/quadb/DAOHOUSE_MAIN/DaoHouse/.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
+    let wasm_module_sample: Vec<u8> = include_bytes!("../../../../.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
     
     
     let cycles: u128 = 10_000_000_000; 
