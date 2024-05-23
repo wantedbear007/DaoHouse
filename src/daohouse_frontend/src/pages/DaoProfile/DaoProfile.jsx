@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./DaoProfile.scss"
 import { useNavigate } from "react-router-dom";
 import Lottie from "react-lottie";
 import BigCircleComponent from "../../Components/Ellipse-Animation/BigCircle/BigCircleComponent";
@@ -113,7 +114,7 @@ const DaoProfile = () => {
       <div
         className={
           className +
-          "__mainComponent bg-[#c8ced3] big_phone:py-8 big_phone:pb-20 py-6 big_phone:px-8 tablet:flex-row gap-2 flex-col w-full"
+          "__mainComponent bg-[#c8ced3] big_phone:py-8 big_phone:pb-20 py-6 big_phone:px-8 px-6 tablet:flex-row gap-2 flex-col w-full"
         }
       >
         <div className="flex tablet:justify-between justify-around w-full gap-2 z-50 relative">
@@ -171,104 +172,97 @@ const DaoProfile = () => {
             </button>
           </div>
         </div>
-        <div className="flex justify-between mt-8 w-[60%]">
-          <a
-            href="#"
+        <div className={className + "__navs w-full flex flex-row overflow-auto justify-between mt-8 w-[60%] gap-6"}>
+          <button
             onClick={(e) => {
               e.preventDefault();
               handleClick("proposals");
             }}
-            className={`cursor-pointer ${activeLink === "proposals"
-                ? "underline text-[#0E3746]"
-                : "text-[#0E37464D]"
+            className={`cursor-pointer text-nowrap ${activeLink === "proposals"
+              ? "underline text-[#0E3746]"
+              : "text-[#0E37464D]"
               }`}
           >
             Proposals
-          </a>
-          <a
-            href="#"
+          </button>
+          <button
             onClick={(e) => {
               e.preventDefault();
               handleClick("feeds");
             }}
-            className={`cursor-pointer ${activeLink === "feeds"
-                ? "underline text-[#0E3746]"
-                : "text-[#0E37464D]"
+            className={`cursor-pointer text-nowrap ${activeLink === "feeds"
+              ? "underline text-[#0E3746]"
+              : "text-[#0E37464D]"
               }`}
           >
             Feeds
-          </a>
-          <a
-            href="#"
+          </button>
+          <button
             onClick={(e) => {
               e.preventDefault();
               handleClick("funds");
             }}
-            className={`cursor-pointer ${activeLink === "funds"
-                ? "underline text-[#0E3746]"
-                : "text-[#0E37464D]"
+            className={`cursor-pointer text-nowrap ${activeLink === "funds"
+              ? "underline text-[#0E3746]"
+              : "text-[#0E37464D]"
               }`}
           >
             Funds
-          </a>
-          <a
-            href="#"
+          </button>
+          <button
             onClick={(e) => {
               e.preventDefault();
               handleClick("member_policy");
             }}
-            className={`cursor-pointer ${activeLink === "member_policy"
-                ? "underline text-[#0E3746]"
-                : "text-[#0E37464D]"
+            className={`cursor-pointer text-nowrap ${activeLink === "member_policy"
+              ? "underline text-[#0E3746]"
+              : "text-[#0E37464D]"
               }`}
           >
             Member & Policy
-          </a>
-          <a
-            href="#"
+          </button>
+          <button
             onClick={(e) => {
               e.preventDefault();
               handleClick("followers");
             }}
-            className={`cursor-pointer ${activeLink === "followers"
-                ? "underline text-[#0E3746]"
-                : "text-[#0E37464D]"
+            className={`cursor-pointer text-nowrap ${activeLink === "followers"
+              ? "underline text-[#0E3746]"
+              : "text-[#0E37464D]"
               }`}
           >
             Followers
-          </a>
-          <a
-            href="#"
+          </button>
+          <button
             onClick={(e) => {
               e.preventDefault();
               handleClick("bounties");
             }}
-            className={`cursor-pointer ${activeLink === "bounties"
-                ? "underline text-[#0E3746]"
-                : "text-[#0E37464D]"
+            className={`cursor-pointer text-nowrap ${activeLink === "bounties"
+              ? "underline text-[#0E3746]"
+              : "text-[#0E37464D]"
               }`}
           >
             Bounties
-          </a>
-          <a
-            href="#"
+          </button>
+          <button
             onClick={(e) => {
               e.preventDefault();
               handleClick("settings");
             }}
-            className={`cursor-pointer ${activeLink === "settings"
-                ? "underline text-[#0E3746]"
-                : "text-[#0E37464D]"
+            className={`cursor-pointer text-nowrap ${activeLink === "settings"
+              ? "underline text-[#0E3746]"
+              : "text-[#0E37464D]"
               }`}
           >
             Settings
-          </a>
+          </button>
         </div>
         {activeLink === "proposals" && <ProposalsContent />}
         {activeLink === "feeds" && <FeedsContent />}
         {activeLink === "member_policy" && <Members />}
       </div>
-    </div>
+    </div >
   );
 };
 
