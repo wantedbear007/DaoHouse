@@ -1,7 +1,7 @@
 import React from "react";
 // import Login from './Components/Auth/Login';
 
-import PostProvider from './PostProvider'
+import PostProvider from "./PostProvider";
 import Dao from "./pages/dao/Dao";
 import Dashboard from "../src/pages/Home/Dashboard";
 import Navbar from "./Components/layouts/Navbar";
@@ -20,10 +20,9 @@ import AboutMe from "./Components/MyProfile/AboutMe/AboutMe";
 import Followers from "./Components/MyProfile/Followers/Followers";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DaoProfile from "./pages/DaoProfile/DaoProfile";
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-quill/dist/quill.snow.css';
-
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-quill/dist/quill.snow.css";
 
 const App = () => {
   return (
@@ -38,9 +37,9 @@ const App = () => {
           <Route path="/create-proposal" element={<CreateProposal />} />
           <Route path="/dao" element={<Dao />} />
           <Route path="/dao/create-dao" element={<CreateDao />} />
+          <Route path="/dao/profile/:tab?" element={<DaoProfile />} />
           <Route path="/edit-profile" element={<EditProfile />} />
-          <Route path="/post/:postID" element={<Post />}
-          />
+          <Route path="/post/:postID" element={<Post />} />
           <Route
             path="/my-profile"
             element={<MyProfile childComponent={<AboutMe />} />}
