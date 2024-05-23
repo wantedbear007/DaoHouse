@@ -1,0 +1,11 @@
+{
+  "dao_canister": {
+    "ic": "qmxcp-waaaa-aaaak-aksqa-cai"
+  },
+  "daohouse_backend": {
+    "ic": "qlwe3-3yaaa-aaaak-aksqq-cai"
+  },
+  "daohouse_frontend": {
+    "ic": "qcvph-nqaaa-aaaak-aksra-cai"
+  }
+}
