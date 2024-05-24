@@ -29,7 +29,7 @@ const ProposalsContent = () => {
           <span className="ml-6 hidden md:block">Create Proposals</span>
         </button>
       </div>
-      <div className="bg-[#F4F2EC] pt-3 pb-8 mt-4 mb-8 rounded-[10px]">
+      <div className="bg-[#F4F2EC] pt-3 pb-8 mt-4 mb-8 rounded-[10px] hidden md:block">
         <div className="flex justify-between items-center px-6 mb-3">
           <span className="text-[20px] text-[#05212C] font-semibold">All</span>
           <span className="flex">
@@ -63,6 +63,9 @@ const ProposalsContent = () => {
         <div className="w-full border-t py-6 px-4  border-[#0000004D] mb-4">
           {selectedProposal && <Card proposal={selectedProposal} />}
         </div>
+      </div>
+      <div className="bg-white md:hidden rounded-[10px] mt-4 mb-12">
+        {selectedProposal && <Card proposal={selectedProposal} />}
       </div>
     </div>
   );
