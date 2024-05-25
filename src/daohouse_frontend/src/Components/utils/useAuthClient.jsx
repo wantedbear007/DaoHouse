@@ -11,6 +11,7 @@ export const useAuthClient = () => {
   const [identity, setIdentity] = useState(null);
   const [principal, setPrincipal] = useState(null);
   const [backendActor, setBackendActor] = useState(null);
+  console.log({backendActor})
 
   const getPrincipalId = (principal) => {
     if (principal) {
