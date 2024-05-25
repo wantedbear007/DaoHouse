@@ -64,7 +64,7 @@ const ProposalsContent = () => {
           {selectedProposal && <Card proposal={selectedProposal} />}
         </div>
       </div>
-      <div className="bg-white md:hidden rounded-[10px] mt-4 mb-12">
+      <div className="bg-white md:hidden rounded-[10px] mt-4 mb-8 ">
         {selectedProposal && <Card proposal={selectedProposal} />}
       </div>
     </div>

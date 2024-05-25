@@ -121,8 +121,10 @@ const FollowersContent = () => {
           <LuSearch className="ml-4 absolute left-0 bottom-3 text-slate-400" />
         </div>
         <div
-          className={className + "__body__group__members "}
-          style={{ maxHeight: "300px", overflowY: "scroll" }}
+          className={
+            className + "__body__group__members md:max-h-[400px] max-h-[300px] "
+          }
+          style={{ overflowY: "scroll" }}
         >
           <div
             className="flex md:flex-row flex-col  md:justify-center lg:justify-start gap-4 flex-wrap bg-white md:mx-7 md:mt-2 mx-2 rounded-[10px] scrollable-container md:p-8 lg:p-6 p-4"

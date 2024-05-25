@@ -24,7 +24,9 @@ const Members = () => {
   return (
     <div className={className + " mt-6"}>
       <div className="flex items-center justify-between">
-        <h1 className="mobile:text-2xl text-lg font-bold py-1">Members and Policy</h1>
+        <h1 className="mobile:text-2xl text-lg font-bold py-1">
+          Members and Policy
+        </h1>
         <button
           onClick={() => {
             Navigate("/create-proposal");
@@ -108,8 +110,6 @@ const Members = () => {
                   <IoIosArrowUp className="font-bold big_phone:text-base text-sm" />
                 )}
               </header>
-
-              <header>Hello</header>
 
               {openedGroupIndex === index && (
                 <div
