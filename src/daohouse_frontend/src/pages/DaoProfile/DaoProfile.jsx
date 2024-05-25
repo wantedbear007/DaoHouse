@@ -64,7 +64,7 @@ const DaoProfile = () => {
       <div
         className={
           className +
-          "__topComponent w-full h-[25vh] p-20 flex flex-col items-start justify-center relative hero-container"
+          "__topComponent w-full lg:h-[25vh] h-[20vh] p-20 flex flex-col items-start justify-center relative hero-container"
         }
         style={{
           backgroundImage: `url("${MyProfileRectangle}")`,
@@ -78,7 +78,7 @@ const DaoProfile = () => {
           <BigCircleComponent imgSrc={BigCircle} />
 
           {/* Big circle animation */}
-          <div className="absolute z-20  big_phone:right-[68px] big_phone:top-1/2 top-[59%] -translate-y-1/2 right-[-50px]">
+          <div className="absolute z-20  md:right-[68px] big_phone:top-1/2 md:top-[50%] top-[60%] -translate-y-1/2 right-[-50px]">
             <Lottie
               options={defaultOptions}
               style={{ height: "112px", width: "112px" }}
@@ -89,7 +89,7 @@ const DaoProfile = () => {
           <SmallCircleComponent imgSrc={SmallestCircle} />
 
           {/* Small circle animation */}
-          <div className="absolute big_phone:right-[24.75rem] right-[7.1rem] big_phone:top-[30%] top-[33%] -translate-y-[93%]">
+          <div className="absolute md:right-[24.75rem] right-[7.1rem] big_phone:top-[30%] md:top-[30%] top-[35.2%] -translate-y-[93%]">
             <Lottie
               options={defaultOptions2}
               height={50}
@@ -102,7 +102,7 @@ const DaoProfile = () => {
           <MediumCircleComponent imgSrc={MediumCircle} />
 
           {/* Medium circle animation */}
-          <div className="absolute big_phone:right-[39.71rem] right-[11.6rem] big_phone:top-[95%] top-[97.6%] -translate-y-[93%]">
+          <div className="absolute md:right-[39.71rem] right-[11.6rem] big_phone:top-[95%] md:top-[95.6%] top-[99.8%] -translate-y-[93%]">
             <Lottie
               options={defaultOptions3}
               height={61}
@@ -115,13 +115,13 @@ const DaoProfile = () => {
       <div
         className={
           className +
-          "__mainComponent bg-[#c8ced3] big_phone:py-8 big_phone:pb-20 py-6 big_phone:px-8 px-6 tablet:flex-row gap-2 flex-col w-full"
+          "__mainComponent bg-[#c8ced3] lg:py-8 lg:pb-20 py-6 big_phone:px-8 px-6 tablet:flex-row gap-2 flex-col w-full"
         }
       >
         <div className="flex md:justify-between w-full md:gap-2 gap-10 z-50 relative flex-wrap">
           <div className="flex items-center">
             <div
-              className="w-[85px] h-[49px] xl:w-[207px] xl:h-[120px] bg-[#C2C2C2] md:w-[145px] md:h-[84px] rounded"
+              className="w-[85px] h-[49px] lg:w-[207px] lg:h-[120px] bg-[#C2C2C2] md:w-[145px] md:h-[84px] rounded"
               style={{
                 boxShadow:
                   "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
@@ -134,19 +134,35 @@ const DaoProfile = () => {
               <p className="text-[12px] tablet:text-[16px] font-normal text-left text-[#646464]">
                 gmail@gmail.xyz
               </p>
-              <div className="flex justify-between mt-2">
-                <span className="tablet:mr-5 md:text-[32px] font-normal text-[#05212C] user-acc-info">
+              <div className="md:flex justify-between mt-2 hidden">
+                <span className="tablet:mr-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
                   6 <span className=" md:text-[16px] mx-1">Posts</span>
                 </span>
-                <span className="md:mx-5 md:text-[32px] font-normal text-[#05212C] user-acc-info">
+                <span className="md:mx-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
                   3<span className=" md:text-[16px] mx-1">Followers</span>
                 </span>
-                <span className="md:mx-5 md:text-[32px] font-normal text-[#05212C] user-acc-info">
+                <span className="md:mx-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
                   3<span className=" md:text-[16px] mx-1">Following</span>
                 </span>
               </div>
             </div>
           </div>
+
+          <div className="flex justify-between mt-[-20px] md:hidden">
+            <span className="flex flex-col items-center justify-center font-normal">
+              <span className="text-[22px] text-[#05212C]">6</span>
+              <span className=" text-[14px] mx-1">Posts</span>
+            </span>
+            <span className="flex flex-col items-center justify-center font-normal ml-8">
+              <span className="text-[22px] text-[#05212C]">3</span>
+              <span className=" text-[14px] mx-1">Followers</span>
+            </span>
+            <span className="flex flex-col items-center justify-center font-normal ml-8">
+              <span className="text-[22px] text-[#05212C]">3</span>
+              <span className=" text-[14px] mx-1">Following</span>
+            </span>
+          </div>
+
           <div className="flex md:justify-end gap-4 md:mt-4 tablet:mr-4">
             <button
               onClick={() => navigate("/follow")}
@@ -174,7 +190,7 @@ const DaoProfile = () => {
         <div
           className={
             className +
-            "__navs w-full flex flex-row overflow-auto justify-between mt-8 w-[60%] gap-6"
+            "__navs w-full flex flex-row overflow-auto justify-between mt-8 md:w-[90%] lg:w-[70%] xl:w-[60%] gap-6 lg:text-[16px] text-[14px] pb-1"
           }
         >
           <button
