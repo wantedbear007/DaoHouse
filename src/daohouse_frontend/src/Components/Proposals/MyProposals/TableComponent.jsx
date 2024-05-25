@@ -2,6 +2,7 @@ import React from 'react';
 import { useTable } from 'react-table';
 import './TableComponent.css';
 import { GiSandsOfTime } from "react-icons/gi";
+import { useNavigate } from 'react-router-dom';
 
 const TableComponent = ({ data }) => {
   const columns = React.useMemo(
@@ -55,12 +56,17 @@ const TableComponent = ({ data }) => {
     prepareRow,
   } = useTable({ columns, data });
 
+const navigate=useNavigate()
+  
+  const handleRowClick = (id) => {
+    navigate(`/proposal/${id}`);
+  };
   return (
     <div className="container mx-auto p-4">
       <table {...getTableProps()} className="min-w-full bg-white rounded-lg shadow-md">
         <thead>
           {headerGroups.map(headerGroup => (
-            <tr {...headerGroup.getHeaderGroupProps()} className="bg-[#F4F2EC]  text-left text-[20px] text-capitalize text-[#05212C] cursor-pointer">
+            <tr {...headerGroup.getHeaderGroupProps()} className="bg-[#F4F2EC]  text-left text-[20px] text-capitalize text-[#05212C] ">
               {headerGroup.headers.map(column => (
                 <th {...column.getHeaderProps()} className="py-2 px-4 border-b">{column.render('Header')}</th>
               ))}
@@ -71,7 +77,8 @@ const TableComponent = ({ data }) => {
           {rows.map(row => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()} className="text-gray-700 bg-[#F4F2EC] py-3">
+              <tr {...row.getRowProps()}    key={row.key}             onClick={() => handleRowClick(row.original.id)} // Call handleRowClick on row click
+              className="text-gray-700 bg-[#F4F2EC] py-3 cursor-pointer">
                 {row.cells.map(cell => (
                   <td {...cell.getCellProps()} className="py-2 px-4 border-b">{cell.render('Cell')}</td>
                 ))}

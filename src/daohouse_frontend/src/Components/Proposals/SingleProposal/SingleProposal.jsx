@@ -1,11 +1,14 @@
-// ProposalCard.js
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
 const SingleProposal = () => {
+    const { id } = useParams();
+
     return (
         <div className="bg-white shadow-md rounded-lg p-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Proposal ID #125</h2>
+
+                <h2 className="text-xl font-semibold">Proposal ID {id}</h2>
                 <div className="flex items-center space-x-2">
                     <span className="px-2 py-1 bg-yellow-300 text-yellow-800 rounded-full text-sm">In Progress</span>
                     <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">6d 8h 35m 12s left</span>

@@ -23,6 +23,7 @@ import DaoProfile from "./pages/DaoProfile/DaoProfile";
 import "react-toastify/dist/ReactToastify.css";
 import "react-quill/dist/quill.snow.css";
 import MyProposals from "./pages/Proposals/myproposals/MyProposals";
+import SingleProposal from "./Components/Proposals/SingleProposal/SingleProposal";
 
 const App = () => {
   return (
@@ -47,6 +48,10 @@ const App = () => {
                  <Route
             path="/my-proposals"
             element={<MyProposals />}
+          />
+           <Route
+            path="/proposal/:id"
+            element={<SingleProposal />}
           />
           
 
