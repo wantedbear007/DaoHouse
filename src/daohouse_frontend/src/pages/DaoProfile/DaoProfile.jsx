@@ -15,6 +15,7 @@ import ProposalsContent from "../../Components/DaoProfile/ProposalsContent";
 import FeedsContent from "../../Components/DaoProfile/FeedsContent";
 import Members from "../../Components/DaoProfile/Members";
 import FollowersContent from "../../Components/DaoProfile/FollowersContent";
+import FundsContent from "../../Components/DaoProfile/FundsContent";
 
 const DaoProfile = () => {
   const className = "DaoProfile";
@@ -190,8 +191,14 @@ const DaoProfile = () => {
         <div
           className={
             className +
-            "__navs w-full flex flex-row overflow-auto justify-between mt-8 md:w-[90%] lg:w-[70%] xl:w-[60%] gap-6 lg:text-[16px] text-[14px] pb-1"
+            "__navs w-full flex flex-row justify-between mt-8 md:w-[90%] lg:w-[70%] xl:w-[60%] gap-6 lg:text-[16px] text-[14px] pb-2"
           }
+          style={{
+            height: "100%",
+            overflowX: "auto",
+            scrollbarWidth: "thin",
+            scrollbarColor: "#0e3746 transparent",
+          }}
         >
           <button
             onClick={(e) => {
@@ -289,6 +296,7 @@ const DaoProfile = () => {
         {activeLink === "feeds" && <FeedsContent />}
         {activeLink === "member_policy" && <Members />}
         {activeLink === "followers" && <FollowersContent />}
+        {activeLink === "funds" && <FundsContent />}
       </div>
     </div>
   );
