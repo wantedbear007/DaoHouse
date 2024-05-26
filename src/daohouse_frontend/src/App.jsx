@@ -50,7 +50,7 @@ const App = () => {
             element={<MyProposals />}
           />
            <Route
-            path="/proposal/:id"
+            path="/my-proposals/:id"
             element={<SingleProposal />}
           />
           

@@ -56,10 +56,11 @@ const TableComponent = ({ data }) => {
     prepareRow,
   } = useTable({ columns, data });
 
-const navigate=useNavigate()
-  
+  const navigate = useNavigate()
+
   const handleRowClick = (id) => {
-    navigate(`/proposal/${id}`);
+    const cleanedId = id.replace(/#/g, '');
+    navigate(`/my-proposals/${cleanedId}`);
   };
   return (
     <div className="container mx-auto p-4">
@@ -77,8 +78,8 @@ const navigate=useNavigate()
           {rows.map(row => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()}    key={row.key}             onClick={() => handleRowClick(row.original.id)} // Call handleRowClick on row click
-              className="text-gray-700 bg-[#F4F2EC] py-3 cursor-pointer">
+              <tr {...row.getRowProps()} key={row.key} onClick={() => handleRowClick(row.original.id)}
+                className="text-gray-700 bg-[#F4F2EC] py-3 cursor-pointer">
                 {row.cells.map(cell => (
                   <td {...cell.getCellProps()} className="py-2 px-4 border-b">{cell.render('Cell')}</td>
                 ))}
