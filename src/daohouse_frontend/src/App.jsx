@@ -24,7 +24,6 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-quill/dist/quill.snow.css";
 import MyProposals from "./pages/Proposals/myproposals/MyProposals";
 import SingleProposal from "./Components/Proposals/SingleProposal/SingleProposal";
-import DaoSettings from "./Components/DaoSettings/DaoSettings"
 
 const App = () => {
   return (
