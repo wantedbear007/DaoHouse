@@ -11,7 +11,7 @@ const Step1 = ({ setData, setActiveStep }) => {
 
   function handleSaveAndNext() {
     if (inputData.DAOIdentifier == "") {
-      alert("Empty fields are not allowed");
+      alert("Empty DAO Identifier");
       return;
     }
 
