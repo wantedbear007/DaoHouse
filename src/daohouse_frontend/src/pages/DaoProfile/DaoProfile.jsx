@@ -16,7 +16,7 @@ import FeedsContent from "../../Components/DaoProfile/FeedsContent";
 import Members from "../../Components/DaoProfile/Members";
 import FollowersContent from "../../Components/DaoProfile/FollowersContent";
 import FundsContent from "../../Components/DaoProfile/FundsContent";
-import Settings from "../../Components/DaoProfile/DaoSettings/Settings";
+import DaoSettings from "../../Components/DaoSettings/DaoSettings"
 
 const DaoProfile = () => {
   const className = "DaoProfile";
@@ -285,7 +285,7 @@ const DaoProfile = () => {
         {activeLink === "member_policy" && <Members />}
         {activeLink === "followers" && <FollowersContent />}
         {activeLink === "funds" && <FundsContent />}
-        {activeLink === "settings" && <Settings />}
+        {activeLink === "settings" && <DaoSettings />}
       </div>
     </div>
   );

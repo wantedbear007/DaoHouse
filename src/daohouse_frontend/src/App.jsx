@@ -24,7 +24,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-quill/dist/quill.snow.css";
 import MyProposals from "./pages/Proposals/myproposals/MyProposals";
 import SingleProposal from "./Components/Proposals/SingleProposal/SingleProposal";
-import Settings from "./Components/DaoProfile/DaoSettings/Settings";
+import DaoSettings from "./Components/DaoSettings/DaoSettings"
 
 const App = () => {
   return (
@@ -40,7 +40,6 @@ const App = () => {
           <Route path="/dao" element={<Dao />} />
           <Route path="/dao/create-dao" element={<CreateDao />} />
           <Route path="/dao/profile/:tab?" element={<DaoProfile />} />
-          <Route path="/dao/profile/settings/:tab?" element={<Settings />} />
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/post/:postID" element={<Post />} />
           <Route
