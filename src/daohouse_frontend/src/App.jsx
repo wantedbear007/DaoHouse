@@ -22,6 +22,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DaoProfile from "./pages/DaoProfile/DaoProfile";
 import "react-toastify/dist/ReactToastify.css";
 import "react-quill/dist/quill.snow.css";
+import MyProposals from "./pages/Proposals/myproposals/MyProposals";
+import SingleProposal from "./Components/Proposals/SingleProposal/SingleProposal";
 
 const App = () => {
   return (
@@ -43,6 +45,16 @@ const App = () => {
             path="/my-profile"
             element={<MyProfile childComponent={<AboutMe />} />}
           />
+                 <Route
+            path="/my-proposals"
+            element={<MyProposals />}
+          />
+           <Route
+            path="/my-proposals/:id"
+            element={<SingleProposal />}
+          />
+          
+
           <Route
             path="/my-profile/my-post"
             element={<MyProfile childComponent={<MyPosts />} />}

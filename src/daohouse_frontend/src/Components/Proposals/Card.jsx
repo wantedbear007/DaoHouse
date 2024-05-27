@@ -35,7 +35,7 @@ export default function Card({ proposal }) {
 
           <div
             className={`w-fit  ${
-              proposal.status === "Rejected"
+              proposal?.status === "Rejected"
                 ? "bg-[#D85032]"
                 : proposal.status === "Approved"
                 ? "bg-[#4FB565]"

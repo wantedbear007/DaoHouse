@@ -92,6 +92,8 @@ const Navbar = () => {
 
   const dropdownItems = [
     { label: "Profile", route: "/my-profile", icon: <FaUser className="mr-2" /> },
+    { label: "My Proposals", route: "/my-proposals", icon: <FaUser className="mr-2" /> },
+    { label: "My Dao", route: "/my-dao", icon: <FaUser className="mr-2" /> },
     { label: "Settings", route: "/settings", icon: <FaCog className="mr-2" /> },
     { label: "Logout", onClick: handleLogout, icon: <FaSignOutAlt className="mr-2" /> },
   ];
