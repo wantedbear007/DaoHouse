@@ -137,20 +137,11 @@ const FundsContent = () => {
                 </span>
               </div>
               <div className="w-full border-t  border-[#97C3D3]"></div>
-              <div
-                className="w-full py-2 md:max-h-[400px] max-h-[260px] xl:ml-[4%]"
-                style={{ overflowY: "scroll" }}
-              >
+              <div className="w-full py-2 xl:ml-[4%]">
                 {Transactions.map((transaction) => (
                   <div
                     key={transaction.userKey}
                     className="flex flex-row items-center justify-start md:gap-[5%] md:px-4 px-2 py-2 text-[#05212C] md:text-[16px] text-[12px] font-normal"
-                    style={{
-                      height: "100%",
-                      overflowY: "auto",
-                      scrollbarWidth: "thin",
-                      scrollbarColor: "#0e3746 transparent",
-                    }}
                   >
                     <div className="flex md:gap-3 gap-2 md:w-[200px] w-[130px]">
                       <img
