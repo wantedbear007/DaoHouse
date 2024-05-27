@@ -15,9 +15,9 @@ const EditPersonalLinksAndContactInfo = ({ userProfile, handleInputChange, handl
           </label>
           <div className="flex flex-grow">
             <input
-              id="contactNo"
+              id="contact_number"
               type="tel"
-              name="contact_no"
+              name="contact_number"
               value={userProfile.contact_no}
               onChange={handleInputChange}
               placeholder="0123456789"
@@ -64,8 +64,8 @@ const EditPersonalLinksAndContactInfo = ({ userProfile, handleInputChange, handl
           </label>
           <div className="flex flex-grow">
             <input
-              id="twitter"
-              name="twitter"
+              id="twitter_id"
+              name="twitter_id"
               value={userProfile.twitter}
               onChange={handleInputChange}
               type="url"

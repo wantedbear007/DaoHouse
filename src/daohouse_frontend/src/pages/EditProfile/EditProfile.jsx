@@ -19,10 +19,11 @@ const EditProfile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userProfile, setUserProfile] = useState({
     username: "",
+    description:"",
     email_id: "",
     profile_img: [], // Array of integers representing image data
-    contact_no: "",
-    twitter: "",
+    contact_number: "",
+    twitter_id: "",
     telegram: "",
     website: ""
   });
