@@ -22,6 +22,7 @@ const Navbar = () => {
 
   const location = useLocation();
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [userProfileData,setUserProfileData]=useState([])
 
   const menuItems = [
     { label: "Home", route: "/" },
@@ -29,8 +30,6 @@ const Navbar = () => {
     { label: "DAOs", route: "/dao" },
     { label: "Proposals", route: "/proposals" },
   ];
-
-
 
   // Function to handle login
   const handleLogin = async () => {
@@ -62,33 +61,22 @@ const Navbar = () => {
     setIsModalOpen(true);
   };
 
-  // useEffect(() => {
-  //   const fetchUserProfile = async () => {
-  //     try {
-  //       const userProfileData = await backendActor.get_user_profile();
-  //       console.log("User profile data after creation:", userProfileData);
-  //       setUserProfile(userProfileData);
-  //     } catch (error) {
-  //       console.error("Error fetching user profile:", error);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const userProfileData = await backendActor?.get_user_profile();
+        console.log({userProfileData});
 
-  //   const createAndFetchUserProfile = async () => {
-  //     try {
-  //       await backendActor.create_profile({
-  //         username: "YourUsername",
-  //         email_id: "YourEmail@example.com",
-  //         profile_img: [/* Array of integers representing image data */]
-  //       });
-  //       // After profile creation, fetch user profile
-  //       await fetchUserProfile();
-  //     } catch (error) {
-  //       console.error("Error creating user profile:", error);
-  //     }
-  //   };
+        setUserProfileData(userProfileData);
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
 
-  //   createAndFetchUserProfile();
-  // }, [backendActor, principal]);
+    fetchUserProfile()
+  }, [backendActor, principal]);
+
+  console.log({ backendActor })
 
   const dropdownItems = [
     { label: "Profile", route: "/my-profile", icon: <FaUser className="mr-2" /> },
@@ -97,7 +85,6 @@ const Navbar = () => {
     { label: "Settings", route: "/settings", icon: <FaCog className="mr-2" /> },
     { label: "Logout", onClick: handleLogout, icon: <FaSignOutAlt className="mr-2" /> },
   ];
-
 
   return (
     <nav>
@@ -168,7 +155,7 @@ const Navbar = () => {
                         <span>{item.label}</span>
                       </Link>
                     ))}
-                   
+
                   </div>
                 )}
               </div>
