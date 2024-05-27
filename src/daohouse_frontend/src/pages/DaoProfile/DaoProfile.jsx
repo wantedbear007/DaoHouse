@@ -16,6 +16,7 @@ import FeedsContent from "../../Components/DaoProfile/FeedsContent";
 import Members from "../../Components/DaoProfile/Members";
 import FollowersContent from "../../Components/DaoProfile/FollowersContent";
 import FundsContent from "../../Components/DaoProfile/FundsContent";
+import Settings from "../../Components/DaoProfile/DaoSettings/Settings";
 
 const DaoProfile = () => {
   const className = "DaoProfile";
@@ -268,19 +269,6 @@ const DaoProfile = () => {
           <button
             onClick={(e) => {
               e.preventDefault();
-              handleClick("bounties");
-            }}
-            className={`cursor-pointer text-nowrap ${
-              activeLink === "bounties"
-                ? "underline text-[#0E3746]"
-                : "text-[#0E37464D]"
-            }`}
-          >
-            Bounties
-          </button>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
               handleClick("settings");
             }}
             className={`cursor-pointer text-nowrap ${
@@ -297,6 +285,7 @@ const DaoProfile = () => {
         {activeLink === "member_policy" && <Members />}
         {activeLink === "followers" && <FollowersContent />}
         {activeLink === "funds" && <FundsContent />}
+        {activeLink === "settings" && <Settings />}
       </div>
     </div>
   );
