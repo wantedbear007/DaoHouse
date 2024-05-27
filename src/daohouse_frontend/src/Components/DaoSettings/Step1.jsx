@@ -11,7 +11,7 @@ const Step1 = ({ setData, setActiveStep }) => {
 
   function handleSaveAndNext() {
     if (inputData.DAOIdentifier == "") {
-      alert("Empty fields are not allowed");
+      alert("Empty DAO Identifier");
       return;
     }
 
@@ -69,7 +69,7 @@ const Step1 = ({ setData, setActiveStep }) => {
           name="Purpose"
           value={inputData.Purpose}
           placeholder="Specify the primary purpose or objectives the DAO aims to achieve, such as governance, funding, community building,"
-          className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"
+          className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm mobile:min-h-full min-h-[90px]"
           onChange={handleChange}
         />
 
