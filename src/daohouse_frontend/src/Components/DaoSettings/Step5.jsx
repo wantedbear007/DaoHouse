@@ -115,7 +115,7 @@ const Step5 = ({ setData, setActiveStep }) => {
         <div
           className={
             className +
-            "__submitButton w-full flex flex-row items-center mobile:justify-end justify-between"
+            "__submitButton w-full flex flex-row items-center justify-end"
           }
         >
           <button

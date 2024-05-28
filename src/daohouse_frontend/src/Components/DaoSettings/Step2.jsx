@@ -5,10 +5,6 @@ const Step2 = ({ setData, setActiveStep }) => {
   const className = "DAO__Step2";
 
   function handleSaveAndNext() {
-    if (inputData.setUpPeriod == "") {
-      alert("Empty fields are not allowed");
-      return;
-    }
     setData((prev) => ({
       ...prev,
       step2: { ...inputData },
@@ -53,7 +49,7 @@ const Step2 = ({ setData, setActiveStep }) => {
       <div
         className={
           className +
-          "__submitButton w-full flex flex-row items-center mobile:justify-end justify-between"
+          "__submitButton w-full flex flex-row items-center justify-end"
         }
       >
         <button

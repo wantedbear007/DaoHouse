@@ -1,3 +1,4 @@
+import { data } from "autoprefixer";
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { FaSquarePlus } from "react-icons/fa6";
@@ -133,6 +134,8 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
       setGropuNameInputIndex(null);
     }
   };
+
+  console.log(data);
 
   return (
     <React.Fragment>
@@ -323,7 +326,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
       <div
         className={
           className +
-          "__submitButton w-full flex flex-row items-center mobile:justify-end justify-between"
+          "__submitButton w-full flex flex-row items-center justify-end"
         }
       >
         <button
