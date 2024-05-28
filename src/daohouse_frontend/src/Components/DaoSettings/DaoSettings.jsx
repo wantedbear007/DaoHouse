@@ -79,7 +79,14 @@ const DaoSettings = () => {
                 "flex mobile:flex-row flex-col py-4 items-center gap-2 cursor-pointer " +
                 `${activeStep >= index ? "opacity-100" : "opacity-50"}`
               }
-              onClick={() => setActiveStep(index)}
+              onClick={() => {
+                if (index === 3) {
+                  alert("First go to setp 3");
+                  setActiveStep(2)
+                  return
+                }
+                else setActiveStep(index)
+              }}
             >
               {index >= activeStep ? (
                 <div
