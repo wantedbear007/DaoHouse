@@ -135,8 +135,6 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
     }
   };
 
-  console.log(data);
-
   return (
     <React.Fragment>
       <div
@@ -218,21 +216,19 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
           {list.slice(1).map((item, index) => (
             <div
               key={index}
-              className={`flex flex-col bg-white rounded-lg ${
-                addMemberIndex === item.index || item.name == "All"
+              className={`flex flex-col bg-white rounded-lg ${addMemberIndex === item.index || item.name == "All"
                   ? ""
                   : "cursor-pointer transition"
-              }`}
+                }`}
               onClick={() => item.name !== "All" && openMemberNames(item.index)}
             >
               {/**The section that appears */}
               <section
                 key={index}
-                className={`w-full py-2 p-2 pl-4 flex ${
-                  addMemberIndex === item.index
+                className={`w-full py-2 p-2 pl-4 flex ${addMemberIndex === item.index
                     ? "border-b-2 border-[#b4b4b4]"
                     : "rounded-lg"
-                } items-center justify-between`}
+                  } items-center justify-between`}
               >
                 {/**Group Name */}
                 {groupNameInputIndex == item.index ? (
