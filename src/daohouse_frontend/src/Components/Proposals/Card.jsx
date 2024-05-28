@@ -42,12 +42,31 @@ export default function Card({ proposal }) {
                 : proposal.status === "In Progress"
                 ? "bg-[#4993B0]"
                 : ""
-            } ml-auto text-white text-xs font-semibold rounded-full my-4 mx-4 px-3 py-1 inline-block md:hidden`}
+            } ml-auto text-white text-xs font-semibold rounded-full my-4 mx-4 pr-3 pl-7 py-1 inline-block md:hidden relative`}
           >
             {" "}
-            <span className="text-[#34342a] text-[16px]">
-              {proposal.status === "In Progress" && <span>• •</span>}
-            </span>{" "}
+            <span
+              className={`absolute  ${
+                proposal.status === "Rejected"
+                  ? "  w-[35%] h-[35%] -left-[0%] -top-[10%]"
+                  : proposal.status === "Approved"
+                  ? " w-[60%] h-[60%] -left-[14%] -top-[65%]"
+                  : proposal.status === "In Progress"
+                  ? " w-[100%] h-[100%] -left-[33%] -top-[150%]"
+                  : ""
+              } `}
+            >
+              <img
+                src={
+                  proposal.status === "In Progress"
+                    ? "https://s3-alpha-sig.figma.com/img/e963/6c42/1608a8a5c3864207303e12791066cb81?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Vwi6xVx6lBLGYngkXCNa4VGyaJudk4y~QLZH4tiQkco7lTzOZ516j27UJv7GpdEK72jkamjBFdzG2Btbh6wBQwLT7UPuGxkVuuFUK2oATQ~M~LPlOkkOSvOAb3m3sjjlrCsHzmjw5zj1s6jHyKhUTtp-XGKFRzxQ8FSflMAuVYwdiN4KAGuxbTdnYY2ucX5LhD2Pwa69z6v70HPH3Y3tU4RTeNKhZssqcTKsLaXxfrqSAaXsif~zwKAEc~MfWzUwdwMzWKFsM1LxoCSOHqjP6rv50z1wBc669mJa~pvU96SKYysN-gSmVt-d1H-bp4Mr3HiUHKAYZpu9bzwkaUC53Q__"
+                    : proposal.status === "Approved"
+                    ? "https://s3-alpha-sig.figma.com/img/e00b/cac3/672814b264634546ce93867fb0beeff5?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=YVREv81cUAAXt6d0kN~O~bDb54hDpmM-5CfhyhlMgsoZ5v2-vpFybq8A99pWBuMoGy7q1FARaQddipqo2qrWQbWWcOFsDrzORvZIB6WEhjQof-nmGVtwlI-EzHdefu~1JWAFKWNb5ewBVv0RRBMU0GDln7lHKXdSEegGgQoa2WfBFBTwP4vwqEXA9xLknMYLkigYdIb4cbc1z5dqrKOe86k4~Aoc~5hcjc1mttci1t4cBw8SrgHLprD71GSPJLu58eeoyedoC8Wa1u3E1USKsqk6n4G0T64A-xwuiuY1HaPzSA18Dq2cYl8iGUpkaxNjjGjSXCL2r9jXj2Jb964HAA__"
+                    : "https://s3-alpha-sig.figma.com/img/13ee/beb9/e675e55dcc1cbec1e25e6c00bce763a8?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=FIilO8FufTg6P9pS60o9w30G3bQhmU3cmDkb5Sl30qsZ0oNny2ivUtl~WbF6z-bK6k0oqXH4WAKatlkIDUbqtXUcnXbqIRm4HLNNUIfhDpJ140cbXeRsiTLo2-I5hvClUjzct4sIzUmMi75aJQ76mpHs6EbFKwmFGuD8dPRa37NeUm5IU9N7ETe6kg~RDHgUyxFg-2Ehdu7qW3KfGQe3CejfT~lk1j~GIK7iMYB0fmnRND2~Mh8YuwVXw~2c4m5x4M~UGp3BqdKqkgiMTEmlNf345OAcPt8nVC-tJCH-cHDYBmuzAbjfpD12thHjhko-MPIz5K4SuGIRscAc8sf41A__"
+                }
+                alt="Proposal Status Image"
+              />
+            </span>
             {proposal.status}
           </div>
         </div>
@@ -83,11 +102,32 @@ export default function Card({ proposal }) {
                 : proposal.status === "In Progress"
                 ? "bg-[#4993B0]"
                 : ""
-            } ml-auto text-white text-xs font-semibold rounded-full my-4 mx-4 px-3 py-1 inline-block`}
+            } ml-auto text-white text-xs font-semibold rounded-full my-4 mx-4 px-4 py-2 inline-block relative`}
           >
             {" "}
-            <span className="text-[#34342a] text-[16px]">
-              {proposal.status === "In Progress" && <span>• •</span>}
+            <span className="text-[#34342a] text-[16px] ml-4">
+              <span
+                className={`absolute  ${
+                  proposal.status === "Rejected"
+                    ? "  w-[35%] h-[35%] -left-[0%] top-[2%]"
+                    : proposal.status === "Approved"
+                    ? " w-[60%] h-[60%] -left-[14%] -top-[40%]"
+                    : proposal.status === "In Progress"
+                    ? " w-[100%] h-[100%] -left-[35%] -top-[105%]"
+                    : ""
+                } `}
+              >
+                <img
+                  src={
+                    proposal.status === "In Progress"
+                      ? "https://s3-alpha-sig.figma.com/img/e963/6c42/1608a8a5c3864207303e12791066cb81?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Vwi6xVx6lBLGYngkXCNa4VGyaJudk4y~QLZH4tiQkco7lTzOZ516j27UJv7GpdEK72jkamjBFdzG2Btbh6wBQwLT7UPuGxkVuuFUK2oATQ~M~LPlOkkOSvOAb3m3sjjlrCsHzmjw5zj1s6jHyKhUTtp-XGKFRzxQ8FSflMAuVYwdiN4KAGuxbTdnYY2ucX5LhD2Pwa69z6v70HPH3Y3tU4RTeNKhZssqcTKsLaXxfrqSAaXsif~zwKAEc~MfWzUwdwMzWKFsM1LxoCSOHqjP6rv50z1wBc669mJa~pvU96SKYysN-gSmVt-d1H-bp4Mr3HiUHKAYZpu9bzwkaUC53Q__"
+                      : proposal.status === "Approved"
+                      ? "https://s3-alpha-sig.figma.com/img/e00b/cac3/672814b264634546ce93867fb0beeff5?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=YVREv81cUAAXt6d0kN~O~bDb54hDpmM-5CfhyhlMgsoZ5v2-vpFybq8A99pWBuMoGy7q1FARaQddipqo2qrWQbWWcOFsDrzORvZIB6WEhjQof-nmGVtwlI-EzHdefu~1JWAFKWNb5ewBVv0RRBMU0GDln7lHKXdSEegGgQoa2WfBFBTwP4vwqEXA9xLknMYLkigYdIb4cbc1z5dqrKOe86k4~Aoc~5hcjc1mttci1t4cBw8SrgHLprD71GSPJLu58eeoyedoC8Wa1u3E1USKsqk6n4G0T64A-xwuiuY1HaPzSA18Dq2cYl8iGUpkaxNjjGjSXCL2r9jXj2Jb964HAA__"
+                      : "https://s3-alpha-sig.figma.com/img/13ee/beb9/e675e55dcc1cbec1e25e6c00bce763a8?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=FIilO8FufTg6P9pS60o9w30G3bQhmU3cmDkb5Sl30qsZ0oNny2ivUtl~WbF6z-bK6k0oqXH4WAKatlkIDUbqtXUcnXbqIRm4HLNNUIfhDpJ140cbXeRsiTLo2-I5hvClUjzct4sIzUmMi75aJQ76mpHs6EbFKwmFGuD8dPRa37NeUm5IU9N7ETe6kg~RDHgUyxFg-2Ehdu7qW3KfGQe3CejfT~lk1j~GIK7iMYB0fmnRND2~Mh8YuwVXw~2c4m5x4M~UGp3BqdKqkgiMTEmlNf345OAcPt8nVC-tJCH-cHDYBmuzAbjfpD12thHjhko-MPIz5K4SuGIRscAc8sf41A__"
+                  }
+                  alt="Proposal Status Image"
+                />
+              </span>
             </span>{" "}
             {proposal.status}
           </div>
