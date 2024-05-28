@@ -49,7 +49,7 @@ const DaoSettings = () => {
         return <Step5 setData={setData} setActiveStep={setActiveStep} />;
       case 5:
         return (
-          <Step6 data={data} setData={setData} setActiveStep={setActiveStep} />
+          <Step6 data={data} setData={setData} />
         );
       default:
         return null;
@@ -76,9 +76,17 @@ const DaoSettings = () => {
               key={index}
               ref={index >= 3 ? Step4Ref : Step1Ref}
               className={
-                "flex mobile:flex-row flex-col py-4 items-center gap-2 " +
+                "flex mobile:flex-row flex-col py-4 items-center gap-2 cursor-pointer " +
                 `${activeStep >= index ? "opacity-100" : "opacity-50"}`
               }
+              onClick={() => {
+                if (index === 3) {
+                  alert("First go to setp 3");
+                  setActiveStep(2)
+                  return
+                }
+                else setActiveStep(index)
+              }}
             >
               {index >= activeStep ? (
                 <div

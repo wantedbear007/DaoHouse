@@ -146,7 +146,7 @@ const FollowersContent = () => {
                       <img
                         src={follower.userImage}
                         alt="Image"
-                        className="rounded-[50%] w-full h-full"
+                        className="rounded-[50%] w-full h-full object-cover"
                       />
                     </section>
                   </div>

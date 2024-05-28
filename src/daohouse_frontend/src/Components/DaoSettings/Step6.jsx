@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { FaArrowLeftLong } from "react-icons/fa6";
 import { FiUpload } from "react-icons/fi";
 import defaultImage from "../../../assets/defaultImage.png";
 
-const Step6 = ({ data, setData, setActiveStep }) => {
+const Step6 = ({ data, setData }) => {
   const [fileURL, setFileURL] = useState(defaultImage);
   const className = "DAO__Step6";
 
@@ -69,11 +68,12 @@ const Step6 = ({ data, setData, setActiveStep }) => {
       <div
         className={
           className +
-          "__submitButton w-full flex flex-row items-center mobile:justify-end justify-between"
+          "__submitButton w-full flex flex-row items-center justify-end"
         }
       >
         <button
           type="submit"
+          onClick={createDAO}
           className="flex mobile:m-4 my-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white mobile:text-base text-sm"
         >
           Propose Change
