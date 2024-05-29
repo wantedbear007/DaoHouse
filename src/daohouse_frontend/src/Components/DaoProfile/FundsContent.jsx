@@ -111,7 +111,7 @@ const FundsContent = () => {
           <span className="ml-6">Create Proposals</span>
         </button>
       </div>
-      <div className="bg-[#F4F2EC] rounded-[10px] mt-4 md:mb-16 mb-8">
+      <div className="bg-[#F4F2EC] rounded-[10px] mt-4 md:mb-16 mb-12">
         <div className="flex items-center md:p-5 p-4">
           <span className="md:text-[20px] text-[16px] font-normal text-[#05212C]">
             Current Balance
