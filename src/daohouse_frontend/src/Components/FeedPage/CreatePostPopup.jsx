@@ -39,7 +39,7 @@ const CreatePostPopup = ({ onClose }) => {
       role="dialog"
       aria-modal="true"
     >
-      <div className="absolute flex flex-col items-center lg:left-[26%] lg:top-[30%] md:left-[15%] md:top-[15%] popup-content lg:w-[50%] md:w-[70%] w-[90vw] bg-[#E6E6E6] text-[#05212C] rounded-[10px] p-4">
+      <div className="absolute flex flex-col items-center lg:left-[26%] lg:top-[30%] md:left-[15%] md:top-[15%] popup-content lg:w-[50%] md:w-[70%] w-[90vw] top-[30%] left-[5%] bg-[#E6E6E6] text-[#05212C] rounded-[10px] p-4">
         <h3 className="text-[24px] font-semibold">Create a new post</h3>
         <div className="bg-black w-full h-[1px] my-2"></div>
         <input
