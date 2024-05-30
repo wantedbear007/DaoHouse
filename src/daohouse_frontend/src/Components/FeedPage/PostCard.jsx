@@ -42,22 +42,22 @@ const PostCard = ({ post }) => {
           <p className="h-full mobile:text-base text-sm">{post.content}</p>
         </div>
 
-        <div className={className + "__buttons mobile:flex hidden flex-row items-center justify-between tablet:gap-x-4 gap-x-2 big_phone:mt-8 mt-0"}>
-          <button className="flex flex-row tablet:gap-2 gap-1 tablet:text-base text-xs items-center bg-[#0E3746] text-white tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]">
+        <div className={className + "__buttons mobile:flex hidden flex-row items-center tablet:justify-between tablet:gap-x-4 gap-x-2 big_phone:mt-8 mt-4"}>
+          <button className="flex flex-row tablet:gap-2 gap-1 items-center bg-[#0E3746] text-white tablet:text-base text-sm tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]">
             <FaRegHeart />
             Like
           </button>
-          <button className="flex flex-row tablet:gap-2 gap-1 tablet:text-base text-xs items-center bg-[#0E3746] text-white tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]">
+          <button className="flex flex-row tablet:gap-2 gap-1 items-center bg-[#0E3746] text-white tablet:text-base text-sm tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]">
             <MdOutlineInsertComment />
             Comment
           </button>
-          <button className="flex flex-row tablet:gap-2 gap-1 tablet:text-base text-xs items-center bg-[#0E3746] text-white tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]">
+          <button className="flex flex-row tablet:gap-2 gap-1 items-center bg-[#0E3746] text-white tablet:text-base text-sm tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]">
             <PiTelegramLogoBold />
             Share
           </button>
 
-          <button className="m-0">
-            <IoLink className="text-lg" />
+          <button className="m-4">
+            <IoLink className="text-2xl" />
           </button>
         </div>
       </section>
