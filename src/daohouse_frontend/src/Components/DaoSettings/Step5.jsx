@@ -78,7 +78,7 @@ const Step5 = ({ setData, setActiveStep }) => {
         </section>
 
         {/**On the Phone after 800px */}
-        <div className="bg-white mobile:p-5 p-3 rounded-lg flex flex-col gap-y-4">
+        <div className="bg-white mobile:p-5 p-3 rounded-lg flex flex-col gap-y-4 md:hidden">
           {quorum.map(({ name, index, vote }) => (
             <div
               key={index}
