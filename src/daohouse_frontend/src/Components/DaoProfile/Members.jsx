@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import "./Members.scss";
 import { MdAddBox } from "react-icons/md";
 import { LuSearch } from "react-icons/lu";
+import { FaListUl } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
-import { IoIosArrowUp } from "react-icons/io";
-import { IoIosArrowDown } from "react-icons/io";
-import { IoFilterSharp } from "react-icons/io5";
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
+import { IoFilterSharp, IoGridOutline } from "react-icons/io5";
 import userImage from "../../../assets/commentUser.jpg";
 import { useMediaQuery } from "@mui/material";
 
 const Members = () => {
   const [openedGroupIndex, setOpenedGroupIndex] = useState();
+  const [gridView, setGridView] = useState(true);
   const className = "Member_and_policy";
   const minWidth = useMediaQuery("(min-width: 800px)");
   const gridTemplateColumns = `repeat(auto-fill, minmax(${
@@ -19,6 +20,13 @@ const Members = () => {
   const gridContainerStyle = {
     display: "grid",
     gridTemplateColumns: gridTemplateColumns,
+  };
+  const listTemplateColumns = `repeat(auto-fill, minmax(${
+    minWidth ? 300 : 220
+  }px, 1fr))`;
+  const listContainerStyle = {
+    display: "grid",
+    gridTemplateColumns: listTemplateColumns,
   };
 
   return (
@@ -41,6 +49,7 @@ const Members = () => {
       </div>
 
       <div className="bg-[#F4F2EC] rounded-[10px] mt-4">
+        {/**Header in desktop, tablet */}
         <header className="mobile:flex hidden flex-row items-center justify-between p-4 border-b border-slate-400">
           <h1 className="font-semibold text-lg">Groups</h1>
 
@@ -62,6 +71,7 @@ const Members = () => {
           </div>
         </header>
 
+        {/**Header in mobile */}
         <header className="mobile:hidden">
           <div className="flex flex-row px-4 py-2 items-center justify-between border-b border-slate-400">
             <h1 className="font-semibold text-lg">Groups</h1>
@@ -84,9 +94,10 @@ const Members = () => {
         <div
           className={
             className +
-            "__body mobile:p-4 p-2 bg-[#F4F2EC] rounded-lg gap-y-6 flex flex-col"
+            "__body mobile:p-4 p-2 bg-[#F4F2EC] rounded-lg mobile:gap-y-6 gap-y-2 flex flex-col"
           }
         >
+          {/**List of groups */}
           {groups.map((item, index) => (
             <div
               key={index}
@@ -104,113 +115,58 @@ const Members = () => {
                   {item.membersList.length} Members
                 </p>
 
+                {/**Icons to open and close the list of members in group */}
                 {openedGroupIndex === index ? (
-                  <IoIosArrowDown className="font-bold big_phone:text-base text-sm" />
+                  <IoIosArrowDown
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setOpenedGroupIndex(null);
+                    }}
+                    className="font-bold big_phone:text-base text-sm hover:text-black text-slate-600"
+                  />
                 ) : (
-                  <IoIosArrowUp className="font-bold big_phone:text-base text-sm" />
+                  <IoIosArrowUp
+                    onClick={() => setOpenedGroupIndex(index)}
+                    className="font-bold big_phone:text-base text-sm hover:text-black text-slate-600"
+                  />
                 )}
               </header>
 
+              {/**List of the members in group */}
               {openedGroupIndex === index && (
-                <div
-                  className={
-                    className + "__body__group__members mobile:p-8 p-2 gap-2"
-                  }
-                  style={gridContainerStyle}
-                >
-                  {item.membersList.map((member, index) => (
-                    <div key={index}>
-                      <div className="big_phone:flex hidden flex-col px-4 py-2 border border-[#97C3D3] rounded-lg">
-                        <div className="top flex flex-row items-start justify-between ">
-                          <section className="relative w-16 h-16">
-                            <img
-                              src={member.userImage}
-                              alt="Image"
-                              className="rounded-[50%] w-full h-full object-cover bottom-5 absolute"
-                            />
-                          </section>
+                <React.Fragment>
+                  <div className="flex flex-row item-scenter justify-between mobile:px-8 px-4 mobile:py-6 py-4">
+                    <h1 className="font-semibold">
+                      {gridView ? "Grid View" : "List View"}
+                    </h1>
 
-                          <MdAddBox className="mx-2 text-[#97C3D3] text-2xl" />
-                        </div>
-
-                        <div className="middle flex flex-row gap-x-4 item-center justify-between">
-                          <section className="details flex flex-col items-start">
-                            <p className="font-semibold text-lg">
-                              {member.userName}
-                            </p>
-
-                            <p className="text-sm">{member.userEmail}</p>
-                          </section>
-
-                          <section>
-                            <button className="bg-[#FFEDED] text-sm text-red-500 rounded-2xl shadow-lg px-4 py-2">
-                              Purpose to Remove
-                            </button>
-                          </section>
-                        </div>
-
-                        <div className="last flex flex-row align-start justify-evenly my-4">
-                          <section className="flex flex-col items-center px-2">
-                            <p className="text-sm">Total Votes</p>
-
-                            <h1 className="font-semibold text-2xl">
-                              {member.totalVotes}
-                            </h1>
-                          </section>
-
-                          <div className="h-7 w-0.5 bg-slate-400"></div>
-
-                          <section className="flex flex-col items-center">
-                            <p className="text-sm">In Favour</p>
-
-                            <h1 className="font-semibold text-2xl">
-                              {member.inFavour}
-                            </h1>
-                          </section>
-
-                          <div className="h-7 w-0.5 bg-slate-400"></div>
-
-                          <section className="flex flex-col items-center">
-                            <p className="text-sm">In Against</p>
-                            <h1 className="font-semibold text-2xl">
-                              {member.inAgainst}
-                            </h1>
-                          </section>
-                        </div>
-                      </div>
-
-                      {/**Mobile View */}
-                      <div className="big_phone:hidden flex flex-col big_phone:p-2 px-1 py-2 gap-y-4 border border-[#97C3D3] rounded-lg">
-                        <section className="top flex flex-row items-start justify-between">
-                          <BsThreeDots className="mx-1 text-2xl" />
-
-                          <img
-                            src={member.userImage}
-                            alt="Image"
-                            className="w-12 h-12 rounded-[50%] object-cover"
-                          />
-
-                          <MdAddBox className="mx-1 text-[#97C3D3] text-2xl" />
-                        </section>
-
-                        <section>
-                          <p className="text-center font-semibold mobile:text-1xl">
-                            {member.userName}
-                          </p>
-                          <p className="text-center text-xs">
-                            {member.userEmail}
-                          </p>
-                        </section>
-
-                        <section className="flex flex-row justify-center p-2">
-                          <button className="bg-[#FFEDED] text-xs text-red-500 rounded-2xl shadow-lg px-3 py-2">
-                            Purpose to Remove
-                          </button>
-                        </section>
-                      </div>
+                    <div className="__viewButtons flex flex-row gap-4">
+                      <button onClick={() => setGridView(true)}>
+                        <IoGridOutline />
+                      </button>
+                      <button onClick={() => setGridView(false)}>
+                        <FaListUl />
+                      </button>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                  <div
+                    className={
+                      className +
+                      "__body__group__members mobile:px-8 px-2 gap-2 mobile:pb-8 pb-4"
+                    }
+                    style={gridView ? gridContainerStyle : listContainerStyle}
+                  >
+                    {item.membersList.map((member, index) => (
+                      <div key={index}>
+                        {gridView ? (
+                          <GridView member={member} />
+                        ) : (
+                          <ListView member={member} />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </React.Fragment>
               )}
             </div>
           ))}
@@ -221,6 +177,118 @@ const Members = () => {
 };
 
 export default Members;
+
+const GridView = ({ member }) => {
+  return (
+    <React.Fragment>
+      <div className="big_phone:flex hidden flex-col px-4 py-2 border border-[#97C3D3] rounded-lg">
+        <div className="top flex flex-row items-start justify-between ">
+          <section className="relative w-16 h-16">
+            <img
+              src={member.userImage}
+              alt="Image"
+              className="rounded-[50%] w-full h-full object-cover bottom-5 absolute"
+            />
+          </section>
+
+          <MdAddBox className="mx-2 text-[#97C3D3] text-2xl" />
+        </div>
+
+        <div className="middle flex flex-row gap-x-4 item-center justify-between">
+          <section className="details flex flex-col items-start">
+            <p className="font-semibold text-lg">{member.userName}</p>
+
+            <p className="text-sm">{member.userEmail}</p>
+          </section>
+
+          <section>
+            <button className="bg-[#FFEDED] text-sm text-red-500 rounded-2xl shadow-lg px-4 py-2">
+              Purpose to Remove
+            </button>
+          </section>
+        </div>
+
+        <div className="last flex flex-row align-start justify-evenly my-4">
+          <section className="flex flex-col items-center px-2">
+            <p className="text-sm">Total Votes</p>
+
+            <h1 className="font-semibold text-2xl">{member.totalVotes}</h1>
+          </section>
+
+          <div className="h-7 w-0.5 bg-slate-400"></div>
+
+          <section className="flex flex-col items-center">
+            <p className="text-sm">In Favour</p>
+
+            <h1 className="font-semibold text-2xl">{member.inFavour}</h1>
+          </section>
+
+          <div className="h-7 w-0.5 bg-slate-400"></div>
+
+          <section className="flex flex-col items-center">
+            <p className="text-sm">In Against</p>
+            <h1 className="font-semibold text-2xl">{member.inAgainst}</h1>
+          </section>
+        </div>
+      </div>
+
+      {/**Mobile View */}
+      <div className="big_phone:hidden flex flex-col big_phone:p-2 px-1 py-2 gap-y-4 border border-[#97C3D3] rounded-lg">
+        <section className="top flex flex-row items-start justify-between">
+          <BsThreeDots className="mx-1 text-2xl" />
+
+          <img
+            src={member.userImage}
+            alt="Image"
+            className="w-12 h-12 rounded-[50%] object-cover"
+          />
+
+          <MdAddBox className="mx-1 text-[#97C3D3] text-2xl" />
+        </section>
+
+        <section>
+          <p className="text-center font-semibold mobile:text-1xl">
+            {member.userName}
+          </p>
+          <p className="text-center text-xs">{member.userEmail}</p>
+        </section>
+
+        <section className="flex flex-row justify-center p-2">
+          <button className="bg-[#FFEDED] text-xs text-red-500 rounded-2xl shadow-lg px-3 py-2">
+            Purpose to Remove
+          </button>
+        </section>
+      </div>
+    </React.Fragment>
+  );
+};
+
+const ListView = ({ member }) => {
+  return (
+    <React.Fragment>
+      <div className="flex w-full flex-row items-center justify-between border border-[#97C3D3] rounded-lg big_phone:p-4 p-2">
+        <section className="flex flex-row items-center gap-2">
+          <img
+            src={member.userImage}
+            alt="Image"
+            className="big_phone:w-12 w-9 big_phone:h-12 h-9 rounded-[50%] object-cover"
+          />
+
+          <div className="flex flex-col items-start">
+            <p className="text-center font-semibold big_phone:text-1xl text-sm">
+              {member.userName}
+            </p>
+            <p className="text-center text-xs">{member.userEmail}</p>
+          </div>
+        </section>
+
+        <section>
+          <MdAddBox className="mx-1 text-[#97C3D3] big_phone:text-2xl text-lg" />
+        </section>
+      </div>
+    </React.Fragment>
+  );
+};
 
 const groups = [
   {
