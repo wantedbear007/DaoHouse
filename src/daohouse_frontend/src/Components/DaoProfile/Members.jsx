@@ -14,16 +14,14 @@ const Members = () => {
   const [gridView, setGridView] = useState(true);
   const className = "Member_and_policy";
   const minWidth = useMediaQuery("(min-width: 800px)");
-  const gridTemplateColumns = `repeat(auto-fill, minmax(${
-    minWidth ? 370 : 165
-  }px, 1fr))`;
+  const gridTemplateColumns = `repeat(auto-fill, minmax(${minWidth ? 370 : 165
+    }px, 1fr))`;
   const gridContainerStyle = {
     display: "grid",
     gridTemplateColumns: gridTemplateColumns,
   };
-  const listTemplateColumns = `repeat(auto-fill, minmax(${
-    minWidth ? 300 : 220
-  }px, 1fr))`;
+  const listTemplateColumns = `repeat(auto-fill, minmax(${minWidth ? 300 : 220
+    }px, 1fr))`;
   const listContainerStyle = {
     display: "grid",
     gridTemplateColumns: listTemplateColumns,
@@ -156,14 +154,14 @@ const Members = () => {
                     }
                     style={gridView ? gridContainerStyle : listContainerStyle}
                   >
-                    {item.membersList.map((member, index) => (
-                      <div key={index}>
+                    {item.membersList.map((member) => (
+                      <React.Fragment>
                         {gridView ? (
                           <GridView member={member} />
                         ) : (
                           <ListView member={member} />
                         )}
-                      </div>
+                      </React.Fragment>
                     ))}
                   </div>
                 </React.Fragment>

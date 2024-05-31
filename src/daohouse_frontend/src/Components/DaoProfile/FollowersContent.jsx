@@ -4,6 +4,7 @@ import userImage from "../../../assets/commentUser.jpg";
 import { MdAddBox } from "react-icons/md";
 import { IoFilterSharp } from "react-icons/io5";
 import { LuSearch } from "react-icons/lu";
+import { useMediaQuery } from "@mui/material";
 
 const followersList = [
   {
@@ -83,6 +84,15 @@ const followersList = [
 const FollowersContent = () => {
   const className = "Followers";
 
+  const minWidth = useMediaQuery("(min-width: 800px)");
+  const listTemplateColumns = `repeat(auto-fill, minmax(${
+    minWidth ? 300 : 220
+  }px, 1fr))`;
+  const listContainerStyle = {
+    display: "grid",
+    gridTemplateColumns: listTemplateColumns,
+  };
+
   return (
     <div className="mt-6">
       <div className="flex items-center justify-between">
@@ -127,43 +137,32 @@ const FollowersContent = () => {
           style={{ overflowY: "scroll" }}
         >
           <div
-            className="flex md:flex-row flex-col  md:justify-center lg:justify-start gap-4 flex-wrap bg-white md:mx-7 md:mt-2 mx-2 rounded-[10px] scrollable-container md:p-8 lg:p-6 p-4"
-            style={{
-              height: "100%",
-              overflowY: "auto",
-              scrollbarWidth: "thin",
-              scrollbarColor: "#0e3746 transparent",
-            }}
+            className="flex md:flex-row flex-col  md:justify-center lg:justify-start gap-4 flex-wrap bg-white md:mx-7 md:mt-2 mx-2 rounded-[10px] scrollable-container md:p-8 lg:p-6 mobile:p-4 p-2"
+            style={listContainerStyle}
           >
             {followersList.map((follower, index) => (
               <div
                 key={index}
-                className="flex flex-row justify-between px-4 py-2 border border-[#97C3D3] gap-8 rounded-lg"
+                className="flex w-full flex-row items-center justify-between border border-[#97C3D3] rounded-lg big_phone:p-4 p-2"
               >
-                <div className="flex gap-2">
-                  <div className="flex flex-row justify-between items-center ">
-                    <section className="relative md:w-10 md:h-10 w-9 h-9">
-                      <img
-                        src={follower.userImage}
-                        alt="Image"
-                        className="rounded-[50%] w-full h-full object-cover"
-                      />
-                    </section>
+                <section className="flex flex-row items-center gap-2">
+                  <img
+                    src={follower.userImage}
+                    alt="Image"
+                    className="big_phone:w-12 w-9 big_phone:h-12 h-9 rounded-[50%] object-cover"
+                  />
+
+                  <div className="flex flex-col items-start">
+                    <p className="text-center font-semibold big_phone:text-1xl text-sm">
+                      {follower.userName}
+                    </p>
+                    <p className="text-center text-xs">{follower.userEmail}</p>
                   </div>
-                  <div className="middle flex flex-row gap-x-4 item-center justify-between">
-                    <section className="details flex flex-col items-start">
-                      <p className="font-semibold md:text-lg text-sm">
-                        {follower.userName}
-                      </p>
-                      <p className="font-light md:text-sm text-xs">
-                        {follower.userEmail}
-                      </p>
-                    </section>
-                  </div>
-                </div>
-                <div className="flex items-center justify-center">
-                  <MdAddBox className="mx-2 text-[#97C3D3] text-2xl" />
-                </div>
+                </section>
+
+                <section>
+                  <MdAddBox className="mx-1 text-[#97C3D3] big_phone:text-2xl text-lg" />
+                </section>
               </div>
             ))}
           </div>
