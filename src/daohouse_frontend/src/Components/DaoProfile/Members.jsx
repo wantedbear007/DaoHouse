@@ -84,7 +84,7 @@ const Members = () => {
         <div
           className={
             className +
-            "__body mobile:p-4 p-2 bg-[#F4F2EC] rounded-lg gap-y-6 flex flex-col"
+            "__body mobile:p-4 p-2 bg-[#F4F2EC] rounded-lg mobile:gap-y-6 gap-y-2 flex flex-col"
           }
         >
           {groups.map((item, index) => (
@@ -105,9 +105,18 @@ const Members = () => {
                 </p>
 
                 {openedGroupIndex === index ? (
-                  <IoIosArrowDown className="font-bold big_phone:text-base text-sm" />
+                  <IoIosArrowDown
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setOpenedGroupIndex(null);
+                    }}
+                    className="font-bold big_phone:text-base text-sm hover:text-black text-slate-600"
+                  />
                 ) : (
-                  <IoIosArrowUp className="font-bold big_phone:text-base text-sm" />
+                  <IoIosArrowUp
+                    onClick={() => setOpenedGroupIndex(index)}
+                    className="font-bold big_phone:text-base text-sm hover:text-black text-slate-600"
+                  />
                 )}
               </header>
 
