@@ -17,7 +17,7 @@ const Proposals = () => {
       <div
         className={
           className +
-          "__filter w-100 md:h-[25vh] h-[20vh] md:p-20 pl-6 pt-8 flex flex-col items-start md:justify-center"
+          "__filter w-100 lg:h-[25vh] md:h-[21vh] h-[18vh] md:p-20 pl-6 pt-8 flex flex-col items-start md:justify-center"
         }
         style={{
           backgroundImage: `url("${proposals}")`,
@@ -34,17 +34,17 @@ const Proposals = () => {
       <div
         className={
           className +
-          "__label bg-[#c8ced3] py-8 md:px-10 px-4 flex flex-row gap-2 w-full justify-between items-center"
+          "__label bg-[#c8ced3] py-8 lg:px-10 px-[4rem] px-4 flex flex-row gap-2 w-full justify-between items-center"
         }
       >
-        <p className="md:text-[40px] text-[20px] text-black md:px-8 flex flex-row items-center md:gap-4 gap-2">
+        <p className="lg:text-[40px] md:text-[32px] text-[20px] text-black lg:px-8 flex flex-row items-center md:gap-4 gap-2">
           {Recent ? "Most Recent" : "Joined"}
           <div className="flex flex-col items-start">
-            <div className="md:w-32 w-[30px] border-t-2 border-black"></div>
-            <div className="md:w-14 w-[13px] md:mt-2 mt-1 border-t-2 border-black"></div>
+            <div className="lg:w-32 md:w-28 w-[30px] border-t-2 border-black"></div>
+            <div className="md:w-16 w-[13px] md:mt-2 mt-1 border-t-2 border-black"></div>
           </div>
         </p>
-        <div className="flex-grow md:flex justify-center px-6 mx-2 hidden">
+        <div className="flex-grow lg:flex justify-center px-6 mx-2 hidden">
           <SearchProposals
             width="100%"
             bgColor="transparent"
@@ -53,7 +53,7 @@ const Proposals = () => {
           />
         </div>
         <div className="flex items-center justify-center gap-4">
-          <button className="bg-white text-[16px] text-[#05212C] gap-1 px-7 shadow-xl py-4 px-4 rounded-full shadow-md md:flex items-center space-x-4 rounded-2xl hidden">
+          <button className="bg-white text-[16px] text-[#05212C] gap-1 lg:px-7 md:px-5 shadow-xl lg:py-4 py-2 px-4 rounded-full shadow-md md:flex items-center space-x-4 rounded-2xl hidden">
             <div>
               <svg
                 width="27"
@@ -75,7 +75,7 @@ const Proposals = () => {
             onClick={() => {
               navigate("/create-proposal");
             }}
-            className="bg-white md:text-[16px] text-[12px] text-[#05212C] gap-1 md:px-7 shadow-xl md:py-4 py-3 md:px-4 px-3 rounded-full shadow-md flex items-center space-x-4 rounded-2xl"
+            className="bg-white md:text-[16px] text-[12px] text-[#05212C] gap-1 lg:px-7 shadow-xl lg:py-4 py-2 md:px-4 px-3 rounded-full shadow-md flex items-center space-x-4 rounded-2xl"
           >
             <BsPlusLg className="mx-1" size={19} />
             Create Proposals
