@@ -192,14 +192,14 @@ const DaoProfile = () => {
         <div
           className={
             className +
-            "__navs w-full flex flex-row justify-between mt-8 md:w-[90%] lg:w-[70%] xl:w-[60%] gap-6 lg:text-[16px] text-[14px] pb-2"
+            "__navs w-full flex flex-row justify-between mt-8 md:w-[90%] lg:w-[70%] xl:w-[60%] gap-6 lg:text-[16px] text-[14px] pb-2 overflow-x-auto"
           }
-          style={{
-            height: "100%",
-            overflowX: "auto",
-            scrollbarWidth: "thin",
-            scrollbarColor: "#0e3746 transparent",
-          }}
+          // style={{
+          //   height: "100%",
+          //   overflowX: "auto",
+          //   scrollbarWidth: "thin",
+          //   scrollbarColor: "transparent",
+          // }}
         >
           <button
             onClick={(e) => {
