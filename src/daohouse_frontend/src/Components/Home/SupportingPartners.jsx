@@ -10,13 +10,13 @@ import Widget from './Widget';
 const SupportingPartners = () => {
   return (
     <div className="bg-gray-200 py-[10rem]">
-      <div className='justify-center mt-[-200px] items-center  flex'>
+      <div className='justify-center mt-[-200px] items-center flex'>
         <Widget />
       </div>
       <div className="container mx-auto text-center pt-4 mb-8 mt-8">
         <h2 className="text-[32px] md:text-[40px] font-medium mb-8">Supporting Partners</h2>
       </div>
-      <div className="container  md:gap-5 mx-auto flex md:flex-wrap justify-center">
+      <div className="container md:gap-5 mx-auto flex md:flex-wrap justify-center">
         {renderPartnerImages()}
       </div>
     </div>

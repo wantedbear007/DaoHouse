@@ -14,27 +14,27 @@ const Decentralization = () => {
           <h1 className="text-white text-6xl md:text-9xl font-semibold">DECENTRALIZATION.</h1>
         </div>
 
-        <div className="w-full px-4 md:px-20 flex flex-col md:flex-row justify-between items-center">
-          <div className="w-full md:w-1/2 md:pr-4 mb-4 md:mb-0">
-            <h2 className=" text-[20px] md:text-[32px] font-medium mb-4 text-white">
+        <div className="w-full laptop:px-20 tablet:px-16 mobile:px-20 px-10 flex flex-col big_phone:flex-row justify-between items-center">
+          <div className="w-full big_phone:w-1/2 md:pr-4 gap-6 flex flex-col items-start">
+            <h2 className="big_phone:text-[32px] mobile:text-3xl text-2xl font-medium text-white">
               Bringing Decentralization to Life: Empowering Communities through
               Seamless DAO Management
             </h2>
-            <p className="text-[12px] text-lg font-medium text-white">
+            <p className="mobile:text-1xl text-sm text-white">
               Our platform provides the tools and infrastructure needed to
               establish and manage your own decentralized autonomous
               organizations.
             </p>
-            <button className="px-8 my-8 md:my-4 py-3 bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
+            <button className="mobile:px-8 px-6 mobile:py-3 py-2 mobile:text-base text-sm bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
               Join DAO
             </button>
           </div>
 
-          <div className="w-full md:w-1/2 flex justify-center items-center rounded-full">
+          <div className="w-full big_phone:w-1/2 big_phone:h-full h-42 flex justify-center items-center rounded-full">
             <img
               src={decentralize}
               alt="Right Image"
-              className="w-3/5 rounded-full pointer-events-none select-none"
+              className="big_phone:w-3/4 mobile:w-2/4 w-3/4 rounded-full pointer-events-none select-none"
             />
           </div>
         </div>
