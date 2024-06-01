@@ -1,5 +1,26 @@
+import React, { useEffect, useState } from "react";
+
 export const CircularProgressBarMobile = ({ percentage, color }) => {
-  const radius = 30;
+  const [radius, setRadius] = useState(30);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 370) {
+        setRadius(25);
+      } else if (window.innerWidth <= 348) {
+        setRadius(20);
+      } else {
+        setRadius(30);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const strokeWidth = 5;
   const normalizedRadius = radius - strokeWidth / 2;
   const circumference = normalizedRadius * 2 * Math.PI;
