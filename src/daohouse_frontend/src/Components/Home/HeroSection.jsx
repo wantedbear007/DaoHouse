@@ -7,11 +7,11 @@ const HeroSection = () => {
   return (
     <div className="relative flex flex-col md:flex-row justify-center items-center h-[90vh]">
       {/* Left Side */}
-      <div className="md:w-1/2 w-full px-10 z-10 md:text-left text-center small_phone:mt-0 mt-8">
-        <div className="text-[#0E3746] font-mulish font-semibold small_phonetext-7xl text-4xl leading-tight mb-4">
+      <div className="md:w-1/2 w-full px-10 z-10 md:text-left text-center small_phone:mt-0 mt-8 flex flex-col mobile:gap-8 gap-4">
+        <p className="text-[#0E3746] font-mulish font-semibold laptop:text-6xl small_phone:text-5xl text-4xl">
           Building Better Future, Together
-        </div>
-        <div className="text-black font-inter text-sm mb-8">
+        </p>
+        <div className="text-black font-inter text-sm">
           Efficiently Manage Resources and Proposals with Our DAO Tools
         </div>
 
