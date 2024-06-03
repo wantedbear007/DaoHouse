@@ -5,7 +5,12 @@ const PersonalLinksAndContactInfo = ({ links }) => {
   const className = "PersonalLinksAndContactInfo";
 
   return (
-    <div className={className + " bg-[#FFFFFF] md:text-[16px] text-[13px]  font-normal text-[#646464] p-2 my-2 rounded-lg"}>
+    <div
+      className={
+        className +
+        " bg-[#FFFFFF] lg:text-[16px] md:text-[14px] text-[12px]  font-normal text-[#646464] p-2 my-2 rounded-lg"
+      }
+    >
       <ul className="list-disc pl-4">
         {links.map((link, index) => (
           <li key={index} className="flex items-center my-4">

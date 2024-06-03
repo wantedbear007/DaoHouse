@@ -5,10 +5,13 @@ import allFeed from "../../Components/FeedPage/AllFeeds";
 import latestFeed from "../../Components/FeedPage/LatestFeed";
 import PostCard from "../../Components/FeedPage/PostCard";
 import image from "../../../assets/bg_image.png";
+import CreatePostPopup from "../../Components/FeedPage/CreatePostPopup";
 
 const FeedPage = () => {
   const [feed, setFeed] = useState(allFeed);
   const [active, setActive] = useState({ all: true, latest: false });
+  const [showPopup, setShowPopup] = useState(false);
+
   const className = "FeedPage";
 
   const setAllActive = () => {
@@ -21,8 +24,16 @@ const FeedPage = () => {
     setActive({ all: false, latest: true });
   };
 
+  const handleCreatePostClick = () => {
+    setShowPopup(!showPopup);
+  };
+
   return (
     <div className={className + " " + "w-full"}>
+      {showPopup && (
+        <div className="fixed inset-0 bg-black opacity-40 z-40"></div>
+      )}
+
       <div
         className={
           className +
@@ -35,21 +46,25 @@ const FeedPage = () => {
           backgroundPosition: "center",
         }}
       >
-        <h1 className="mobile:text-5xl text-3xl p-3 text-white">
-          Social Feed
-        </h1>
+        <h1 className="mobile:text-5xl text-3xl p-3 text-white">Social Feed</h1>
 
-        <div className={className + "__buttons flex flex-row border-t-2 border-white"}>
+        <div
+          className={
+            className + "__buttons flex flex-row border-t-2 border-white"
+          }
+        >
           <button
-            className={`px-6 py-2 mobile:text-lg text-sm text-white ${!active.all ? "" : "shadow-lg font-semibold"
-              }`}
+            className={`px-6 py-2 mobile:text-lg text-sm text-white ${
+              !active.all ? "" : "shadow-lg font-semibold"
+            }`}
             onClick={setAllActive}
           >
             All
           </button>
           <button
-            className={`px-6 py-2 mobile:text-lg text-sm text-white ${!active.latest ? "" : "shadow-lg font-semibold"
-              }`}
+            className={`px-6 py-2 mobile:text-lg text-sm text-white ${
+              !active.latest ? "" : "shadow-lg font-semibold"
+            }`}
             onClick={setLatestActive}
           >
             Latest
@@ -71,7 +86,10 @@ const FeedPage = () => {
           </div>
         </p>
 
-        <button className="bg-white small_phone:gap-2 gap-1 mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl rounded-full shadow-md flex items-center rounded-2xl hover:bg-[#ececec] hover:scale-105 transition">
+        <button
+          className="bg-white small_phone:gap-2 gap-1 mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl rounded-full shadow-md flex items-center rounded-2xl hover:bg-[#ececec] hover:scale-105 transition"
+          onClick={handleCreatePostClick}
+        >
           <HiPlus />
           Create Post
         </button>
@@ -79,11 +97,14 @@ const FeedPage = () => {
 
       <div
         className={
-          className + "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col"
+          className +
+          "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col"
         }
       >
         {feed && feed.map((post, i) => <PostCard post={post} key={i} />)}
       </div>
+
+      {showPopup && <CreatePostPopup onClose={() => setShowPopup(false)} />}
     </div>
   );
 };
