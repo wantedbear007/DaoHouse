@@ -16,7 +16,7 @@ import FeedsContent from "../../Components/DaoProfile/FeedsContent";
 import Members from "../../Components/DaoProfile/Members";
 import FollowersContent from "../../Components/DaoProfile/FollowersContent";
 import FundsContent from "../../Components/DaoProfile/FundsContent";
-import DaoSettings from "../../Components/DaoSettings/DaoSettings"
+import DaoSettings from "../../Components/DaoSettings/DaoSettings";
 
 const DaoProfile = () => {
   const className = "DaoProfile";
@@ -66,7 +66,7 @@ const DaoProfile = () => {
       <div
         className={
           className +
-          "__topComponent w-full lg:h-[25vh] h-[20vh] p-20 flex flex-col items-start justify-center relative hero-container"
+          "__topComponent w-full lg:h-[25vh] md:h-[21vh] h-[18vh] p-20 flex flex-col items-start justify-center relative hero-container"
         }
         style={{
           backgroundImage: `url("${MyProfileRectangle}")`,
