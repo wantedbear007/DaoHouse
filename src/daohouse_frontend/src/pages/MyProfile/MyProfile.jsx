@@ -74,7 +74,7 @@ const MyProfile = ({ childComponent }) => {
           backgroundPosition: "center",
         }}
       >
-        <div className="absolute z-20 top-0 left-0 w-full h-full overflow-x-hidden">
+        <div className="absolute z-22 top-0 left-0 w-full h-full overflow-x-hidden">
           {/* Big circle image */}
           <BigCircleComponent imgSrc={BigCircle} />
 
@@ -120,22 +120,23 @@ const MyProfile = ({ childComponent }) => {
       <div
         className={
           className +
-          "__mainComponent bg-[#c8ced3] big_phone:py-8 big_phone:pb-20 py-6 big_phone:px-8 flex tablet:flex-row gap-2 flex-col w-full user-container"
+          "__mainComponent bg-[#c8ced3] big_phone:py-8 big_phone:pb-20 py-6 big_phone:px-8 flex md:flex-row gap-2 flex-col w-full user-container"
         }
       >
         {/* Left side content */}
         <div
           className={
             className +
-            "__mainComponent__leftSide tablet:mx-2 mx-5 tablet:px-20 flex flex-col tablet:items-start justify-center tablet:w-[251px] tablet:h-[620px] rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal tablet:mt-[-80px] mt-[-30px] z-20"
+            "__mainComponent__leftSide md:mx-0 mx-5 lg:px-20 flex flex-col tablet:items-start justify-center  md:h-[550px] lg:w-[251px] lg:h-[620px] md:px-14  rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal md:mt-[-80px] mt-[-30px] z-20"
           }
         >
           {/* Navigation links */}
-          <div className="flex tablet:flex-col flex-row items-start tablet:justify-center justify-around gap-y-6 mt-[5rem] text-base text-nowrap">
+          <div className="flex md:flex-col flex-row items-start md:justify-center justify-around gap-y-6 mt-[5rem] lg:text-base md:text-sm text-nowrap">
             <Link to="/my-profile" onClick={() => setActiveTab(0)}>
               <p
-                className={`${tabButtonsStyle}  ${activeTab == 0 ? "text-white" : ""
-                  }`}
+                className={`${tabButtonsStyle}  ${
+                  activeTab == 0 ? "text-white" : ""
+                }`}
               >
                 Overview {activeTab == 0 ? <FaArrowRightLong /> : ""}
               </p>
@@ -143,18 +144,19 @@ const MyProfile = ({ childComponent }) => {
 
             <Link to="/my-profile/my-post" onClick={() => setActiveTab(1)}>
               <p
-                className={`${tabButtonsStyle} ${activeTab == 1 ? "text-white" : ""
-                  }`}
+                className={`${tabButtonsStyle} ${
+                  activeTab == 1 ? "text-white" : ""
+                }`}
               >
                 My Posts {activeTab == 1 ? <FaArrowRightLong /> : ""}
               </p>
             </Link>
 
-
             <Link to="/my-profile/followers" onClick={() => setActiveTab(2)}>
               <p
-                className={`${tabButtonsStyle} ${activeTab == 2 ? "text-white" : ""
-                  }`}
+                className={`${tabButtonsStyle} ${
+                  activeTab == 2 ? "text-white" : ""
+                }`}
               >
                 Followers {activeTab == 2 ? <FaArrowRightLong /> : ""}
               </p>
@@ -162,8 +164,9 @@ const MyProfile = ({ childComponent }) => {
 
             <Link to="/my-profile/following" onClick={() => setActiveTab(3)}>
               <p
-                className={`${tabButtonsStyle}  ${activeTab == 3 ? "text-white" : ""
-                  }`}
+                className={`${tabButtonsStyle}  ${
+                  activeTab == 3 ? "text-white" : ""
+                }`}
               >
                 Following {activeTab == 3 ? <FaArrowRightLong /> : ""}
               </p>
@@ -174,11 +177,11 @@ const MyProfile = ({ childComponent }) => {
         {/* Right side content */}
         <div className={className + "__rightSide w-full"}>
           {/* Profile picture and details */}
-          <div className="flex tablet:justify-between justify-around w-full gap-2 z-50 relative">
-            <div className="flex items-start tablet:ml-[-90px] relative">
+          <div className="flex md:justify-between justify-around w-full gap-2 z-50 relative">
+            <div className="flex items-start big_phone:-ml-[10%] tablet:ml-[-90px] relative">
               <div>
                 <img
-                  className="rounded-tablet tablet:w-full  min-w-[69px] mt-[-20px] z-50"
+                  className="rounded-tablet tablet:w-full md:w-[93px]  min-w-[69px] mt-[-20px] rounded-[5px] z-50"
                   src={MyProfileImage}
                   alt="profile-pic"
                   style={{
@@ -188,21 +191,30 @@ const MyProfile = ({ childComponent }) => {
                 />
               </div>
               <div className="ml-5">
-                <h2 className="tablet:text-[32px] text-[18px] tablet:font-normal font-medium text-left text-[#05212C]">
+                <h2 className="tablet:text-[32px] text-[24px] tablet:font-normal font-medium text-left text-[#05212C]">
                   Username.user
                 </h2>
-                <p className="text-[12px] tablet:text-[16px] font-normal text-left text-[#646464]">
+                <p className="text-[14px]  tablet:text-[16px] font-normal text-left text-[#646464]">
                   gmail@gmail.xyz
                 </p>
-                <div className="tablet:flex hidden justify-between mt-3">
-                  <span className="tablet:mr-5 tablet:text-[32px] font-normal text-[#05212C] user-acc-info">
-                    6 <span className=" tablet:text-[16px] mx-1">Posts</span>
+                <div className="md:flex hidden justify-between mt-3">
+                  <span className="md:mr-5 tablet:text-[32px] text-[24px] font-normal text-[#05212C] user-acc-info">
+                    6{" "}
+                    <span className=" tablet:text-[16px] text-[14px] mx-1">
+                      Posts
+                    </span>
                   </span>
-                  <span className="tablet:mx-5 tablet:text-[32px] font-normal text-[#05212C] user-acc-info">
-                    3<span className=" tablet:text-[16px] mx-1">Followers</span>
+                  <span className="md:mx-5 tablet:text-[32px] text-[24px] font-normal text-[#05212C] user-acc-info">
+                    3
+                    <span className=" tablet:text-[16px] text-[14px] mx-1">
+                      Followers
+                    </span>
                   </span>
-                  <span className="tablet:mx-5 tablet:text-[32px] font-normal text-[#05212C] user-acc-info">
-                    3<span className=" tablet:text-[16px] mx-1">Following</span>
+                  <span className="mds:mx-5 tablet:text-[32px] text-[24px] font-normal text-[#05212C] user-acc-info">
+                    3
+                    <span className=" tablet:text-[16px] text-[14px] mx-1">
+                      Following
+                    </span>
                   </span>
                 </div>
               </div>
@@ -210,7 +222,7 @@ const MyProfile = ({ childComponent }) => {
             <div className="flex justify-end gap-4 tablet:mt-4 tablet:mr-4">
               <button
                 onClick={() => navigate("/edit-profile")}
-                className="bg-white text-[16px] text-[#05212C] gap-1  shadow-xl tablet:py-4 tablet:px-3 rounded-[27px] tablet:w-[181px] tablet:h-[40px] w-[2.5rem] h-[2.5rem] tablet:flex items-center space-x-4 rounded-2xl"
+                className="bg-white text-[16px] text-[#05212C] gap-1  shadow-xl md:px-3 rounded-[27px] tablet:w-[181px] tablet:h-[40px] big_phone:w-[151px] big_phone:h-[35px] w-[2.5rem] h-[2.5rem] flex items-center space-x-4 rounded-2xl"
               >
                 <img
                   src={EditPen}
@@ -221,7 +233,7 @@ const MyProfile = ({ childComponent }) => {
               </button>
             </div>
           </div>
-          <div className="flex justify-start gap-12 p-4 mx-6 mt-3 tablet:hidden text-center">
+          <div className="flex justify-start gap-12 p-4 mx-6 mt-3 md:hidden text-center">
             <div className="text-4xl font-semibold text-[#05212C]">
               6 <div className="text-[14px] font-normal">Posts</div>
             </div>
