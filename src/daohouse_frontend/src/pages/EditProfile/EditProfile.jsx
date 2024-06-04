@@ -9,10 +9,10 @@ import SmallestCircle from "../../../assets/SmallestCircle.png";
 import EditTags from "../../Components/EditProfile/EditTags";
 import EditPersonalLinksAndContactInfo from "./EditPersonalLinksAndContactInfo";
 
-import BigCircleComponent from "../../Components/Circles/BigCircleComponent";
-import SmallCircleComponent from "../../Components/Circles/SmallCircleComponent";
-import MediumCircleComponent from "../../Components/Circles/MediumCircleComponent";
 import SuccessModal from "../../Components/EditProfile/SuccessModal";
+import BigCircleComponent from "../../Components/Ellipse-Animation/BigCircle/BigCircleComponent";
+import SmallCircleComponent from "../../Components/Ellipse-Animation/SmallCircle/SmallCircleComponent";
+import MediumCircleComponent from "../../Components/Ellipse-Animation/MediumCircle/MediumCircleComponent";
 
 const EditProfile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,7 +28,7 @@ const EditProfile = () => {
   return (
     <div className="bg-zinc-200 w-full pb-20 relative">
       <div
-        className="w-full h-[25vh] p-20 flex flex-col items-start justify-center relative hero-container"
+        className="w-full lg:h-[25vh] h-[18vh] p-20 flex flex-col items-start justify-center relative hero-container"
         style={{
           backgroundImage: `url("${MyProfileRectangle}")`,
           backgroundRepeat: "no-repeat",
@@ -36,10 +36,28 @@ const EditProfile = () => {
           backgroundPosition: "center",
         }}
       >
-        <div className="absolute z-20 top-0 left-0 w-full h-full overflow-x-hidden">
-          <BigCircleComponent imgSrc={BigCircle} />
-          <SmallCircleComponent imgSrc={SmallestCircle} />
-          <MediumCircleComponent imgSrc={MediumCircle} />
+        <div className="absolute z-22 top-0 left-0 w-full h-full overflow-x-hidden">
+          {/* Big circle image */}
+          <div className="absolute md:right-[3.7%] -right-[3.7%] top-1/2 -translate-y-1/2">
+            <div className="relative tablet:w-[96px] tablet:h-[96px] md:w-[88.19px] md:h-[88.19px] w-[65px] h-[65px]">
+              <BigCircleComponent imgSrc={BigCircle} />
+            </div>
+          </div>
+
+          <div className="absolute right-[25%] -translate-y-full top-[30%]">
+            <div className="relative tablet:w-[43px] tablet:h-[43px] md:w-[33.3px] md:h-[33.3px] w-[21.19px] h-[21.19px]">
+              {/* Smallest circle image */}
+
+              <SmallCircleComponent imgSrc={SmallestCircle} />
+            </div>
+          </div>
+
+          {/* Medium circle image */}
+          <div className="absolute right-[45%] -translate-y-full top-[95%]">
+            <div className="relative tablet:w-[52px] tablet:h-[52px] md:w-[43.25px] md:h-[43.25px] w-[29.28px] h-[29.28px] ">
+              <MediumCircleComponent imgSrc={MediumCircle} />
+            </div>
+          </div>
         </div>
         <ProfileTitleDivider title="Edit Profile" />
       </div>
@@ -47,7 +65,7 @@ const EditProfile = () => {
         <div className="md:mt-12 mt-8 md:mx-24 mx-6 bg-[#F4F2EC] md:p-6 p-4 rounded-lg">
           <div className="flex items-center gap-2">
             <img
-              className="rounded-md md:w-[105px]  w-[69px] md:mr-12 mr-1 "
+              className="rounded-md lg:w-[105px] md:w-[85px] w-[69px] lg:mr-12 md:mr-4 mr-1 "
               src={MyProfileImage}
               alt="profile-pic"
               style={{
@@ -64,18 +82,20 @@ const EditProfile = () => {
                 alt="edit"
                 className="md:mr-2 mr-1 md:h-4 md:w-4 w-3 h-3 edit-pen"
               />
-              <span className="">Upload New Photo</span>
+              <span className="text-[14px] lg:text-[16px]">
+                Upload New Photo
+              </span>
             </button>
             <button
               onClick={() => navigate("/remove-icon")}
-              className="md:text-[16px] text-[12px] text-[#9F9F9F] shadow-xl md:h-[50px] h-[40px] md:px-6 px-4 rounded-[27px] border-solid border border-[#9F9F9F] flex items-center"
+              className="text-[12px] md:text-[14px] lg:text-[16px] text-[#9F9F9F] shadow-xl md:h-[50px] h-[40px] md:px-6 px-4 rounded-[27px] border-solid border border-[#9F9F9F] flex items-center "
             >
               Remove<span className="hidden sm:inline-block ml-1">Photo</span>
             </button>
           </div>
 
-          <div className="md:ml-40 md:mr-5 md:mt-12 mt-5">
-            <h3 className="text-[#05212C] md:text-[24px] text-[18px] md:font-semibold font-medium ml-3">
+          <div className="lg:ml-40 md:ml-24 lg:mr-5 md:mt-12 mt-5">
+            <h3 className="text-[#05212C] text-[16px] md:text-[18px] lg:text-[24px] md:font-semibold font-medium ml-3">
               About Me
             </h3>
             <div className="bg-[#FFFFFF] md:text-[16px] text-[12px] font-normal text-[#646464] py-3 md:px-5 pl-3 my-4 sm:w-[100%] rounded-lg">
@@ -86,7 +106,7 @@ const EditProfile = () => {
                 className="border-solid border border-[#DFE9EE] py-2 pl-4 md:w-[40%] w-[82%] rounded-[6px]"
               />
             </div>
-            <p className="md:text-[20px] text-[16px] font-semibold text-[#05212C] md:ml-2 md:mb-3">
+            <p className="lg:text-[20px] md:text-[16px] text-[14px] font-semibold text-[#05212C] md:ml-2 md:mb-3">
               Description
             </p>
             <div className="bg-[#FFFFFF] md:text-[16px] text-[12px] font-normal text-[#646464] py-3 px-5 my-2 rounded-lg">
@@ -96,7 +116,7 @@ const EditProfile = () => {
               to savoring exotic cuisines from around the globe, I thrive on the
               thrill of adventure and the joy of discovery.
             </div>
-            <p className="md:text-[20px] text-[16px] font-semibold text-[#05212C] md:ml-2 md:mb-3 mt-6">
+            <p className="lg:text-[20px] md:text-[16px] text-[14px] font-semibold text-[#05212C] md:ml-2 md:mb-3 mt-6">
               Tags That Defines You
             </p>
             <EditTags
@@ -110,7 +130,7 @@ const EditProfile = () => {
                 "Ethereum",
               ]}
             />
-            <p className="md:text-[20px] text-[16px] font-semibold text-[#05212C] ml-2 mb-3 mt-6">
+            <p className="lg:text-[20px] md:text-[16px] text-[14px] font-semibold text-[#05212C] ml-2 mb-3 mt-6">
               Personal Links & Contact Info
             </p>
             <EditPersonalLinksAndContactInfo
