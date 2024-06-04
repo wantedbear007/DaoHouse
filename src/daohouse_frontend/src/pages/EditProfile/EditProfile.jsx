@@ -19,9 +19,9 @@ const EditProfile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userProfile, setUserProfile] = useState({
     username: "",
-    description:"",
+    description: "",
     email_id: "",
-    profile_img: [], // Array of integers representing image data
+    profile_img: [], // Array of int8 representing image data
     contact_number: "",
     twitter_id: "",
     telegram: "",
@@ -41,9 +41,12 @@ const EditProfile = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
+        const base64String = reader.result.split(',')[1]; // Extract Base64 part
+        const byteArray = Uint8Array.from(atob(base64String), char => char.charCodeAt(0));
+        const int8Array = Array.from(byteArray).map(byte => byte < 128 ? byte : byte - 256); // Convert to int8 range
         setUserProfile((prevProfile) => ({
           ...prevProfile,
-          profile_img: reader.result, // Set the image URL as profile_img
+          profile_img: int8Array,
         }));
       };
       reader.readAsDataURL(file);
@@ -59,20 +62,15 @@ const EditProfile = () => {
     }
   };
 
-
   const closeModal = () => {
     setIsModalOpen(false);
   };
 
-  const {
-
-    backendActor,
-  } = useAuth();
-
+  const { backendActor } = useAuth();
 
   useEffect(() => {
     if (backendActor === null) {
-      return
+      return;
     }
     const fetchUserProfile = async () => {
       try {
@@ -84,23 +82,8 @@ const EditProfile = () => {
       }
     };
 
-    // const createAndFetchUserProfile = async () => {
-    //   try {
-    //     await backendActor.create_profile({
-    //       username: "YourUsername",
-    //       email_id: "YourEmail@example.com",
-    //       profile_img: [/* Array of integers representing image data */]
-    //     });
-    //     // After profile creation, fetch user profile
-    //     await fetchUserProfile();
-    //   } catch (error) {
-    //     console.error("Error creating user profile:", error);
-    //   }
-    // };
-
     fetchUserProfile();
   }, [backendActor]);
-
 
   return (
     <div className="bg-zinc-200 w-full pb-20 relative">
@@ -124,14 +107,18 @@ const EditProfile = () => {
         <div className="md:mt-12 mt-8 md:mx-24 mx-6 bg-[#F4F2EC] md:p-6 p-4 rounded-lg">
           <div className="flex items-center gap-2">
             <img
-              className="rounded-md md:w-[105px]  w-[69px] md:mr-12 mr-1 "
-              src={userProfile.profile_img || MyProfileImage}
+              className="rounded-md md:w-[105px] w-[69px] md:mr-12 mr-1"
+              src={
+                userProfile.profile_img.length
+                  ? `data:image/png;base64,${btoa(String.fromCharCode(...userProfile.profile_img.map(byte => byte >= 0 ? byte : byte + 256)))}`
+                  : MyProfileImage
+              }
               alt="profile-pic"
               style={{
-                boxShadow:
-                  "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
+                boxShadow: "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
               }}
             />
+
             <input
               type="file"
               accept="image/*"
@@ -168,11 +155,9 @@ const EditProfile = () => {
                 type="text"
                 placeholder="Username.user"
                 name="username"
-
                 className="border-solid border border-[#DFE9EE] py-2 pl-4 md:w-[40%] w-[82%] rounded-[6px]"
                 value={userProfile.username}
                 onChange={handleInputChange}
-
               />
             </div>
             <p className="md:text-[20px] text-[16px] font-semibold text-[#05212C] md:ml-2 md:mb-3">
