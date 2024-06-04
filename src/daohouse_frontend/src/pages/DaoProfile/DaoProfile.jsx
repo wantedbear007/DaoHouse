@@ -15,6 +15,8 @@ import ProposalsContent from "../../Components/DaoProfile/ProposalsContent";
 import FeedsContent from "../../Components/DaoProfile/FeedsContent";
 import Members from "../../Components/DaoProfile/Members";
 import FollowersContent from "../../Components/DaoProfile/FollowersContent";
+import FundsContent from "../../Components/DaoProfile/FundsContent";
+import DaoSettings from "../../Components/DaoSettings/DaoSettings";
 
 const DaoProfile = () => {
   const className = "DaoProfile";
@@ -64,7 +66,7 @@ const DaoProfile = () => {
       <div
         className={
           className +
-          "__topComponent w-full lg:h-[25vh] h-[20vh] p-20 flex flex-col items-start justify-center relative hero-container"
+          "__topComponent w-full lg:h-[25vh] h-[20vh] md:p-20 pt-6 pl-2 flex flex-col items-start md:justify-center relative"
         }
         style={{
           backgroundImage: `url("${MyProfileRectangle}")`,
@@ -73,42 +75,57 @@ const DaoProfile = () => {
           backgroundPosition: "center",
         }}
       >
-        <div className="absolute z-20 top-0 left-0 w-full h-full overflow-x-hidden">
+        <div className="absolute z-22 top-0 left-0 w-full h-full overflow-x-hidden">
           {/* Big circle image */}
-          <BigCircleComponent imgSrc={BigCircle} />
+          <div className="absolute md:right-[3.7%] -right-[3.7%] top-1/2 -translate-y-1/2">
+            <div className="relative tablet:w-[96px] tablet:h-[96px] md:w-[88.19px] md:h-[88.19px] w-[65px] h-[65px]">
+              <BigCircleComponent imgSrc={BigCircle} />
+            </div>
 
-          {/* Big circle animation */}
-          <div className="absolute z-20  md:right-[68px] big_phone:top-1/2 md:top-[50%] top-[60%] -translate-y-1/2 right-[-50px]">
-            <Lottie
-              options={defaultOptions}
-              style={{ height: "112px", width: "112px" }}
-              className="absolute z-50 "
-            />
+            {/* Big circle animation */}
+            <div className="absolute inset-0 flex items-center justify-center z-20">
+              <div className="tablet:w-[112px] tablet:h-[112px] md:w-[104px] md:h-[104px] w-[75px] h-[75px]">
+                <Lottie
+                  options={defaultOptions}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </div>
+            </div>
           </div>
-          {/* Smallest circle image */}
-          <SmallCircleComponent imgSrc={SmallestCircle} />
 
-          {/* Small circle animation */}
-          <div className="absolute md:right-[24.75rem] right-[7.1rem] big_phone:top-[30%] md:top-[30%] top-[35.2%] -translate-y-[93%]">
-            <Lottie
-              options={defaultOptions2}
-              height={50}
-              width={50}
-              className="absolute z-20"
-            />
+          <div className="absolute right-[25%] -translate-y-full top-[30%]">
+            <div className="relative tablet:w-[43px] tablet:h-[43px] md:w-[33.3px] md:h-[33.3px] w-[21.19px] h-[21.19px]">
+              {/* Smallest circle image */}
+
+              <SmallCircleComponent imgSrc={SmallestCircle} />
+            </div>
+
+            {/* Small circle animation */}
+            <div className="absolute inset-0 flex items-center justify-center z-20">
+              <div className="tablet:w-[47px] tablet:h-[47px] md:w-[37.3px] md:h-[37.3px] w-[23.19px] h-[23.19px]">
+                <Lottie
+                  options={defaultOptions2}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </div>
+            </div>
           </div>
 
           {/* Medium circle image */}
-          <MediumCircleComponent imgSrc={MediumCircle} />
+          <div className="absolute right-[45%] -translate-y-full top-[95%]">
+            <div className="relative tablet:w-[52px] tablet:h-[52px] md:w-[43.25px] md:h-[43.25px] w-[29.28px] h-[29.28px] ">
+              <MediumCircleComponent imgSrc={MediumCircle} />
+            </div>
 
-          {/* Medium circle animation */}
-          <div className="absolute md:right-[39.71rem] right-[11.6rem] big_phone:top-[95%] md:top-[95.6%] top-[99.8%] -translate-y-[93%]">
-            <Lottie
-              options={defaultOptions3}
-              height={61}
-              width={61}
-              className="absolute z-20"
-            />
+            {/* Medium circle animation */}
+            <div className="absolute inset-0 flex items-center justify-center z-20">
+              <div className="tablet:w-[60px] tablet:h-[60px] md:w-[47.25px] md:h-[47.25px] w-[33.28px] h-[33.28px]">
+                <Lottie
+                  options={defaultOptions3}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -190,7 +207,7 @@ const DaoProfile = () => {
         <div
           className={
             className +
-            "__navs w-full flex flex-row overflow-auto justify-between mt-8 md:w-[90%] lg:w-[70%] xl:w-[60%] gap-6 lg:text-[16px] text-[14px] pb-1"
+            "__navs w-full overflow-auto flex flex-row justify-between mt-8 md:w-[90%] lg:w-[70%] xl:w-[60%] gap-12 lg:text-[16px] text-[14px] pb-2"
           }
         >
           <button
@@ -261,19 +278,6 @@ const DaoProfile = () => {
           <button
             onClick={(e) => {
               e.preventDefault();
-              handleClick("bounties");
-            }}
-            className={`cursor-pointer text-nowrap ${
-              activeLink === "bounties"
-                ? "underline text-[#0E3746]"
-                : "text-[#0E37464D]"
-            }`}
-          >
-            Bounties
-          </button>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
               handleClick("settings");
             }}
             className={`cursor-pointer text-nowrap ${
@@ -289,6 +293,8 @@ const DaoProfile = () => {
         {activeLink === "feeds" && <FeedsContent />}
         {activeLink === "member_policy" && <Members />}
         {activeLink === "followers" && <FollowersContent />}
+        {activeLink === "funds" && <FundsContent />}
+        {activeLink === "settings" && <DaoSettings />}
       </div>
     </div>
   );

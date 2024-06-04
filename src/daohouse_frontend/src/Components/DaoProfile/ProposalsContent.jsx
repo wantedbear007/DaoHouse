@@ -60,11 +60,13 @@ const ProposalsContent = () => {
             </button>
           </span>
         </div>
-        <div className="w-full border-t py-6 px-4  border-[#0000004D] mb-4">
-          {selectedProposal && <Card proposal={selectedProposal} />}
+        <div className="w-full border-t py-6 px-4  border-[#0000004D] rounded-[10px] mb-4">
+          <div className="bg-white rounded">
+            {selectedProposal && <Card proposal={selectedProposal} />}
+          </div>
         </div>
       </div>
-      <div className="bg-white md:hidden rounded-[10px] mt-4 mb-12">
+      <div className="bg-white md:hidden rounded-[10px] mt-4 mb-8 ">
         {selectedProposal && <Card proposal={selectedProposal} />}
       </div>
     </div>

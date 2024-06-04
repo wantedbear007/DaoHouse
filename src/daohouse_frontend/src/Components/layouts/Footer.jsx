@@ -9,40 +9,40 @@ import discord from "../../../assets/discord.png";
 const Footer = () => {
   return (
     <React.Fragment>
-      <footer className="bg-[#05212C] py-12 text-center">
-        <div className="w-full mb-8">
-          <img src={logo} alt="DAO HOuse" className="w-32 mx-auto mb-10" />
-          <div className="flex justify-center mb-4">
+      <footer className="bg-[#05212C] small_phone:py-12 py-8 text-center">
+        <div className="w-full small_phone:mb-8 mb-4">
+          <img src={logo} alt="DAO HOuse" className="small_phone:w-32 w-20 mx-auto small_phone:mb-10 mb-6" />
+          <div className="flex justify-center mb-4 gap-x-3">
             <Link
               to="/"
-              className="text-[#728288] font-inter font-normal text-base mr-6 hover:underline"
+              className="text-[#728288] small_phone:text-base text-sm font-inter font-normal hover:underline"
             >
               Home
             </Link>
             <Link
               to="/social-feed"
-              className="text-[#728288]  font-inter font-normal text-base mr-6 hover:underline"
+              className="text-[#728288] small_phone:text-base text-sm font-inter font-norma  hover:underline"
             >
               Social Feed
             </Link>
             <Link
               to="/daos"
-              className="text-[#728288]  font-inter font-normal text-base mr-6 hover:underline"
+              className="text-[#728288] small_phone:text-base text-sm font-inter font-norma  hover:underline"
             >
               DAOs
             </Link>
             <Link
               to="/proposals"
-              className="text-[#728288]  font-inter font-normal text-base hover:underline"
+              className="text-[#728288] small_phone:text-base tex-sm font-inter font-norma r:underline"
             >
               Proposals
             </Link>
           </div>
-          <div className="flex justify-center mb-4">
-            <img src={twitter} alt="Twitter" className="w-8 h-8 mr-4" />
-            <img src={telegram} alt="Telegram" className="w-8 h-8 mr-4" />
-            <img src={linkedin} alt="LinkedIn" className="w-8 h-8 mr-4" />
-            <img src={discord} alt="Discord" className="w-8 h-8" />
+          <div className="flex justify-center mb-4 gap-4">
+            <img src={twitter} alt="Twitter" className="small_phone:w-8 w-6 small_phone:h-8 h-6 object-contain" />
+            <img src={telegram} alt="Telegram" className="small_phone:w-8 w-6 small_phone:h-8 h-6 object-contain" />
+            <img src={linkedin} alt="LinkedIn" className="small_phone:w-8 w-6 small_phone:h-8 h-6 object-contain" />
+            <img src={discord} alt="Discord" className="small_phone:w-8 w-6 small_phone:h-8 h-6 object-contain" />
           </div>
         </div>
       </footer>
