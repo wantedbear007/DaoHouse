@@ -495,7 +495,7 @@ pub struct Profileinput{
     pub twitter_id:String,
     pub telegram:String,
     pub website:String,
-
+    pub tag_defines: Vec<String>,
 } 
 
 #[derive(Clone,CandidType,Serialize,Deserialize)]

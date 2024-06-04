@@ -36,7 +36,7 @@ pub fn create_new_profile(state: &mut State, profile: Profileinput) -> Result<()
         followings_count: 0,
         followings_list: Vec::new(),
         description: profile.description,
-        tag_defines: Vec::new(),
+        tag_defines: profile.tag_defines,
         contact_number: profile.contact_number,
         twitter_id: profile.twitter_id,
         telegram: profile.telegram,

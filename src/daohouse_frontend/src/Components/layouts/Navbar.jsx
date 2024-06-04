@@ -82,7 +82,7 @@ const Navbar = () => {
         // const img_URL = `blob:${image}`;
         console.log("image", image);
 
-        // await backendActor.delete_profile();
+        await backendActor.delete_profile();
         await backendActor.create_profile({
           username: "Admin1",
           email_id: "admin@example.com",
@@ -92,6 +92,7 @@ const Navbar = () => {
           twitter_id: "@admin_twitter",
           telegram: "@admin_telegram",
           website: "https://admin.com",
+          tag_defines: ["ICP", "Blockchain", "NFT Artist"]
         });
         // After profile creation, fetch user profile
         await fetchUserProfile();
