@@ -29,6 +29,12 @@ const Members = () => {
     gridTemplateColumns: listTemplateColumns,
   };
 
+  function toggleOpenGroup(index) {
+    if (openedGroupIndex == index) {
+      setOpenedGroupIndex(null);
+    } else setOpenedGroupIndex(index);
+  }
+
   return (
     <div className={className + " mt-6"}>
       <div className="flex items-center justify-between">
@@ -104,9 +110,11 @@ const Members = () => {
               className={
                 className + "__body__group flex flex-col bg-white rounded-lg"
               }
-              onClick={() => setOpenedGroupIndex(index)}
             >
-              <header className="cursor-pointer flex flex-row items-center justify-between bg-[#AAC8D6] p-3 rounded-lg">
+              <header
+                onClick={() => toggleOpenGroup(index)}
+                className="cursor-pointer flex flex-row items-center justify-between bg-[#AAC8D6] p-3 rounded-lg"
+              >
                 <p className="font-semibold big_phone:text-base text-sm">
                   {item.groupName}
                 </p>
@@ -126,7 +134,10 @@ const Members = () => {
                   />
                 ) : (
                   <IoIosArrowUp
-                    onClick={() => setOpenedGroupIndex(index)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setOpenedGroupIndex(index);
+                    }}
                     className="font-bold big_phone:text-base text-sm hover:text-black text-slate-600"
                   />
                 )}
@@ -135,7 +146,7 @@ const Members = () => {
               {/**List of the members in group */}
               {openedGroupIndex === index && (
                 <React.Fragment>
-                  <div className="flex flex-row item-scenter justify-between mobile:px-8 px-4 mobile:py-6 py-4">
+                  <div className="big_phone:hidden flex flex-row item-scenter justify-between mobile:px-8 px-4 mobile:py-6 py-4">
                     <h1 className="font-semibold">
                       {gridView ? "Grid View" : "List View"}
                     </h1>
@@ -152,18 +163,18 @@ const Members = () => {
                   <div
                     className={
                       className +
-                      "__body__group__members mobile:px-8 px-2 gap-2 mobile:pb-8 pb-4"
+                      "__body__group__members mobile:px-8 px-2 gap-2 big_phone:py-8 pb-4"
                     }
                     style={gridView ? gridContainerStyle : listContainerStyle}
                   >
-                    {item.membersList.map((member, index) => (
-                      <div key={index}>
+                    {item.membersList.map((member) => (
+                      <React.Fragment>
                         {gridView ? (
                           <GridView member={member} />
                         ) : (
                           <ListView member={member} />
                         )}
-                      </div>
+                      </React.Fragment>
                     ))}
                   </div>
                 </React.Fragment>

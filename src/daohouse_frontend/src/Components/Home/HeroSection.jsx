@@ -5,20 +5,21 @@ import circle from "../../../assets/circle.png";
 
 const HeroSection = () => {
   return (
-    <div className="relative flex flex-col md:flex-row justify-center items-center h-[85vh]">
+    <div className="relative flex flex-col md:flex-row justify-center items-center h-[90vh]">
       {/* Left Side */}
-      <div className="md:w-1/2 px-10 z-10 md:text-left text-center">
-        <div className="text-[#0E3746] font-mulish font-semibold text-[48px] md:text-7xl leading-tight mb-4">
+      <div className="md:w-1/2 w-full px-10 z-10 md:text-left text-center small_phone:mt-0 mt-8 flex flex-col mobile:gap-8 gap-4">
+        <p className="text-[#0E3746] font-mulish font-semibold laptop:text-6xl small_phone:text-5xl text-4xl">
           Building Better Future, Together
-        </div>
-        <div className="text-black font-inter text-sm mb-8">
+        </p>
+        <div className="text-black font-inter text-sm">
           Efficiently Manage Resources and Proposals with Our DAO Tools
         </div>
-        <div className="flex space-x-4">
-          <button className="px-8 py-3 bg-[#0E3746] text-white font-semibold rounded-[27.5px] shadow-md hover:bg-blue-800 hover:text-white">
+
+        <div className="flex flex-row big_phone:justify-start justify-center space-x-4">
+          <button className="mobile:px-8 px-4 mobile:py-3 py-2 mobile:text-base text-sm bg-[#0E3746] text-white font-semibold rounded-[27.5px] shadow-md hover:bg-blue-800 hover:text-white">
             Create DAO
           </button>
-          <button className="px-8 py-3 bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
+          <button className="mobile:px-8 px-4 mobile:py-3 py-2 mobile:text-base text-sm bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
             Join DAO
           </button>
         </div>
