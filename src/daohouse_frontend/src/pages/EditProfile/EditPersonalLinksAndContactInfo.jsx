@@ -1,6 +1,6 @@
 import React from "react";
 
-const EditPersonalLinksAndContactInfo = ({ userProfile, handleInputChange, handleSaveChangesClick }) => {
+const EditPersonalLinksAndContactInfo = ({ handleSaveChangesClick }) => {
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
       <div className="mb-4 flex flex-col">
@@ -9,21 +9,17 @@ const EditPersonalLinksAndContactInfo = ({ userProfile, handleInputChange, handl
           <label
             htmlFor="contactNo"
             className="block md:text-[16px] text-[12px] font-semibold text-[#05212C] mr-2 md:w-[100px] w-[70px]"
-
           >
             Contact No.
           </label>
           <div className="flex flex-grow">
             <input
-              id="contact_number"
+              id="contactNo"
               type="tel"
-              name="contact_number"
-              value={userProfile.contact_no}
-              onChange={handleInputChange}
               placeholder="0123456789"
-              className="py-2 px-3 w-full md:w-[50%] md:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm box-border text-[12px]"
+              className="py-2 px-3 w-full lg:w-[50%] md:w-[100%] lg:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm box-border text-[12px]"
             />
-            <button className="ml-20 px-10 py-2 bg-[#0E3746] text-white text-[14px] rounded-[27px] transition duration-200 ease-in-out hover:bg-[#0E37464D] box-border hidden sm:block">
+            <button className="lg:ml-20 ml-10 px-10 py-2 bg-[#0E3746] text-white text-[14px] rounded-[27px] transition duration-200 ease-in-out hover:bg-[#0E37464D] box-border hidden sm:block">
               Update
             </button>
           </div>
@@ -41,14 +37,10 @@ const EditPersonalLinksAndContactInfo = ({ userProfile, handleInputChange, handl
             <input
               id="email"
               type="email"
-              name="email_id"
-
               placeholder="Emailid.id@example.com"
-              value={userProfile.email_id}
-              onChange={handleInputChange}
-              className="py-2 px-3 w-full md:w-[50%] md:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm box-border text-[12px]"
+              className="py-2 px-3 w-full lg:w-[50%] md:w-[100%] lg:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm box-border text-[12px]"
             />
-            <button className="ml-20 px-10 py-2 bg-[#0E3746] text-white text-[14px] rounded-[27px] transition duration-200 ease-in-out hover:bg-[#0E37464D] box-border hidden sm:block">
+            <button className="lg:ml-20 ml-10 px-10 py-2 bg-[#0E3746] text-white text-[14px] rounded-[27px] transition duration-200 ease-in-out hover:bg-[#0E37464D] box-border hidden sm:block">
               Update
             </button>
           </div>
@@ -64,15 +56,12 @@ const EditPersonalLinksAndContactInfo = ({ userProfile, handleInputChange, handl
           </label>
           <div className="flex flex-grow">
             <input
-              id="twitter_id"
-              name="twitter_id"
-              value={userProfile.twitter}
-              onChange={handleInputChange}
+              id="twitter"
               type="url"
               placeholder="http://www.example.com"
-              className="py-2 px-3 w-full md:w-[50%] md:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm box-border text-[12px]"
+              className="py-2 px-3 w-full lg:w-[50%] md:w-[100%] lg:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm box-border text-[12px]"
             />
-            <button className="ml-20 px-10 py-2 bg-[#0E3746] text-white text-[14px] rounded-[27px] transition duration-200 ease-in-out hover:bg-[#0E37464D] box-border hidden sm:block">
+            <button className="lg:ml-20 ml-10 px-10 py-2 bg-[#0E3746] text-white text-[14px] rounded-[27px] transition duration-200 ease-in-out hover:bg-[#0E37464D] box-border hidden sm:block">
               Update
             </button>
           </div>
@@ -90,14 +79,10 @@ const EditPersonalLinksAndContactInfo = ({ userProfile, handleInputChange, handl
             <input
               id="telegram"
               type="url"
-              name="telegram"
-              value={userProfile.telegram}
-              onChange={handleInputChange}
-
               placeholder="http://www.example.com"
-              className="py-2 px-3 w-full md:w-[50%] md:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm box-border text-[12px]"
+              className="py-2 px-3 w-full lg:w-[50%] md:w-[100%] lg:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm box-border text-[12px]"
             />
-            <button className="ml-20 px-10 py-2 bg-[#0E3746] text-white text-[14px] rounded-[27px] transition duration-200 ease-in-out hover:bg-[#0E37464D] box-border hidden sm:block">
+            <button className="lg:ml-20 ml-10 px-10 py-2 bg-[#0E3746] text-white text-[14px] rounded-[27px] transition duration-200 ease-in-out hover:bg-[#0E37464D] box-border hidden sm:block">
               Update
             </button>
           </div>
@@ -115,14 +100,10 @@ const EditPersonalLinksAndContactInfo = ({ userProfile, handleInputChange, handl
             <input
               id="website"
               type="url"
-              name="website"
-
-              value={userProfile.website}
-              onChange={handleInputChange}
               placeholder="http://www.example.com"
-              className="py-2 px-3 w-full md:w-[50%] md:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm box-border text-[12px]"
+              className="py-2 px-3 w-full lg:w-[50%] md:w-[100%] lg:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm box-border text-[12px]"
             />
-            <button className="ml-2 md:ml-20 px-10 py-2 bg-[#0E3746] text-white text-[14px] rounded-[27px] transition duration-200 ease-in-out hover:bg-[#0E37464D] box-border hidden sm:block">
+            <button className="lg:ml-20 ml-10 px-10 py-2 bg-[#0E3746] text-white text-[14px] rounded-[27px] transition duration-200 ease-in-out hover:bg-[#0E37464D] box-border hidden sm:block">
               Update
             </button>
           </div>

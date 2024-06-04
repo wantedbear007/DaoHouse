@@ -6,6 +6,7 @@ import LoginModal from "../Auth/LoginModal";
 import { FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
 import avatarprofile from "../../../assets/avatarprofile.png";
 import logo from "../../../assets/ColorLogo.png";
+import aboutImg from '../../../assets/avatar.png';
 
 const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +23,6 @@ const Navbar = () => {
 
   const location = useLocation();
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [userProfileData,setUserProfileData]=useState([])
 
   const menuItems = [
     { label: "Home", route: "/" },
@@ -30,6 +30,8 @@ const Navbar = () => {
     { label: "DAOs", route: "/dao" },
     { label: "Proposals", route: "/proposals" },
   ];
+
+
 
   // Function to handle login
   const handleLogin = async () => {
@@ -64,19 +66,43 @@ const Navbar = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const userProfileData = await backendActor?.get_user_profile();
-        console.log({userProfileData});
-
-        setUserProfileData(userProfileData);
+        const userProfileData = await backendActor.get_user_profile();
+        console.log("User profile data after creation:", userProfileData);
+        // setUserProfile(userProfileData);
       } catch (error) {
         console.error("Error fetching user profile:", error);
       }
     };
 
-    fetchUserProfile()
-  }, [backendActor, principal]);
+    const createAndFetchUserProfile = async () => {
+      try {
+        const response = await fetch(aboutImg);
+        const imageBlob = await response.blob();
+        const image = URL.createObjectURL(imageBlob);
+        // const img_URL = `blob:${image}`;
+        console.log("image", image);
 
-  console.log({ backendActor })
+        await backendActor.delete_profile();
+        await backendActor.create_profile({
+          username: "Admin1",
+          email_id: "admin@example.com",
+          profile_img: image,
+          description: "This is a sample profile description.",
+          contact_number: "123-456-7890",
+          twitter_id: "@admin_twitter",
+          telegram: "@admin_telegram",
+          website: "https://admin.com",
+          tag_defines: ["ICP", "Blockchain", "NFT Artist"]
+        });
+        // After profile creation, fetch user profile
+        await fetchUserProfile();
+      } catch (error) {
+        console.error("Error creating user profile:", error);
+      }
+    };
+
+    createAndFetchUserProfile();
+  }, [backendActor, principal]);
 
   const dropdownItems = [
     { label: "Profile", route: "/my-profile", icon: <FaUser className="mr-2" /> },
@@ -85,6 +111,7 @@ const Navbar = () => {
     { label: "Settings", route: "/settings", icon: <FaCog className="mr-2" /> },
     { label: "Logout", onClick: handleLogout, icon: <FaSignOutAlt className="mr-2" /> },
   ];
+
 
   return (
     <nav>
