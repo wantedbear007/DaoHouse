@@ -467,7 +467,7 @@ pub struct CanisterInfoResponse {
 pub struct UserProfile{
     pub user_id: Principal,
     pub email_id: String,
-    pub profile_img: Vec<i8>,
+    pub profile_img: String,
     pub username: String,
     pub dao_ids: Vec<String>,
     pub post_count:u32,
@@ -488,14 +488,14 @@ pub struct UserProfile{
 #[derive(Clone,CandidType,Serialize,Deserialize)]
 pub struct Profileinput{
     pub email_id: String,
-    pub profile_img: Vec<i8>,
+    pub profile_img: String,
     pub username: String,
     pub description:String,
     pub contact_number:String,
     pub twitter_id:String,
     pub telegram:String,
     pub website:String,
-
+    pub tag_defines: Vec<String>,
 } 
 
 #[derive(Clone,CandidType,Serialize,Deserialize)]
@@ -518,7 +518,7 @@ pub struct PostInfo{
     pub post_id:String,
     pub post_title:String,
     pub post_description:String,
-    pub post_img:Vec<i8>,
+    pub post_img:String,
     pub post_created_at:String,
     pub like_count:u32,
     pub like_id_list:Vec<Principal>,
@@ -530,7 +530,7 @@ pub struct PostInfo{
 pub struct PostInput{
     pub post_title:String,
     pub post_description:String,
-    pub post_img:Vec<i8>,
+    pub post_img:String,
     
 }
 

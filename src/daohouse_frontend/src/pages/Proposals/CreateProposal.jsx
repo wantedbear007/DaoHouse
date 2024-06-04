@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import proposals from "../../../assets/proposals.png"
 import createProposal from "../../../assets/createProposal.png"
 import ReactQuill from 'react-quill';
-import { quillFormats, quillModules } from '../../uitls/quilConfig';
+import { quillFormats, quillModules } from '../../utils/quilConfig';
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
 
 
