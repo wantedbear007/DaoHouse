@@ -16,7 +16,7 @@ import MediumCircleComponent from "../../Components/Ellipse-Animation/MediumCirc
 
 const EditProfile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const className = "Edit-Profile";
   const handleSaveChangesClick = () => {
     setIsModalOpen(true);
   };
@@ -28,7 +28,10 @@ const EditProfile = () => {
   return (
     <div className="bg-zinc-200 w-full pb-20 relative">
       <div
-        className="w-full lg:h-[25vh] h-[18vh] p-20 flex flex-col items-start justify-center relative hero-container"
+        className={
+          className +
+          "__topComponent w-full lg:h-[25vh] h-[20vh] md:p-20 pt-6 pl-2 flex flex-col items-start md:justify-center relative"
+        }
         style={{
           backgroundImage: `url("${MyProfileRectangle}")`,
           backgroundRepeat: "no-repeat",
@@ -63,7 +66,7 @@ const EditProfile = () => {
       </div>
       <div className={`relative ${isModalOpen ? "blur-sm" : ""}`}>
         <div className="md:mt-12 mt-8 md:mx-24 mx-6 bg-[#F4F2EC] md:p-6 p-4 rounded-lg">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-7">
             <img
               className="rounded-md lg:w-[105px] md:w-[85px] w-[69px] lg:mr-12 md:mr-4 mr-1 "
               src={MyProfileImage}
@@ -75,7 +78,7 @@ const EditProfile = () => {
             />
             <button
               onClick={() => navigate("/upload-icon")}
-              className="bg-white md:text-[16px] text-[12px] text-[#05212C] gap-1 shadow-xl md:h-[50px] h-[40px] md:px-6 px-3 rounded-[27px] flex items-center"
+              className="bg-white md:text-[16px] text-[12px] text-[#05212C] gap-1 shadow-xl md:h-[50px] h-[40px] px-7 rounded-[27px] flex items-center"
             >
               <img
                 src={UploadIcon}
@@ -88,7 +91,7 @@ const EditProfile = () => {
             </button>
             <button
               onClick={() => navigate("/remove-icon")}
-              className="text-[12px] md:text-[14px] lg:text-[16px] text-[#9F9F9F] shadow-xl md:h-[50px] h-[40px] md:px-6 px-4 rounded-[27px] border-solid border border-[#9F9F9F] flex items-center "
+              className="text-[12px] md:text-[14px] lg:text-[16px] text-[#9F9F9F] shadow-xl md:h-[50px] h-[40px] px-7 rounded-[27px] border-solid border border-[#9F9F9F] flex items-center hidden md:block "
             >
               Remove<span className="hidden sm:inline-block ml-1">Photo</span>
             </button>
