@@ -83,17 +83,17 @@ const Navbar = () => {
         console.log("image", image);
 
         await backendActor.delete_profile();
-        await backendActor.create_profile({
-          username: "Admin1",
-          email_id: "admin@example.com",
-          profile_img: image,
-          description: "This is a sample profile description.",
-          contact_number: "123-456-7890",
-          twitter_id: "@admin_twitter",
-          telegram: "@admin_telegram",
-          website: "https://admin.com",
-          tag_defines: ["ICP", "Blockchain", "NFT Artist"]
-        });
+        // await backendActor.create_profile({
+        //   username: "Admin1",
+        //   email_id: "admin@example.com",
+        //   profile_img: image,
+        //   description: "This is a sample profile description.",
+        //   contact_number: "123-456-7890",
+        //   twitter_id: "@admin_twitter",
+        //   telegram: "@admin_telegram",
+        //   website: "https://admin.com",
+        //   tag_defines: ["ICP", "Blockchain", "NFT Artist"]
+        // });
         // After profile creation, fetch user profile
         await fetchUserProfile();
       } catch (error) {

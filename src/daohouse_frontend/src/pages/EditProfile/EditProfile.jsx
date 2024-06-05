@@ -24,7 +24,7 @@ const EditProfile = () => {
   console.log({ backendActor })
 
   const [profileData, setProfileData] = useState({
-    username: "",
+    name: "",
     email_id: "",
     contact_number: "",
     twitter_id: "",
@@ -56,6 +56,8 @@ const EditProfile = () => {
       await backendActor.delete_profile();
       const ans = await backendActor.create_profile(profilePayload);
       console.log("Profile created successfully", ans);
+      const userProfileData = await backendActor.get_user_profile();
+      console.log("User profile data after creation:", userProfileData);
     } catch (error) {
       console.error("Error creating profile:", error);
     }
