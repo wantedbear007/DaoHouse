@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import proposals from "../../../assets/proposals.png"
-import createProposal from "../../../assets/createProposal.png"
+import createProposal from "../../../assets/proposal.gif"
 import ReactQuill from 'react-quill';
 import { quillFormats, quillModules } from '../../utils/quilConfig';
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
@@ -27,7 +27,7 @@ function CreateProposal() {
         setDropdownOpen(!dropdownOpen)
     };
 
-  const handleProposalDescriptionChange = (value) => {
+    const handleProposalDescriptionChange = (value) => {
         setProposalDescription(value);
     };
 
@@ -182,10 +182,10 @@ function CreateProposal() {
                         </button>
                     </div>
                 </div>
-
                 <div className="absolute right-10 top-10">
-                    <img src={createProposal} alt="Illustration" />
+                    <img src={createProposal} alt="Illustration" className="w-[350px] h-[350px]" />
                 </div>
+
             </div>
         </div>
     );

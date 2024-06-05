@@ -1,6 +1,10 @@
 import React from "react";
 
-const EditPersonalLinksAndContactInfo = ({ handleSaveChangesClick }) => {
+const EditPersonalLinksAndContactInfo = ({
+  profileData,
+  handleInputChange,
+  handleSaveChangesClick,
+}) => {
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
       <div className="mb-4 flex flex-col">
@@ -14,8 +18,11 @@ const EditPersonalLinksAndContactInfo = ({ handleSaveChangesClick }) => {
           </label>
           <div className="flex flex-grow">
             <input
-              id="contactNo"
+              id="contact_number"
+              name="contact_number"
               type="tel"
+              value={profileData.contactNo}
+              onChange={handleInputChange}
               placeholder="0123456789"
               className="py-2 px-3 w-full lg:w-[50%] md:w-[100%] lg:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm box-border text-[12px]"
             />
@@ -36,7 +43,10 @@ const EditPersonalLinksAndContactInfo = ({ handleSaveChangesClick }) => {
           <div className="flex flex-grow">
             <input
               id="email"
+              name="email_id"
               type="email"
+              value={profileData.email_id}
+              onChange={handleInputChange}
               placeholder="Emailid.id@example.com"
               className="py-2 px-3 w-full lg:w-[50%] md:w-[100%] lg:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm box-border text-[12px]"
             />
@@ -57,7 +67,10 @@ const EditPersonalLinksAndContactInfo = ({ handleSaveChangesClick }) => {
           <div className="flex flex-grow">
             <input
               id="twitter"
+              name="twitter_id"
               type="url"
+              value={profileData.twitter_id}
+              onChange={handleInputChange}
               placeholder="http://www.example.com"
               className="py-2 px-3 w-full lg:w-[50%] md:w-[100%] lg:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm box-border text-[12px]"
             />
@@ -78,7 +91,10 @@ const EditPersonalLinksAndContactInfo = ({ handleSaveChangesClick }) => {
           <div className="flex flex-grow">
             <input
               id="telegram"
+              name="telegram"
               type="url"
+              value={profileData.telegram}
+              onChange={handleInputChange}
               placeholder="http://www.example.com"
               className="py-2 px-3 w-full lg:w-[50%] md:w-[100%] lg:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm box-border text-[12px]"
             />
@@ -99,7 +115,10 @@ const EditPersonalLinksAndContactInfo = ({ handleSaveChangesClick }) => {
           <div className="flex flex-grow">
             <input
               id="website"
+              name="website"
               type="url"
+              value={profileData.website}
+              onChange={handleInputChange}
               placeholder="http://www.example.com"
               className="py-2 px-3 w-full lg:w-[50%] md:w-[100%] lg:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm box-border text-[12px]"
             />
