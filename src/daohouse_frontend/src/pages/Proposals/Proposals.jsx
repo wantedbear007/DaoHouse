@@ -34,16 +34,16 @@ const Proposals = () => {
       <div
         className={
           className +
-          "__label bg-[#c8ced3] py-8 lg:px-10 px-[4rem] px-4 flex flex-row gap-2 w-full justify-between items-center"
+          "__label bg-[#c8ced3] py-8 lg:px-10 px-4 flex flex-row gap-2 w-full justify-between items-center"
         }
       >
-        <p className="lg:text-[40px] md:text-[32px] text-[20px] text-black lg:px-8 flex flex-row items-center md:gap-4 gap-2">
+        <div className="lg:text-[40px] md:text-[32px] text-[20px] text-black lg:px-8 flex flex-row justify-center items-center md:gap-4 gap-2">
           {Recent ? "Most Recent" : "Joined"}
           <div className="flex flex-col items-start">
             <div className="lg:w-32 md:w-28 w-[30px] border-t-2 border-black"></div>
             <div className="md:w-16 w-[13px] md:mt-2 mt-1 border-t-2 border-black"></div>
           </div>
-        </p>
+        </div>
         <div className="flex-grow lg:flex justify-center px-6 mx-2 hidden">
           <SearchProposals
             width="100%"
