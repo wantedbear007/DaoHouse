@@ -21,10 +21,10 @@ const EditProfile = () => {
     backendActor,
   } = useAuth();
 
-  console.log({backendActor})
+  console.log({ backendActor })
 
   const [profileData, setProfileData] = useState({
-    name: "",
+    username: "",
     email_id: "",
     contact_number: "",
     twitter_id: "",
@@ -35,7 +35,7 @@ const EditProfile = () => {
     tag_defines: ["ICP", "Blockchain", "Engineer", "Digital Artist", "NFT Artist", "Decentralization", "Ethereum"],
   });
 
-  console.log({profileData})
+  console.log({ profileData })
 
   const handleSaveChangesClick = async () => {
     setIsModalOpen(true);
@@ -49,12 +49,13 @@ const EditProfile = () => {
       twitter_id: profileData.twitter_id,
       telegram: profileData.telegram,
       website: profileData.website,
-      tag_defines: profileData.tags,
+      tag_defines: profileData.tag_defines,
     };
 
     try {
-      const ans=await backendActor.create_profile(profilePayload);
-      console.log("Profile created successfully",ans);
+      await backendActor.delete_profile();
+      const ans = await backendActor.create_profile(profilePayload);
+      console.log("Profile created successfully", ans);
     } catch (error) {
       console.error("Error creating profile:", error);
     }
@@ -72,11 +73,8 @@ const EditProfile = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileData((prevData) => ({ ...prevData, profile_img: reader.result }));
-      };
-      reader.readAsDataURL(file);
+      const blobUrl = URL.createObjectURL(file);
+      setProfileData((prevData) => ({ ...prevData, profile_img: blobUrl }));
     }
   };
 
@@ -125,7 +123,7 @@ const EditProfile = () => {
       </div>
       <div className={`relative ${isModalOpen ? "blur-sm" : ""}`}>
         <div className="md:mt-12 mt-8 md:mx-24 mx-6 bg-[#F4F2EC] md:p-6 p-4 rounded-lg">
-        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <img
               className="rounded-md lg:w-[105px] md:w-[85px] w-[69px] lg:mr-12 md:mr-4 mr-1 "
               src={profileData.profile_img}
@@ -190,7 +188,7 @@ const EditProfile = () => {
             <p className="lg:text-[20px] md:text-[16px] text-[14px] font-semibold text-[#05212C] md:ml-2 md:mb-3 mt-6">
               Tags That Defines You
             </p>
-         <EditTags
+            <EditTags
               editTags={profileData.tag_defines}
               handleTagsChange={handleTagsChange}
             />
