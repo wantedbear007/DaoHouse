@@ -23,7 +23,7 @@ const MyProfile = ({ childComponent }) => {
   const navigate = useNavigate();
   const className = "MyProfile";
   const tabButtonsStyle =
-    "my-1 text-[12px] big_phone:text-[16px] flex flex-row items-center gap-2 hover:text-white";
+    "my-1 big_phone:text-base mobile:text-md text-sm flex flex-row items-center gap-2 hover:text-white";
 
   // Animation options for the big circle
   const defaultOptions = {
@@ -154,9 +154,7 @@ const MyProfile = ({ childComponent }) => {
               >
                 Overview{" "}
                 {activeTab == 0 ? (
-                  <span className="md:inline hidden">
-                    <FaArrowRightLong />
-                  </span>
+                  <FaArrowRightLong className="md:inline hidden" />
                 ) : (
                   ""
                 )}
@@ -169,7 +167,12 @@ const MyProfile = ({ childComponent }) => {
                   activeTab == 1 ? "text-white" : ""
                 }`}
               >
-                My Posts {activeTab == 1 ? <FaArrowRightLong /> : ""}
+                My Posts{" "}
+                {activeTab == 1 ? (
+                  <FaArrowRightLong className="md:inline hidden" />
+                ) : (
+                  ""
+                )}
               </p>
             </Link>
 
@@ -179,7 +182,12 @@ const MyProfile = ({ childComponent }) => {
                   activeTab == 2 ? "text-white" : ""
                 }`}
               >
-                Followers {activeTab == 2 ? <FaArrowRightLong /> : ""}
+                Followers{" "}
+                {activeTab == 2 ? (
+                  <FaArrowRightLong className="md:inline hidden" />
+                ) : (
+                  ""
+                )}
               </p>
             </Link>
 
@@ -189,7 +197,12 @@ const MyProfile = ({ childComponent }) => {
                   activeTab == 3 ? "text-white" : ""
                 }`}
               >
-                Following {activeTab == 3 ? <FaArrowRightLong /> : ""}
+                Following{" "}
+                {activeTab == 3 ? (
+                  <FaArrowRightLong className="md:inline hidden" />
+                ) : (
+                  ""
+                )}
               </p>
             </Link>
           </div>
@@ -202,7 +215,7 @@ const MyProfile = ({ childComponent }) => {
             <div className="flex items-start md:-ml-[10%] tablet:ml-[-90px]  relative">
               <div>
                 <img
-                  className="rounded-tablet tablet:w-full md:w-[93px] w-[59px]  min-w-[59px] mt-[-20px]  rounded-[5px] z-50"
+                  className="rounded-tablet tablet:w-full md:w-[90px] w-[70px]  min-w-[60px] mt-[-20px] rounded-md z-50"
                   src={MyProfileImage}
                   alt="profile-pic"
                   style={{
@@ -243,14 +256,14 @@ const MyProfile = ({ childComponent }) => {
             <div className="flex justify-end gap-4 tablet:mt-4 tablet:mr-4">
               <button
                 onClick={() => navigate("/edit-profile")}
-                className="bg-white text-[16px] text-[#05212C] gap-1  shadow-xl md:px-3 rounded-[27px] tablet:w-[181px] tablet:h-[40px] md:w-[151px] md:h-[35px] w-[2.5rem] h-[2.5rem] flex items-center justify-center space-x-4 rounded-2xl"
+                className="bg-white text-[16px] text-[#05212C] gap-1 shadow-xl md:px-3 rounded-[27px] tablet:w-[181px] tablet:h-[40px] md:w-[151px] md:h-[35px] w-[2.5rem] h-[2.5rem] flex items-center justify-center space-x-4 rounded-2xl"
               >
                 <img
                   src={EditPen}
                   alt="edit"
                   className="tablet:mr-2 h-4 w-4 edit-pen"
                 />
-                <span className=" sm:inline hidden">Edit Profile</span>
+                <span className="md:inline hidden">Edit Profile</span>
               </button>
             </div>
           </div>

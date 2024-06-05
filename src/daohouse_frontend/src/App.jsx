@@ -24,6 +24,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-quill/dist/quill.snow.css";
 import MyProposals from "./pages/Proposals/myproposals/MyProposals";
 import SingleProposal from "./Components/Proposals/SingleProposal/SingleProposal";
+import Following from "./Components/MyProfile/Following/Following";
 
 const App = () => {
   return (
@@ -58,7 +59,7 @@ const App = () => {
           />
           <Route
             path="/my-profile/following"
-            element={<MyProfile childComponent={<Followers />} />}
+            element={<MyProfile childComponent={<Following />} />}
           />
         </Routes>
         <Footer />

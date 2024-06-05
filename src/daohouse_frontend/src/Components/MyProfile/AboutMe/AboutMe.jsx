@@ -16,7 +16,7 @@ const AboutMe = () => {
           <p className="lg:text-[20px] md:text-[16px] text-[14px] font-semibold text-[#05212C] md:ml-2 md:mb-3">
             Description
           </p>
-          <div className="bg-[#FFFFFF] lg:text-[16px] md:text-[14px] text-[12px] font-normal text-[#646464] p-3 my-2 rounded-lg">
+          <div className="bg-white lg:text-[16px] md:text-[14px] text-[12px] font-normal text-[#646464] p-3 my-2 rounded-lg">
             I'm a firm believer in the power of kindness and the beauty of
             diversity, constantly seeking out new perspectives and experiences
             to broaden my horizons. From hiking through rugged mountain trails

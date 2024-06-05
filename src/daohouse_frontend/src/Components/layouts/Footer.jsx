@@ -11,7 +11,11 @@ const Footer = () => {
     <React.Fragment>
       <footer className="bg-[#05212C] small_phone:py-12 py-8 text-center">
         <div className="w-full small_phone:mb-8 mb-4">
-          <img src={logo} alt="DAO HOuse" className="small_phone:w-32 w-20 mx-auto small_phone:mb-10 mb-6" />
+          <img
+            src={logo}
+            alt="DAO HOuse"
+            className="small_phone:w-32 w-20 mx-auto small_phone:mb-10 mb-6"
+          />
           <div className="flex justify-center mb-4 gap-x-3">
             <Link
               to="/"
@@ -26,7 +30,7 @@ const Footer = () => {
               Social Feed
             </Link>
             <Link
-              to="/daos"
+              to="/dao"
               className="text-[#728288] small_phone:text-base text-sm font-inter font-norma  hover:underline"
             >
               DAOs
@@ -39,10 +43,26 @@ const Footer = () => {
             </Link>
           </div>
           <div className="flex justify-center mb-4 gap-4">
-            <img src={twitter} alt="Twitter" className="small_phone:w-8 w-6 small_phone:h-8 h-6 object-contain" />
-            <img src={telegram} alt="Telegram" className="small_phone:w-8 w-6 small_phone:h-8 h-6 object-contain" />
-            <img src={linkedin} alt="LinkedIn" className="small_phone:w-8 w-6 small_phone:h-8 h-6 object-contain" />
-            <img src={discord} alt="Discord" className="small_phone:w-8 w-6 small_phone:h-8 h-6 object-contain" />
+            <img
+              src={twitter}
+              alt="Twitter"
+              className="small_phone:w-8 w-6 small_phone:h-8 h-6 object-contain"
+            />
+            <img
+              src={telegram}
+              alt="Telegram"
+              className="small_phone:w-8 w-6 small_phone:h-8 h-6 object-contain"
+            />
+            <img
+              src={linkedin}
+              alt="LinkedIn"
+              className="small_phone:w-8 w-6 small_phone:h-8 h-6 object-contain"
+            />
+            <img
+              src={discord}
+              alt="Discord"
+              className="small_phone:w-8 w-6 small_phone:h-8 h-6 object-contain"
+            />
           </div>
         </div>
       </footer>

@@ -7,7 +7,7 @@ const Tags = ({ tags }) => {
     <div
       className={
         className +
-        " bg-[#FFFFFF]lg:text-[16px] md:text-[14px] text-[12px] font-normal text-[#646464] md:p-2 p-3 my-2 rounded-lg"
+        " bg-[#FFFFFF] lg:text-[16px] md:text-[14px] text-[12px] font-normal text-[#646464] md:p-2 p-3 my-2 rounded-lg"
       }
     >
       <div className="flex flex-wrap">
