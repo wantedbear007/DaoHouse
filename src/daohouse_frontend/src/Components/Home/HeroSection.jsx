@@ -28,12 +28,12 @@ const HeroSection = () => {
       <img
         src={herosectiongradient}
         alt="hero section gradient"
-        className="absolute pointer-events-none select-none bottom-0 left-0 mb-4 ml-4 animate-gradient"
+        className="absolute pointer-events-none select-none bottom-0 left-0 mb-24 ml-4 animate-gradient"
       />
       <img
         src={herosectionleftbottomimg}
         alt="Bottom Left Image"
-        className="absolute pointer-events-none select-none bottom-0 left-0 mb-4 ml-4"
+        className="absolute pointer-events-none select-none bottom-0 left-0"
       />
 
       {/* Right Side */}
