@@ -6,7 +6,7 @@ const Followers = () => {
   const className = "Followers";
 
   return (
-    <div className={className + "w-full"}>
+    <div className={className + " " + "w-full"}>
       <div className="tablet:ml-10 mx-5 tablet:mt-12 mt-5">
         <h3 className="text-[#05212C] tablet:text-[24px] text-[18px] tablet:font-bold font-semibold mb-4">
           Followers
@@ -30,7 +30,9 @@ const Followers = () => {
 
                   <section className="flex flex-col items-start">
                     <p className="tablet:text-lg text-sm">{userName}</p>
-                    <p className="text-slate-500 tablet:text-sm text-xs">{userName}</p>
+                    <p className="text-slate-500 tablet:text-sm text-xs">
+                      {userName}
+                    </p>
                   </section>
                 </div>
 
@@ -40,7 +42,7 @@ const Followers = () => {
               </div>
             ))}
           </div>
-          <div className="tablet:w-2/5 w-full max-h-[300px] p-4 bg-[#F4F2EC] rounded-lg flex flex-col gap-5 overflow-y-auto">
+          <div className="tablet:w-2/5 w-full max-h-[300px] mobile:p-4 tablet:bg-[#F4F2EC] rounded-lg flex flex-col gap-5 overflow-y-auto">
             <h1 className="tablet:text-2xl text-lg font-bold border-b border-black tablet:py-2 py-0">
               More People
             </h1>
@@ -48,7 +50,7 @@ const Followers = () => {
             {morePeopleList.map(({ userName, image, gmail, key }) => (
               <div
                 key={key}
-                className="w-full flex flex-row items-center justify-between"
+                className="w-full tablet:flex hidden flex-row items-center justify-between"
               >
                 <div className="flex flex-row items-center">
                   <div className="flex flex-row tablet:gap-4 gap-2 items-center">
@@ -60,7 +62,9 @@ const Followers = () => {
 
                     <section className="flex flex-col items-start">
                       <p className="tablet:text-1xl text-sm">{userName}</p>
-                      <p className="text-slate-500 tablet:text-xs text-xs">{gmail}</p>
+                      <p className="text-slate-500 tablet:text-xs text-xs">
+                        {gmail}
+                      </p>
                     </section>
                   </div>
                 </div>
@@ -68,6 +72,25 @@ const Followers = () => {
                 <RxArrowTopRight className="tablet:text-2xl text-lg" />
               </div>
             ))}
+
+            <div className="flex flex-row overflow-x-auto gap-3">
+              {morePeopleList.map(({ userName, image, gmail, key }) => (
+                <div
+                  key={key}
+                  className="flex gap-2 my-2 flex-col items-center bg-white p-4 rounded-lg"
+                >
+                  <img
+                    src={image}
+                    alt="Follower"
+                    className="tablet:w-10 w-8 object-contain rounded-[50%]"
+                  />
+                  <p className="tablet:text-1xl text-sm">{userName}</p>
+                  <p className="text-slate-500 tablet:text-xs text-xs">
+                    {gmail}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
