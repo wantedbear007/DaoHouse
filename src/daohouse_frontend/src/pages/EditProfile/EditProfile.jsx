@@ -38,39 +38,9 @@ const EditProfile = () => {
     tag_defines: userProfile?.tag_defines || [],
   });
 
-  useEffect(() => {
-
-    if(backendActor===null){
-      return
-    }
-    const fetchUserProfile = async () => {
-      try {
-        const userProfileResponse = await backendActor.get_user_profile();
-        const userProfile = userProfileResponse.Ok;
-        console.log(userProfile.username,"Sd")
-        if (userProfile) {
-          setProfileData({
-            username: userProfile.username,
-            email_id: userProfile.email_id,
-            contact_number: userProfile.contact_number,
-            twitter_id: userProfile.twitter_id,
-            telegram: userProfile.telegram,
-            website: userProfile.website,
-            description: userProfile.description,
-            profile_img: userProfile.profile_img || MyProfileImage,
-            tag_defines: userProfile.tag_defines || ["ICP", "Blockchain", "Engineer", "Digital Artist", "NFT Artist", "Decentralization", "Ethereum"],
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching user profile:", error);
-      }
-    };
-
-    fetchUserProfile();
-  }, [backendActor]);
 
 
-  console.log({ profileData })
+
 
   const handleSaveChangesClick = async () => {
     setIsModalOpen(true);
