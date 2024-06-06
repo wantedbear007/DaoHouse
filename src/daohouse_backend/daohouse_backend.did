@@ -32,7 +32,7 @@ type Profileinput = record {
   website : text;
   contact_number : text;
   email_id : text;
-  profile_img : text;
+  profile_img : blob;
   telegram : text;
   tag_defines : vec text;
 };
@@ -54,7 +54,7 @@ type UserProfile = record {
   contact_number : text;
   email_id : text;
   followers_count : nat32;
-  profile_img : text;
+  profile_img : blob;
   telegram : text;
   tag_defines : vec text;
   followings_list : vec principal;

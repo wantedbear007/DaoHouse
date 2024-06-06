@@ -467,7 +467,7 @@ pub struct CanisterInfoResponse {
 pub struct UserProfile{
     pub user_id: Principal,
     pub email_id: String,
-    pub profile_img: String,
+    pub profile_img: Vec<u8>,
     pub username: String,
     pub dao_ids: Vec<String>,
     pub post_count:u32,
@@ -488,7 +488,7 @@ pub struct UserProfile{
 #[derive(Clone,CandidType,Serialize,Deserialize)]
 pub struct Profileinput{
     pub email_id: String,
-    pub profile_img: String,
+    pub profile_img: Vec<u8>,
     pub username: String,
     pub description:String,
     pub contact_number:String,
