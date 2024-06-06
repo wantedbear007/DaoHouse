@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProfileTitleDivider from "../../Components/ProfileTitleDivider/ProfileTitleDivider";
 import MyProfileRectangle from "../../../assets/MyProfileRectangle.png";
 import MyProfileImage from "../../../assets/MyProfile-img.png";
@@ -14,22 +14,14 @@ import BigCircleComponent from "../../Components/Ellipse-Animation/BigCircle/Big
 import SmallCircleComponent from "../../Components/Ellipse-Animation/SmallCircle/SmallCircleComponent";
 import MediumCircleComponent from "../../Components/Ellipse-Animation/MediumCircle/MediumCircleComponent";
 import { useAuth } from "../../Components/utils/useAuthClient";
-import { AssetManager } from "@dfinity/assets";
-import { HttpAgent } from "@dfinity/agent";
 
 const EditProfile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const {principal,frontendCanisterId,identity,
+  const {
     backendActor,
   } = useAuth();
 
-  const agent = new HttpAgent({ identity });
-  const assetManager = new AssetManager({
-    canisterId: frontendCanisterId,
-    agent:backendActor,
-  });
-
-  console.log({  })
+  console.log({ backendActor })
 
   const [profileData, setProfileData] = useState({
     username: "",
@@ -42,6 +34,38 @@ const EditProfile = () => {
     profile_img: MyProfileImage,
     tag_defines: ["ICP", "Blockchain", "Engineer", "Digital Artist", "NFT Artist", "Decentralization", "Ethereum"],
   });
+
+  useEffect(() => {
+
+    if(backendActor===null){
+      return
+    }
+    const fetchUserProfile = async () => {
+      try {
+        const userProfileResponse = await backendActor.get_user_profile();
+        const userProfile = userProfileResponse.Ok;
+        console.log(userProfile.username,"Sd")
+        if (userProfile) {
+          setProfileData({
+            username: userProfile.username,
+            email_id: userProfile.email_id,
+            contact_number: userProfile.contact_number,
+            twitter_id: userProfile.twitter_id,
+            telegram: userProfile.telegram,
+            website: userProfile.website,
+            description: userProfile.description,
+            profile_img: userProfile.profile_img || MyProfileImage,
+            tag_defines: userProfile.tag_defines || ["ICP", "Blockchain", "Engineer", "Digital Artist", "NFT Artist", "Decentralization", "Ethereum"],
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+
+    fetchUserProfile();
+  }, [backendActor]);
+
 
   console.log({ profileData })
 
@@ -78,16 +102,11 @@ const EditProfile = () => {
     setProfileData((prevData) => ({ ...prevData, [name]: value }));
   };
 
- const handleImageChange = async (e) => {
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      try {
-        const key = await assetManager.store(file);
-        const imageUrl = `https://your-canister-id.raw.ic0.app${key}`;
-        setProfileData((prevData) => ({ ...prevData, profile_img: imageUrl }));
-      } catch (error) {
-        console.error("Error uploading image:", error);
-      }
+      const blobUrl = URL.createObjectURL(file);
+      setProfileData((prevData) => ({ ...prevData, profile_img: blobUrl }));
     }
   };
 
@@ -180,7 +199,7 @@ const EditProfile = () => {
               <input
                 type="text"
                 name="name"
-                value={profileData.name}
+                value={profileData.username}
                 onChange={handleInputChange}
                 placeholder="Username.user"
                 className="border-solid border border-[#DFE9EE] py-2 pl-4 md:w-[40%] w-[82%] rounded-[6px]"
