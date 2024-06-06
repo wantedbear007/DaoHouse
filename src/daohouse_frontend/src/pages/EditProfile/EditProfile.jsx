@@ -14,14 +14,22 @@ import BigCircleComponent from "../../Components/Ellipse-Animation/BigCircle/Big
 import SmallCircleComponent from "../../Components/Ellipse-Animation/SmallCircle/SmallCircleComponent";
 import MediumCircleComponent from "../../Components/Ellipse-Animation/MediumCircle/MediumCircleComponent";
 import { useAuth } from "../../Components/utils/useAuthClient";
+import { AssetManager } from "@dfinity/assets";
+import { HttpAgent } from "@dfinity/agent";
 
 const EditProfile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const {
+  const {principal,frontendCanisterId,identity,
     backendActor,
   } = useAuth();
 
-  console.log({ backendActor })
+  const agent = new HttpAgent({ identity });
+  const assetManager = new AssetManager({
+    canisterId: frontendCanisterId,
+    agent:backendActor,
+  });
+
+  console.log({  })
 
   const [profileData, setProfileData] = useState({
     username: "",
@@ -70,11 +78,16 @@ const EditProfile = () => {
     setProfileData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleImageChange = (e) => {
+ const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const blobUrl = URL.createObjectURL(file);
-      setProfileData((prevData) => ({ ...prevData, profile_img: blobUrl }));
+      try {
+        const key = await assetManager.store(file);
+        const imageUrl = `https://your-canister-id.raw.ic0.app${key}`;
+        setProfileData((prevData) => ({ ...prevData, profile_img: imageUrl }));
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
     }
   };
 
