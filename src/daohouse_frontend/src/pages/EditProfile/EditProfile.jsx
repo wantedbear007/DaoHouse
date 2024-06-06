@@ -14,25 +14,28 @@ import BigCircleComponent from "../../Components/Ellipse-Animation/BigCircle/Big
 import SmallCircleComponent from "../../Components/Ellipse-Animation/SmallCircle/SmallCircleComponent";
 import MediumCircleComponent from "../../Components/Ellipse-Animation/MediumCircle/MediumCircleComponent";
 import { useAuth } from "../../Components/utils/useAuthClient";
+import { useUserProfile } from "../../context/UserProfileContext";
 
 const EditProfile = () => {
+
+  const userProfile = useUserProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     backendActor,
   } = useAuth();
 
-  console.log({ backendActor })
+  console.log({ userProfile })
 
   const [profileData, setProfileData] = useState({
-    username: "",
-    email_id: "",
-    contact_number: "",
-    twitter_id: "",
-    telegram: "",
-    website: "",
-    description: "",
-    profile_img: MyProfileImage,
-    tag_defines: ["ICP", "Blockchain", "Engineer", "Digital Artist", "NFT Artist", "Decentralization", "Ethereum"],
+    username: userProfile?.username || "",
+    email_id: userProfile?.email_id || "",
+    contact_number: userProfile?.contact_number || "",
+    twitter_id: userProfile?.twitter_id || "",
+    telegram: userProfile?.telegram || "",
+    website: userProfile?.website || "",
+    description: userProfile?.description || "",
+    profile_img: userProfile?.profile_img || MyProfileImage,
+    tag_defines: userProfile?.tag_defines || [],
   });
 
   useEffect(() => {
