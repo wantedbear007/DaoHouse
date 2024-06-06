@@ -7,7 +7,7 @@ const ProfileTitleDivider = ({ title }) => {
     <div
       className={
         className +
-        " flex justify-between items-center md:gap-4 gap-0 my-profile"
+        " flex justify-between items-center md:gap-4 gap-0 my-profile p-3"
       }
     >
       <h1 className="lg:text-[40px] md:text-[32px] text-[24px] p-2 text-white">
