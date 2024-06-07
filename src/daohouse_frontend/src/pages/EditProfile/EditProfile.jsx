@@ -17,14 +17,11 @@ import { useAuth } from "../../Components/utils/useAuthClient";
 import { useUserProfile } from "../../context/UserProfileContext";
 
 const EditProfile = () => {
-
   const userProfile = useUserProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const {
-    backendActor,
-  } = useAuth();
+  const { backendActor } = useAuth();
 
-  console.log({ userProfile })
+  console.log({ userProfile });
 
   const [profileData, setProfileData] = useState({
     username: userProfile?.username || "",
@@ -37,10 +34,6 @@ const EditProfile = () => {
     profile_img: userProfile?.profile_img || MyProfileImage,
     tag_defines: userProfile?.tag_defines || [],
   });
-
-
-
-
 
   const handleSaveChangesClick = async () => {
     setIsModalOpen(true);
@@ -84,7 +77,10 @@ const EditProfile = () => {
   };
 
   const handleRemoveImage = () => {
-    setProfileData((prevData) => ({ ...prevData, profile_img: MyProfileImage }));
+    setProfileData((prevData) => ({
+      ...prevData,
+      profile_img: MyProfileImage,
+    }));
   };
 
   const handleTagsChange = (tags) => {
@@ -93,7 +89,7 @@ const EditProfile = () => {
   return (
     <div className="bg-zinc-200 w-full pb-20 relative">
       <div
-        className="w-full lg:h-[25vh] h-[18vh] p-20 flex flex-col items-start justify-center relative hero-container"
+        className="w-full lg:h-[25vh] h-[18vh] md:p-20 pt-6 pl-2 flex flex-col items-start md:justify-center relative hero-container"
         style={{
           backgroundImage: `url("${MyProfileRectangle}")`,
           backgroundRepeat: "no-repeat",
@@ -161,7 +157,6 @@ const EditProfile = () => {
               Remove<span className="hidden sm:inline-block ml-1">Photo</span>
             </button>
           </div>
-
 
           <div className="lg:ml-40 md:ml-24 lg:mr-5 md:mt-12 mt-5">
             <h3 className="text-[#05212C] text-[16px] md:text-[18px] lg:text-[24px] md:font-semibold font-medium ml-3">
