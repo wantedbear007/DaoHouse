@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProfileTitleDivider from "../../Components/ProfileTitleDivider/ProfileTitleDivider";
 import MyProfileRectangle from "../../../assets/MyProfileRectangle.png";
 import MyProfileImage from "../../../assets/MyProfile-img.png";
@@ -14,28 +14,33 @@ import BigCircleComponent from "../../Components/Ellipse-Animation/BigCircle/Big
 import SmallCircleComponent from "../../Components/Ellipse-Animation/SmallCircle/SmallCircleComponent";
 import MediumCircleComponent from "../../Components/Ellipse-Animation/MediumCircle/MediumCircleComponent";
 import { useAuth } from "../../Components/utils/useAuthClient";
+import { useUserProfile } from "../../context/UserProfileContext";
 
 const EditProfile = () => {
+
+  const userProfile = useUserProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     backendActor,
   } = useAuth();
 
-  console.log({ backendActor })
+  console.log({ userProfile })
 
   const [profileData, setProfileData] = useState({
-    name: "",
-    email_id: "",
-    contact_number: "",
-    twitter_id: "",
-    telegram: "",
-    website: "",
-    description: "",
-    profile_img: MyProfileImage,
-    tag_defines: ["ICP", "Blockchain", "Engineer", "Digital Artist", "NFT Artist", "Decentralization", "Ethereum"],
+    username: userProfile?.username || "",
+    email_id: userProfile?.email_id || "",
+    contact_number: userProfile?.contact_number || "",
+    twitter_id: userProfile?.twitter_id || "",
+    telegram: userProfile?.telegram || "",
+    website: userProfile?.website || "",
+    description: userProfile?.description || "",
+    profile_img: userProfile?.profile_img || MyProfileImage,
+    tag_defines: userProfile?.tag_defines || [],
   });
 
-  console.log({ profileData })
+
+
+
 
   const handleSaveChangesClick = async () => {
     setIsModalOpen(true);
@@ -56,8 +61,6 @@ const EditProfile = () => {
       await backendActor.delete_profile();
       const ans = await backendActor.create_profile(profilePayload);
       console.log("Profile created successfully", ans);
-      const userProfileData = await backendActor.get_user_profile();
-      console.log("User profile data after creation:", userProfileData);
     } catch (error) {
       console.error("Error creating profile:", error);
     }
@@ -169,7 +172,7 @@ const EditProfile = () => {
               <input
                 type="text"
                 name="name"
-                value={profileData.name}
+                value={profileData.username}
                 onChange={handleInputChange}
                 placeholder="Username.user"
                 className="border-solid border border-[#DFE9EE] py-2 pl-4 md:w-[40%] w-[82%] rounded-[6px]"
