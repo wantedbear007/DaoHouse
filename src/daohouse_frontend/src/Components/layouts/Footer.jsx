@@ -70,7 +70,7 @@ const Footer = () => {
       </footer>
       <div className="bg-[#0E3746] py-4 flex justify-center items-center">
         <p className="text-white font-inter font-normal  text-[10px] md:text-base ">
-          &copy; DAO House. All Rights Reserved
+          &copy; {new Date().getFullYear()}, DAO House. All rights reserved.
         </p>
       </div>
     </React.Fragment>
