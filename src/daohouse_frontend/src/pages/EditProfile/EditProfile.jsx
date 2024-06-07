@@ -8,13 +8,15 @@ import MediumCircle from "../../../assets/MediumCircle.png";
 import SmallestCircle from "../../../assets/SmallestCircle.png";
 import EditTags from "../../Components/EditProfile/EditTags";
 import EditPersonalLinksAndContactInfo from "./EditPersonalLinksAndContactInfo";
-
+import BigCircleAnimation from "../../Components/Ellipse-Animation/BigCircle/BigCircleAnimation.json";
+import SmallCircleAnimation from "../../Components/Ellipse-Animation/SmallCircle/SmallCircleAnimation.json";
 import SuccessModal from "../../Components/EditProfile/SuccessModal";
 import BigCircleComponent from "../../Components/Ellipse-Animation/BigCircle/BigCircleComponent";
 import SmallCircleComponent from "../../Components/Ellipse-Animation/SmallCircle/SmallCircleComponent";
 import MediumCircleComponent from "../../Components/Ellipse-Animation/MediumCircle/MediumCircleComponent";
 import { useAuth } from "../../Components/utils/useAuthClient";
 import { useUserProfile } from "../../context/UserProfileContext";
+import Lottie from "react-lottie";
 
 const EditProfile = () => {
   const userProfile = useUserProfile();
@@ -83,6 +85,38 @@ const EditProfile = () => {
     }));
   };
 
+  // Animation options for the big circle
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: BigCircleAnimation,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+      id: "lottie-bigCircle",
+    },
+  };
+
+  // Animation options for the small circle
+  const defaultOptions2 = {
+    loop: true,
+    autoplay: true,
+    animationData: SmallCircleAnimation,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+      id: "lottie-smallCircle",
+    },
+  };
+  // Animation options for the medium circle
+  const defaultOptions3 = {
+    loop: true,
+    autoplay: true,
+    animationData: SmallCircleAnimation,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+      id: "lottie-mediumCircle",
+    },
+  };
+
   const handleTagsChange = (tags) => {
     setProfileData((prevData) => ({ ...prevData, tag_defines: tags }));
   };
@@ -103,6 +137,16 @@ const EditProfile = () => {
             <div className="relative tablet:w-[96px] tablet:h-[96px] md:w-[88.19px] md:h-[88.19px] w-[65px] h-[65px]">
               <BigCircleComponent imgSrc={BigCircle} />
             </div>
+
+            {/* Big circle animation */}
+            <div className="absolute inset-0 flex items-center justify-center z-20">
+              <div className="tablet:w-[112px] tablet:h-[112px] md:w-[104px] md:h-[104px] w-[75px] h-[75px]">
+                <Lottie
+                  options={defaultOptions}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </div>
+            </div>
           </div>
 
           <div className="absolute right-[25%] -translate-y-full top-[30%]">
@@ -111,12 +155,32 @@ const EditProfile = () => {
 
               <SmallCircleComponent imgSrc={SmallestCircle} />
             </div>
+
+            {/* Small circle animation */}
+            <div className="absolute inset-0 flex items-center justify-center z-20">
+              <div className="tablet:w-[47px] tablet:h-[47px] md:w-[37.3px] md:h-[37.3px] w-[23.19px] h-[23.19px]">
+                <Lottie
+                  options={defaultOptions2}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </div>
+            </div>
           </div>
 
           {/* Medium circle image */}
           <div className="absolute right-[45%] -translate-y-full top-[95%]">
             <div className="relative tablet:w-[52px] tablet:h-[52px] md:w-[43.25px] md:h-[43.25px] w-[29.28px] h-[29.28px] ">
               <MediumCircleComponent imgSrc={MediumCircle} />
+            </div>
+
+            {/* Medium circle animation */}
+            <div className="absolute inset-0 flex items-center justify-center z-20">
+              <div className="tablet:w-[60px] tablet:h-[60px] md:w-[47.25px] md:h-[47.25px] w-[33.28px] h-[33.28px]">
+                <Lottie
+                  options={defaultOptions3}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </div>
             </div>
           </div>
         </div>
