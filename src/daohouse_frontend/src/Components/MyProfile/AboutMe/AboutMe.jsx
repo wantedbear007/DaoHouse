@@ -1,9 +1,11 @@
 import React from "react";
 import Tags from "../../../Components/MyProfile/Tags";
 import PersonalLinksAndContactInfo from "../PersonalLinksAndContactInfo";
+import { useUserProfile } from "../../../context/UserProfileContext";
 
 const AboutMe = () => {
   const className = "AboutMe";
+  const userProfile = useUserProfile();
 
   return (
     <div className={className + "w-full"}>
@@ -17,54 +19,48 @@ const AboutMe = () => {
             Description
           </p>
           <div className="bg-white lg:text-[16px] md:text-[14px] text-[12px] font-normal text-[#646464] p-3 my-2 rounded-lg">
-            I'm a firm believer in the power of kindness and the beauty of
-            diversity, constantly seeking out new perspectives and experiences
-            to broaden my horizons. From hiking through rugged mountain trails
-            to savoring exotic cuisines from around the globe, I thrive on the
-            thrill of adventure and the joy of discovery.
+            {userProfile?.description || "No Data"}
           </div>
           <p className="lg:text-[20px] md:text-[16px] text-[14px] font-semibold text-[#05212C] md:ml-2 md:mb-3 mt-6">
             Tags That Defines You
           </p>
-          <Tags
-            tags={[
-              "ICP",
-              "Blockchain",
-              "Engineer",
-              "Digital Artist",
-              "NFT Artist",
-              "Decentralization",
-              "Ethereum",
-            ]}
-          />
+          {userProfile?.description ? <Tags
+            tags={userProfile?.tag_defines || []}
+          /> : <div className="bg-white lg:text-[16px] md:text-[14px] text-[12px] font-normal text-[#646464] p-3 my-2 rounded-lg">
+            {"No Data"}
+          </div>}
+
+
           <p className="lg:text-[20px] md:text-[16px] text-[14px] font-semibold text-[#05212C] ml-2 mb-3 mt-6">
             Personal Links & Contact Info
           </p>
-          <PersonalLinksAndContactInfo
+          {userProfile?.description ? (<PersonalLinksAndContactInfo
             links={[
-              { icon: "phone-icon", name: "Phone", value: "0123456789" },
+              { icon: "phone-icon", name: "Phone", value: userProfile?.contact_number },
               {
                 icon: "email-icon",
                 name: "Email",
-                value: "Emailid.id@email.com",
+                value: userProfile?.email_id,
               },
               {
                 icon: "X-icon",
                 name: "X",
-                value: "http://www.statholdings.com",
+                value: userProfile?.twitter_id,
               },
               {
                 icon: "telegram-icon",
                 name: "Telegram",
-                value: "http://www.groovestreet.com",
+                value: userProfile?.telegram,
               },
               {
                 icon: "web-icon",
                 name: "Web",
-                value: "http://dummywebsite2.net",
+                value: userProfile?.website,
               },
             ]}
-          />
+          />) : <div className="bg-white lg:text-[16px] md:text-[14px] text-[12px] font-normal text-[#646464] p-3 my-2 rounded-lg">
+            {"No Data"}
+          </div>}
         </div>
       </div>
     </div>

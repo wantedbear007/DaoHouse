@@ -62,6 +62,10 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+
+    if(backendActor===null){
+      return 
+    }
     const fetchUserProfile = async () => {
       try {
         const userProfileData = await backendActor.get_user_profile();
