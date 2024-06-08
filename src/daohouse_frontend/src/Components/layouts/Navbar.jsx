@@ -78,17 +78,31 @@ const Navbar = () => {
 
     const createAndFetchUserProfile = async () => {
       try {
-        const response = await fetch(aboutImg);
-        const imageBlob = await response.blob();
-        const image = URL.createObjectURL(imageBlob);
-        // const img_URL = `blob:${image}`;
-        console.log("image", image);
+        //  // Fetch the image and convert to Uint8Array
+        //  const response = await fetch(aboutImg);
+        //  const arrayBuffer = await response.arrayBuffer();
+        //  const uint8Array = new Uint8Array(arrayBuffer);
 
-        await backendActor.delete_profile();
+        const response = await fetch(aboutImg);
+        const blob = await response.blob();
+        console.log("blob", blob);
+        // Convert to Uint8Array
+        const arrayBuffer = await blob.arrayBuffer();
+        const uint8Array = new Uint8Array(arrayBuffer);
+        console.log("uint8Array", uint8Array);
+
+
+        // const imageBlob = await response.blob();
+        // console.log("imageBlob", imageBlob);
+        // const image = URL.createObjectURL(imageBlob);
+        // // const img_URL = `blob:${image}`;
+        // console.log("image", image);
+
+        // await backendActor.delete_profile();
         // await backendActor.create_profile({
         //   username: "Admin1",
         //   email_id: "admin@example.com",
-        //   profile_img: image,
+        //   profile_img: Array.from(uint8Array),
         //   description: "This is a sample profile description.",
         //   contact_number: "123-456-7890",
         //   twitter_id: "@admin_twitter",

@@ -17,16 +17,48 @@ import MediumCircleComponent from "../../Components/Ellipse-Animation/MediumCirc
 import { useAuth } from "../../Components/utils/useAuthClient";
 import { useUserProfile } from "../../context/UserProfileContext";
 import Lottie from "react-lottie";
+import { AssetManager } from "@dfinity/assets";
+import { HttpAgent } from "@dfinity/agent";
+
 
 const EditProfile = () => {
   const userProfile = useUserProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { backendActor } = useAuth();
+  const { backendActor, frontendCanisterId, identity } = useAuth();
 
+  // Create Agent
+  const isLocal = !window.location.host.endsWith('ic0.app');
+  const agent = new HttpAgent({
+    host: isLocal ? `http://127.0.0.1:${window.location.port}` : 'https://ic0.app', identity,
+  });
+  if (isLocal) {
+    agent.fetchRootKey();
+  }
+
+  // Initiate AssetManager
+  const assetManager = new AssetManager({
+    canisterId: frontendCanisterId, 
+    agent: agent,
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const files = await assetManager.list();
+        console.log({ files });
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+    fetchData();
+  }, [])
+
+  console.log({ agent });
+  console.log({ assetManager });
   console.log({ userProfile });
 
   const [profileData, setProfileData] = useState({
-    username: userProfile?.username || "",
+    name: userProfile?.name || "",
     email_id: userProfile?.email_id || "",
     contact_number: userProfile?.contact_number || "",
     twitter_id: userProfile?.twitter_id || "",
