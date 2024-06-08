@@ -6,7 +6,7 @@ import LoginModal from "../Auth/LoginModal";
 import { FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
 import avatarprofile from "../../../assets/avatarprofile.png";
 import logo from "../../../assets/ColorLogo.png";
-import aboutImg from '../../../assets/avatar.png';
+import aboutImg from "../../../assets/avatar.png";
 
 const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,8 +30,6 @@ const Navbar = () => {
     { label: "DAOs", route: "/dao" },
     { label: "Proposals", route: "/proposals" },
   ];
-
-
 
   // Function to handle login
   const handleLogin = async () => {
@@ -123,13 +121,24 @@ const Navbar = () => {
   }, [backendActor, principal]);
 
   const dropdownItems = [
-    { label: "Profile", route: "/my-profile", icon: <FaUser className="mr-2" /> },
-    { label: "My Proposals", route: "/my-proposals", icon: <FaUser className="mr-2" /> },
+    {
+      label: "Profile",
+      route: "/my-profile",
+      icon: <FaUser className="mr-2" />,
+    },
+    {
+      label: "My Proposals",
+      route: "/my-proposals",
+      icon: <FaUser className="mr-2" />,
+    },
     { label: "My Dao", route: "/my-dao", icon: <FaUser className="mr-2" /> },
     { label: "Settings", route: "/settings", icon: <FaCog className="mr-2" /> },
-    { label: "Logout", onClick: handleLogout, icon: <FaSignOutAlt className="mr-2" /> },
+    {
+      label: "Logout",
+      onClick: handleLogout,
+      icon: <FaSignOutAlt className="mr-2" />,
+    },
   ];
-
 
   return (
     <nav>
@@ -143,19 +152,26 @@ const Navbar = () => {
               >
                 <Link
                   to={item.route}
-                  className={`hover:text-[#05212C] hover:font-medium cursor-pointer text-[16px] text-[#829095] ${location.pathname === item.route
-                    ? "font-semibold border-b-2 border-[#05212C] text-black"
-                    : "border-transparent border-b-0.5"
-                    }`}
+                  className={`hover:text-[#05212C] hover:font-medium cursor-pointer text-[16px] text-[#829095] ${
+                    location.pathname === item.route
+                      ? "font-semibold border-b-2 border-[#05212C] text-black"
+                      : "border-transparent border-b-0.5"
+                  }`}
                 >
                   {item.label}
                 </Link>
               </div>
             ))}
           </div>
-          <div className="flex items-center">
-            <img src={logo} alt="DAO House" className="mobile:h-10 small_phone:w-30 w-25 h-8 object-contain" />
-          </div>
+          <Link to="/">
+            <div className="flex items-center">
+              <img
+                src={logo}
+                alt="DAO House"
+                className="mobile:h-10 small_phone:w-30 w-25 h-8 object-contain"
+              />
+            </div>
+          </Link>
 
           {!isAuthenticated ? (
             <div className="flex items-center tablet:space-x-4 space-x-2">
@@ -200,7 +216,6 @@ const Navbar = () => {
                         <span>{item.label}</span>
                       </Link>
                     ))}
-
                   </div>
                 )}
               </div>

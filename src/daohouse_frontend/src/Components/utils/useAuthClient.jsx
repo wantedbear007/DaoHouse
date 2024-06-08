@@ -103,7 +103,7 @@ export const useAuthClient = () => {
             identityProvider:
               process.env.DFX_NETWORK === "ic"
                 ? "https://identity.ic0.app/"
-                : "http://bw4dl-smaaa-aaaaa-qaacq-cai.localhost:4943",
+                : `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943`,
             onError: (error) => reject(error),
             onSuccess: () => resolve(clientInfo(authClient, authClient.getIdentity())),
           });
