@@ -79,44 +79,59 @@ const MyProposals = () => {
                     backgroundPosition: "center",
                 }}
             >
-                <div className="absolute z-20 top-0 left-0 w-full h-full overflow-x-hidden">
-                    {/* Big circle image */}
-                    <BigCircleComponent imgSrc={BigCircle} />
+               <div className="absolute z-22 top-0 left-0 w-full h-full overflow-x-hidden">
+          {/* Big circle image */}
+          <div className="absolute md:right-[3.7%] -right-[3.7%] top-1/2 -translate-y-1/2">
+            <div className="relative tablet:w-[96px] tablet:h-[96px] md:w-[88.19px] md:h-[88.19px] w-[65px] h-[65px]">
+              <BigCircleComponent imgSrc={BigCircle} />
+            </div>
 
-                    {/* Big circle animation */}
-                    <div className="absolute z-20  md:right-[68px] big_phone:top-1/2 md:top-[50%] top-[60%] -translate-y-1/2 right-[-50px]">
-                        <Lottie
-                            options={defaultOptions}
-                            style={{ height: "112px", width: "112px" }}
-                            className="absolute z-50 "
-                        />
-                    </div>
-                    {/* Smallest circle image */}
-                    <SmallCircleComponent imgSrc={SmallestCircle} />
+            {/* Big circle animation */}
+            <div className="absolute inset-0 flex items-center justify-center z-20">
+              <div className="tablet:w-[112px] tablet:h-[112px] md:w-[104px] md:h-[104px] w-[75px] h-[75px]">
+                <Lottie
+                  options={defaultOptions}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </div>
+            </div>
+          </div>
 
-                    {/* Small circle animation */}
-                    <div className="absolute md:right-[24.75rem] right-[7.1rem] big_phone:top-[30%] md:top-[30%] top-[35.2%] -translate-y-[93%]">
-                        <Lottie
-                            options={defaultOptions2}
-                            height={50}
-                            width={50}
-                            className="absolute z-20"
-                        />
-                    </div>
+          <div className="absolute right-[25%] -translate-y-full top-[30%]">
+            <div className="relative tablet:w-[43px] tablet:h-[43px] md:w-[33.3px] md:h-[33.3px] w-[21.19px] h-[21.19px]">
+              {/* Smallest circle image */}
 
-                    {/* Medium circle image */}
-                    <MediumCircleComponent imgSrc={MediumCircle} />
+              <SmallCircleComponent imgSrc={SmallestCircle} />
+            </div>
 
-                    {/* Medium circle animation */}
-                    <div className="absolute md:right-[39.71rem] right-[11.6rem] big_phone:top-[95%] md:top-[95.6%] top-[99.8%] -translate-y-[93%]">
-                        <Lottie
-                            options={defaultOptions3}
-                            height={61}
-                            width={61}
-                            className="absolute z-20"
-                        />
-                    </div>
-                </div>
+            {/* Small circle animation */}
+            <div className="absolute inset-0 flex items-center justify-center z-20">
+              <div className="tablet:w-[47px] tablet:h-[47px] md:w-[37.3px] md:h-[37.3px] w-[23.19px] h-[23.19px]">
+                <Lottie
+                  options={defaultOptions2}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Medium circle image */}
+          <div className="absolute right-[45%] -translate-y-full top-[95%]">
+            <div className="relative tablet:w-[52px] tablet:h-[52px] md:w-[43.25px] md:h-[43.25px] w-[29.28px] h-[29.28px] ">
+              <MediumCircleComponent imgSrc={MediumCircle} />
+            </div>
+
+            {/* Medium circle animation */}
+            <div className="absolute inset-0 flex items-center justify-center z-20">
+              <div className="tablet:w-[60px] tablet:h-[60px] md:w-[47.25px] md:h-[47.25px] w-[33.28px] h-[33.28px]">
+                <Lottie
+                  options={defaultOptions3}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
                 <div className="absolute flex justify-start top-0 left-9 p-8 z-30 ">
                     <div className="text-white text-[40px] font-normal">
                         My Proposals
