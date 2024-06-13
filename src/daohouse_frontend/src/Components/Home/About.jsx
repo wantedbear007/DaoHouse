@@ -72,7 +72,7 @@ const About = () => {
           />
         </div>
 
-        <p className="text-about-content md:w-[480px] flex flex-col gap-1 font-mulish font-normal text-[12px] md:text-[14px] lg:text-[16px] md:px-8 md:pb-8 md:mx-0 md:my-4 lg:mr-6">
+        <p className="text-about-content md:w-[480px] lg:w-[620px] flex flex-col gap-1 font-mulish font-normal text-[12px] md:text-[14px] lg:text-[16px] md:px-8 md:pb-8 md:mx-0 md:my-4 lg:mr-6">
           <span className="pr-4">
             At our platform. decentralized autonomous organization meets
             cutting-edge technology to revolutionize the way communities govern
