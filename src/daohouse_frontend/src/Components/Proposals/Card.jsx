@@ -4,8 +4,43 @@ import { CircularProgressBar } from "./CircularProgressBar";
 import SmallCard from "./SmallCard";
 import { buttons, gridItems, sectionsData } from "./proposalsData";
 import { CircularProgressBarMobile } from "./CircularProgressBarMobile";
+import ProgressAnimation from "./MyProposals/proposal-cards-animations/progress-animation.json";
+import ApprovedAnimation from "./MyProposals/proposal-cards-animations/approved-animation.json";
+import RejectedAnimation from "./MyProposals/proposal-cards-animations/rejected-animation.json";
+import Lottie from "react-lottie";
 
 export default function Card({ proposal }) {
+  // Animation options for the progress
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: ProgressAnimation,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+      id: "lottie-bigCircle",
+    },
+  };
+
+  // Animation options for the approved
+  const defaultOptions2 = {
+    loop: true,
+    autoplay: true,
+    animationData: ApprovedAnimation,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+      id: "lottie-smallCircle",
+    },
+  };
+  // Animation options for the rejected
+  const defaultOptions3 = {
+    loop: true,
+    autoplay: true,
+    animationData: RejectedAnimation,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+      id: "lottie-mediumCircle",
+    },
+  };
   return (
     <div className="rounded-l-lg rounded-t-lg w-full  shadow-md flex">
       <div className="w-full">
@@ -56,16 +91,29 @@ export default function Card({ proposal }) {
                   : ""
               } `}
             >
-              <img
-                src={
-                  proposal.status === "In Progress"
-                    ? "https://s3-alpha-sig.figma.com/img/e963/6c42/1608a8a5c3864207303e12791066cb81?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Vwi6xVx6lBLGYngkXCNa4VGyaJudk4y~QLZH4tiQkco7lTzOZ516j27UJv7GpdEK72jkamjBFdzG2Btbh6wBQwLT7UPuGxkVuuFUK2oATQ~M~LPlOkkOSvOAb3m3sjjlrCsHzmjw5zj1s6jHyKhUTtp-XGKFRzxQ8FSflMAuVYwdiN4KAGuxbTdnYY2ucX5LhD2Pwa69z6v70HPH3Y3tU4RTeNKhZssqcTKsLaXxfrqSAaXsif~zwKAEc~MfWzUwdwMzWKFsM1LxoCSOHqjP6rv50z1wBc669mJa~pvU96SKYysN-gSmVt-d1H-bp4Mr3HiUHKAYZpu9bzwkaUC53Q__"
-                    : proposal.status === "Approved"
-                    ? "https://s3-alpha-sig.figma.com/img/e00b/cac3/672814b264634546ce93867fb0beeff5?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=YVREv81cUAAXt6d0kN~O~bDb54hDpmM-5CfhyhlMgsoZ5v2-vpFybq8A99pWBuMoGy7q1FARaQddipqo2qrWQbWWcOFsDrzORvZIB6WEhjQof-nmGVtwlI-EzHdefu~1JWAFKWNb5ewBVv0RRBMU0GDln7lHKXdSEegGgQoa2WfBFBTwP4vwqEXA9xLknMYLkigYdIb4cbc1z5dqrKOe86k4~Aoc~5hcjc1mttci1t4cBw8SrgHLprD71GSPJLu58eeoyedoC8Wa1u3E1USKsqk6n4G0T64A-xwuiuY1HaPzSA18Dq2cYl8iGUpkaxNjjGjSXCL2r9jXj2Jb964HAA__"
-                    : "https://s3-alpha-sig.figma.com/img/13ee/beb9/e675e55dcc1cbec1e25e6c00bce763a8?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=FIilO8FufTg6P9pS60o9w30G3bQhmU3cmDkb5Sl30qsZ0oNny2ivUtl~WbF6z-bK6k0oqXH4WAKatlkIDUbqtXUcnXbqIRm4HLNNUIfhDpJ140cbXeRsiTLo2-I5hvClUjzct4sIzUmMi75aJQ76mpHs6EbFKwmFGuD8dPRa37NeUm5IU9N7ETe6kg~RDHgUyxFg-2Ehdu7qW3KfGQe3CejfT~lk1j~GIK7iMYB0fmnRND2~Mh8YuwVXw~2c4m5x4M~UGp3BqdKqkgiMTEmlNf345OAcPt8nVC-tJCH-cHDYBmuzAbjfpD12thHjhko-MPIz5K4SuGIRscAc8sf41A__"
-                }
-                alt="Proposal Status Image"
-              />
+              <div
+                id="lottie-container"
+                style={{ width: "100%", height: "auto" }}
+              >
+                {proposal.status === "In Progress" && (
+                  <Lottie
+                    options={defaultOptions}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                )}
+                {proposal.status === "Approved" && (
+                  <Lottie
+                    options={defaultOptions2}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                )}
+                {proposal.status === "Rejected" && (
+                  <Lottie
+                    options={defaultOptions3}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                )}
+              </div>
             </span>
             {proposal.status}
           </div>
@@ -117,16 +165,29 @@ export default function Card({ proposal }) {
                     : ""
                 } `}
               >
-                <img
-                  src={
-                    proposal.status === "In Progress"
-                      ? "https://s3-alpha-sig.figma.com/img/e963/6c42/1608a8a5c3864207303e12791066cb81?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Vwi6xVx6lBLGYngkXCNa4VGyaJudk4y~QLZH4tiQkco7lTzOZ516j27UJv7GpdEK72jkamjBFdzG2Btbh6wBQwLT7UPuGxkVuuFUK2oATQ~M~LPlOkkOSvOAb3m3sjjlrCsHzmjw5zj1s6jHyKhUTtp-XGKFRzxQ8FSflMAuVYwdiN4KAGuxbTdnYY2ucX5LhD2Pwa69z6v70HPH3Y3tU4RTeNKhZssqcTKsLaXxfrqSAaXsif~zwKAEc~MfWzUwdwMzWKFsM1LxoCSOHqjP6rv50z1wBc669mJa~pvU96SKYysN-gSmVt-d1H-bp4Mr3HiUHKAYZpu9bzwkaUC53Q__"
-                      : proposal.status === "Approved"
-                      ? "https://s3-alpha-sig.figma.com/img/e00b/cac3/672814b264634546ce93867fb0beeff5?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=YVREv81cUAAXt6d0kN~O~bDb54hDpmM-5CfhyhlMgsoZ5v2-vpFybq8A99pWBuMoGy7q1FARaQddipqo2qrWQbWWcOFsDrzORvZIB6WEhjQof-nmGVtwlI-EzHdefu~1JWAFKWNb5ewBVv0RRBMU0GDln7lHKXdSEegGgQoa2WfBFBTwP4vwqEXA9xLknMYLkigYdIb4cbc1z5dqrKOe86k4~Aoc~5hcjc1mttci1t4cBw8SrgHLprD71GSPJLu58eeoyedoC8Wa1u3E1USKsqk6n4G0T64A-xwuiuY1HaPzSA18Dq2cYl8iGUpkaxNjjGjSXCL2r9jXj2Jb964HAA__"
-                      : "https://s3-alpha-sig.figma.com/img/13ee/beb9/e675e55dcc1cbec1e25e6c00bce763a8?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=FIilO8FufTg6P9pS60o9w30G3bQhmU3cmDkb5Sl30qsZ0oNny2ivUtl~WbF6z-bK6k0oqXH4WAKatlkIDUbqtXUcnXbqIRm4HLNNUIfhDpJ140cbXeRsiTLo2-I5hvClUjzct4sIzUmMi75aJQ76mpHs6EbFKwmFGuD8dPRa37NeUm5IU9N7ETe6kg~RDHgUyxFg-2Ehdu7qW3KfGQe3CejfT~lk1j~GIK7iMYB0fmnRND2~Mh8YuwVXw~2c4m5x4M~UGp3BqdKqkgiMTEmlNf345OAcPt8nVC-tJCH-cHDYBmuzAbjfpD12thHjhko-MPIz5K4SuGIRscAc8sf41A__"
-                  }
-                  alt="Proposal Status Image"
-                />
+                <div
+                  id="lottie-container"
+                  style={{ width: "100%", height: "auto" }}
+                >
+                  {proposal.status === "In Progress" && (
+                    <Lottie
+                      options={defaultOptions}
+                      style={{ width: "100%", height: "100%" }}
+                    />
+                  )}
+                  {proposal.status === "Approved" && (
+                    <Lottie
+                      options={defaultOptions2}
+                      style={{ width: "100%", height: "100%" }}
+                    />
+                  )}
+                  {proposal.status === "Rejected" && (
+                    <Lottie
+                      options={defaultOptions3}
+                      style={{ width: "100%", height: "100%" }}
+                    />
+                  )}
+                </div>
               </span>
             </span>{" "}
             {proposal.status}
