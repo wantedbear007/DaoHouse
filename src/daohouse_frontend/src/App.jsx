@@ -25,6 +25,8 @@ import "react-quill/dist/quill.snow.css";
 import MyProposals from "./pages/Proposals/myproposals/MyProposals";
 import SingleProposal from "./Components/Proposals/SingleProposal/SingleProposal";
 import Following from "./Components/MyProfile/Following/Following";
+import { ToastContainer, toast } from 'react-toastify';
+
 
 const App = () => {
   return (
@@ -64,6 +66,8 @@ const App = () => {
         </Routes>
         <Footer />
       </Router>
+      <ToastContainer />
+
     </PostProvider>
   );
 };
