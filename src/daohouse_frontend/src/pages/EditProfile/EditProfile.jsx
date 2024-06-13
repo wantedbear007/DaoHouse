@@ -19,6 +19,7 @@ import { useUserProfile } from "../../context/UserProfileContext";
 import Lottie from "react-lottie";
 import { AssetManager } from "@dfinity/assets";
 import { HttpAgent } from "@dfinity/agent";
+import { toast } from "react-toastify";
 
 
 const EditProfile = () => {
@@ -87,6 +88,7 @@ const EditProfile = () => {
     try {
       await backendActor.delete_profile();
       const ans = await backendActor.create_profile(profilePayload);
+      toast.success("Profile created successfully")
       console.log("Profile created successfully", ans);
     } catch (error) {
       console.error("Error creating profile:", error);
