@@ -132,7 +132,9 @@ const MyProposals = () => {
                     <h1 className="text-[#05212C] text-[30px] px-4">Proposal Dashboard</h1>
 
 
-                    <button className="ml-auto my-4 mx-4 bg-white text-[16px] text-[#05212C] gap-1 px-7 shadow-xl py-4 px-4 rounded-full shadow-md flex items-center space-x-4 rounded-2xl">
+                    <button      onClick={() => {
+              navigate("/create-proposal");
+            }} className="ml-auto my-4 mx-4 bg-white text-[16px] text-[#05212C] gap-1 px-7 shadow-xl py-4 px-4 rounded-full shadow-md flex items-center space-x-4 rounded-2xl">
                         <BsPlusLg className='mx-1' size={19} />
                         Create New Proposals
                     </button>

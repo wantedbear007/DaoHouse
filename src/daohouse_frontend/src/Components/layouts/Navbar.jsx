@@ -131,8 +131,8 @@ const Navbar = () => {
       route: "/my-proposals",
       icon: <FaUser className="mr-2" />,
     },
-    { label: "My Dao", route: "/my-dao", icon: <FaUser className="mr-2" /> },
-    { label: "Settings", route: "/settings", icon: <FaCog className="mr-2" /> },
+    // { label: "My Dao", route: "/my-dao", icon: <FaUser className="mr-2" /> },
+    // { label: "Settings", route: "/settings", icon: <FaCog className="mr-2" /> },
     {
       label: "Logout",
       onClick: handleLogout,

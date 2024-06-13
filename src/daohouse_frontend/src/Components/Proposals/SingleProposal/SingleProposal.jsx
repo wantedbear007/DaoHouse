@@ -13,9 +13,11 @@ import MyProfileRectangle from "../../../../assets/MyProfileRectangle.png";
 import { BsPlusLg } from "react-icons/bs";
 import { singleProposalData } from './proposal';
 import SingleProposalCard from './SingleProposalCard';
+import { useNavigate } from "react-router-dom";
 
 const SingleProposal = () => {
     const { id } = useParams();
+    const navigate=useNavigate()
     // Animation options for the big circle
     const defaultOptions = {
         loop: true,
@@ -113,7 +115,9 @@ const SingleProposal = () => {
                 <div className="flex items-center justify-between px-9">
                     <h1 className="text-[#05212C] text-[30px] px-4">Proposal ID:  {id}</h1>
 
-                    <button className="ml-auto my-4 mx-4 bg-white text-[16px] text-[#05212C] gap-1 px-7 shadow-xl py-4 px-4 rounded-full shadow-md flex items-center space-x-4 rounded-2xl">
+                    <button      onClick={() => {
+              navigate("/create-proposal");
+            }} className="ml-auto my-4 mx-4 bg-white text-[16px] text-[#05212C] gap-1 px-7 shadow-xl py-4 px-4 rounded-full shadow-md flex items-center space-x-4 rounded-2xl">
                         <BsPlusLg className='mx-1' size={19} />
                         Create New Proposals
                     </button>
