@@ -5,23 +5,57 @@ import closeIcon from "../../../assets/close-icon.png";
 import TrashIcon from "../../../assets/Trash.png";
 import avtarProfileIcon from "../../../assets/avatarprofile.png";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { useAuth } from "../utils/useAuthClient";
+import { constant } from "../utils/constants";
 
 const CreatePostPopup = ({ onClose }) => {
-  const [selectedImages, setSelectedImages] = useState([]);
   const [showDescription, setShowDescription] = useState(false);
   const [description, setDescription] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
+  // const [selectedImages, setSelectedImages] = useState([]);
 
-  const handleFileChange = (event) => {
-    const files = Array.from(event.target.files);
-    setSelectedImages(files);
-    event.target.value = null;
+  const [imageData, setImageData] = useState({
+    base64: "",
+    int8Array: [],
+  });
+
+  const { handleFileUpload } = constant();
+  const { backendActor } = useAuth();
+
+  async function handleCreatePost() {
+    const postPayload = {
+      post_description: description,
+      post_img: imageData.base64,
+    };
+
+    try {
+      const ans = await backendActor.create_new_post(postPayload);
+      toast.success("Post created successfully");
+      console.log("Post created successfully", ans);
+    } catch (error) {
+      console.error("Error creating post:", error);
+    }
+  }
+
+  const handleFileUploading = async (event) => {
+    // const files = Array.from(event.target.files);
+    // setSelectedImages(files);
+
+    try {
+      const { base64, int8Array } = await handleFileUpload(event);
+      setImageData({ base64, int8Array });
+    } catch (error) {
+      if (typeof error === "string") {
+        toast.error(error);
+        console.error("Error:", error);
+      } else {
+        console.error("Error:", error);
+      }
+    }
   };
 
-  const onImageLoaded = (image) => {};
-
   const handleClose = () => {
-    if (selectedImages.length > 0) {
+    if (imageData.base64 !== "") {
       setShowConfirmation(true);
     } else {
       onClose();
@@ -29,15 +63,17 @@ const CreatePostPopup = ({ onClose }) => {
   };
 
   const handleDiscard = () => {
-    setSelectedImages([]);
+    setImageData(null);
     setShowConfirmation(false);
     onClose();
+    // setSelectedImages([]);
   };
 
-  const handleDeleteImage = (index) => {
-    const newImages = [...selectedImages];
-    newImages.splice(index, 1);
-    setSelectedImages(newImages);
+  const handleDeleteImage = () => {
+    setImageData(null);
+    // const newImages = [...selectedImages];
+    // newImages.splice(index, 1);
+    // setSelectedImages(newImages);
   };
 
   return (
@@ -51,83 +87,84 @@ const CreatePostPopup = ({ onClose }) => {
         <h3 className="md:text-[24px] text-[20px] font-semibold">
           Create a new post
         </h3>
+
         <div className="bg-black w-full h-[1px] my-2"></div>
+
         <input
           type="file"
           accept="image/*"
-          onChange={handleFileChange}
+          onChange={handleFileUploading}
           style={{ display: "none" }}
         />
-        <div className="w-[80%] my-[5%] flex flex-col items-center gap-8">
-          {selectedImages.length > 0 ? (
-            selectedImages.map((image, index) => (
-              <div className="w-full relative" key={index}>
-                <img
-                  src={URL.createObjectURL(image)}
-                  alt=""
-                  className="object-fit w-full h-48 object-contain md:mb-4"
-                  onLoad={onImageLoaded}
-                />
 
-                {showDescription ? (
-                  <div className="flex flex-col gap-4">
-                    <div className="flex justify-between items-center">
-                      <span className="flex items-center md:gap-3 gap-2">
-                        <img
-                          src={avtarProfileIcon}
-                          alt="avtarProfileIcon"
-                          className="md:w-full w-7 "
-                        />
-                        <p className="md:text-[14px] text-[10px] text-[#05212C] font-medium">
-                          nzbdchsvvksckshcbkjscb kc
-                        </p>
-                      </span>
-                      <button
-                        className="flex items-center justify-center md:w-24 w-18 md:gap-4 gap-2 mt-2 bg-[#0E3746] text-white md:text-[16px] text-[14px] md:px-4 px-3 py-2 font-semibold rounded-[10px]"
-                        style={{ boxShadow: "0px 3px 6px 0px #00000026" }}
-                        onClick={() => console.log("Post button clicked")}
-                      >
-                        <span>Post</span>
-                        <span>
-                          <FaArrowRightLong />
-                        </span>
-                      </button>
-                    </div>
-                    <textarea
-                      placeholder="Write Description here..."
-                      className="w-full md:h-32 h-28 bg-[#E6E6E6] rounded-[10px] p-2 border-2 border-[#BDBFF1] md:text-[16px] text-[14px]"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                    />
-                  </div>
-                ) : (
-                  <div className="flex justify-between">
-                    <button
-                      className="bg-white px-2 rounded-[10px] ml-1"
-                      onClick={() => handleDeleteImage(index)}
-                    >
+        <div className="w-[80%] my-[5%] flex flex-col items-center gap-8">
+          {imageData.base64 !== "" ? (
+            <div className="w-full relative">
+              <img
+                src={imageData.base64}
+                alt="POST IMAGE"
+                className="object-fit w-full h-48 object-contain md:mb-4"
+              />
+
+              {showDescription ? (
+                <div className="flex flex-col gap-4">
+                  <div className="flex justify-between items-center">
+                    <span className="flex items-center md:gap-3 gap-2">
                       <img
-                        src={TrashIcon}
-                        alt="delete-icon"
-                        className="w-full"
+                        src={avtarProfileIcon}
+                        alt="avtarProfileIcon"
+                        className="md:w-full w-7 "
                       />
-                    </button>
+
+                      <p className="md:text-[14px] text-[10px] text-[#05212C] font-medium">
+                        nzbdchsvvksckshcbkjscb kc
+                      </p>
+                    </span>
+
                     <button
-                      className="flex items-center justify-center gap-4 mt-2 bg-white text-[#0E3746] px-4 py-2 font-semibold rounded-[10px]"
+                      className="flex items-center justify-center md:w-24 w-18 md:gap-4 gap-2 mt-2 bg-[#0E3746] text-white md:text-[16px] text-[14px] md:px-4 px-3 py-2 font-semibold rounded-[10px]"
                       style={{ boxShadow: "0px 3px 6px 0px #00000026" }}
-                      onClick={() => setShowDescription(true)}
+                      onClick={handleCreatePost}
                     >
-                      <span>Next</span>
+                      <span>Post</span>
                       <span>
                         <FaArrowRightLong />
                       </span>
                     </button>
                   </div>
-                )}
-              </div>
-            ))
+
+                  <textarea
+                    placeholder="Write Description here..."
+                    className="w-full md:h-32 h-28 bg-[#E6E6E6] rounded-[10px] p-2 border-2 border-[#BDBFF1] md:text-[16px] text-[14px]"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                </div>
+              ) : (
+                <div className="flex justify-between">
+                  <button
+                    className="bg-white px-2 rounded-[10px] ml-1"
+                    onClick={handleDeleteImage}
+                  >
+                    <img src={TrashIcon} alt="delete-icon" className="w-full" />
+                  </button>
+
+                  <button
+                    className="flex items-center justify-center gap-4 mt-2 bg-white text-[#0E3746] px-4 py-2 font-semibold rounded-[10px]"
+                    style={{ boxShadow: "0px 3px 6px 0px #00000026" }}
+                    onClick={() => setShowDescription(true)}
+                  >
+                    <span>Next</span>
+
+                    <span>
+                      <FaArrowRightLong />
+                    </span>
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
-            <>
+            <React.Fragment>
               <span className="flex items-end gap-[2px] mt-6">
                 <img src={addImageHero} className="w-[45px] h-[39px]" />
                 <img
@@ -135,6 +172,7 @@ const CreatePostPopup = ({ onClose }) => {
                   className="w-[25px] h-[22px] -my-[4px]"
                 />
               </span>
+
               <button
                 className="flex items-center justify-center bg-white cursor-pointer w-[150px] h-[35px] rounded-[10px] gap-1 text-[16px] font-semibold"
                 onClick={() =>
@@ -146,9 +184,10 @@ const CreatePostPopup = ({ onClose }) => {
                 </span>
                 Add Images
               </button>
-            </>
+            </React.Fragment>
           )}
         </div>
+
         <button className="absolute top-[4%] right-[2%]" onClick={handleClose}>
           <img
             src={closeIcon}
