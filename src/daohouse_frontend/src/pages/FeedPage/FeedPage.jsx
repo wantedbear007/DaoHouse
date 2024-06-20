@@ -7,12 +7,16 @@ import PostCard from "../../Components/FeedPage/PostCard";
 import image from "../../../assets/bg_image.png";
 import CreatePostPopup from "../../Components/FeedPage/CreatePostPopup";
 
+import { useAuth } from "../../Components/utils/useAuthClient";
+
 const FeedPage = () => {
   const [feed, setFeed] = useState(allFeed);
   const [active, setActive] = useState({ all: true, latest: false });
   const [showPopup, setShowPopup] = useState(false);
 
   const className = "FeedPage";
+  const { backendActor } = useAuth();
+  // console.log(backendActor);
 
   const setAllActive = () => {
     setFeed(allFeed);
@@ -54,17 +58,15 @@ const FeedPage = () => {
           }
         >
           <button
-            className={`px-6 py-2 mobile:text-lg text-sm text-white ${
-              !active.all ? "" : "shadow-lg font-semibold"
-            }`}
+            className={`px-6 py-2 mobile:text-lg text-sm text-white ${!active.all ? "" : "shadow-lg font-semibold"
+              }`}
             onClick={setAllActive}
           >
             All
           </button>
           <button
-            className={`px-6 py-2 mobile:text-lg text-sm text-white ${
-              !active.latest ? "" : "shadow-lg font-semibold"
-            }`}
+            className={`px-6 py-2 mobile:text-lg text-sm text-white ${!active.latest ? "" : "shadow-lg font-semibold"
+              }`}
             onClick={setLatestActive}
           >
             Latest

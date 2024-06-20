@@ -25,7 +25,9 @@ const Decentralization = () => {
               establish and manage your own decentralized autonomous
               organizations.
             </p>
+
             <button className="mobile:px-8 px-6 mobile:py-3 py-2 mobile:text-base text-sm bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
+
               Join DAO
             </button>
           </div>
