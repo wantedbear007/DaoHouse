@@ -153,6 +153,8 @@ pub fn delete_profile(state: &mut State) -> Result<(), String> {
 
 
 
+
+
 // pub async fn create_dao(state: &mut State, dao_detail: DaoInput)->String {
 //     let principal_id = api::caller();
 //     if !state.user_profile.contains_key(&principal_id) {

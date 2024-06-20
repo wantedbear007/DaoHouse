@@ -516,7 +516,7 @@ pub struct DaoInput{
 #[derive(Clone,CandidType,Serialize,Deserialize)]
 pub struct PostInfo{
     pub post_id:String,
-    pub post_title:String,
+   // pub post_title:String,
     pub post_description:String,
     pub post_img:String,
     pub post_created_at:String,
@@ -528,7 +528,7 @@ pub struct PostInfo{
 
 #[derive(Clone,CandidType,Serialize,Deserialize)]
 pub struct PostInput{
-    pub post_title:String,
+  //  pub post_title:String,
     pub post_description:String,
     pub post_img:String,
     

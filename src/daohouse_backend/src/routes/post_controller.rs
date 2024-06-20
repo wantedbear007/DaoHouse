@@ -5,7 +5,7 @@ use crate::types::{PostInfo, PostInput};
 pub fn create_new_post(state: &mut State, post_id: String, postdetail: PostInput) -> Result<String, String> {
     let new_post = PostInfo {
         post_id: post_id.clone(),
-        post_title: postdetail.post_title,
+      //  post_title: postdetail.post_title,
         post_description: postdetail.post_description,
         post_img: postdetail.post_img,
         post_created_at: String::new(), 
