@@ -50,7 +50,7 @@ async fn like_post(post_id:String)->Result<String, String>{
 
     let new_post = PostInfo {
         post_id: getpost.post_id.clone(),
-        post_title: getpost.post_title.clone(),
+    //    post_title: getpost.post_title.clone(),
         post_description: getpost.post_description.clone(),
         post_img: getpost.post_img.clone(),
         post_created_at: getpost.post_created_at.clone(),
@@ -91,7 +91,7 @@ async fn comment_post(post_id:String,comment:String)->Result<String, String>{
 
     let new_post = PostInfo {
         post_id: getpost.post_id.clone(),
-        post_title: getpost.post_title.clone(),
+     //   post_title: getpost.post_title.clone(),
         post_description: getpost.post_description.clone(),
         post_img: getpost.post_img.clone(),
         post_created_at: getpost.post_created_at.clone(),
