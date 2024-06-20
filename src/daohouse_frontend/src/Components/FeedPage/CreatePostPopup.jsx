@@ -23,7 +23,6 @@ const CreatePostPopup = ({ onClose }) => {
   const { backendActor } = useAuth();
 
   async function handleCreatePost() {
-    console.log("clicked");
     const postPayload = {
       post_description: description,
       post_img: imageData.base64,
