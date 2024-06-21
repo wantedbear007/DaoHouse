@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import addImageLogo from "../../../assets/addImageLogo.png";
 import addImageHero from "../../../assets/addImageHero.png";
 import closeIcon from "../../../assets/close-icon.png";
@@ -7,6 +7,7 @@ import avtarProfileIcon from "../../../assets/avatarprofile.png";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { useAuth } from "../utils/useAuthClient";
 import { constant } from "../utils/constants";
+import { toast } from "react-toastify";
 
 const CreatePostPopup = ({ onClose }) => {
   const [showDescription, setShowDescription] = useState(false);
@@ -25,13 +26,14 @@ const CreatePostPopup = ({ onClose }) => {
   async function handleCreatePost() {
     const postPayload = {
       post_description: description,
-      post_img: imageData.base64,
+      post_img: "",
     };
 
     try {
       const ans = await backendActor.create_new_post(postPayload);
       toast.success("Post created successfully");
       console.log("Post created successfully", ans);
+      onClose();
     } catch (error) {
       console.error("Error creating post:", error);
     }
@@ -75,6 +77,51 @@ const CreatePostPopup = ({ onClose }) => {
     // newImages.splice(index, 1);
     // setSelectedImages(newImages);
   };
+
+  function disableBtn(button) {
+    button.setAttribute("disabled", "true");
+    button.style.opacity = "0.5";
+  }
+  function enableBtn(button) {
+    button.removeAttribute("disabled");
+    button.style.opacity = "1";
+  }
+
+  React.useEffect(() => {
+    const postButton = document.getElementById("postButton");
+
+    if (postButton) {
+      postButton.addEventListener("click", async () => {
+        disableBtn(postButton);
+
+        try {
+          const postPayload = {
+            post_description: description,
+            post_img: "",
+          };
+
+          const ans = await backendActor.create_new_post(postPayload);
+          toast.success("Post created successfully");
+          console.log("Post created successfully", ans);
+          onClose();
+
+          enableBtn(postButton);
+        } catch (error) {
+          console.error("Error creating post:", error);
+        } finally {
+          enableBtn(postButton);
+        }
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    async function callMe() {
+      const data = await backendActor.get_all_posts();
+      console.log("data: ", data);
+    }
+    callMe();
+  }, []);
 
   return (
     <div
@@ -124,7 +171,8 @@ const CreatePostPopup = ({ onClose }) => {
                     <button
                       className="flex items-center justify-center md:w-24 w-18 md:gap-4 gap-2 mt-2 bg-[#0E3746] text-white md:text-[16px] text-[14px] md:px-4 px-3 py-2 font-semibold rounded-[10px]"
                       style={{ boxShadow: "0px 3px 6px 0px #00000026" }}
-                      onClick={handleCreatePost}
+                      // onClick={handleCreatePost}
+                      id="postButton"
                     >
                       <span>Post</span>
                       <span>
