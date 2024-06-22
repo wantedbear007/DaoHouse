@@ -1,5 +1,6 @@
+use crate::routes::upload_image;
 use crate::types::{DaoInput, Profileinput, UserProfile};
-use crate::{routes, with_state};
+use crate::{routes, with_state, ImageData};
 use ic_cdk::{query, update};
 use crate::types::{CreateCanisterArgument,CanisterInstallMode,CanisterIdRecord,CreateCanisterArgumentExtended,InstallCodeArgument,InstallCodeArgumentExtended};
 use crate::api::call::{ call_with_payment128, CallResult};
@@ -11,8 +12,67 @@ use ic_cdk::println;
 
 
 #[update]
-async fn create_profile(profile: Profileinput) -> Result<(), String> {
-    with_state(|state| routes::create_new_profile(state, profile.clone()))
+async fn create_profile(asset_handler_canister_id: String, profile: Profileinput) -> Result<(), String> {
+
+           // Validate email format
+   if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
+    return Err("Enter correct Email ID".to_string());
+}
+    let principal_id = api::caller();
+
+
+    // Check if the caller is anonymous
+    if principal_id == Principal::anonymous() {
+       return Err("Anonymous principal not allowed to make calls.".to_string());
+   }
+
+
+    let image_data = ImageData {
+        content: profile.image_content,
+        content_type: profile.image_content_type,
+        name: profile.image_title
+    };
+
+
+    // upload image file
+    let image_id: String = upload_image(asset_handler_canister_id, image_data).await;
+
+
+    let new_profile = UserProfile {
+        user_id: principal_id,
+        email_id: profile.email_id,
+        profile_img: image_id,
+        username: profile.username,
+        dao_ids: Vec::new(),
+        post_count: 0,
+        post_id: Vec::new(),
+        followers_count: 0,
+        followers_list: Vec::new(),
+        followings_count: 0,
+        followings_list: Vec::new(),
+        description: profile.description,
+        tag_defines: profile.tag_defines,
+        contact_number: profile.contact_number,
+        twitter_id: profile.twitter_id,
+        telegram: profile.telegram,
+        website: profile.website,
+    };
+
+    // with_state(|state| routes::create_new_profile(state, profile.clone()))
+
+
+    with_state(|state| -> Result<(), String> {
+        // Check if the user is already registered
+if state.user_profile.contains_key(&principal_id) {
+    return Err("User already registered".to_string());
+};
+
+
+state.user_profile.insert(principal_id, new_profile);
+
+Ok(())
+
+})    
 }
 
 #[query]
@@ -223,11 +283,11 @@ async fn deposit_cycles(arg: CanisterIdRecord, cycles: u128) -> CallResult<()> {
 }
 
 async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
-    // let wasm_base64: &str = "3831fb07143cd43c3c51f770342d2b7d0a594311529f5503587bf1544ccd44be";
-    // let wasm_module_sample: Vec<u8> = base64::decode(wasm_base64).expect("Decoding failed");
+    let wasm_base64: &str = "3831fb07143cd43c3c51f770342d2b7d0a594311529f5503587bf1544ccd44be";
+    let wasm_module_sample: Vec<u8> = base64::decode(wasm_base64).expect("Decoding failed");
 
-    let wasm_module_sample: Vec<u8> = include_bytes!("../../../../.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
-    
+    // let wasm_module_sample: Vec<u8> = include_bytes!("../../../../.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
+    // /
     
     let cycles: u128 = 10_000_000_000; 
     

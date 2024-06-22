@@ -35,6 +35,13 @@ type Profileinput = record {
   profile_img : text;
   telegram : text;
   tag_defines : vec text;
+
+  // image 
+  image_content: opt blob;
+  image_title: text;
+  image_content_type: text;
+
+
 };
 type Result = variant { Ok : text; Err : text };
 type Result_1 = variant { Ok; Err : text };
@@ -63,7 +70,7 @@ service : {
   comment_post : (text, text) -> (Result);
   create_dao : (DaoInput) -> (Result);
   create_new_post : (PostInput) -> (Result);
-  create_profile : (Profileinput) -> (Result_1);
+  create_profile : (text, Profileinput) -> (Result_1);
   delete_profile : () -> (Result_1);
   follow_user : (principal) -> (Result_1);
   get_all_posts : () -> (vec record { text; PostInfo }) query;

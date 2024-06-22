@@ -2,7 +2,7 @@ use candid::{CandidType, Nat, Principal};
 use serde::{Deserialize, Serialize};
 use ic_stable_structures::{storable::Bound,Storable};
 use candid::{ Decode, Encode};
-use serde_bytes;
+use serde_bytes::{self, ByteBuf};
 use std::borrow::Cow;
 
 
@@ -496,6 +496,11 @@ pub struct Profileinput{
     pub telegram:String,
     pub website:String,
     pub tag_defines: Vec<String>,
+
+    // image data
+    pub image_content: Option<ByteBuf>,
+    pub image_title: String,
+    pub image_content_type: String,
 } 
 
 #[derive(Clone,CandidType,Serialize,Deserialize)]
@@ -532,6 +537,13 @@ pub struct PostInput{
     pub post_description:String,
     pub post_img:String,
     
+}
+
+#[derive(Clone, CandidType, Serialize, Deserialize)]
+pub struct ImageData {
+    pub content: Option<ByteBuf>,
+    pub name: String,
+    pub content_type: String,
 }
 
 const MAX_VALUE_SIZE: u32 = 600;
