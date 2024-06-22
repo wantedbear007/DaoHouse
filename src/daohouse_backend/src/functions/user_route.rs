@@ -26,6 +26,18 @@ async fn create_profile(asset_handler_canister_id: String, profile: Profileinput
        return Err("Anonymous principal not allowed to make calls.".to_string());
    }
 
+   // Check if the user is already registered
+   let is_registered = with_state(|state|  {
+        if state.user_profile.contains_key(&principal_id) {
+        return Err("User already registered".to_string());
+        };
+        Ok(())
+    }).is_err();
+
+    if is_registered {
+        return Err("User already exist".to_string())
+    }
+
 
     let image_data = ImageData {
         content: profile.image_content,
@@ -62,15 +74,8 @@ async fn create_profile(asset_handler_canister_id: String, profile: Profileinput
 
 
     with_state(|state| -> Result<(), String> {
-        // Check if the user is already registered
-if state.user_profile.contains_key(&principal_id) {
-    return Err("User already registered".to_string());
-};
-
-
-state.user_profile.insert(principal_id, new_profile);
-
-Ok(())
+    state.user_profile.insert(principal_id, new_profile);
+    Ok(())
 
 })    
 }
