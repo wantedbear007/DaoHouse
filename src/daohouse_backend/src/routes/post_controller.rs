@@ -5,26 +5,41 @@ use crate::{ImageData, State};
 use crate::types::{PostInfo, PostInput};
 
 
+// pub async fn create_new_post(state: &mut State, canister_id: String, post_id: String, postdetail: PostInput) -> Result<String, String> {
 
-pub fn create_new_post(state: &mut State, post_id: String, postdetail: PostInput) -> Result<String, String> {
-    let new_post = PostInfo {
-        post_id: post_id.clone(),
-        username: postdetail.username,
-      //  post_title: postdetail.post_title,
-        post_description: postdetail.post_description,
-        post_img: postdetail.post_img,
-        // post_created_at: String::new(), 
-        post_created_at: ic_cdk::api::time(),
-        like_count: 0,
-        like_id_list: Vec::new(),
-        comment_count: 0,
-        comment_list: Vec::new(),
-    };
 
-    state.post_detail.insert(post_id, new_post);
 
-    Ok("Post created successfully".to_string())
-}
+//     // upload image
+//     let image_data: ImageData = ImageData {
+//         content: postdetail.image_content,
+//         content_type: postdetail.image_content_type,
+//         name: postdetail.image_title
+//     };
+
+//     let image_id: String = upload_image(canister_id, image_data).await;
+
+
+//     let new_post = PostInfo {
+//         post_id: post_id.clone(),
+//         username: postdetail.username,
+//       //  post_title: postdetail.post_title,
+//         post_description: postdetail.post_description,
+//         post_img: postdetail.post_img,
+//         // post_created_at: String::new(), 
+//         post_created_at: ic_cdk::api::time(),
+//         like_count: 0,
+//         like_id_list: Vec::new(),
+//         comment_count: 0,
+//         comment_list: Vec::new(),
+//     };
+
+
+
+
+//     state.post_detail.insert(post_id, new_post);
+
+//     Ok("Post created successfully".to_string())
+// }
 
 type ReturnResult = Result<u32, String>;
 
