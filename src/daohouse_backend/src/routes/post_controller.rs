@@ -5,13 +5,16 @@ use crate::{ImageData, State};
 use crate::types::{PostInfo, PostInput};
 
 
+
 pub fn create_new_post(state: &mut State, post_id: String, postdetail: PostInput) -> Result<String, String> {
     let new_post = PostInfo {
         post_id: post_id.clone(),
+        username: postdetail.username,
       //  post_title: postdetail.post_title,
         post_description: postdetail.post_description,
         post_img: postdetail.post_img,
-        post_created_at: String::new(), 
+        // post_created_at: String::new(), 
+        post_created_at: ic_cdk::api::time(),
         like_count: 0,
         like_id_list: Vec::new(),
         comment_count: 0,

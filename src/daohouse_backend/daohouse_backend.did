@@ -10,6 +10,7 @@ type DaoInput = record {
   required_votes : int8;
 };
 type PostInfo = record {
+  username: text;
   post_img : text;
   post_id : text;
   comment_count : nat32;
@@ -18,9 +19,10 @@ type PostInfo = record {
   like_id_list : vec principal;
   post_description : text;
   comment_list : vec text;
-  post_created_at : text;
+  post_created_at : nat64;
 };
 type PostInput = record {
+  username: text;
   post_img : text;
 //  post_title : text;
   post_description : text;
