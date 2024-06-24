@@ -140,6 +140,7 @@ const Navbar = () => {
     },
   ];
 
+  console.log({backendActor})
   return (
     <nav>
       <div className="bg-bg-color shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50">
