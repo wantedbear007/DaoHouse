@@ -22,6 +22,7 @@ import { HttpAgent } from "@dfinity/agent";
 import { toast } from "react-toastify";
 
 
+
 const EditProfile = () => {
   const userProfile = useUserProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -72,7 +73,7 @@ const EditProfile = () => {
 
   const handleSaveChangesClick = async () => {
     setIsModalOpen(true);
-
+  
     const profilePayload = {
       username: profileData.name,
       email_id: profileData.email_id,
@@ -83,18 +84,21 @@ const EditProfile = () => {
       telegram: profileData.telegram,
       website: profileData.website,
       tag_defines: profileData.tag_defines,
+      image_content: profileData.image_content ? [new Uint8Array(profileData.image_content)] : [],
+      image_title: profileData.image_title || "",
+      image_content_type: profileData.image_content_type || "",
     };
-
+  
+    const canisterId = process.env.CANISTER_ID_DAOHOUSE_FRONTEND;
     try {
-      await backendActor.delete_profile();
-      const ans = await backendActor.create_profile(profilePayload);
-      toast.success("Profile created successfully")
+      const ans = await backendActor.create_profile(canisterId, profilePayload); 
+      toast.success("Profile created successfully");     
       console.log("Profile created successfully", ans);
     } catch (error) {
       console.error("Error creating profile:", error);
     }
   };
-
+  
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -104,13 +108,21 @@ const EditProfile = () => {
     setProfileData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const blobUrl = URL.createObjectURL(file);
-      setProfileData((prevData) => ({ ...prevData, profile_img: blobUrl }));
+      const arrayBuffer = await file.arrayBuffer();
+      const content = new Uint8Array(arrayBuffer);
+      setProfileData((prevData) => ({
+        ...prevData,
+        image_content: Array.from(content),
+        image_title: file.name,
+        image_content_type: file.type,
+      }));
     }
   };
+  
+  
 
   const handleRemoveImage = () => {
     setProfileData((prevData) => ({
