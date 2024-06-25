@@ -3,6 +3,7 @@ use std::env;
 use crate::routes::upload_image;
 use crate::types::{DaoInput, Profileinput, UserProfile};
 use crate::{routes, with_state, ImageData};
+use ciborium::value;
 use ic_cdk::{query, update};
 use crate::types::{CreateCanisterArgument,CanisterInstallMode,CanisterIdRecord,CreateCanisterArgumentExtended,InstallCodeArgument,InstallCodeArgumentExtended};
 use crate::api::call::{ call_with_payment128, CallResult};
@@ -41,21 +42,31 @@ async fn create_profile(asset_handler_canister_id: String, profile: Profileinput
     }
 
 
-    let image_data = ImageData {
-        content: profile.image_content,
-        content_type: profile.image_content_type,
-        name: profile.image_title
-    };
 
+    
+    // upload image
+    let image_id: Result<String, String> = upload_image(asset_handler_canister_id, ImageData { content: profile.image_content, name: profile.image_title, content_type: profile.image_content_type }).await;
+    let mut id = String::new();
+    let image_create_res: bool = match image_id {
+        Ok(value) => {
+            id = value;
+            Ok(())
+        }
+        Err(er) => {
+            ic_cdk::println!("{}", er.to_string());
+            Err(())
+        }
+    }.is_err();
 
-    // upload image file
-    let image_id: String = upload_image(asset_handler_canister_id, image_data).await;
+    if image_create_res {
+        return Err("Image upload failed".to_string());
+    }
 
 
     let new_profile = UserProfile {
         user_id: principal_id,
         email_id: profile.email_id,
-        profile_img: image_id,
+        profile_img: id,
         username: profile.username,
         dao_ids: Vec::new(),
         post_count: 0,
@@ -180,7 +191,7 @@ async fn follow_user(userid:Principal)->Result<(), String>{
 }
 
 #[update]
-pub async fn create_dao( dao_detail: DaoInput) -> Result<String,String> {
+pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<String,String> {
     let principal_id = api::caller();
     if principal_id == Principal::anonymous() {
         // trap("Anonymous principal not allowed to make calls.")
@@ -189,6 +200,26 @@ pub async fn create_dao( dao_detail: DaoInput) -> Result<String,String> {
 
     let mut updated_members = dao_detail.members.clone();
     updated_members.push(principal_id);
+
+
+    // upload image
+    let image_id: Result<String, String> = upload_image(canister_id, ImageData { content: dao_detail.image_content, name: dao_detail.image_title, content_type: dao_detail.image_content_type }).await;
+    let mut id = String::new();
+    let image_create_res: bool = match image_id {
+        Ok(value) => {
+            id = value;
+            Ok(())
+        }
+        Err(er) => {
+            ic_cdk::println!("{:?}", er);
+            Err(())
+        }
+    }.is_err();
+
+    if image_create_res {
+        return Err("Image upload failed".to_string());
+    }
+
 
     let update_dau_detail=DaoInput{
         dao_name:dao_detail.dao_name,
@@ -200,6 +231,12 @@ pub async fn create_dao( dao_detail: DaoInput) -> Result<String,String> {
         tokenissuer:dao_detail.tokenissuer,
         linksandsocials:dao_detail.linksandsocials,
         required_votes:dao_detail.required_votes,
+
+        image_id: Some(id),
+        image_content: None,
+        image_content_type: "".to_string(),
+        image_title: "".to_string(),
+        
     };
 
     let dao_detail_bytes: Vec<u8> = match encode_one(&update_dau_detail) {

@@ -515,6 +515,13 @@ pub struct DaoInput{
     pub linksandsocials:Vec<String>,
     pub required_votes:i8,
 
+
+        // image data
+    pub image_id: Option<String>,
+    pub image_content: Option<ByteBuf>,
+    pub image_title: String,
+    pub image_content_type: String,
+
 }
 
 

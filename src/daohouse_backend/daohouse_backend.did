@@ -8,6 +8,13 @@ type DaoInput = record {
   cool_down_period : text;
   purpose : text;
   required_votes : int8;
+
+   // image
+  image_content: opt blob;
+  image_title: text;
+  image_content_type: text;
+
+
 };
 type PostInfo = record {
   username: text;
@@ -20,6 +27,12 @@ type PostInfo = record {
   post_description : text;
   comment_list : vec text;
   post_created_at : nat64;
+
+ // image
+  image_content: opt blob;
+  image_title: text;
+  image_content_type: text;
+
 };
 type PostInput = record {
   username: text;
@@ -70,7 +83,7 @@ type UserProfile = record {
 };
 service : {
   comment_post : (text, text) -> (Result);
-  create_dao : (DaoInput) -> (Result);
+  create_dao : (text, DaoInput) -> (Result);
   create_new_post : (PostInput) -> (Result);
   create_profile : (text, Profileinput) -> (Result_1);
   delete_profile : () -> (Result_1);
