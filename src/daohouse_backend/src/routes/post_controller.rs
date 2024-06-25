@@ -44,7 +44,7 @@ use crate::types::{PostInfo, PostInput};
 type ReturnResult = Result<u32, String>;
 
 // upload image
- pub async  fn upload_image(canister_id: String, image_data: ImageData) -> String {
+ pub async  fn upload_image(canister_id: String, image_data: ImageData) -> Result<String, String> {
   let response: CallResult<(ReturnResult,)> = ic_cdk::call(Principal::from_text(canister_id).unwrap(), "create_file", (image_data,)).await;
   // format!("{:?}", result.ok());
 
@@ -53,15 +53,15 @@ type ReturnResult = Result<u32, String>;
 
   let formatted_value = match res0 {
       Ok((Ok(value),)) => {
-          format!("{}", value)
+          format!("{}", value);
+          Ok(format!("{}", value))
           // value
       },
-      Ok((Err(_),)) => {
-          "-1".to_string()
+      Ok((Err(err),)) => {
+          Err(err)
       },
-      Err(_) => {
-          println!("Result is an error");
-          "-1".to_string()
+      Err(err) => {
+        Err("err".to_string())
       }
   };
 

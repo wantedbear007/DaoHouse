@@ -23,21 +23,28 @@ async fn create_new_post( canister_id: String, post_details: PostInput) -> Resul
 
 
     // upload image
-    let image_data: ImageData = ImageData {
-        content: post_details.image_content,
-        content_type: post_details.image_content_type,
-        name: post_details.image_title
-    };
+    let image_id: Result<String, String> = upload_image(canister_id, ImageData { content: post_details.image_content, name: post_details.image_title, content_type: post_details.image_content_type }).await;
+    let mut id = String::new();
+    let image_create_res: bool = match image_id {
+        Ok(value) => {
+            id = value;
+            Ok(())
+        }
+        Err(er) => {
+            Err(())
+        }
+    }.is_err();
 
-    let image_id: String = upload_image(canister_id, image_data).await;
-
+    if image_create_res {
+        return Err("Image upload failed".to_string());
+    }
 
     let new_post = PostInfo {
         post_id: post_id.clone(),
         username: post_details.username,
       //  post_title: post_details.post_title,
         post_description: post_details.post_description,
-        post_img: image_id,
+        post_img: id,
         // post_created_at: String::new(), 
         post_created_at: ic_cdk::api::time(),
         like_count: 0,
