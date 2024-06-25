@@ -1,8 +1,9 @@
 
 // use std::collections::BTreeMap;
 
+use crate::routes::upload_image;
 use crate::types::{PostInfo,PostInput};
-use crate::{routes, with_state};
+use crate::{with_state, ImageData};
 use ic_cdk::{query, update};
 use ic_cdk::api;
 use sha2::{Digest, Sha256};
@@ -11,14 +12,50 @@ use candid:: Principal;
 
 
 #[update]
-async fn create_new_post(postdetail: PostInput) -> Result<String, String> {
+async fn create_new_post( canister_id: String, post_details: PostInput) -> Result<String, String> {
     let principal_id = api::caller();
     if principal_id == Principal::anonymous() {
         return Err("Anonymous principal not allowed to make calls.".to_string());
     }
     let uuids = raw_rand().await.unwrap().0;
     let post_id = format!("{:x}", Sha256::digest(&uuids));
-    with_state(|state| routes::create_new_post(state, post_id,postdetail.clone()))
+
+
+
+    // upload image
+    let image_data: ImageData = ImageData {
+        content: post_details.image_content,
+        content_type: post_details.image_content_type,
+        name: post_details.image_title
+    };
+
+    let image_id: String = upload_image(canister_id, image_data).await;
+
+
+    let new_post = PostInfo {
+        post_id: post_id.clone(),
+        username: post_details.username,
+      //  post_title: post_details.post_title,
+        post_description: post_details.post_description,
+        post_img: image_id,
+        // post_created_at: String::new(), 
+        post_created_at: ic_cdk::api::time(),
+        like_count: 0,
+        like_id_list: Vec::new(),
+        comment_count: 0,
+        comment_list: Vec::new(),
+    };
+
+    
+    with_state(|state| state.post_detail.insert(post_id, new_post));
+    
+    Ok("Post created successfully".to_string())
+    
+    
+    
+    // async closures are not stable in rust (JUNE 24)
+    // state.post_detail.insert(post_id, new_post);
+    // with_state(|state| routes::create_new_post(state, post_id,postdetail.clone()))
 }
 #[query]
 fn get_all_posts() -> Vec<(String, PostInfo)> {

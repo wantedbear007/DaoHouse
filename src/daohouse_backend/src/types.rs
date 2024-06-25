@@ -538,7 +538,13 @@ pub struct PostInput{
   //  pub post_title:String,
     pub post_description:String,
     pub username: String,
-    pub post_img:String,
+    //pub post_img:String,
+
+    // image data
+    pub image_content: Option<ByteBuf>,
+    pub image_title: String,
+    pub image_content_type: String,
+    
     
 }
 
