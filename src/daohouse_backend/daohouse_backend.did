@@ -29,9 +29,9 @@ type PostInfo = record {
   post_created_at : nat64;
 
  // image
-  image_content: opt blob;
-  image_title: text;
-  image_content_type: text;
+ // image_content: opt blob;
+//  image_title: text;
+//  image_content_type: text;
 
 };
 type PostInput = record {
@@ -39,6 +39,12 @@ type PostInput = record {
   post_img : text;
 //  post_title : text;
   post_description : text;
+
+
+  // image 
+  image_content: opt blob;
+  image_title: text;
+  image_content_type: text;
 };
 type Profileinput = record {
   username : text;
@@ -84,7 +90,7 @@ type UserProfile = record {
 service : {
   comment_post : (text, text) -> (Result);
   create_dao : (text, DaoInput) -> (Result);
-  create_new_post : (PostInput) -> (Result);
+  create_new_post : (text, PostInput) -> (Result);
   create_profile : (text, Profileinput) -> (Result_1);
   delete_profile : () -> (Result_1);
   follow_user : (principal) -> (Result_1);
