@@ -123,8 +123,6 @@ const EditProfile = () => {
       }));
     }
   };
-  
-  
 
   const handleRemoveImage = () => {
     setProfileData((prevData) => ({
