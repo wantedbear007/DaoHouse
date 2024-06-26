@@ -42,31 +42,44 @@ async fn create_profile(asset_handler_canister_id: String, profile: Profileinput
     }
 
 
+    // image upload
+    let image_id = upload_image(
+        asset_handler_canister_id,
+        ImageData {
+            content: profile.image_content,
+            name: profile.image_title.clone(),
+            content_type: profile.image_content_type.clone(),
+        },
+    ).await.map_err(|err| format!("Image upload failed: {}", err))?;
+
+
 
     
-    // upload image
-    let image_id: Result<String, String> = upload_image(asset_handler_canister_id, ImageData { content: profile.image_content, name: profile.image_title, content_type: profile.image_content_type }).await;
-    let mut id = String::new();
-    let image_create_res: bool = match image_id {
-        Ok(value) => {
-            id = value;
-            Ok(())
-        }
-        Err(er) => {
-            ic_cdk::println!("{}", er.to_string());
-            Err(())
-        }
-    }.is_err();
+    // // upload image
+    // let image_id: Result<String, String> = upload_image(asset_handler_canister_id, ImageData { content: profile.image_content, name: profile.image_title, content_type: profile.image_content_type }).await;
 
-    if image_create_res {
-        return Err("Image upload failed".to_string());
-    }
+    
+    // let mut id = String::new();
+    // let image_create_res: bool = match image_id {
+    //     Ok(value) => {
+    //         id = value;
+    //         Ok(())
+    //     }
+    //     Err(er) => {
+    //         ic_cdk::println!("{}", er.to_string());
+    //         Err(())
+    //     }
+    // }.is_err();
+
+    // if image_create_res {
+    //     return Err("Image upload failed".to_string());
+    // }
 
 
     let new_profile = UserProfile {
         user_id: principal_id,
         email_id: profile.email_id,
-        profile_img: id,
+        profile_img: image_id,
         username: profile.username,
         dao_ids: Vec::new(),
         post_count: 0,
