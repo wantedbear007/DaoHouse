@@ -60,8 +60,17 @@ type ReturnResult = Result<u32, String>;
       Ok((Err(err),)) => {
           Err(err)
       },
-      Err(err) => {
-        Err("err".to_string())
+      Err((code, message)) => {
+        match code {
+          RejectionCode::NoError => Err("NoError".to_string()),
+          RejectionCode::SysFatal => Err("SysFatal".to_string()),
+          RejectionCode::SysTransient => Err("SysTransient".to_string()),
+          RejectionCode::DestinationInvalid => Err("DestinationInvalid".to_string()),
+          RejectionCode::CanisterReject => Err("CanisterReject".to_string()),
+          // Handle other rejection codes here
+          _ => Err(format!("Unknown rejection code: {:?}: {}", code, message)),
+          // _ => Err(format!("Unknown rejection code: {:?}", code)),
+      }
       }
   };
 
