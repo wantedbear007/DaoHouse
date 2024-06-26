@@ -20,7 +20,7 @@ import Lottie from "react-lottie";
 import { AssetManager } from "@dfinity/assets";
 import { HttpAgent } from "@dfinity/agent";
 import { toast } from "react-toastify";
-
+import data from "../../../../../canister_ids.json"
 
 
 const EditProfile = () => {
@@ -44,6 +44,10 @@ const EditProfile = () => {
   });
 
   useEffect(() => {
+
+    console.log("hello ")
+    console.log(data["ic-asset-handler"]["ic"])
+
     const fetchData = async () => {
       try {
         const files = await assetManager.list();
@@ -90,9 +94,11 @@ const EditProfile = () => {
     };
   
     // const canisterId = process.env.CANISTER_ID_DAOHOUSE_FRONTEND;
-    const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
+    // const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLE;
+    const canisterId = data["ic-asset-handler"]["ic"]
 
     try {
+      console.log("canister id of asset ", canisterId)
       const ans = await backendActor.create_profile(canisterId, profilePayload); 
       toast.success("Profile created successfully");     
       console.log("Profile created successfully", ans);
