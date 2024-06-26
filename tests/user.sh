@@ -18,7 +18,7 @@
 
 # creare_profile function
     test1=$(dfx canister call daohouse_backend create_profile '(
-    "cbopz-duaaa-aaaaa-qaaka-cai",
+    "aovwi-4maaa-aaaaa-qaagq-cai",
 
     record {
         email_id = "bhanupra@gmail.com";
@@ -132,29 +132,29 @@ echo $test1
 
 
 
-dao_test=$(dfx canister call daohouse_backend create_dao '("cbopz-duaaa-aaaaa-qaaka-cai", record {
-    dao_name = "Sample DAO";
-    purpose = "To manage community projects";
-    daotype = "Non-profit";
-    link_of_document = "https://example.com/charter.pdf";
-    cool_down_period = "7 days";
-    members=vec{
-        principal "aaaaa-aa";
-    };
-    tokenissuer="sample";
-    linksandsocials=vec{
-        "https://twitter.com/sampledao";
-    };
-    required_votes=100;
+# dao_test=$(dfx canister call daohouse_backend create_dao '("cbopz-duaaa-aaaaa-qaaka-cai", record {
+#     dao_name = "Sample DAO";
+#     purpose = "To manage community projects";
+#     daotype = "Non-profit";
+#     link_of_document = "https://example.com/charter.pdf";
+#     cool_down_period = "7 days";
+#     members=vec{
+#         principal "aaaaa-aa";
+#     };
+#     tokenissuer="sample";
+#     linksandsocials=vec{
+#         "https://twitter.com/sampledao";
+#     };
+#     required_votes=100;
     
-      image_content= opt vec {10};
-  image_title = "samppe.jpg";
-  image_content_type = "image/jpg";
+#       image_content= opt vec {10};
+#   image_title = "samppe.jpg";
+#   image_content_type = "image/jpg";
 
-})')
+# })')
 
 
-echo $dao_test
+# echo $dao_test
 
 
 # # dfx canister call b77ix-eeaaa-aaaaa-qaada-cai add_member_to_group '("council", principal "lebve-ee3za-txcur-xbw36-ujg7l-gpofb-x6onu-cuxxs-kx2fx-mlklc-bqe")'

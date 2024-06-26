@@ -89,7 +89,9 @@ const EditProfile = () => {
       image_content_type: profileData.image_content_type || "",
     };
   
-    const canisterId = process.env.CANISTER_ID_DAOHOUSE_FRONTEND;
+    // const canisterId = process.env.CANISTER_ID_DAOHOUSE_FRONTEND;
+    const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
+
     try {
       const ans = await backendActor.create_profile(canisterId, profilePayload); 
       toast.success("Profile created successfully");     

@@ -31,6 +31,7 @@ async fn create_new_post( canister_id: String, post_details: PostInput) -> Resul
             Ok(())
         }
         Err(er) => {
+            ic_cdk::println!("error {}", er.to_string());
             Err(())
         }
     }.is_err();
