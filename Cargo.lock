@@ -929,32 +929,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ic-asset-handler"
-version = "0.2.0"
-dependencies = [
- "base64 0.21.7",
- "bytes",
- "candid",
- "ciborium 0.2.2",
- "crc32fast",
- "hex",
- "hmac",
- "hyperx",
- "ic-cdk 0.13.3",
- "ic-cdk-timers 0.8.0",
- "ic-http-certification",
- "ic-stable-structures",
- "lazy_static",
- "num-traits",
- "once_cell",
- "serde",
- "serde_bytes",
- "serde_json",
- "sha3",
- "url",
-]
-
-[[package]]
 name = "ic-cdk"
 version = "0.13.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1107,6 +1081,32 @@ name = "ic0"
 version = "0.23.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8de254dd67bbd58073e23dc1c8553ba12fa1dc610a19de94ad2bbcd0460c067f"
+
+[[package]]
+name = "ic_asset_handler"
+version = "0.1.0"
+dependencies = [
+ "base64 0.21.7",
+ "bytes",
+ "candid",
+ "ciborium 0.2.2",
+ "crc32fast",
+ "hex",
+ "hmac",
+ "hyperx",
+ "ic-cdk 0.13.3",
+ "ic-cdk-timers 0.8.0",
+ "ic-http-certification",
+ "ic-stable-structures",
+ "lazy_static",
+ "num-traits",
+ "once_cell",
+ "serde",
+ "serde_bytes",
+ "serde_json",
+ "sha3",
+ "url",
+]
 
 [[package]]
 name = "ic_principal"
@@ -1679,9 +1679,9 @@ checksum = "7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f"
 
 [[package]]
 name = "subtle"
-version = "2.6.0"
+version = "2.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0d0208408ba0c3df17ed26eb06992cb1a1268d41b2c0e12e65203fbe3972cee5"
+checksum = "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
 
 [[package]]
 name = "syn"
@@ -1733,9 +1733,9 @@ dependencies = [
 
 [[package]]
 name = "tinyvec"
-version = "1.6.0"
+version = "1.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "87cc5ceb3875bb20c2890005a4e226a4651264a5c75edb2421b52861a0a0cb50"
+checksum = "c55115c6fbe2d2bef26eb09ad74bde02d8255476fc0c7b515ef09fbb35742d82"
 dependencies = [
  "tinyvec_macros",
 ]

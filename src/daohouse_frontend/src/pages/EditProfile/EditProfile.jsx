@@ -94,8 +94,8 @@ const EditProfile = () => {
     };
   
     // const canisterId = process.env.CANISTER_ID_DAOHOUSE_FRONTEND;
-    // const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLE;
-    const canisterId = data["ic-asset-handler"]["ic"]
+    const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
+    // const canisterId = data["ic-asset-handler"]["ic"]
 
     try {
       console.log("canister id of asset ", canisterId)

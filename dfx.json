@@ -1,12 +1,8 @@
 {
   "canisters": {
-    "ic-asset-handler": {
-      "candid": "src/ic-asset-handler/ic-asset-handler.did",
-      "declarations": {
-        "node_compatibility": true
-      },
-      "package": "ic-asset-handler",
-      "optimize": "cycles",
+    "ic_asset_handler": {
+      "candid": "src/ic_asset_handler/ic_asset_handler.did",
+      "package": "ic_asset_handler",
       "type": "rust"
     },
     "daohouse_backend": {
