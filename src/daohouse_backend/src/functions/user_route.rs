@@ -45,28 +45,24 @@ async fn create_profile(asset_handler_canister_id: String, profile: Profileinput
 
     
     // upload image
-    let image_id: Result<String, String> = upload_image(asset_handler_canister_id, ImageData { content: profile.image_content, name: profile.image_title, content_type: profile.image_content_type }).await;
-    let mut id = String::new();
-    let image_create_res: bool = match image_id {
-        Ok(value) => {
-            id = value;
-            Ok(())
-        }
-        Err(er) => {
-            ic_cdk::println!("{}", er.to_string());
-            Err(())
-        }
-    }.is_err();
+ 
+    // image upload
+    let image_id = upload_image(
+        asset_handler_canister_id,
+        ImageData {
+            content: profile.image_content,
+            name: profile.image_title.clone(),
+            content_type: profile.image_content_type.clone(),
+        },
+    ).await.map_err(|err| format!("Image upload failed: {}", err))?;
 
-    if image_create_res {
-        return Err("Image upload failed".to_string());
-    }
+
 
 
     let new_profile = UserProfile {
         user_id: principal_id,
         email_id: profile.email_id,
-        profile_img: id,
+        profile_img: image_id,
         username: profile.username,
         dao_ids: Vec::new(),
         post_count: 0,
@@ -327,10 +323,10 @@ async fn deposit_cycles(arg: CanisterIdRecord, cycles: u128) -> CallResult<()> {
 }
 
 async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
-    // let wasm_base64: &str = "3831fb07143cd43c3c51f770342d2b7d0a594311529f5503587bf1544ccd44be";
-    // let wasm_module_sample: Vec<u8> = base64::decode(wasm_base64).expect("Decoding failed");
+    let wasm_base64: &str = "3831fb07143cd43c3c51f770342d2b7d0a594311529f5503587bf1544ccd44be";
+    let wasm_module_sample: Vec<u8> = base64::decode(wasm_base64).expect("Decoding failed");
 
-    let wasm_module_sample: Vec<u8> = include_bytes!("../../../../.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
+    // let wasm_module_sample: Vec<u8> = include_bytes!("../../../../.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
     // /
     
     let cycles: u128 = 10_000_000_000; 

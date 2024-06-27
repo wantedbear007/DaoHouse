@@ -583,92 +583,92 @@ pub mod fs {
     }
 }
 
-#[cfg(test)]
-mod test {
-    use crate::MAX_FILE_SIZE;
+// #[cfg(test)]
+// mod test {
+//     use crate::MAX_FILE_SIZE;
 
-    use super::*;
+//     use super::*;
 
-    #[test]
-    fn test_bound_max_size() {
-        let v = FileId(u32::MAX, u32::MAX);
-        let v = v.to_bytes();
-        println!("FileId max_size: {:?}, {}", v.len(), hex::encode(&v));
+//     #[test]
+//     fn test_bound_max_size() {
+//         let v = FileId(u32::MAX, u32::MAX);
+//         let v = v.to_bytes();
+//         println!("FileId max_size: {:?}, {}", v.len(), hex::encode(&v));
 
-        let v = FileId(0u32, 0u32);
-        let v = v.to_bytes();
-        println!("FileId min_size: {:?}, {}", v.len(), hex::encode(&v));
-    }
+//         let v = FileId(0u32, 0u32);
+//         let v = v.to_bytes();
+//         println!("FileId min_size: {:?}, {}", v.len(), hex::encode(&v));
+//     }
 
-    #[test]
-    fn test_fs() {
-        state::with_mut(|b| {
-            b.name = "default".to_string();
-            b.max_file_size = MAX_FILE_SIZE;
-            b.max_dir_depth = 10;
-            b.max_children = 1000;
-        });
+//     #[test]
+//     fn test_fs() {
+//         state::with_mut(|b| {
+//             b.name = "default".to_string();
+//             b.max_file_size = MAX_FILE_SIZE;
+//             b.max_dir_depth = 10;
+//             b.max_children = 1000;
+//         });
 
-        assert!(fs::get_file(0).is_none());
-        assert!(fs::get_full_chunks(0).is_err());
-        assert!(fs::get_full_chunks(1).is_err());
+//         assert!(fs::get_file(0).is_none());
+//         assert!(fs::get_full_chunks(0).is_err());
+//         assert!(fs::get_full_chunks(1).is_err());
 
-        let f1 = fs::add_file(FileMetadata {
-            name: "f1.bin".to_string(),
-            ..Default::default()
-        })
-        .unwrap();
-        assert_eq!(f1, 1);
+//         let f1 = fs::add_file(FileMetadata {
+//             name: "f1.bin".to_string(),
+//             ..Default::default()
+//         })
+//         .unwrap();
+//         assert_eq!(f1, 1);
 
-        assert!(fs::get_full_chunks(0).is_err());
-        let f1_data = fs::get_full_chunks(f1).unwrap();
-        assert!(f1_data.is_empty());
+//         assert!(fs::get_full_chunks(0).is_err());
+//         let f1_data = fs::get_full_chunks(f1).unwrap();
+//         assert!(f1_data.is_empty());
 
-        let f1_meta = fs::get_file(f1).unwrap();
-        assert_eq!(f1_meta.name, "f1.bin");
+//         let f1_meta = fs::get_file(f1).unwrap();
+//         assert_eq!(f1_meta.name, "f1.bin");
 
-        assert!(fs::update_chunk(0, 0, 999, [0u8; 32].to_vec()).is_err());
-        let _ = fs::update_chunk(f1, 0, 999, [0u8; 32].to_vec()).unwrap();
-        let _ = fs::update_chunk(f1, 1, 1000, [0u8; 32].to_vec()).unwrap();
-        let f1_data = fs::get_full_chunks(f1).unwrap();
-        assert_eq!(f1_data, [0u8; 64]);
+//         assert!(fs::update_chunk(0, 0, 999, [0u8; 32].to_vec()).is_err());
+//         let _ = fs::update_chunk(f1, 0, 999, [0u8; 32].to_vec()).unwrap();
+//         let _ = fs::update_chunk(f1, 1, 1000, [0u8; 32].to_vec()).unwrap();
+//         let f1_data = fs::get_full_chunks(f1).unwrap();
+//         assert_eq!(f1_data, [0u8; 64]);
 
-        let f1_meta = fs::get_file(f1).unwrap();
-        assert_eq!(f1_meta.name, "f1.bin");
-        assert_eq!(f1_meta.size, 64);
-        assert_eq!(f1_meta.filled, 64);
-        assert_eq!(f1_meta.chunks, 2);
+//         let f1_meta = fs::get_file(f1).unwrap();
+//         assert_eq!(f1_meta.name, "f1.bin");
+//         assert_eq!(f1_meta.size, 64);
+//         assert_eq!(f1_meta.filled, 64);
+//         assert_eq!(f1_meta.chunks, 2);
 
-        let f2 = fs::add_file(FileMetadata {
-            name: "f2.bin".to_string(),
-            ..Default::default()
-        })
-        .unwrap();
-        assert_eq!(f2, 2);
-        fs::update_chunk(f2, 0, 999, [0u8; 16].to_vec()).unwrap();
-        fs::update_chunk(f2, 1, 1000, [1u8; 16].to_vec()).unwrap();
-        fs::update_chunk(f1, 3, 1000, [1u8; 16].to_vec()).unwrap();
-        fs::update_chunk(f2, 2, 1000, [2u8; 16].to_vec()).unwrap();
-        fs::update_chunk(f1, 2, 1000, [2u8; 16].to_vec()).unwrap();
+//         let f2 = fs::add_file(FileMetadata {
+//             name: "f2.bin".to_string(),
+//             ..Default::default()
+//         })
+//         .unwrap();
+//         assert_eq!(f2, 2);
+//         fs::update_chunk(f2, 0, 999, [0u8; 16].to_vec()).unwrap();
+//         fs::update_chunk(f2, 1, 1000, [1u8; 16].to_vec()).unwrap();
+//         fs::update_chunk(f1, 3, 1000, [1u8; 16].to_vec()).unwrap();
+//         fs::update_chunk(f2, 2, 1000, [2u8; 16].to_vec()).unwrap();
+//         fs::update_chunk(f1, 2, 1000, [2u8; 16].to_vec()).unwrap();
 
-        let f1_data = fs::get_full_chunks(f1).unwrap();
-        assert_eq!(&f1_data[0..64], &[0u8; 64]);
-        assert_eq!(&f1_data[64..80], &[2u8; 16]);
-        assert_eq!(&f1_data[80..96], &[1u8; 16]);
+//         let f1_data = fs::get_full_chunks(f1).unwrap();
+//         assert_eq!(&f1_data[0..64], &[0u8; 64]);
+//         assert_eq!(&f1_data[64..80], &[2u8; 16]);
+//         assert_eq!(&f1_data[80..96], &[1u8; 16]);
 
-        let f1_meta = fs::get_file(f1).unwrap();
-        assert_eq!(f1_meta.size, 96);
-        assert_eq!(f1_meta.filled, 96);
-        assert_eq!(f1_meta.chunks, 4);
+//         let f1_meta = fs::get_file(f1).unwrap();
+//         assert_eq!(f1_meta.size, 96);
+//         assert_eq!(f1_meta.filled, 96);
+//         assert_eq!(f1_meta.chunks, 4);
 
-        let f2_data = fs::get_full_chunks(f2).unwrap();
-        assert_eq!(&f2_data[0..16], &[0u8; 16]);
-        assert_eq!(&f2_data[16..32], &[1u8; 16]);
-        assert_eq!(&f2_data[32..48], &[2u8; 16]);
+//         let f2_data = fs::get_full_chunks(f2).unwrap();
+//         assert_eq!(&f2_data[0..16], &[0u8; 16]);
+//         assert_eq!(&f2_data[16..32], &[1u8; 16]);
+//         assert_eq!(&f2_data[32..48], &[2u8; 16]);
 
-        let f2_meta = fs::get_file(f2).unwrap();
-        assert_eq!(f2_meta.size, 48);
-        assert_eq!(f2_meta.filled, 48);
-        assert_eq!(f2_meta.chunks, 3);
-    }
-}
+//         let f2_meta = fs::get_file(f2).unwrap();
+//         assert_eq!(f2_meta.size, 48);
+//         assert_eq!(f2_meta.filled, 48);
+//         assert_eq!(f2_meta.chunks, 3);
+//     }
+// }

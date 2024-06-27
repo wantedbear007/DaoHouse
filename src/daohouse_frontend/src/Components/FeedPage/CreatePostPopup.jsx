@@ -24,10 +24,36 @@ const CreatePostPopup = ({ onClose }) => {
   const { backendActor } = useAuth();
 
   async function handleCreatePost() {
-    const postPayload = {
-      post_description: description,
-      post_img: "",
-    };
+
+
+    const canisterId = "br5f7-7uaaa-aaaaa-qaaca-cai";
+
+          // const postPayload = {
+          //   post_description: description,
+          //   post_img: "",
+          // };
+
+          console.log(canisterId)
+
+          const postPayload = {
+            post_description: "This is a sample post description.",
+            post_img: "testing",
+            username: "prataptechnologies",
+            image_content: [10], 
+            image_title: "bhanuprofile.png",
+            image_content_type: "image/png",
+          };
+            console.log("hello")
+            console.log(canisterId)
+          const ans = await backendActor.create_new_post(canisterId, postPayload);
+          toast.success("Post created successfully");
+          console.log("Post created successfully", ans);
+          onClose();
+
+    // const postPayload = {
+    //   post_description: description,
+    //   post_img: "",
+    // };
 
     try {
       const ans = await backendActor.create_new_post(postPayload);
@@ -95,12 +121,27 @@ const CreatePostPopup = ({ onClose }) => {
         disableBtn(postButton);
 
         try {
-          const postPayload = {
-            post_description: description,
-            post_img: "",
-          };
 
-          const ans = await backendActor.create_new_post(postPayload);
+    const canisterId = "br5f7-7uaaa-aaaaa-qaaca-cai";
+
+          // const postPayload = {
+          //   post_description: description,
+          //   post_img: "",
+          // };
+
+          console.log(canisterId)
+
+          const postPayload = {
+            post_description: "This is a sample post description.",
+            post_img: "testing",
+            username: "prataptechnologies",
+            image_content: [10], 
+            image_title: "bhanuprofile.png",
+            image_content_type: "image/png",
+          };
+            console.log("hello")
+            console.log(canisterId)
+          const ans = await backendActor.create_new_post(canisterId, postPayload);
           toast.success("Post created successfully");
           console.log("Post created successfully", ans);
           onClose();
@@ -171,7 +212,7 @@ const CreatePostPopup = ({ onClose }) => {
                     <button
                       className="flex items-center justify-center md:w-24 w-18 md:gap-4 gap-2 mt-2 bg-[#0E3746] text-white md:text-[16px] text-[14px] md:px-4 px-3 py-2 font-semibold rounded-[10px]"
                       style={{ boxShadow: "0px 3px 6px 0px #00000026" }}
-                      // onClick={handleCreatePost}
+                      onClick={handleCreatePost}
                       id="postButton"
                     >
                       <span>Post</span>

@@ -14,11 +14,11 @@
 
 
 # To access image via URL
-# http://br5f7-7uaaa-aaaaa-qaaca-cai.localhost:4943/f/FILE_
+# http://br5f7-7uaaa-aaaaa-qaaca-cai.localhost:4943/f/1
 
 # creare_profile function
     test1=$(dfx canister call daohouse_backend create_profile '(
-    "aovwi-4maaa-aaaaa-qaagq-cai",
+    "br5f7-7uaaa-aaaaa-qaaca-cai",
 
     record {
         email_id = "bhanupra@gmail.com";
@@ -63,12 +63,12 @@ echo $test1
 # # create_new_post function
 test3=$(dfx canister call daohouse_backend create_new_post '(
 
-"dccg7-xmaaa-aaaaa-qaamq-cai",
+"br5f7-7uaaa-aaaaa-qaaca-cai",
 record{
     post_description="This is a sample post description.";
     post_img="testing";
     username="prataptechnologies";
-    image_content = opt vec {10};
+    image_content =  vec {10};
         image_title = "bhanuprofile.png";
         image_content_type = "image/png";
 })')
