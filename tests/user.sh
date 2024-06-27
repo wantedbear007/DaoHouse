@@ -10,16 +10,18 @@
 
 # echo "TESTING3: $TESTING3"
 
+
+# dfx canister uninstall-code ic_asset_handler --network ic
+
 # dfx  identity use principal3
 
 
 # To access image via URL
-# http://br5f7-7uaaa-aaaaa-qaaca-cai.localhost:4943/f/1
+# http://a3shf-5eaaa-aaaaa-qaafa-cai.localhost:4943/f/1
 
 # creare_profile function
     test1=$(dfx canister call daohouse_backend create_profile '(
     "br5f7-7uaaa-aaaaa-qaaca-cai",
-
     record {
         email_id = "bhanupra@gmail.com";
         profile_img = "abc";  
@@ -63,7 +65,7 @@ echo $test1
 # # create_new_post function
 test3=$(dfx canister call daohouse_backend create_new_post '(
 
-"br5f7-7uaaa-aaaaa-qaaca-cai",
+"avqkn-guaaa-aaaaa-qaaea-cai",
 record{
     post_description="This is a sample post description.";
     post_img="testing";

@@ -44,7 +44,7 @@ use crate::types::{PostInfo, PostInput};
 type ReturnResult = Result<u32, String>;
 
 // upload image
-pub async  fn upload_image(canister_id: String, image_data: ImageData) -> Result<String, String> {
+pub async fn upload_image(canister_id: String, image_data: ImageData) -> Result<String, String> {
   let response: CallResult<(ReturnResult,)> = ic_cdk::call(Principal::from_text(canister_id).unwrap(), "create_file", (image_data,)).await;
   // format!("{:?}", result.ok());
 

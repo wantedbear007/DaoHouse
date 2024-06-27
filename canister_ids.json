@@ -1,14 +1,11 @@
 {
   "dao_canister": {
-    "ic": "qmxcp-waaaa-aaaak-aksqa-cai"
+    "ic": "377nl-zyaaa-aaaag-aldya-cai"
   },
   "daohouse_backend": {
-    "ic": "qlwe3-3yaaa-aaaak-aksqq-cai"
+    "ic": "3y6l7-uaaaa-aaaag-aldyq-cai"
   },
-  "daohouse_frontend": {
-    "ic": "qcvph-nqaaa-aaaak-aksra-cai"
-  },
-  "ic-asset-handler": {
-    "ic": "dccg7-xmaaa-aaaaa-qaamq-cai"
+  "ic_asset_handler": {
+    "ic": "zccdd-kqaaa-aaaag-aldxq-cai"
   }
 }
