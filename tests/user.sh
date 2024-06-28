@@ -4,7 +4,8 @@
 # dfx identity new principal3 --storage-mode=plaintext || true
 
 
-
+ASSET_HANDLER_ID=$(dfx canister id ic_asset_handler )
+echo $ASSET_HANDLER_ID
 # TESTING3=$(dfx --identity principal3 identity get-principal)
 
 
@@ -64,20 +65,27 @@ echo $test1
 #     echo "Test 2 failed"
 # fi
 
-# # create_new_post function
-test3=$(dfx canister call daohouse_backend create_new_post '(
 
-"avqkn-guaaa-aaaaa-qaaea-cai",
-record{
-    post_description="This is a sample post description.";
-    post_img="testing";
-    username="prataptechnologies";
-    image_content =  vec {10};
-        image_title = "bhanuprofile.png";
-        image_content_type = "image/png";
-})')
+# create_new_post function
+test3=$(dfx canister call daohouse_backend create_new_post "(
+   \"$ASSET_HANDLER_ID\",
+  record {
+    post_description = \"This post description.\";
+    post_img = \"testing\";
+    username = \"prataptechnologies\";
+    image_content = vec {10};
+    image_title = \"bhanuprofile.png\";
+    image_content_type = \"image/png\";
+  }
+)")
 
-echo $test3;
+echo $test3
+
+# get user specific post
+test4=$(dfx canister call daohouse_backend get_my_post)
+
+echo $test4
+
 # # 
 
 

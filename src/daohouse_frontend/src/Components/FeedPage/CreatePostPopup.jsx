@@ -24,39 +24,25 @@ const CreatePostPopup = ({ onClose }) => {
   const { backendActor } = useAuth();
 
   async function handleCreatePost() {
+    const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
 
+    console.log(canisterId);
 
-    const canisterId = "br5f7-7uaaa-aaaaa-qaaca-cai";
-
+    const postPayload = {
+      post_description: "This is a sample post description.",
+      post_img: "testing",
+      username: "prataptechnologies",
+      image_content: [10],
+      image_title: "bhanuprofile.png",
+      image_content_type: "image/png",
+    };
           // const postPayload = {
           //   post_description: description,
           //   post_img: "",
           // };
-
-          console.log(canisterId)
-
-          const postPayload = {
-            post_description: "This is a sample post description.",
-            post_img: "testing",
-            username: "prataptechnologies",
-            image_content: [10], 
-            image_title: "bhanuprofile.png",
-            image_content_type: "image/png",
-          };
-            console.log("hello")
-            console.log(canisterId)
-          const ans = await backendActor.create_new_post(canisterId, postPayload);
-          toast.success("Post created successfully");
-          console.log("Post created successfully", ans);
-          onClose();
-
-    // const postPayload = {
-    //   post_description: description,
-    //   post_img: "",
-    // };
-
     try {
-      const ans = await backendActor.create_new_post(postPayload);
+      const ans = await backendActor.create_new_post(canisterId, postPayload);
+
       toast.success("Post created successfully");
       console.log("Post created successfully", ans);
       onClose();
@@ -121,27 +107,29 @@ const CreatePostPopup = ({ onClose }) => {
         disableBtn(postButton);
 
         try {
-
-    const canisterId = "br5f7-7uaaa-aaaaa-qaaca-cai";
+          const canisterId = "br5f7-7uaaa-aaaaa-qaaca-cai";
 
           // const postPayload = {
           //   post_description: description,
           //   post_img: "",
           // };
 
-          console.log(canisterId)
+          console.log(canisterId);
 
           const postPayload = {
             post_description: "This is a sample post description.",
             post_img: "testing",
             username: "prataptechnologies",
-            image_content: [10], 
+            image_content: [10],
             image_title: "bhanuprofile.png",
             image_content_type: "image/png",
           };
-            console.log("hello")
-            console.log(canisterId)
-          const ans = await backendActor.create_new_post(canisterId, postPayload);
+          console.log("hello");
+          console.log(canisterId);
+          const ans = await backendActor.create_new_post(
+            canisterId,
+            postPayload
+          );
           toast.success("Post created successfully");
           console.log("Post created successfully", ans);
           onClose();

@@ -34,6 +34,9 @@ type PostInfo = record {
 //  image_content_type: text;
 
 };
+
+
+
 type PostInput = record {
   username: text;
   post_img : text;
@@ -64,10 +67,14 @@ type Profileinput = record {
 
 
 };
+
+
+
 type Result = variant { Ok : text; Err : text };
 type Result_1 = variant { Ok; Err : text };
 type Result_2 = variant { Ok : PostInfo; Err : text };
 type Result_3 = variant { Ok : UserProfile; Err : text };
+type Result_4 = variant { Ok: vec record {text; PostInfo}; Err: text  };
 type UserProfile = record {
   post_id : vec text;
   username : text;
@@ -99,4 +106,5 @@ service : {
   get_user_profile : () -> (Result_3) query;
   like_post : (text) -> (Result);
   update_profile : (Profileinput) -> (Result_1);
+  get_my_post: () -> (Result_4);
 }
