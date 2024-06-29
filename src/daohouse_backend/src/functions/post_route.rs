@@ -41,6 +41,7 @@ async fn create_new_post( canister_id: String, post_details: PostInput) -> Resul
     }
 
     let new_post = PostInfo {
+        principal_id,
         post_id: post_id.clone(),
         username: post_details.username,
       //  post_title: post_details.post_title,
@@ -94,6 +95,7 @@ async fn like_post(post_id:String)->Result<String, String>{
     updated_like_id_list.push(principal_id);
 
     let new_post = PostInfo {
+        principal_id: getpost.principal_id,
         post_id: getpost.post_id.clone(),
         username: getpost.username,
     //    post_title: getpost.post_title.clone(),
@@ -119,8 +121,6 @@ async fn get_post_byid(id: String) -> Result<PostInfo, String> {
     }
 }
 
-
-
 #[update]
 async fn comment_post(post_id:String,comment:String)->Result<String, String>{
     let getpost=with_state(|state| state.post_detail.get(&post_id).unwrap().clone());
@@ -136,6 +136,7 @@ async fn comment_post(post_id:String,comment:String)->Result<String, String>{
 
 
     let new_post = PostInfo {
+        principal_id: getpost.principal_id,
         post_id: getpost.post_id.clone(),
         username: getpost.username,
      //   post_title: getpost.post_title.clone(),
@@ -152,6 +153,30 @@ async fn comment_post(post_id:String,comment:String)->Result<String, String>{
 
 
     return Ok("comment successfully".to_string());
+
+
+}
+
+#[update]
+fn get_my_post() -> Result<Vec<(String, PostInfo)>, String> {
+
+    let principal_id = api::caller();
+    if principal_id == Principal::anonymous() {
+        return Err("Anonymous user not allowed, register.".to_string());
+    }
+
+    let mut posts: Vec<(String, PostInfo)> = Vec::new();
+
+    with_state(|state| for (k, v) in state.post_detail.iter() {
+        if v.principal_id == principal_id {
+            // posts.push(v)
+            posts.push((k.clone(), v.clone()))
+        }
+    });
+
+    Ok(posts)
+
+    // Ok("sfsd".to_string())
 
 
 }

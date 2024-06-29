@@ -45,8 +45,6 @@ const EditProfile = () => {
 
   useEffect(() => {
 
-    console.log("hello ")
-    console.log(data["ic-asset-handler"]["ic"])
 
     const fetchData = async () => {
       try {
