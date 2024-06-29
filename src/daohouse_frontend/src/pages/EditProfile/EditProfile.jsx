@@ -97,9 +97,14 @@ const EditProfile = () => {
 
     try {
       console.log("canister id of asset ", canisterId)
-      const ans = await backendActor.create_profile(canisterId, profilePayload); 
-      toast.success("Profile created successfully");     
-      console.log("Profile created successfully", ans);
+      const response = await backendActor.create_profile(canisterId, profilePayload); 
+
+      if(response.Err){
+        toast.error(`${response.Err}`);     
+      }else{
+        toast.success("Profile created successfully");     
+      }
+  
     } catch (error) {
       console.error("Error creating profile:", error);
     }
@@ -121,6 +126,7 @@ const EditProfile = () => {
       const content = new Uint8Array(arrayBuffer);
       setProfileData((prevData) => ({
         ...prevData,
+        profile_img: URL.createObjectURL(file), 
         image_content: Array.from(content),
         image_title: file.name,
         image_content_type: file.type,
