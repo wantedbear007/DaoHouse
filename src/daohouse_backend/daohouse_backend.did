@@ -16,6 +16,14 @@ type DaoInput = record {
 
 
 };
+
+type Comment = record {
+  author_principal: principal;
+  comment_text: text;
+  replies: vec text;
+  comment_id: opt text;
+};
+
 type PostInfo = record {
   username: text;
   post_img : text;
@@ -25,7 +33,8 @@ type PostInfo = record {
   like_count : nat32;
   like_id_list : vec principal;
   post_description : text;
-  comment_list : vec text;
+ // comment_list : vec text;
+ comment_list : vec Comment;
   post_created_at : nat64;
 
  // image
@@ -94,6 +103,13 @@ type UserProfile = record {
   tag_defines : vec text;
   followings_list : vec principal;
 };
+
+type CommentInfo = record {
+  comment_id: text;
+  comment: text;
+  post_id: text;
+};
+
 service : {
   comment_post : (text, text) -> (Result);
   create_dao : (text, DaoInput) -> (Result);
@@ -107,4 +123,5 @@ service : {
   like_post : (text) -> (Result);
   update_profile : (Profileinput) -> (Result_1);
   get_my_post: () -> (Result_4);
+  reply_comment: (CommentInfo) -> (Result);
 }

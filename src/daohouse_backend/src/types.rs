@@ -538,7 +538,7 @@ pub struct PostInfo{
     pub like_count:u32,
     pub like_id_list:Vec<Principal>,
     pub comment_count:u32,
-    pub comment_list:Vec<String>,  
+    pub comment_list:Vec<Comment>,  
 }
 
 #[derive(Clone,CandidType,Serialize,Deserialize)]
@@ -563,7 +563,28 @@ pub struct ImageData {
     pub content_type: String,
 }
 
-const MAX_VALUE_SIZE: u32 = 600;
+// comment
+#[derive(Clone, CandidType, Serialize, Deserialize)]
+pub struct Comment {
+    pub author_principal: Principal,
+    pub comment_text: String,
+    pub comment_id: Option<String>,
+    pub replies: Vec<String>
+}
+
+// reply comment data
+#[derive(Clone, CandidType, Serialize, Deserialize)]
+pub struct ReplyCommentData {
+    pub comment_id: String,
+    pub comment: String,
+    pub post_id: String
+}
+
+
+
+const MAX_VALUE_SIZE: u32 = 700;
+// const MAX_VALUE_SIZE: u32 = 600;
+
 
 
 

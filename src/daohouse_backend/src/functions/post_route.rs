@@ -1,14 +1,16 @@
 
 // use std::collections::BTreeMap;
 
+
 use crate::routes::upload_image;
-use crate::types::{PostInfo,PostInput};
-use crate::{with_state, ImageData};
+use crate::types::{PostInfo,PostInput, Comment};
+use crate::{with_state, ImageData, ReplyCommentData};
 use ic_cdk::{query, update};
 use ic_cdk::api;
 use sha2::{Digest, Sha256};
 use ic_cdk::api::management_canister::main::raw_rand;
 use candid:: Principal;
+// use uuid::Uuid;
 
 
 #[update]
@@ -122,7 +124,7 @@ async fn get_post_byid(id: String) -> Result<PostInfo, String> {
 }
 
 #[update]
-async fn comment_post(post_id:String,comment:String)->Result<String, String>{
+async fn comment_post(post_id:String,comment:String)->Result<String, String> {
     let getpost=with_state(|state| state.post_detail.get(&post_id).unwrap().clone());
 
     let principal_id = api::caller();
@@ -132,7 +134,22 @@ async fn comment_post(post_id:String,comment:String)->Result<String, String>{
 
     let updated_comment_count = getpost.comment_count + 1;
     let mut updated_list = getpost.comment_list.clone();
-    updated_list.push(comment);
+
+
+    let uuids = raw_rand().await.unwrap().0;
+    let unique_commend_id = format!("{:x}", Sha256::digest(&uuids)); 
+
+    let new_comment  = Comment {
+        author_principal: principal_id,
+        comment_text: comment,
+        replies: Vec::new(),
+        comment_id: Some(unique_commend_id)
+        // comment_id: Some(Uuid::new_v4().to_string())
+        // comment_id: Some(String::from("value")),
+    };
+    
+    updated_list.push(new_comment);
+    // updated_list.push(comment);
 
 
     let new_post = PostInfo {
@@ -153,6 +170,40 @@ async fn comment_post(post_id:String,comment:String)->Result<String, String>{
 
 
     return Ok("comment successfully".to_string());
+
+
+}
+
+// reply comment
+#[update]
+// fn reply_comment(comment_id: String, comment: String, post_id: String) -> Result<String, String> {
+fn reply_comment(comment_data: ReplyCommentData) -> Result<String, String> {
+
+    let principal_id = api::caller();
+    if principal_id == Principal::anonymous() {
+        return Err("Anonymous users not allowed".to_string());
+    }
+
+    let post = with_state(|state| state.post_detail.get(&comment_data.post_id).clone()).expect("Post not found");
+    
+    let mut updated_comment_list = post.comment_list.clone();
+
+    for com in updated_comment_list.iter_mut() {
+        if com.comment_id == Some(comment_data.comment_id.clone()) {
+            com.replies.push(comment_data.comment.clone());
+            break;
+        }
+    }
+
+    let updated_post = PostInfo {
+        comment_count: post.comment_count + 1,
+        comment_list: updated_comment_list,
+        ..post
+    };
+
+    with_state(|state| state.post_detail.insert(updated_post.post_id.clone(), updated_post));
+
+    Ok("commented on post".to_string())
 
 
 }

@@ -22,8 +22,7 @@ echo $ASSET_HANDLER_ID
 
 # creare_profile function
     test1=$(dfx canister call daohouse_backend create_profile '(
-
-    "br5f7-7uaaa-aaaaa-qaaca-cai",
+    "bw4dl-smaaa-aaaaa-qaacq-cai",
 
     record {
         email_id = "bhanupra@gmail.com";
@@ -67,27 +66,48 @@ echo $test1
 
 
 # create_new_post function
-test3=$(dfx canister call daohouse_backend create_new_post "(
-   \"$ASSET_HANDLER_ID\",
-  record {
-    post_description = \"This post description.\";
-    post_img = \"testing\";
-    username = \"prataptechnologies\";
-    image_content = vec {10};
-    image_title = \"bhanuprofile.png\";
-    image_content_type = \"image/png\";
-  }
-)")
+# test3=$(dfx canister call daohouse_backend create_new_post "(
+#    \"$ASSET_HANDLER_ID\",
+#   record {
+#     post_description = \"This post description.\";
+#     post_img = \"testing\";
+#     username = \"prataptechnologies\";
+#     image_content = vec {10};
+#     image_title = \"bhanuprofile.png\";
+#     image_content_type = \"image/png\";
+#   }
+# )")
 
-echo $test3
+# echo $test3
 
 # get user specific post
-test4=$(dfx canister call daohouse_backend get_my_post)
+# test4=$(dfx canister call daohouse_backend get_my_post)
 
-echo $test4
+# echo $test4
 
 # # 
 
+# post id e43befc5ef5fab48ee81e1ae3a9447488f35af5e6365276ea7b68a385e7d8db3
+
+# commenting on post
+# test5=$(dfx canister call daohouse_backend comment_post "(
+#   \"e3e2fd46bc60cca7500315c2a76b5c94eff845592a20fbffff02990c1f81ecf6\",
+#   \"hello from bhanu\"
+# )")
+
+# echo $test5
+
+# reply to comment
+test6=$(dfx canister call daohouse_backend reply_comment "(
+  record {
+ comment_id = \"79a251cdbc5ea1b503e2a7e1951e6241589e855751d0cb7a1ff373a59f240a9c\";
+   comment = \"noob developer hai mai \";
+post_id = \"e3e2fd46bc60cca7500315c2a76b5c94eff845592a20fbffff02990c1f81ecf6\";
+  }
+
+)")
+
+echo $test6
 
 # if [[ "$test3" == *'"post created successfully"'* ]]; then
 #     echo "Test 3 passed"
