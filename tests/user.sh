@@ -22,10 +22,10 @@ echo $ASSET_HANDLER_ID
 
 # creare_profile function
     test1=$(dfx canister call daohouse_backend create_profile '(
-    "bw4dl-smaaa-aaaaa-qaacq-cai",
+    "br5f7-7uaaa-aaaaa-qaaca-cai",
 
     record {
-        email_id = "bhanupra@gmail.com";
+        email_id = "bhanupradddd@gmail.com";
         profile_img = "abc";  
         username = "bhanupra123";
         description = "This is a sample profile description.";
@@ -66,19 +66,19 @@ echo $test1
 
 
 # create_new_post function
-# test3=$(dfx canister call daohouse_backend create_new_post "(
-#    \"$ASSET_HANDLER_ID\",
-#   record {
-#     post_description = \"This post description.\";
-#     post_img = \"testing\";
-#     username = \"prataptechnologies\";
-#     image_content = vec {10};
-#     image_title = \"bhanuprofile.png\";
-#     image_content_type = \"image/png\";
-#   }
-# )")
+test3=$(dfx canister call daohouse_backend create_new_post "(
+   \"$ASSET_HANDLER_ID\",
+  record {
+    post_description = \"This post description.\";
+    post_img = \"testing\";
+    username = \"prataptechnologies\";
+    image_content = vec {10};
+    image_title = \"bhanuprofile.png\";
+    image_content_type = \"image/png\";
+  }
+)")
 
-# echo $test3
+echo $test3
 
 # get user specific post
 # test4=$(dfx canister call daohouse_backend get_my_post)
@@ -98,25 +98,28 @@ echo $test1
 # echo $test5
 
 # reply to comment
-test6=$(dfx canister call daohouse_backend reply_comment "(
-  record {
- comment_id = \"79a251cdbc5ea1b503e2a7e1951e6241589e855751d0cb7a1ff373a59f240a9c\";
-   comment = \"noob developer hai mai \";
-post_id = \"e3e2fd46bc60cca7500315c2a76b5c94eff845592a20fbffff02990c1f81ecf6\";
-  }
+# test6=$(dfx canister call daohouse_backend reply_comment "(
+#   record {
+#  comment_id = \"79a251cdbc5ea1b503e2a7e1951e6241589e855751d0cb7a1ff373a59f240a9c\";
+#    comment = \"noob developer hai mai \";
+# post_id = \"e3e2fd46bc60cca7500315c2a76b5c94eff845592a20fbffff02990c1f81ecf6\";
+#   }
 
-)")
+# )")
 
-echo $test6
+# echo $test6
 
-# if [[ "$test3" == *'"post created successfully"'* ]]; then
-#     echo "Test 3 passed"
-# else
-#     echo "Test 3 failed"
-# fi
+# FOLLOW USER
+test8=$(dfx canister call daohouse_backend follow_user '( principal  "esck6-db6cw-zof2r-afmk2-i36j2-knlkq-wpydp-rc73r-xj2bo-dwotu-wqe" )')
 
+echo $test8
 
+# TO GET THE FOLLOWERS 
+test7=$(dfx canister call daohouse_backend get_my_follower)
 
+echo $test7
+
+# esck6-db6cw-zof2r-afmk2-i36j2-knlkq-wpydp-rc73r-xj2bo-dwotu-wqe
 
 
 # sample deploy cmd 

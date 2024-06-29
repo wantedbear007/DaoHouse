@@ -4,7 +4,7 @@ use crate::routes::upload_image;
 use crate::types::{DaoInput, Profileinput, UserProfile};
 use crate::{routes, with_state, ImageData};
 use ciborium::value;
-use ic_cdk::{query, update};
+use ic_cdk::{caller, query, update};
 use crate::types::{CreateCanisterArgument,CanisterInstallMode,CanisterIdRecord,CreateCanisterArgumentExtended,InstallCodeArgument,InstallCodeArgumentExtended};
 use crate::api::call::{ call_with_payment128, CallResult};
 use crate::api::canister_version;
@@ -53,13 +53,6 @@ async fn create_profile(asset_handler_canister_id: String, profile: Profileinput
     ).await.map_err(|err| format!("Image upload failed: {}", err))?;
 
 
-
-
-
-
-
-
-
     let new_profile = UserProfile {
         user_id: principal_id,
         email_id: profile.email_id,
@@ -91,6 +84,18 @@ async fn create_profile(asset_handler_canister_id: String, profile: Profileinput
 }
 
 #[query]
+fn get_my_follower() -> Result<Vec<Principal>, String> {
+    let principal_id = api::caller();
+
+    if principal_id == Principal::anonymous() {
+        return Err("Anonymous user not allowed".to_string());
+    }
+    let followers = with_state(|state| state.user_profile.get(&principal_id).clone()).expect("User not found");
+    Ok(followers.followers_list)
+
+}
+
+#[query]
 async fn get_user_profile() -> Result<UserProfile, String> {
     with_state(|state| routes::get_user_profile(state))
 }
@@ -110,7 +115,7 @@ async fn delete_profile() -> Result<(), String>{
 async fn follow_user(userid:Principal)->Result<(), String>{
     let principal_id = api::caller();
 
-    if with_state(|state| state.user_profile.contains_key(&principal_id)) {
+    if !with_state(|state| state.user_profile.contains_key(&principal_id)) {
         return Err("User not registered".to_string());
     }
 

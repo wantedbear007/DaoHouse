@@ -84,6 +84,7 @@ type Result_1 = variant { Ok; Err : text };
 type Result_2 = variant { Ok : PostInfo; Err : text };
 type Result_3 = variant { Ok : UserProfile; Err : text };
 type Result_4 = variant { Ok: vec record {text; PostInfo}; Err: text  };
+type Result_5 = variant {Ok: vec principal; Err: text};
 type UserProfile = record {
   post_id : vec text;
   username : text;
@@ -124,4 +125,5 @@ service : {
   update_profile : (Profileinput) -> (Result_1);
   get_my_post: () -> (Result_4);
   reply_comment: (CommentInfo) -> (Result);
+  get_my_follower: () -> (Result_5);
 }
