@@ -126,4 +126,5 @@ service : {
   get_my_post: () -> (Result_4);
   reply_comment: (CommentInfo) -> (Result);
   get_my_follower: () -> (Result_5);
+  get_my_following: () -> (Result_5);
 }

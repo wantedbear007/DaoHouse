@@ -1,10 +1,8 @@
-use std::env;
-
 use crate::routes::upload_image;
 use crate::types::{DaoInput, Profileinput, UserProfile};
 use crate::{routes, with_state, ImageData};
-use ciborium::value;
-use ic_cdk::{caller, query, update};
+use candid::types::principal;
+use ic_cdk::{query, update};
 use crate::types::{CreateCanisterArgument,CanisterInstallMode,CanisterIdRecord,CreateCanisterArgumentExtended,InstallCodeArgument,InstallCodeArgumentExtended};
 use crate::api::call::{ call_with_payment128, CallResult};
 use crate::api::canister_version;
@@ -96,6 +94,19 @@ fn get_my_follower() -> Result<Vec<Principal>, String> {
 }
 
 #[query]
+fn get_my_following() -> Result<Vec<Principal>, String> {
+    let principal_id = api::caller();
+
+    if principal_id == Principal::anonymous() {
+        return Err(String::from("Anonymous user not allowed, try logging in")); 
+    }
+
+    let following: UserProfile = with_state(|state| state.user_profile.get(&principal_id).clone())
+.expect("User not found");
+    Ok(following.followings_list)
+}
+
+#[query]
 async fn get_user_profile() -> Result<UserProfile, String> {
     with_state(|state| routes::get_user_profile(state))
 }
@@ -152,7 +163,6 @@ async fn follow_user(userid:Principal)->Result<(), String>{
         website: getuser.website,
 
     };
-
 
 
     let getuser2=with_state(|state| state.user_profile.get(&userid).unwrap().clone());
