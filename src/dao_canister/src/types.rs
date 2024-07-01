@@ -5,7 +5,7 @@ use std::borrow::Cow;
 use serde::{Deserialize, Serialize};
 
 
-#[derive(Clone,CandidType,Serialize,Deserialize)]
+#[derive(Clone,CandidType,Serialize,Deserialize, Debug)]
 pub struct Proposals{
     pub proposal_id: String,
     pub proposal_title: String,
