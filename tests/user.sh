@@ -22,7 +22,7 @@ echo $ASSET_HANDLER_ID
 
 # creare_profile function
     test1=$(dfx canister call daohouse_backend create_profile '(
-    "b77ix-eeaaa-aaaaa-qaada-cai",
+    "br5f7-7uaaa-aaaaa-qaaca-cai",
 
     record {
         email_id = "bhanupradddd@gmail.com";
@@ -209,7 +209,7 @@ echo $test2
 
 
 
-dao_test=$(dfx canister call daohouse_backend create_dao '("bw4dl-smaaa-aaaaa-qaacq-cai", record {
+dao_test=$(dfx canister call daohouse_backend create_dao '("br5f7-7uaaa-aaaaa-qaaca-cai", record {
     dao_name = "Sample DAO";
     purpose = "To manage community projects";
     daotype = "Non-profit";
@@ -232,6 +232,10 @@ dao_test=$(dfx canister call daohouse_backend create_dao '("bw4dl-smaaa-aaaaa-qa
 
 
 echo $dao_test
+
+# TO LIST ALL DAO BASIC DETAIL
+dao_test0=$(dfx canister call daohouse_backend get_all_dao)
+echo $dao_test0
 
 
 # # dfx canister call b77ix-eeaaa-aaaaa-qaada-cai add_member_to_group '("council", principal "lebve-ee3za-txcur-xbw36-ujg7l-gpofb-x6onu-cuxxs-kx2fx-mlklc-bqe")'
