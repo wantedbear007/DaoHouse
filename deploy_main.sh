@@ -1,6 +1,6 @@
 # 
 # dfx stop
-# dfx start --clean --background
+dfx start --clean --background
 
 dfx generate
 

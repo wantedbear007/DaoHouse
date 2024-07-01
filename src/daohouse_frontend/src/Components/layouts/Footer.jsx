@@ -17,6 +17,7 @@ const Footer = () => {
               alt="DAO HOuse"
               className="small_phone:w-32 w-20 mx-auto small_phone:mb-10 mb-6"
             />
+               
           </Link>
           <div className="flex justify-center mb-4 gap-x-3">
             <Link
