@@ -237,8 +237,8 @@ echo $test1
 
 
 # echo $dao_test\n
-# 
-# # TO LIST ALL DAO BASIC DETAIL
+# # 
+# # # TO LIST ALL DAO BASIC DETAIL
 # dao_test0=$(dfx canister call daohouse_backend get_all_dao)
 # echo $dao_test0\n\n
 
@@ -255,10 +255,14 @@ echo $test1
 
 
 # # # # TO JOIN DAO
-dao_test008=$(dfx canister call bw4dl-smaaa-aaaaa-qaacq-cai join_dao)
-echo $dao_test008
+# dao_test008=$(dfx canister call bw4dl-smaaa-aaaaa-qaacq-cai join_dao)
+# echo $dao_test008
 
 # echo "\n\n\n"
+
+# GET DAO MEMBERS
+dao_test656=$(dfx canister call bw4dl-smaaa-aaaaa-qaacq-cai get_dao_members)
+echo $dao_test656
 
 # dao_test007=$(dfx canister call by6od-j4aaa-aaaaa-qaadq-cai get_dao_detail)
 # echo $dao_test007
