@@ -2,7 +2,7 @@
 
 use crate::routes::upload_image;
 use crate::types::{Comment, PostInfo, PostInput};
-use crate::{with_state, ImageData, ReplyCommentData};
+use crate::{with_state, DaoDetails, ImageData, ReplyCommentData};
 use candid::Principal;
 use ic_cdk::api;
 use ic_cdk::api::management_canister::main::raw_rand;
@@ -225,8 +225,22 @@ fn get_my_post() -> Result<Vec<(String, PostInfo)>, String> {
             }
         }
     });
-
     Ok(posts)
-
     // Ok("sfsd".to_string())
+}
+
+
+// TEMP FUNCTION
+#[query] 
+fn get_all_dao() -> Vec<DaoDetails> {
+    let mut daos: Vec<DaoDetails> = Vec::new();
+
+
+    with_state(|state| {
+        for (x, y) in state.dao_details.iter() {
+            daos.push(y);
+        }
+    });
+
+    daos
 }
