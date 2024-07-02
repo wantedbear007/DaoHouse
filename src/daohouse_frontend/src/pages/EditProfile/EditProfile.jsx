@@ -21,13 +21,17 @@ import { AssetManager } from "@dfinity/assets";
 import { HttpAgent } from "@dfinity/agent";
 import { toast } from "react-toastify";
 import data from "../../../../../canister_ids.json"
+import { useNavigate } from "react-router-dom";
 
 
 const EditProfile = () => {
   const userProfile = useUserProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { backendActor, frontendCanisterId, identity } = useAuth();
-
+  const navigate = useNavigate();
+  const handleDiscardClick = () => {
+    navigate("/my-profile");
+  }
   // Create Agent
   const isLocal = !window.location.host.endsWith('ic0.app');
   const agent = new HttpAgent({
@@ -325,7 +329,9 @@ const EditProfile = () => {
               closeModal={closeModal}
             />
             <div className="hidden sm:flex justify-center gap-5 mt-8">
-              <button className="py-2 px-9 border border-[#0E3746] hover:bg-[#0E3746] hover:text-white rounded-[27px] transition duration-200 ease-in-out">
+              <button
+                onClick={handleDiscardClick}
+                className="py-2 px-9 border border-[#0E3746] hover:bg-[#0E3746] hover:text-white rounded-[27px] transition duration-200 ease-in-out">
                 Discard
               </button>
               <button
