@@ -51,6 +51,8 @@ pub struct Dao{
     pub required_votes:i8,
     pub groups_count:u64,
     pub group_name:Vec<String>,
+
+    pub members: Vec<Principal>,
 }
 
 #[derive(Clone,CandidType,Serialize,Deserialize)]

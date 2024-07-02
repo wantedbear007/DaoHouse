@@ -146,6 +146,14 @@ const CreatePostPopup = ({ onClose }) => {
   //   callMe();
   // }, []);
 
+  useEffect(() => {
+    async function callMe() {
+      const data = await backendActor.get_all_posts();
+      console.log("All posts: ", data);
+    }
+    callMe();
+  }, []);
+
   return (
     <div
       className="create-post-popup fixed z-50 inset-0 overflow-y-auto"

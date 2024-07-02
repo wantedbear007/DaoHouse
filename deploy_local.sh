@@ -18,12 +18,14 @@ dfx deploy dao_canister --argument '(record{
         "https://discord.gg/sampledao";
     };
     required_votes=100;
+
+
 })' 
 
 
 
 dfx deploy daohouse_backend 
-dfx deploy internet_identity 
-dfx deploy daohouse_frontend 
+# dfx deploy internet_identity 
+# dfx deploy daohouse_frontend 
 dfx deploy ic_asset_handler 
 # dfx generate
