@@ -212,7 +212,7 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
     };
 
     let mut updated_members = dao_detail.members.clone();
-    updated_members.push(principal_id);
+    updated_members.push(principal_id.clone());
 
 
     //upload image
@@ -290,7 +290,7 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
     let dao_details: DaoDetails = DaoDetails {
         dao_canister_id: canister_id_principal.to_string().clone(),
         dao_name: dao_detail.dao_name,
-        image_id: image_id,
+        image_id,
         dao_id: canister_id_principal.clone()
     };
 

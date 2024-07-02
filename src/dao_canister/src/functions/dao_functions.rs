@@ -64,5 +64,38 @@ async fn remove_member_from_group(group: String, principal: Principal) -> String
     result
 }
 
+#[update]
+async fn join_dao() -> Result<String, String> {
+
+    let principal_id = api::caller();
+
+    if principal_id == Principal::anonymous() {
+        return Err("Anonymous principal not allowed, try logging in".to_string());
+    }
+
+    with_state(|state| -> Result<String, String> {
+        if state.dao.members.contains(&principal_id) {
+            return Err("You are already member of this Dao".to_string());
+        }
+
+        let mut members = state.dao.members.clone();
+
+        members.push(principal_id.clone());
+
+        state.dao.members = members;
+
+        // if let Some(mut members) = state.dao.members
+
+        
+
+        // state.dao.members.push(principal_id.clone());
+        // let members: &mut Vec<Principal> = state.dao.members.as_mut();
+        Ok("Successfully joined DAO".to_string())
+
+    })
+
+}
+
+
 
 
