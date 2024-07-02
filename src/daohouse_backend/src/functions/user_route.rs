@@ -1,7 +1,8 @@
 use crate::routes::upload_image;
 use crate::types::{DaoInput, Profileinput, UserProfile};
-use crate::{routes, with_state, ImageData};
+use crate::{routes, with_state, DaoDetails, DaoResponse, ImageData};
 use candid::types::principal;
+use ic_cdk::api::call::RejectionCode;
 use ic_cdk::{query, update};
 use crate::types::{CreateCanisterArgument,CanisterInstallMode,CanisterIdRecord,CreateCanisterArgumentExtended,InstallCodeArgument,InstallCodeArgumentExtended};
 use crate::api::call::{ call_with_payment128, CallResult};
@@ -244,7 +245,7 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
 
 
     let update_dau_detail=DaoInput{
-        dao_name:dao_detail.dao_name,
+        dao_name:dao_detail.dao_name.clone(),
         purpose:dao_detail.purpose,
         daotype:dao_detail.daotype,
         link_of_document:dao_detail.link_of_document,
@@ -254,7 +255,7 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         linksandsocials:dao_detail.linksandsocials,
         required_votes:dao_detail.required_votes,
 
-        image_id: Some(image_id),
+        image_id: Some(image_id.clone()),
         image_content: None,
         image_content_type: "".to_string(),
         image_title: "".to_string(),
@@ -286,6 +287,17 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
 
     println!("Canister ID: {}", canister_id_principal.to_string());
 
+    let dao_details: DaoDetails = DaoDetails {
+        dao_canister_id: canister_id_principal.to_string().clone(),
+        dao_name: dao_detail.dao_name,
+        image_id: image_id,
+        dao_id: canister_id_principal.clone()
+    };
+
+    with_state(|state| {
+        state.dao_details.insert(canister_id_principal.to_string().clone(), dao_details)
+    });
+
 
     user_profile_detail.dao_ids.push(canister_id_principal.to_string());
 
@@ -308,6 +320,7 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         telegram: user_profile_detail.telegram,
         website: user_profile_detail.website,
     };
+
     with_state(|state| {state.user_profile.insert(principal_id, new_profile)});
     let arg1 = InstallCodeArgument {
         mode: CanisterInstallMode::Install, 
@@ -349,11 +362,10 @@ async fn deposit_cycles(arg: CanisterIdRecord, cycles: u128) -> CallResult<()> {
 }
 
 async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
-    let wasm_base64: &str = "3831fb07143cd43c3c51f770342d2b7d0a594311529f5503587bf1544ccd44be";
-    let wasm_module_sample: Vec<u8> = base64::decode(wasm_base64).expect("Decoding failed");
+    // let wasm_base64: &str = "3831fb07143cd43c3c51f770342d2b7d0a594311529f5503587bf1544ccd44be";
+    // let wasm_module_sample: Vec<u8> = base64::decode(wasm_base64).expect("Decoding failed");
 
-    // let wasm_module_sample: Vec<u8> = include_bytes!("../../../../.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
-    // /
+    let wasm_module_sample: Vec<u8> = include_bytes!("../../../../.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
     
     let cycles: u128 = 10_000_000_000; 
     
@@ -372,4 +384,59 @@ async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
         (extended_arg,),
         cycles,
     ).await
+}
+
+// get dao details (intercanister)
+// #[query]
+// pub async fn get_dao_details(dao_canister_id: String) -> String {
+
+//     ic_cdk::println!("inside this function: {}", &dao_canister_id);
+
+//     type ReturnResult = DaoResponse;
+
+//     let response:  CallResult<(ReturnResult,)>  =
+//     ic_cdk::call(Principal::from_text(dao_canister_id).unwrap(), "get_dao_detail", ()).await;
+
+
+//   let res0: Result<(ReturnResult,), (RejectionCode, String)> = response;
+
+
+//     ic_cdk::println!("response is  {:?}", res0);
+
+//     "sdfs".to_string()
+// }
+
+
+#[update]
+pub async fn get_dao_details(dao_canister_id: String) -> String {
+    ic_cdk::println!("inside this function: {}", &dao_canister_id);
+
+    type ReturnResult = DaoResponse;
+
+    // let principal = match Principal::from_text(&dao_canister_id) {
+    //     Ok(p) => p,
+    //     Err(e) => {
+    //         ic_cdk::println!("Invalid principal: {}", e);
+    //         return "Invalid principal".to_string();
+    //     }
+    // };
+
+    let principal =  Principal::from_text(&dao_canister_id).unwrap();
+
+
+    ic_cdk::println!("principal id is {:?} ", &principal);
+
+    let response: CallResult<(ReturnResult,)> = ic_cdk::call(principal, "get_dao_detail", ()).await;
+
+    match response {
+        Ok((dao_response,)) => {
+            ic_cdk::println!("DAO response: {:?}", dao_response);
+            // Return the DAO response or any other appropriate data
+            "DAO details fetched successfully".to_string()
+        }
+        Err((rejection_code, message)) => {
+            ic_cdk::println!("Call failed with code {:?} and message {:?}", rejection_code, message);
+            "Call failed".to_string()
+        }
+    }
 }

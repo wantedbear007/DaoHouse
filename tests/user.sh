@@ -53,8 +53,8 @@ echo $test1
 
 
 # # get_user_profile function
-test2=$(dfx canister call daohouse_backend get_user_profile)
-echo $test2
+# test2=$(dfx canister call daohouse_backend get_user_profile)
+# echo $test2
 
 # username=$(echo $test2 | grep -oP '(?<=username = ")[^"]*')
 
@@ -210,8 +210,8 @@ echo $test2
 
 
 dao_test=$(dfx canister call daohouse_backend create_dao '("br5f7-7uaaa-aaaaa-qaaca-cai", record {
-    dao_name = "Sample DAO";
-    purpose = "To manage community projects";
+    dao_name = "DAO by bhanu";
+    purpose = "this is by bhanu";
     daotype = "Non-profit";
     link_of_document = "https://example.com/charter.pdf";
     cool_down_period = "7 days";
@@ -231,18 +231,34 @@ dao_test=$(dfx canister call daohouse_backend create_dao '("br5f7-7uaaa-aaaaa-qa
 })')
 
 
-echo $dao_test
-
-# TO LIST ALL DAO BASIC DETAIL
+# echo $dao_test\n
+# 
+# # TO LIST ALL DAO BASIC DETAIL
 dao_test0=$(dfx canister call daohouse_backend get_all_dao)
-echo $dao_test0
+echo $dao_test0\n\n
 
 
-# # dfx canister call b77ix-eeaaa-aaaaa-qaada-cai add_member_to_group '("council", principal "lebve-ee3za-txcur-xbw36-ujg7l-gpofb-x6onu-cuxxs-kx2fx-mlklc-bqe")'
 
-# dfx canister call b77ix-eeaaa-aaaaa-qaada-cai remove_member_from_group '("council", principal "e4gcc-67d6k-sf24x-pxcy3-6rq3v-ymzl7-ryzv4-jvgp5-irgrk-6aoru-xae")'
+echo "\n\n"
 
-# dfx canister call b77ix-eeaaa-aaaaa-qaada-cai remove_member_from_group '("council", principal "lebve-ee3za-txcur-xbw36-ujg7l-gpofb-x6onu-cuxxs-kx2fx-mlklc-bqe")'
+
+# dao_test1=$(dfx canister call daohouse_backend get_dao_details '("be2us-64aaa-aaaaa-qaabq-cai")')
+# echo $dao_test1
+
+# dao_test008=$(dfx canister call bw4dl-smaaa-aaaaa-qaacq-cai get_dao_detail)
+# echo $dao_test008
+
+
+# echo "\n\n\n"
+
+# dao_test007=$(dfx canister call by6od-j4aaa-aaaaa-qaadq-cai get_dao_detail)
+# echo $dao_test007
+
+# # dfx canister call br5f7-7uaaa-aaaaa-qaaca-cai add_member_to_group '("council", principal "lebve-ee3za-txcur-xbw36-ujg7l-gpofb-x6onu-cuxxs-kx2fx-mlklc-bqe")'
+
+# dfx canister call br5f7-7uaaa-aaaaa-qaaca-cai remove_member_from_group '("council", principal "e4gcc-67d6k-sf24x-pxcy3-6rq3v-ymzl7-ryzv4-jvgp5-irgrk-6aoru-xae")'
+
+# dfx canister call br5f7-7uaaa-aaaaa-qaaca-cai remove_member_from_group '("council", principal "lebve-ee3za-txcur-xbw36-ujg7l-gpofb-x6onu-cuxxs-kx2fx-mlklc-bqe")'
 
 # # e4gcc-67d6k-sf24x-pxcy3-6rq3v-ymzl7-ryzv4-jvgp5-irgrk-6aoru-xae
 
