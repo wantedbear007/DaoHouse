@@ -8,7 +8,7 @@ const HeroSection = () => {
   return (
     <div className="relative flex flex-col md:flex-row justify-center items-center h-[90vh]">
       {/* Left Side */}
-      <div className="md:w-1/2 w-full px-10 z-10 md:text-left text-center small_phone:mt-0 mt-8 flex flex-col mobile:gap-8 gap-4">
+      <div className="md:w-1/2 pl-20 w-full px-10 z-10 md:text-left text-center small_phone:mt-0 mt-8 flex flex-col mobile:gap-8 gap-4">
         <p className="text-[#0E3746] font-mulish font-semibold laptop:text-6xl small_phone:text-5xl text-4xl">
           Building Better Future, Together
         </p>
@@ -17,12 +17,14 @@ const HeroSection = () => {
         </div>
 
         <div className="flex flex-row big_phone:justify-start justify-center space-x-4">
+
           <Link to=
             "/dao/create-dao"
             className="mobile:px-8 px-4 mobile:py-3 py-2 mobile:text-base text-sm bg-[#0E3746] text-white font-semibold rounded-[27.5px] shadow-md hover:bg-blue-800 hover:text-white"
            >CreateDAO
           </Link>
           <button className="mobile:px-8 px-4 mobile:py-3 py-2 mobile:text-base text-sm bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
+
             Join DAO
           </button>
         </div>
@@ -41,11 +43,11 @@ const HeroSection = () => {
 
       {/* Right Side */}
       <div className="md:w-1/2 flex items-center justify-center md:mt-0 mt-8">
-        <div className="relative ">
+        <div className="relative xl:w-[65%] lg:w-[80%] w-[75%]">
           <img
             src={circle}
             alt="Placeholder"
-            className=" w-[276px] h-[276px] md:mt-0 mt-8  md:w-[85%] pointer-events-none select-none lg:w-[90%] xl:w-[92%] 2xl:w-full h-full object-cover animate-spin-slow"
+            className="w-full h-full md:mt-0 mt-8  md:w-[85%] pointer-events-none select-none lg:w-[90%] xl:w-[92%] 2xl:w-full h-full object-cover animate-spin-slow"
           />
         </div>
       </div>

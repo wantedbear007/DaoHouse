@@ -524,6 +524,16 @@ pub struct DaoInput{
 
 }
 
+#[derive(Clone,CandidType,Serialize,Deserialize)]
+pub struct DaoDetails {
+    pub dao_id: Principal,
+    pub dao_name: String,
+    pub image_id: String,
+    pub dao_canister_id: String,
+}
+
+
+
 
 #[derive(Clone,CandidType,Serialize,Deserialize)]
 pub struct PostInfo{
@@ -580,6 +590,21 @@ pub struct ReplyCommentData {
     pub post_id: String
 }
 
+// dao response
+#[derive(Clone,CandidType,Serialize,Deserialize, Debug)]
+pub struct DaoResponse {
+    pub dao_id:Principal,
+    pub dao_name:String,
+    pub purpose:String,
+    pub daotype:String,
+    pub link_of_document:String,
+    pub cool_down_period:String,
+    pub tokenissuer:String,
+    pub linksandsocials:Vec<String>,
+    pub required_votes:i8,
+    pub groups_count:u64,
+    pub group_name:Vec<String>,
+}
 
 
 const MAX_VALUE_SIZE: u32 = 700;
@@ -618,4 +643,17 @@ impl Storable for PostInfo{
         max_size: MAX_VALUE_SIZE,
         is_fixed_size: false,
     };
+}
+
+impl  Storable for DaoDetails {
+    fn to_bytes(&self) -> Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    const BOUND: Bound = Bound::Bounded { max_size: MAX_VALUE_SIZE, is_fixed_size: false };
+    
 }

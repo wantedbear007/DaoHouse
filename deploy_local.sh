@@ -1,6 +1,8 @@
 
 dfx generate
 
+dfx build
+
 dfx deploy dao_canister --argument '(record{
     dao_name="Sample DAO";
     purpose="To manage community projects";

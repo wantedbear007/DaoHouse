@@ -111,6 +111,14 @@ type CommentInfo = record {
   post_id: text;
 };
 
+type DaoDetails = record {
+  dao_id: principal;
+  dao_name: text;
+  image_id: text;
+  dao_canister_id: text;
+};
+
+
 service : {
   comment_post : (text, text) -> (Result);
   create_dao : (text, DaoInput) -> (Result);
@@ -127,4 +135,6 @@ service : {
   reply_comment: (CommentInfo) -> (Result);
   get_my_follower: () -> (Result_5);
   get_my_following: () -> (Result_5);
+  get_all_dao: () -> (vec DaoDetails);
+  get_dao_details: (text) -> (text);
 }
