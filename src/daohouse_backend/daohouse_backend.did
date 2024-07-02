@@ -16,6 +16,14 @@ type DaoInput = record {
 
 
 };
+
+type Comment = record {
+  author_principal: principal;
+  comment_text: text;
+  replies: vec text;
+  comment_id: opt text;
+};
+
 type PostInfo = record {
   username: text;
   post_img : text;
@@ -25,7 +33,8 @@ type PostInfo = record {
   like_count : nat32;
   like_id_list : vec principal;
   post_description : text;
-  comment_list : vec text;
+ // comment_list : vec text;
+ comment_list : vec Comment;
   post_created_at : nat64;
 
  // image
@@ -34,6 +43,9 @@ type PostInfo = record {
 //  image_content_type: text;
 
 };
+
+
+
 type PostInput = record {
   username: text;
   post_img : text;
@@ -42,7 +54,7 @@ type PostInput = record {
 
 
   // image 
-  image_content: opt blob;
+  image_content: blob;
   image_title: text;
   image_content_type: text;
 };
@@ -64,10 +76,15 @@ type Profileinput = record {
 
 
 };
+
+
+
 type Result = variant { Ok : text; Err : text };
 type Result_1 = variant { Ok; Err : text };
 type Result_2 = variant { Ok : PostInfo; Err : text };
 type Result_3 = variant { Ok : UserProfile; Err : text };
+type Result_4 = variant { Ok: vec record {text; PostInfo}; Err: text  };
+type Result_5 = variant {Ok: vec principal; Err: text};
 type UserProfile = record {
   post_id : vec text;
   username : text;
@@ -87,6 +104,21 @@ type UserProfile = record {
   tag_defines : vec text;
   followings_list : vec principal;
 };
+
+type CommentInfo = record {
+  comment_id: text;
+  comment: text;
+  post_id: text;
+};
+
+type DaoDetails = record {
+  dao_id: principal;
+  dao_name: text;
+  image_id: text;
+  dao_canister_id: text;
+};
+
+
 service : {
   comment_post : (text, text) -> (Result);
   create_dao : (text, DaoInput) -> (Result);
@@ -99,4 +131,10 @@ service : {
   get_user_profile : () -> (Result_3) query;
   like_post : (text) -> (Result);
   update_profile : (Profileinput) -> (Result_1);
+  get_my_post: () -> (Result_4);
+  reply_comment: (CommentInfo) -> (Result);
+  get_my_follower: () -> (Result_5);
+  get_my_following: () -> (Result_5);
+  get_all_dao: () -> (vec DaoDetails);
+  get_dao_details: (text) -> (text);
 }

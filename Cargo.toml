@@ -2,7 +2,7 @@
 members = [
     "src/daohouse_backend",
     "src/dao_canister",
-    "src/ic-asset-handler",
+    "src/ic_asset_handler",
 
 ]
 resolver = "2"

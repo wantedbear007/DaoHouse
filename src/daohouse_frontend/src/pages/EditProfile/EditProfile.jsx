@@ -20,7 +20,7 @@ import Lottie from "react-lottie";
 import { AssetManager } from "@dfinity/assets";
 import { HttpAgent } from "@dfinity/agent";
 import { toast } from "react-toastify";
-
+import data from "../../../../../canister_ids.json"
 
 
 const EditProfile = () => {
@@ -37,13 +37,16 @@ const EditProfile = () => {
     agent.fetchRootKey();
   }
 
+
   // Initiate AssetManager
   const assetManager = new AssetManager({
-    canisterId: frontendCanisterId, 
+    canisterId: frontendCanisterId,
     agent: agent,
   });
 
   useEffect(() => {
+
+
     const fetchData = async () => {
       try {
         const files = await assetManager.list();
@@ -67,13 +70,13 @@ const EditProfile = () => {
     telegram: userProfile?.telegram || "",
     website: userProfile?.website || "",
     description: userProfile?.description || "",
-    profile_img: userProfile?.profile_img || MyProfileImage,
+    profile_img: userProfile?.profile_img ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}` : MyProfileImage,
     tag_defines: userProfile?.tag_defines || [],
   });
 
   const handleSaveChangesClick = async () => {
     setIsModalOpen(true);
-  
+
     const profilePayload = {
       username: profileData.name,
       email_id: profileData.email_id,
@@ -88,19 +91,26 @@ const EditProfile = () => {
       image_title: profileData.image_title || "",
       image_content_type: profileData.image_content_type || "",
     };
-  
-    // const canisterId = process.env.CANISTER_ID_DAOHOUSE_FRONTEND;
+
     const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
+    // const canisterId = data["ic-asset-handler"]["ic"]
 
     try {
-      const ans = await backendActor.create_profile(canisterId, profilePayload); 
-      toast.success("Profile created successfully");     
-      console.log("Profile created successfully", ans);
+      console.log("canister id of asset ", canisterId)
+      const response = await backendActor.create_profile(canisterId, profilePayload);
+      console.log({ response })
+
+      if (response.Err) {
+        toast.error(`${response.Err}`);
+      } else {
+        toast.success("Profile created successfully");
+      }
+
     } catch (error) {
       console.error("Error creating profile:", error);
     }
   };
-  
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -117,6 +127,7 @@ const EditProfile = () => {
       const content = new Uint8Array(arrayBuffer);
       setProfileData((prevData) => ({
         ...prevData,
+        profile_img: URL.createObjectURL(file),
         image_content: Array.from(content),
         image_title: file.name,
         image_content_type: file.type,
@@ -166,6 +177,8 @@ const EditProfile = () => {
   const handleTagsChange = (tags) => {
     setProfileData((prevData) => ({ ...prevData, tag_defines: tags }));
   };
+
+  console.log(profileData.profile_img)
   return (
     <div className="bg-zinc-200 w-full pb-20 relative">
       <div

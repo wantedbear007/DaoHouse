@@ -49,7 +49,11 @@ type Proposals = record {
   comments_list : vec text;
   required_votes : nat64;
 };
+
+
 type Result = variant { Ok : GroupList; Err : text };
+type ProposalResponse = variant {Ok: vec Proposals; Err: text };
+
 service : (DaoInput) -> {
   add_member_to_group : (text, principal) -> (text);
   create_proposal : (ProposalInput) -> (text);
@@ -57,4 +61,6 @@ service : (DaoInput) -> {
   get_members_of_group : (text) -> (Result) query;
   get_proposal_by_id : (text) -> (Proposals) query;
   remove_member_from_group : (text, principal) -> (text);
+  get_all_proposals: () -> (vec Proposals) query;
+  get_my_proposals: () -> (ProposalResponse) query;
 }

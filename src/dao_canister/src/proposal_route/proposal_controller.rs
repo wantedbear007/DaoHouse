@@ -1,4 +1,5 @@
 
+
 use crate::State;
 
 use ic_cdk::api;
@@ -7,6 +8,8 @@ use crate::types::{ProposalInput,Proposals};
 
 pub fn create_new_proposal(state: &mut State, proposal: ProposalInput,proposal_id:String) -> String {
     let principal_id = api::caller();
+
+
 
     
     let new_proposal = Proposals {

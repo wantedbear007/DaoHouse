@@ -5,7 +5,7 @@ use std::borrow::Cow;
 use serde::{Deserialize, Serialize};
 
 
-#[derive(Clone,CandidType,Serialize,Deserialize)]
+#[derive(Clone,CandidType,Serialize,Deserialize, Debug)]
 pub struct Proposals{
     pub proposal_id: String,
     pub proposal_title: String,
@@ -22,7 +22,9 @@ pub struct Proposals{
     pub required_votes:u64,
     pub created_by: Principal,
     pub comments:u64,
+    // pub comments_list:Vec<Comment>,
     pub comments_list:Vec<String>,
+
     pub share_count:u64,
 }
 

@@ -4,24 +4,28 @@
 # dfx identity new principal3 --storage-mode=plaintext || true
 
 
-
+ASSET_HANDLER_ID=$(dfx canister id ic_asset_handler )
+echo $ASSET_HANDLER_ID
 # TESTING3=$(dfx --identity principal3 identity get-principal)
 
 
 # echo "TESTING3: $TESTING3"
 
+
+# dfx canister uninstall-code ic_asset_handler --network ic
+
 # dfx  identity use principal3
 
 
 # To access image via URL
-# http://br5f7-7uaaa-aaaaa-qaaca-cai.localhost:4943/f/FILE_
+# http://a3shf-5eaaa-aaaaa-qaafa-cai.localhost:4943/f/1
 
 # creare_profile function
     test1=$(dfx canister call daohouse_backend create_profile '(
-    "aovwi-4maaa-aaaaa-qaagq-cai",
+    "br5f7-7uaaa-aaaaa-qaaca-cai",
 
     record {
-        email_id = "bhanupra@gmail.com";
+        email_id = "bhanupradddd@gmail.com";
         profile_img = "abc";  
         username = "bhanupra123";
         description = "This is a sample profile description.";
@@ -60,29 +64,96 @@ echo $test1
 #     echo "Test 2 failed"
 # fi
 
-# # create_new_post function
-test3=$(dfx canister call daohouse_backend create_new_post '(
 
-"dccg7-xmaaa-aaaaa-qaamq-cai",
-record{
-    post_description="This is a sample post description.";
-    post_img="testing";
-    username="prataptechnologies";
-    image_content = opt vec {10};
-        image_title = "bhanuprofile.png";
-        image_content_type = "image/png";
-})')
+# create_new_post function
+# test3=$(dfx canister call daohouse_backend create_new_post "(
+#    \"$ASSET_HANDLER_ID\",
+#   record {
+#     post_description = \"This post description.\";
+#     post_img = \"testing\";
+#     username = \"prataptechnologies\";
+#     image_content = vec {10};
+#     image_title = \"bhanuprofile.png\";
+#     image_content_type = \"image/png\";
+#   }
+# )")
 
-echo $test3;
+# echo $test3
+
+# get user specific post
+# test4=$(dfx canister call daohouse_backend get_my_post)
+
+# echo $test4
+
 # # 
 
+# post id e43befc5ef5fab48ee81e1ae3a9447488f35af5e6365276ea7b68a385e7d8db3
 
-# if [[ "$test3" == *'"post created successfully"'* ]]; then
-#     echo "Test 3 passed"
-# else
-#     echo "Test 3 failed"
-# fi
+# commenting on post
+# test5=$(dfx canister call daohouse_backend comment_post "(
+#   \"e3e2fd46bc60cca7500315c2a76b5c94eff845592a20fbffff02990c1f81ecf6\",
+#   \"hello from bhanu\"
+# )")
 
+# echo $test5
+
+# reply to comment
+# test6=$(dfx canister call daohouse_backend reply_comment "(
+#   record {
+#  comment_id = \"79a251cdbc5ea1b503e2a7e1951e6241589e855751d0cb7a1ff373a59f240a9c\";
+#    comment = \"noob developer hai mai \";
+# post_id = \"e3e2fd46bc60cca7500315c2a76b5c94eff845592a20fbffff02990c1f81ecf6\";
+#   }
+
+# )")
+
+# echo $test6
+
+# FOLLOW USER
+# test8=$(dfx canister call daohouse_backend follow_user '( principal  "esck6-db6cw-zof2r-afmk2-i36j2-knlkq-wpydp-rc73r-xj2bo-dwotu-wqe" )')
+
+# echo $test8
+
+# # TO GET THE FOLLOWERS 
+# test7=$(dfx canister call daohouse_backend get_my_follower)
+# echo $test7
+
+# # TO GET THE FOLLOWINGS
+# test9=$(dfx canister call daohouse_backend get_my_following)
+# echo $test9
+
+# esck6-db6cw-zof2r-afmk2-i36j2-knlkq-wpydp-rc73r-xj2bo-dwotu-wqe
+
+
+# TO CREATE A PROPOSAL
+# test10=$(dfx canister call dao_canister create_proposal '(
+#   record {
+#         "proposal_id"= "12345";
+#     "proposal_title"= "New Community Park";
+#     "proposal_description"= "Proposal for the construction of a new community;park in the downtown area.";
+#     "proposal_status"= "Pending";
+#     "proposal_amount"= "100000";
+#     "proposal_submitted_at"= "2024-01-01T12:00:00Z";
+#     "proposal_expired_at"= "2024-12-31T12:00:00Z";
+#     "proposal_receiver_id"= "67890";
+#     "proposal_approved_votes"= 150;
+#     "approved_votes_list"= vec {"user1"; "user2"};
+#     "proposal_rejected_votes"= 50;
+#     "rejected_votes_list"= vec {"user3"; "user4"};
+#     "required_votes"= 200;
+#     "created_by"= "aaaaa-aa";
+#     "comments"= 10;
+#     "comments_list"= vec {"Great idea!"};
+#     "share_count"= 25
+#   }
+# )' )
+
+
+# echo $test10
+
+# TO GET USER SPECIFIC PROPOSALS
+# test11=$(dfx canister call dao_canister get_my_proposal)
+# echo $test11
 
 
 
@@ -138,36 +209,56 @@ echo $test3;
 
 
 
-# dao_test=$(dfx canister call daohouse_backend create_dao '("cbopz-duaaa-aaaaa-qaaka-cai", record {
-#     dao_name = "Sample DAO";
-#     purpose = "To manage community projects";
-#     daotype = "Non-profit";
-#     link_of_document = "https://example.com/charter.pdf";
-#     cool_down_period = "7 days";
-#     members=vec{
-#         principal "aaaaa-aa";
-#     };
-#     tokenissuer="sample";
-#     linksandsocials=vec{
-#         "https://twitter.com/sampledao";
-#     };
-#     required_votes=100;
+dao_test=$(dfx canister call daohouse_backend create_dao '("br5f7-7uaaa-aaaaa-qaaca-cai", record {
+    dao_name = "DAO by bhanu";
+    purpose = "this is by bhanu";
+    daotype = "Non-profit";
+    link_of_document = "https://example.com/charter.pdf";
+    cool_down_period = "7 days";
+    members=vec{
+        principal "aaaaa-aa";
+    };
+    tokenissuer="sample";
+    linksandsocials=vec{
+        "https://twitter.com/sampledao";
+    };
+    required_votes=100;
     
-#       image_content= opt vec {10};
-#   image_title = "samppe.jpg";
-#   image_content_type = "image/jpg";
+      image_content= opt vec {10};
+  image_title = "samppe.jpg";
+  image_content_type = "image/jpg";
 
-# })')
-
-
-# echo $dao_test
+})')
 
 
-# # dfx canister call b77ix-eeaaa-aaaaa-qaada-cai add_member_to_group '("council", principal "lebve-ee3za-txcur-xbw36-ujg7l-gpofb-x6onu-cuxxs-kx2fx-mlklc-bqe")'
+# echo $dao_test\n
+# 
+# # TO LIST ALL DAO BASIC DETAIL
+dao_test0=$(dfx canister call daohouse_backend get_all_dao)
+echo $dao_test0\n\n
 
-# dfx canister call b77ix-eeaaa-aaaaa-qaada-cai remove_member_from_group '("council", principal "e4gcc-67d6k-sf24x-pxcy3-6rq3v-ymzl7-ryzv4-jvgp5-irgrk-6aoru-xae")'
 
-# dfx canister call b77ix-eeaaa-aaaaa-qaada-cai remove_member_from_group '("council", principal "lebve-ee3za-txcur-xbw36-ujg7l-gpofb-x6onu-cuxxs-kx2fx-mlklc-bqe")'
+
+echo "\n\n"
+
+
+# dao_test1=$(dfx canister call daohouse_backend get_dao_details '("be2us-64aaa-aaaaa-qaabq-cai")')
+# echo $dao_test1
+
+# dao_test008=$(dfx canister call bw4dl-smaaa-aaaaa-qaacq-cai get_dao_detail)
+# echo $dao_test008
+
+
+# echo "\n\n\n"
+
+# dao_test007=$(dfx canister call by6od-j4aaa-aaaaa-qaadq-cai get_dao_detail)
+# echo $dao_test007
+
+# # dfx canister call br5f7-7uaaa-aaaaa-qaaca-cai add_member_to_group '("council", principal "lebve-ee3za-txcur-xbw36-ujg7l-gpofb-x6onu-cuxxs-kx2fx-mlklc-bqe")'
+
+# dfx canister call br5f7-7uaaa-aaaaa-qaaca-cai remove_member_from_group '("council", principal "e4gcc-67d6k-sf24x-pxcy3-6rq3v-ymzl7-ryzv4-jvgp5-irgrk-6aoru-xae")'
+
+# dfx canister call br5f7-7uaaa-aaaaa-qaaca-cai remove_member_from_group '("council", principal "lebve-ee3za-txcur-xbw36-ujg7l-gpofb-x6onu-cuxxs-kx2fx-mlklc-bqe")'
 
 # # e4gcc-67d6k-sf24x-pxcy3-6rq3v-ymzl7-ryzv4-jvgp5-irgrk-6aoru-xae
 

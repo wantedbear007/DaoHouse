@@ -524,9 +524,20 @@ pub struct DaoInput{
 
 }
 
+#[derive(Clone,CandidType,Serialize,Deserialize)]
+pub struct DaoDetails {
+    pub dao_id: Principal,
+    pub dao_name: String,
+    pub image_id: String,
+    pub dao_canister_id: String,
+}
+
+
+
 
 #[derive(Clone,CandidType,Serialize,Deserialize)]
 pub struct PostInfo{
+    pub principal_id: Principal,
     pub username: String,
     pub post_id:String,
    // pub post_title:String,
@@ -537,7 +548,7 @@ pub struct PostInfo{
     pub like_count:u32,
     pub like_id_list:Vec<Principal>,
     pub comment_count:u32,
-    pub comment_list:Vec<String>,  
+    pub comment_list:Vec<Comment>,  
 }
 
 #[derive(Clone,CandidType,Serialize,Deserialize)]
@@ -562,7 +573,43 @@ pub struct ImageData {
     pub content_type: String,
 }
 
-const MAX_VALUE_SIZE: u32 = 600;
+// comment
+#[derive(Clone, CandidType, Serialize, Deserialize)]
+pub struct Comment {
+    pub author_principal: Principal,
+    pub comment_text: String,
+    pub comment_id: Option<String>,
+    pub replies: Vec<String>
+}
+
+// reply comment data
+#[derive(Clone, CandidType, Serialize, Deserialize)]
+pub struct ReplyCommentData {
+    pub comment_id: String,
+    pub comment: String,
+    pub post_id: String
+}
+
+// dao response
+#[derive(Clone,CandidType,Serialize,Deserialize, Debug)]
+pub struct DaoResponse {
+    pub dao_id:Principal,
+    pub dao_name:String,
+    pub purpose:String,
+    pub daotype:String,
+    pub link_of_document:String,
+    pub cool_down_period:String,
+    pub tokenissuer:String,
+    pub linksandsocials:Vec<String>,
+    pub required_votes:i8,
+    pub groups_count:u64,
+    pub group_name:Vec<String>,
+}
+
+
+const MAX_VALUE_SIZE: u32 = 700;
+// const MAX_VALUE_SIZE: u32 = 600;
+
 
 
 
@@ -596,4 +643,17 @@ impl Storable for PostInfo{
         max_size: MAX_VALUE_SIZE,
         is_fixed_size: false,
     };
+}
+
+impl  Storable for DaoDetails {
+    fn to_bytes(&self) -> Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    const BOUND: Bound = Bound::Bounded { max_size: MAX_VALUE_SIZE, is_fixed_size: false };
+    
 }

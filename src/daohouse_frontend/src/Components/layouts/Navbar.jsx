@@ -76,6 +76,7 @@ const Navbar = () => {
       }
     };
 
+
     const createAndFetchUserProfile = async () => {
       try {
         //  // Fetch the image and convert to Uint8Array

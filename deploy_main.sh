@@ -1,7 +1,8 @@
+# 
+# dfx stop
+dfx start --clean --background
 
 dfx generate
-
-dfx build
 
 dfx deploy dao_canister --argument '(record{
     dao_name="Sample DAO";
@@ -18,12 +19,12 @@ dfx deploy dao_canister --argument '(record{
         "https://discord.gg/sampledao";
     };
     required_votes=100;
-})' 
+})' --network ic
 
 
 
-dfx deploy daohouse_backend 
-dfx deploy internet_identity 
-dfx deploy daohouse_frontend 
-dfx deploy ic_asset_handler 
+dfx deploy daohouse_backend --network ic
+dfx deploy internet_identity --network ic
+dfx deploy daohouse_frontend --network ic
+dfx deploy ic_asset_handler --network ic
 # dfx generate

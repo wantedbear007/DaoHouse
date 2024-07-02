@@ -44,7 +44,7 @@ use crate::types::{PostInfo, PostInput};
 type ReturnResult = Result<u32, String>;
 
 // upload image
- pub async  fn upload_image(canister_id: String, image_data: ImageData) -> Result<String, String> {
+pub async fn upload_image(canister_id: String, image_data: ImageData) -> Result<String, String> {
   let response: CallResult<(ReturnResult,)> = ic_cdk::call(Principal::from_text(canister_id).unwrap(), "create_file", (image_data,)).await;
   // format!("{:?}", result.ok());
 
@@ -60,13 +60,23 @@ type ReturnResult = Result<u32, String>;
       Ok((Err(err),)) => {
           Err(err)
       },
-      Err(err) => {
-        Err("err".to_string())
+      Err((code, message)) => {
+        match code {
+          RejectionCode::NoError => Err("NoError".to_string()),
+          RejectionCode::SysFatal => Err("SysFatal".to_string()),
+          RejectionCode::SysTransient => Err("SysTransient".to_string()),
+          RejectionCode::DestinationInvalid => Err("DestinationInvalid".to_string()),
+          RejectionCode::CanisterReject => Err("CanisterReject".to_string()),
+          // Handle other rejection codes here
+          _ => Err(format!("Unknown rejection code: {:?}: {}", code, message)),
+          // _ => Err(format!("Unknown rejection code: {:?}", code)),
+      }
       }
   };
 
   formatted_value
 }
+
 
 
 
