@@ -1,6 +1,8 @@
 
 dfx generate
+
 dfx build
+
 dfx deploy dao_canister --argument '(record{
     dao_name="Sample DAO";
     purpose="To manage community projects";
@@ -21,7 +23,7 @@ dfx deploy dao_canister --argument '(record{
 
 
 dfx deploy daohouse_backend 
-# dfx deploy internet_identity 
-# dfx deploy daohouse_frontend 
+dfx deploy internet_identity 
+dfx deploy daohouse_frontend 
 dfx deploy ic_asset_handler 
 # dfx generate
