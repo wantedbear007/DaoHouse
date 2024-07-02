@@ -7,7 +7,7 @@ const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug }) => {
   const buttons = [
     {
       onClick: onLogin,
-      bgColor: 'bg-[#0E3746]',
+      bgColor: 'bg-[#OE3746]',
       hoverColor: 'hover:bg-[#0E3746]',
       textColor: 'text-white',
       icon: II,
@@ -40,11 +40,11 @@ const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug }) => {
                   <button
                     key={index}
                     onClick={button.onClick}
-                    className={`flex items-center justify-start w-full p-2 mb-2 ${button.textColor} border-2 border-[#4993B0] ${button.hoverColor} rounded-lg`}
+                    className={`flex items-center justify-start w-full p-2 mb-2 text-black hover:text-white hover:bg-black border-2 border-[#4993B0]  rounded-lg`}
                   >
                     <div className='w-fit text-center mx-auto inline-flex '>
                       <img src={button.icon} alt={button.label} className="w-6 h-6 mr-2" />
-                      <span className='w-[7rem] text-[#0E3746] hover:text-white truncate text-left'>{button.label}</span>
+                      <span className='w-[7rem]  truncate text-left'>{button.label}</span>
                     </div>
                   </button>
                 ))}
