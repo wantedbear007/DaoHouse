@@ -65,7 +65,7 @@ async fn remove_member_from_group(group: String, principal: Principal) -> String
 }
 
 #[update]
-async fn join_dao() -> Result<String, String> {
+fn join_dao() -> Result<String, String> {
 
     let principal_id = api::caller();
 
@@ -83,13 +83,6 @@ async fn join_dao() -> Result<String, String> {
         members.push(principal_id.clone());
 
         state.dao.members = members;
-
-        // if let Some(mut members) = state.dao.members
-
-        
-
-        // state.dao.members.push(principal_id.clone());
-        // let members: &mut Vec<Principal> = state.dao.members.as_mut();
         Ok("Successfully joined DAO".to_string())
 
     })
@@ -97,5 +90,9 @@ async fn join_dao() -> Result<String, String> {
 }
 
 
+#[query]
+fn get_dao_members() -> Vec<Principal> {
+    with_state(|state| state.dao.members.clone())
+}
 
 

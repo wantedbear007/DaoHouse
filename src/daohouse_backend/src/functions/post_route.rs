@@ -2,7 +2,7 @@
 
 use crate::routes::upload_image;
 use crate::types::{Comment, PostInfo, PostInput};
-use crate::{with_state, DaoDetails, ImageData, ReplyCommentData};
+use crate::{with_state, Analytics, DaoDetails, ImageData, ReplyCommentData};
 use candid::Principal;
 use ic_cdk::api;
 use ic_cdk::api::management_canister::main::raw_rand;
@@ -237,10 +237,23 @@ fn get_all_dao() -> Vec<DaoDetails> {
 
 
     with_state(|state| {
-        for (x, y) in state.dao_details.iter() {
-            daos.push(y);
+        for y in state.dao_details.iter() {
+            daos.push(y.1);
         }
     });
 
     daos
+}
+
+#[query]
+fn get_analytics() -> Result<Analytics, String> {
+    
+    with_state(|state| {
+        let data = state.analytics_content.get(&0);
+
+        match data {
+            Some(res) => Ok(res),
+            None => Err("data not found !!!!!".to_string())
+        }
+    })
 }
