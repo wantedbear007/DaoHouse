@@ -22,7 +22,7 @@ echo $ASSET_HANDLER_ID
 
 # creare_profile function
     test1=$(dfx canister call daohouse_backend create_profile '(
-    "br5f7-7uaaa-aaaaa-qaaca-cai",
+    "ajuq4-ruaaa-aaaaa-qaaga-cai",
 
     record {
         email_id = "bhanupradddd@gmail.com";
@@ -261,8 +261,12 @@ echo $test1
 # echo "\n\n\n"
 
 # GET DAO MEMBERS
-dao_test656=$(dfx canister call bw4dl-smaaa-aaaaa-qaacq-cai get_dao_members)
-echo $dao_test656
+# dao_test656=$(dfx canister call bw4dl-smaaa-aaaaa-qaacq-cai get_dao_members)
+# echo $dao_test656
+
+analytics_test=$(dfx canister call daohouse_backend get_analytics)
+echo $analytics_test
+
 
 # dao_test007=$(dfx canister call by6od-j4aaa-aaaaa-qaadq-cai get_dao_detail)
 # echo $dao_test007
