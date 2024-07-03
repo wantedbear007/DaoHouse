@@ -1,5 +1,7 @@
 // use std::collections::BTreeMap;
 
+use std::borrow::{Borrow, BorrowMut};
+
 use crate::routes::upload_image;
 use crate::types::{Comment, PostInfo, PostInput};
 use crate::{with_state, Analytics, DaoDetails, ImageData, ReplyCommentData};
@@ -61,7 +63,17 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
         comment_list: Vec::new(),
     };
 
-    with_state(|state| state.post_detail.insert(post_id, new_post));
+    with_state(|state| 
+        {
+            // state.analytics_content.borrow_mut().get(&0).unwrap().post_count += 1;      
+            // state.analytics_content.borrow_mut().get(&0).unwrap().members_count += 1;            
+            let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
+            analytics.post_count += 1;
+            // state.analytics_content.borrow_mut().get(&0).unwrap().members_count += 1;
+             state.analytics_content.insert(0, analytics);
+            state.post_detail.insert(post_id, new_post)}
+        
+        );
 
     Ok("Post created successfully".to_string())
 
@@ -230,7 +242,6 @@ fn get_my_post() -> Result<Vec<(String, PostInfo)>, String> {
 }
 
 
-// TEMP FUNCTION
 #[query] 
 fn get_all_dao() -> Vec<DaoDetails> {
     let mut daos: Vec<DaoDetails> = Vec::new();
@@ -257,3 +268,9 @@ fn get_analytics() -> Result<Analytics, String> {
         }
     })
 }
+
+
+// #[update]
+// fn update_proposals_count() {
+//     with_state(|state| state.analytics_content.get(&0))
+// }

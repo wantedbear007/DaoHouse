@@ -31,10 +31,17 @@ async fn init() {
         dao_counts: 0,
         members_count: 0,
         post_count: 0,
-        proposals_count: 0
+        proposals_count: 0,
     };
 
-    with_state(|state| state.analytics_content.insert(0, analytics));
+    with_state(|state| {
+        if let Some(_) = state.analytics_content.get(&0) {
+            ic_cdk::println!("Analytics already available.");
+        } else {
+            state.analytics_content.insert(0, analytics.clone());
+        }
+        ()
+    });
 }
 
 
