@@ -8,11 +8,14 @@ import Step4 from "../../Components/Dao/Step4";
 import Step5 from "../../Components/Dao/Step5";
 import Step6 from "../../Components/Dao/Step6";
 import TopComponent from "../../Components/Dao/TopComponent";
+import { useAuth } from "../../Components/utils/useAuthClient";
+import { Principal } from "@dfinity/principal";
 
 const CreateDao = () => {
+  
   const className = "CreateDAO";
   const [activeStep, setActiveStep] = React.useState(0);
-
+  const { backendActor, frontendCanisterId, identity } = useAuth();
   const [data, setData] = useState({
     step1: {},
     step2: {},
@@ -23,6 +26,76 @@ const CreateDao = () => {
       imageURI: "",
     },
   });
+  // // Create Agent
+  // const isLocal = !window.location.host.endsWith('ic0.app');
+  // const agent = new HttpAgent({
+  //   host: isLocal ? http://127.0.0.1:${window.location.port} : 'https://ic0.app', identity,
+  // });
+  // if (isLocal) {
+  //   agent.fetchRootKey();
+  // }
+
+
+  // // Initiate AssetManager
+  // const assetManager = new AssetManager({
+  //   canisterId: frontendCanisterId,
+  //   agent: agent,
+  // });
+
+  const handleDaoClick = async() => {
+    // const DaoPayload = {
+    //     dao_name: "Step1.DAOIdentifier",
+    //     purpose: "Step1.Purpose",
+    //     daotype:    "Step1.DAOType",
+    //     link_of_document: " ",
+    //     cool_down_period: "",
+    //     members: "",
+    //     tokenissuer: "",
+    //     linksandsocials: [
+    //         "https://twitter.com/sampledao"
+    //     ],
+    //     required_votes: " ",
+    //     image_content:  " ",
+    //     image_title: "",
+    //     image_content_type: ""
+    // };
+
+    let princi = Principal.fromText("qnrhg-uveun-uk5ve-46qq6-eeqio-rnh2l-f6mvk-hbhan-vccrc-wdmbn-fqe")
+    const daoPayload = {
+      dao_name: Step1.DAOIdentifier,
+      purpose: "this is by bhanu",
+      daotype: "Non-profit",
+      link_of_document: "https://example.com/charter.pdf",
+      cool_down_period: "7 days",
+      members: [princi],
+      tokenissuer: "sample",
+      linksandsocials: ["https://twitter.com/sampledao"],
+      required_votes: 100,
+      image_content: [10],
+      image_title: "samppe.jpg",
+      image_content_type: "image/jpg"
+    };
+ console.log(daoPayload);
+    const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
+
+    try {
+      console.log("canister id of asset ", canisterId)
+      const response = await backendActor.create_dao(canisterId, daoPayload);
+      console.log({ response })
+
+      if (response.Err) {
+        toast.error(`${response.Err}`);
+      } else {
+        toast.success("Dao created successfully");
+      }
+
+    } catch (error) {
+      console.error("Error creating Dao:", error);
+    }
+  };
+
+
+
 
   const Step1Ref = useRef(null);
   const Step4Ref = useRef(null);
@@ -51,12 +124,12 @@ const CreateDao = () => {
         );
       case 5:
         return (
-          <Step6 data={data} setData={setData} setActiveStep={setActiveStep} />
+          <Step6 data={data} setData={setData} setActiveStep={setActiveStep} handleDaoClick={handleDaoClick} />
         );
       default:
         return null;
     }
-  };
+  }
 
   return (
     <Fragment>
@@ -115,7 +188,7 @@ const CreateDao = () => {
       </div>
     </Fragment>
   );
-};
+}
 
 export default CreateDao;
 

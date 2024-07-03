@@ -15,11 +15,10 @@ const Step1 = ({ setData, setActiveStep }) => {
   const className = "DAO__Step1";
 
   function handleSaveAndNext() {
-
     if (
-      inputData.DAOIdentifier == "" ||
-      inputData.tokenName == "" ||
-      inputData.tokenSymbol == ""
+      inputData.DAOIdentifier === "" ||
+      inputData.tokenName === "" ||
+      inputData.tokenSymbol === ""
     ) {
       alert("Empty fields are not allowed");
       return;
@@ -39,7 +38,7 @@ const Step1 = ({ setData, setActiveStep }) => {
       [e.target.name]: e.target.value,
     });
 
-    // console.log(inputData);
+    console.log(inputData);
   }
 
   function handlenewTokenFlag(flag) {

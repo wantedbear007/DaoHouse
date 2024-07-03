@@ -3,7 +3,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { FiUpload } from "react-icons/fi";
 import defaultImage from "../../../assets/defaultImage.png";
 
-const Step6 = ({ data, setData, setActiveStep }) => {
+const Step6 = ({ data, setData, setActiveStep ,handleDaoClick}) => {
   const [fileURL, setFileURL] = useState(defaultImage);
   const className = "DAO__Step6";
 
@@ -27,6 +27,7 @@ const Step6 = ({ data, setData, setActiveStep }) => {
       ...prevData,
       step6: { imageURI: fileURL },
     }))
+    handleDaoClick();
   }
 
   return (
