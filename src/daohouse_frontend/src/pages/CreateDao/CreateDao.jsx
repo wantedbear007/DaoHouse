@@ -62,7 +62,7 @@ const CreateDao = () => {
 
     let princi = Principal.fromText("qnrhg-uveun-uk5ve-46qq6-eeqio-rnh2l-f6mvk-hbhan-vccrc-wdmbn-fqe")
     const daoPayload = {
-      dao_name: Step1.DAOIdentifier,
+      dao_name: "hellllop",
       purpose: "this is by bhanu",
       daotype: "Non-profit",
       link_of_document: "https://example.com/charter.pdf",
