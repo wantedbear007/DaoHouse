@@ -607,7 +607,7 @@ pub struct DaoResponse {
 }
 
 
-#[derive(CandidType, Serialize, Deserialize)]
+#[derive(CandidType, Clone, Serialize, Debug, Deserialize)]
 pub struct Analytics {
     pub members_count: u64,
     pub proposals_count: u64,
