@@ -239,8 +239,8 @@ dao_test=$(dfx canister call daohouse_backend create_dao '("ahw5u-keaaa-aaaaa-qa
 echo $dao_test\n
 # # 
 # # # TO LIST ALL DAO BASIC DETAIL
-# dao_test0=$(dfx canister call daohouse_backend get_all_dao)
-# echo $dao_test0\n\n
+dao_test0=$(dfx canister call daohouse_backend get_all_dao)
+echo $dao_test0\n\n
 
 
 
