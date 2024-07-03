@@ -224,24 +224,6 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
     updated_members.push(principal_id.clone());
 
 
-    //upload image
-    // let image_id: Result<String, String> = upload_image(canister_id, ImageData { content: dao_detail.image_content.clone(), name: dao_detail.image_title, content_type: dao_detail.image_content_type }).await;
-    // let mut id = String::new();
-    // let image_create_res: bool = match image_id {
-    //     Ok(value) => {
-    //         id = value;
-    //         Ok(())
-    //     }
-    //     Err(er) => {
-    //         ic_cdk::println!("{:?}", er);
-    //         Err(())
-    //     }
-    // }.is_err();
-
-    // if image_create_res {
-    //     return Err("Image upload failed".to_string());
-    // }
-
      // image upload
      let image_id = upload_image(
         canister_id,
@@ -281,7 +263,14 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
 
     // let user_detail=with_state(|state| state.user_profile.get(&principal_id));
 
-    let mut user_profile_detail =  with_state(|state| state.user_profile.get(&principal_id).unwrap().clone());
+    // let mut user_profile_detail =  with_state(|state| state.user_profile.get(&principal_id).unwrap().clone());
+
+    let  user_profile_detail =  with_state(|state| state.user_profile.get(&principal_id).clone());
+
+    let mut user_profile_detail = match user_profile_detail {
+        Some(data) => data,
+        None => panic!("Error ho gya bhanu")
+    }; 
     let arg = CreateCanisterArgument {
         settings: None,
     };
