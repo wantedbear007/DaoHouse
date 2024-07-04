@@ -1,4 +1,4 @@
-use std::borrow::{Borrow, BorrowMut};
+use std::borrow::Borrow;
 
 use crate::routes::upload_image;
 use crate::types::{DaoInput, Profileinput, UserProfile};

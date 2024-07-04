@@ -615,6 +615,12 @@ pub struct Analytics {
     pub post_count: u64,
 }
 
+#[derive(CandidType, Serialize, Deserialize)]
+pub struct Pagination {
+    pub start: u32,
+    pub end: u32,
+}
+
 const MAX_VALUE_SIZE: u32 = 700;
 const  MAX_VALUE_SIZE_ANALYTICS: u32 = 300;
 const  MAX_VALUE_SIZE_DAO: u32 = 400;

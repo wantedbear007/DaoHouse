@@ -10,7 +10,6 @@ type Dao = record {
   cool_down_period : text;
   purpose : text;
   required_votes : int8;
-
   members: vec principal;
 };
 type DaoInput = record {
@@ -51,6 +50,7 @@ type Proposals = record {
   comments_list : vec text;
   required_votes : nat64;
 };
+
 
 
 type Result = variant { Ok : GroupList; Err : text };

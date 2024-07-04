@@ -127,6 +127,11 @@ type Analytics = record {
     post_count : nat64;
 };
 
+type Pagination = record {
+  start : nat32;
+  end : nat32;
+};
+
 
 
 service : {
@@ -136,7 +141,7 @@ service : {
   create_profile : (text, Profileinput) -> (Result_1);
   delete_profile : () -> (Result_1);
   follow_user : (principal) -> (Result_1);
-  get_all_posts : () -> (vec record { text; PostInfo }) query;
+  get_all_posts : (Pagination) -> (vec record { text; PostInfo }) query;
   get_post_byid : (text) -> (Result_2) query;
   get_user_profile : () -> (Result_3) query;
   like_post : (text) -> (Result);

@@ -4,7 +4,7 @@ use std::borrow::{Borrow, BorrowMut};
 
 use crate::routes::upload_image;
 use crate::types::{Comment, PostInfo, PostInput};
-use crate::{with_state, Analytics, DaoDetails, ImageData, ReplyCommentData};
+use crate::{with_state, Analytics, DaoDetails, ImageData, Pagination, ReplyCommentData};
 use candid::Principal;
 use ic_cdk::api;
 use ic_cdk::api::management_canister::main::raw_rand;
@@ -82,15 +82,32 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
     // with_state(|state| routes::create_new_post(state, post_id,postdetail.clone()))
 }
 #[query]
-fn get_all_posts() -> Vec<(String, PostInfo)> {
-    let mut vec = Vec::new();
+fn get_all_posts(page_data: Pagination) -> Vec<(String, PostInfo)> {
+    let mut all_posts = Vec::new();
+
     with_state(|state| {
         for (k, v) in state.post_detail.iter() {
-            vec.push((k.clone(), v.clone()));
+            all_posts.push((k.clone(), v.clone()));
         }
     });
-    vec
+
+    let ending = all_posts.len();
+
+    if ending == 0 {
+        return all_posts;
+    }
+
+    let start = page_data.start as usize;
+    let end = page_data.end as usize;
+
+    if start < ending {
+        let end = end.min(ending);
+        return all_posts[start..end].to_vec();
+    }
+
+    Vec::new()
 }
+
 
 #[update]
 async fn like_post(post_id: String) -> Result<String, String> {
