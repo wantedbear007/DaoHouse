@@ -62,9 +62,7 @@ const EditProfile = () => {
     fetchData();
   }, [])
 
-  console.log({ agent });
-  console.log({ assetManager });
-  console.log({ userProfile });
+ 
 
   const [profileData, setProfileData] = useState({
     name: userProfile?.name || "",
