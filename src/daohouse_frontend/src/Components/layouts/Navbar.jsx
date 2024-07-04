@@ -7,10 +7,13 @@ import { FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
 import avatarprofile from "../../../assets/avatarprofile.png";
 import logo from "../../../assets/ColorLogo.png";
 import aboutImg from "../../../assets/avatar.png";
+import { useUserProfile } from "../../context/UserProfileContext";
 
 const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+const {profile}=useUserProfile()
 
   const {
     login,
@@ -23,6 +26,7 @@ const Navbar = () => {
 
   const location = useLocation();
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const { userProfile, fetchUserProfile } = useUserProfile();
 
   const menuItems = [
     { label: "Home", route: "/" },
@@ -66,57 +70,55 @@ const Navbar = () => {
     if(backendActor===null){
       return 
     }
-    const fetchUserProfile = async () => {
-      try {
-        const userProfileData = await backendActor.get_user_profile();
-        console.log("User profile data after creation:", userProfileData);
-        // setUserProfile(userProfileData);
-      } catch (error) {
-        console.error("Error fetching user profile:", error);
-      }
-    };
-
 
     const createAndFetchUserProfile = async () => {
       try {
-        //  // Fetch the image and convert to Uint8Array
-        //  const response = await fetch(aboutImg);
-        //  const arrayBuffer = await response.arrayBuffer();
-        //  const uint8Array = new Uint8Array(arrayBuffer);
-
+        // Fetch image data and convert to Uint8Array
         const response = await fetch(aboutImg);
         const blob = await response.blob();
         console.log("blob", blob);
-        // Convert to Uint8Array
         const arrayBuffer = await blob.arrayBuffer();
         const uint8Array = new Uint8Array(arrayBuffer);
         console.log("uint8Array", uint8Array);
-
-
-        // const imageBlob = await response.blob();
-        // console.log("imageBlob", imageBlob);
-        // const image = URL.createObjectURL(imageBlob);
-        // // const img_URL = `blob:${image}`;
-        // console.log("image", image);
-
-        // await backendActor.delete_profile();
-        // await backendActor.create_profile({
-        //   username: "Admin1",
-        //   email_id: "admin@example.com",
-        //   profile_img: Array.from(uint8Array),
-        //   description: "This is a sample profile description.",
-        //   contact_number: "123-456-7890",
-        //   twitter_id: "@admin_twitter",
-        //   telegram: "@admin_telegram",
-        //   website: "https://admin.com",
-        //   tag_defines: ["ICP", "Blockchain", "NFT Artist"]
-        // });
-        // After profile creation, fetch user profile
-        await fetchUserProfile();
+    
+        // Create profile payload with default values
+        const profilePayload = {
+          username:  "",
+          email_id: "",
+          profile_img:  [],
+          description:  "",
+          contact_number: "",
+          twitter_id: "",
+          telegram:  "",
+          website:  "",
+          tag_defines:  [],
+          image_content: [],
+          image_title:  "",
+          image_content_type:  "",
+        };
+    
+        const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
+        
+        if (!canisterId) {
+          throw new Error("Canister ID is not defined");
+        }
+    
+        try {
+          console.log("canister id of asset", canisterId);
+          const response = await backendActor.create_profile(canisterId, profilePayload);
+          console.log({ response });
+    
+          await fetchUserProfile();
+        } catch (error) {
+          console.error("Error creating user profile:", error);
+        }
       } catch (error) {
-        console.error("Error creating user profile:", error);
+        console.error("Error in createAndFetchUserProfile:", error);
       }
     };
+    
+ 
+    
 
     createAndFetchUserProfile();
   }, [backendActor, principal]);

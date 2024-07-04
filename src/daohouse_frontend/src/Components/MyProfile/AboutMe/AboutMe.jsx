@@ -5,7 +5,7 @@ import { useUserProfile } from "../../../context/UserProfileContext";
 
 const AboutMe = () => {
   const className = "AboutMe";
-  const userProfile = useUserProfile();
+  const { userProfile, fetchUserProfile } = useUserProfile();
 
   return (
     <div className={className + "w-full"}>
