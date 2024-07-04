@@ -43,6 +43,7 @@ const CreateDao = () => {
       image_content: step6.image_content || '',
       image_title: step6.image_title || '',
       image_content_type: step6.image_content_type || '',
+
     };
     
     console.log(daoPayload);

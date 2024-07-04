@@ -22,7 +22,7 @@ echo $ASSET_HANDLER_ID
 
 # creare_profile function
     test1=$(dfx canister call daohouse_backend create_profile '(
-    "br5f7-7uaaa-aaaaa-qaaca-cai",
+    "bw4dl-smaaa-aaaaa-qaacq-cai",
 
     record {
         email_id = "bhanupradddd@gmail.com";
@@ -66,19 +66,19 @@ echo $test1
 
 
 # create_new_post function
-# test3=$(dfx canister call daohouse_backend create_new_post "(
-#    \"$ASSET_HANDLER_ID\",
-#   record {
-#     post_description = \"This post description.\";
-#     post_img = \"testing\";
-#     username = \"prataptechnologies\";
-#     image_content = vec {10};
-#     image_title = \"bhanuprofile.png\";
-#     image_content_type = \"image/png\";
-#   }
-# )")
+test3=$(dfx canister call daohouse_backend create_new_post "(
+   \"$ASSET_HANDLER_ID\",
+  record {
+    post_description = \"This post description.\";
+    post_img = \"testing\";
+    username = \"prataptechnologies\";
+    image_content = vec {10};
+    image_title = \"bhanuprofile.png\";
+    image_content_type = \"image/png\";
+  }
+)")
 
-# echo $test3
+echo $test3
 
 # get user specific post
 # test4=$(dfx canister call daohouse_backend get_my_post)
@@ -214,33 +214,33 @@ echo $test1
 
 
 
-# dao_test=$(dfx canister call daohouse_backend create_dao '("br5f7-7uaaa-aaaaa-qaaca-cai", record {
-#     dao_name = "foundation dao";
-#     purpose = "this is by bhanu";
-#     daotype = "Non-profit";
-#     link_of_document = "https://example.com/charter.pdf";
-#     cool_down_period = "7 days";
-#     members=vec{
-#         principal "aaaaa-aa";
-#     };
-#     tokenissuer="sample";
-#     linksandsocials=vec{
-#         "https://twitter.com/sampledao";
-#     };
-#     required_votes=100;
+dao_test=$(dfx canister call daohouse_backend create_dao '("ahw5u-keaaa-aaaaa-qaaha-cai", record {
+    dao_name = "foundation dao";
+    purpose = "this is by bhanu";
+    daotype = "Non-profit";
+    link_of_document = "https://example.com/charter.pdf";
+    cool_down_period = "7 days";
+    members=vec{
+        principal "aaaaa-aa";
+    };
+    tokenissuer="sample";
+    linksandsocials=vec{
+        "https://twitter.com/sampledao";
+    };
+    required_votes=100;
     
-#       image_content= opt vec {10};
-#   image_title = "samppe.jpg";
-#   image_content_type = "image/jpg";
+      image_content= vec {10};
+  image_title = "samppe.jpg";
+  image_content_type = "image/jpg";
 
-# })')
+})')
 
 
-# echo $dao_test\n
+echo $dao_test\n
 # # 
 # # # TO LIST ALL DAO BASIC DETAIL
-# dao_test0=$(dfx canister call daohouse_backend get_all_dao)
-# echo $dao_test0\n\n
+dao_test0=$(dfx canister call daohouse_backend get_all_dao)
+echo $dao_test0\n\n
 
 
 
@@ -263,6 +263,11 @@ echo $test1
 # GET DAO MEMBERS
 # dao_test656=$(dfx canister call bw4dl-smaaa-aaaaa-qaacq-cai get_dao_members)
 # echo $dao_test656
+
+
+analytics_test=$(dfx canister call daohouse_backend get_analytics)
+echo $analytics_test
+
 
 # dao_test007=$(dfx canister call by6od-j4aaa-aaaaa-qaadq-cai get_dao_detail)
 # echo $dao_test007

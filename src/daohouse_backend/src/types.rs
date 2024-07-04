@@ -607,7 +607,17 @@ pub struct DaoResponse {
 }
 
 
+#[derive(CandidType, Clone, Serialize, Debug, Deserialize)]
+pub struct Analytics {
+    pub members_count: u64,
+    pub proposals_count: u64,
+    pub dao_counts: u64,
+    pub post_count: u64,
+}
+
 const MAX_VALUE_SIZE: u32 = 700;
+const  MAX_VALUE_SIZE_ANALYTICS: u32 = 300;
+const  MAX_VALUE_SIZE_DAO: u32 = 400;
 // const MAX_VALUE_SIZE: u32 = 600;
 
 
@@ -654,6 +664,18 @@ impl  Storable for DaoDetails {
         Decode!(bytes.as_ref(), Self).unwrap()
     }
 
-    const BOUND: Bound = Bound::Bounded { max_size: MAX_VALUE_SIZE, is_fixed_size: false };
+    const BOUND: Bound = Bound::Bounded { max_size: MAX_VALUE_SIZE_DAO, is_fixed_size: false };
     
+}
+
+impl  Storable for Analytics {
+    fn to_bytes(&self) -> Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+
+    }
+    const BOUND: Bound = Bound::Bounded { max_size: MAX_VALUE_SIZE_ANALYTICS, is_fixed_size: false };
 }

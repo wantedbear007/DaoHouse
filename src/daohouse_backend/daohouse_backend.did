@@ -118,6 +118,16 @@ type DaoDetails = record {
   dao_canister_id: text;
 };
 
+type AnalyticsResponse = variant {Ok: Analytics; Err: text};
+
+type Analytics = record {
+    members_count : nat64;
+    proposals_count : nat64;
+    dao_counts : nat64;
+    post_count : nat64;
+};
+
+
 
 service : {
   comment_post : (text, text) -> (Result);
@@ -137,4 +147,5 @@ service : {
   get_my_following: () -> (Result_5);
   get_all_dao: () -> (vec DaoDetails);
   get_dao_details: (text) -> (text);
+  get_analytics: () -> (AnalyticsResponse) query;
 }

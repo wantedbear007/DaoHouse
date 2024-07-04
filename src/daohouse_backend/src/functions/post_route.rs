@@ -1,8 +1,10 @@
 // use std::collections::BTreeMap;
 
+use std::borrow::{Borrow, BorrowMut};
+
 use crate::routes::upload_image;
 use crate::types::{Comment, PostInfo, PostInput};
-use crate::{with_state, DaoDetails, ImageData, ReplyCommentData};
+use crate::{with_state, Analytics, DaoDetails, ImageData, ReplyCommentData};
 use candid::Principal;
 use ic_cdk::api;
 use ic_cdk::api::management_canister::main::raw_rand;
@@ -61,7 +63,17 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
         comment_list: Vec::new(),
     };
 
-    with_state(|state| state.post_detail.insert(post_id, new_post));
+    with_state(|state| 
+        {
+            // state.analytics_content.borrow_mut().get(&0).unwrap().post_count += 1;      
+            // state.analytics_content.borrow_mut().get(&0).unwrap().members_count += 1;            
+            let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
+            analytics.post_count += 1;
+            // state.analytics_content.borrow_mut().get(&0).unwrap().members_count += 1;
+             state.analytics_content.insert(0, analytics);
+            state.post_detail.insert(post_id, new_post)}
+        
+        );
 
     Ok("Post created successfully".to_string())
 
@@ -230,17 +242,35 @@ fn get_my_post() -> Result<Vec<(String, PostInfo)>, String> {
 }
 
 
-// TEMP FUNCTION
 #[query] 
 fn get_all_dao() -> Vec<DaoDetails> {
     let mut daos: Vec<DaoDetails> = Vec::new();
 
 
     with_state(|state| {
-        for (x, y) in state.dao_details.iter() {
-            daos.push(y);
+        for y in state.dao_details.iter() {
+            daos.push(y.1);
         }
     });
 
     daos
 }
+
+#[query]
+fn get_analytics() -> Result<Analytics, String> {
+    
+    with_state(|state| {
+        let data = state.analytics_content.get(&0);
+
+        match data {
+            Some(res) => Ok(res),
+            None => Err("data not found !!!!!".to_string())
+        }
+    })
+}
+
+
+// #[update]
+// fn update_proposals_count() {
+//     with_state(|state| state.analytics_content.get(&0))
+// }

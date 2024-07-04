@@ -1,8 +1,8 @@
+use std::borrow::{Borrow, BorrowMut};
+
 use crate::routes::upload_image;
 use crate::types::{DaoInput, Profileinput, UserProfile};
 use crate::{routes, with_state, DaoDetails, DaoResponse, ImageData};
-use candid::types::principal;
-use ic_cdk::api::call::RejectionCode;
 use ic_cdk::{query, update};
 use crate::types::{CreateCanisterArgument,CanisterInstallMode,CanisterIdRecord,CreateCanisterArgumentExtended,InstallCodeArgument,InstallCodeArgumentExtended};
 use crate::api::call::{ call_with_payment128, CallResult};
@@ -74,8 +74,17 @@ async fn create_profile(asset_handler_canister_id: String, profile: Profileinput
 
     // with_state(|state| routes::create_new_profile(state, profile.clone()))
 
+    
 
     with_state(|state| -> Result<(), String> {
+    // let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
+    // analytics.members_count += 1;
+    let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
+    analytics.members_count += 1;
+    // state.analytics_content.borrow_mut().get(&0).unwrap().members_count += 1;
+     state.analytics_content.insert(0, analytics);
+    // state.analytics_content.borrow_mut().get(&0).unwrap().members_count += 1;
+    //  state.analytics_content.insert(0, analytics);
     state.user_profile.insert(principal_id, new_profile);
     Ok(())
 
@@ -215,24 +224,6 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
     updated_members.push(principal_id.clone());
 
 
-    //upload image
-    // let image_id: Result<String, String> = upload_image(canister_id, ImageData { content: dao_detail.image_content.clone(), name: dao_detail.image_title, content_type: dao_detail.image_content_type }).await;
-    // let mut id = String::new();
-    // let image_create_res: bool = match image_id {
-    //     Ok(value) => {
-    //         id = value;
-    //         Ok(())
-    //     }
-    //     Err(er) => {
-    //         ic_cdk::println!("{:?}", er);
-    //         Err(())
-    //     }
-    // }.is_err();
-
-    // if image_create_res {
-    //     return Err("Image upload failed".to_string());
-    // }
-
      // image upload
      let image_id = upload_image(
         canister_id,
@@ -272,7 +263,14 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
 
     // let user_detail=with_state(|state| state.user_profile.get(&principal_id));
 
-    let mut user_profile_detail =  with_state(|state| state.user_profile.get(&principal_id).unwrap().clone());
+    // let mut user_profile_detail =  with_state(|state| state.user_profile.get(&principal_id).unwrap().clone());
+
+    let  user_profile_detail =  with_state(|state| state.user_profile.get(&principal_id).clone());
+
+    let mut user_profile_detail = match user_profile_detail {
+        Some(data) => data,
+        None => panic!("Error ho gya bhanu")
+    }; 
     let arg = CreateCanisterArgument {
         settings: None,
     };
@@ -321,7 +319,12 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         website: user_profile_detail.website,
     };
 
-    with_state(|state| {state.user_profile.insert(principal_id, new_profile)});
+    with_state(|state| {
+        let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
+        analytics.dao_counts += 1;
+        // state.analytics_content.borrow_mut().get(&0).unwrap().members_count += 1;
+         state.analytics_content.insert(0, analytics);
+        state.user_profile.insert(principal_id, new_profile)});
     let arg1 = InstallCodeArgument {
         mode: CanisterInstallMode::Install, 
         canister_id: canister_id_principal, 
@@ -363,6 +366,7 @@ async fn deposit_cycles(arg: CanisterIdRecord, cycles: u128) -> CallResult<()> {
 
 async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
     let wasm_base64: &str = "3831fb07143cd43c3c51f770342d2b7d0a594311529f5503587bf1544ccd44be";
+
     let wasm_module_sample: Vec<u8> = base64::decode(wasm_base64).expect("Decoding failed");
 
     // let wasm_module_sample: Vec<u8> = include_bytes!("../../../../.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();

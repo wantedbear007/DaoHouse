@@ -67,4 +67,5 @@ service : (DaoInput) -> {
   get_all_proposals: () -> (vec Proposals) query;
   get_my_proposals: () -> (ProposalResponse) query;
   join_dao: () -> (JoinDaoResponse); 
+  get_dao_members: () -> (vec principal) query;
 }
