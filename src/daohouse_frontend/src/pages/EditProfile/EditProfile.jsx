@@ -25,7 +25,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const EditProfile = () => {
-  const userProfile = useUserProfile();
+  const { userProfile, fetchUserProfile } = useUserProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { backendActor, frontendCanisterId, identity } = useAuth();
   const navigate = useNavigate();
