@@ -3,8 +3,13 @@ import herosectionleftbottomimg from "../../../assets/herosection.png";
 import herosectiongradient from "../../../assets/herosectiongradient.png";
 import circle from "../../../assets/circle.png";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+  const handlemov = () => {
+    navigate("/dao/create-dao");
+  }
   return (
     <div className="relative flex flex-col md:flex-row justify-center items-center h-[90vh]">
       {/* Left Side */}
@@ -18,11 +23,11 @@ const HeroSection = () => {
 
         <div className="flex flex-row big_phone:justify-start justify-center space-x-4">
 
-          <Link to=
-            "/dao/create-dao"
+          <button 
+            onClick={handlemov}
             className="mobile:px-8 px-4 mobile:py-3 py-2 mobile:text-base text-sm bg-[#0E3746] text-white font-semibold rounded-[27.5px] shadow-md hover:bg-blue-800 hover:text-white"
-           >CreateDAO
-          </Link>
+           >Create DAO
+          </button>
           <button className="mobile:px-8 px-4 mobile:py-3 py-2 mobile:text-base text-sm bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
 
             Join DAO
