@@ -1,6 +1,6 @@
 // use std::collections::BTreeMap;
 
-use std::borrow::{ Borrow, BorrowMut };
+use std::borrow::Borrow;
 
 use crate::routes::upload_image;
 use crate::types::{ Comment, PostInfo, PostInput };
@@ -227,8 +227,8 @@ fn reply_comment(comment_data: ReplyCommentData) -> Result<String, String> {
     Ok("commented on post".to_string())
 }
 
-#[update]
-fn get_my_post() -> Result<Vec<(String, PostInfo)>, String> {
+#[query]
+fn get_my_post(page_data: Pagination) -> Result<Vec<(String, PostInfo)>, String> {
     let principal_id = api::caller();
     if principal_id == Principal::anonymous() {
         return Err("Anonymous user not allowed, register.".to_string());
@@ -244,12 +244,26 @@ fn get_my_post() -> Result<Vec<(String, PostInfo)>, String> {
             }
         }
     });
-    Ok(posts)
-    // Ok("sfsd".to_string())
+
+    let ending = posts.len();
+
+    if ending == 0 {
+        return Ok(posts);
+    }
+
+    let start = page_data.start as usize;
+    let end = page_data.end as usize;
+
+    if start < ending {
+        let end = end.min(ending);
+        return Ok(posts[start..end].to_vec());
+    }
+    Ok(Vec::new())
+    // Ok(posts)
 }
 
 #[query]
-fn get_all_dao() -> Vec<DaoDetails> {
+fn get_all_dao(page_data: Pagination) -> Vec<DaoDetails> {
     let mut daos: Vec<DaoDetails> = Vec::new();
 
     with_state(|state| {
@@ -258,7 +272,22 @@ fn get_all_dao() -> Vec<DaoDetails> {
         }
     });
 
-    daos
+    let ending = daos.len();
+
+    if ending == 0 {
+        return daos;
+    }
+
+    let start = page_data.start as usize;
+    let end = page_data.end as usize;
+
+    if start < ending {
+        let end = end.min(ending);
+        return daos[start..end].to_vec();
+    }
+    Vec::new()
+
+    // daos
 }
 
 #[query]

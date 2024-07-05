@@ -1,4 +1,4 @@
-
+set -e
 dfx generate
 
 dfx build

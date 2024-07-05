@@ -146,11 +146,11 @@ service : {
   get_user_profile : () -> (Result_3) query;
   like_post : (text) -> (Result);
   update_profile : (Profileinput) -> (Result_1);
-  get_my_post: () -> (Result_4);
+  get_my_post: (Pagination) -> (Result_4) query;
   reply_comment: (CommentInfo) -> (Result);
   get_my_follower: () -> (Result_5);
   get_my_following: () -> (Result_5);
-  get_all_dao: () -> (vec DaoDetails);
+  get_all_dao: (Pagination) -> (vec DaoDetails);
   get_dao_details: (text) -> (text);
   get_analytics: () -> (AnalyticsResponse) query;
 }
