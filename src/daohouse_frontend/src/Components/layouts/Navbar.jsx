@@ -73,6 +73,51 @@ const {profile}=useUserProfile()
 
     const createAndFetchUserProfile = async () => {
       try {
+// <<<<<<< prabhjot
+//         //  // Fetch the image and convert to Uint8Array
+//         //  const response = await fetch(aboutImg);
+//         //  const arrayBuffer = await response.arrayBuffer();
+//         //  const uint8Array = new Uint8Array(arrayBuffer);
+
+//         // const response = await fetch(aboutImg);
+//         // const blob = await response.blob();
+//         // console.log("blob", blob);
+//         // // Convert to Uint8Array
+//         // const arrayBuffer = await blob.arrayBuffer();
+//         // const uint8Array = new Uint8Array(arrayBuffer);
+//         // console.log("uint8Array", uint8Array);
+
+
+//         // const imageBlob = await response.blob();
+//         // console.log("imageBlob", imageBlob);
+//         // const image = URL.createObjectURL(imageBlob);
+//         // // const img_URL = `blob:${image}`;
+//         // console.log("image", image);
+//         const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
+
+//         await backendActor.delete_profile();
+//         await backendActor.create_profile(canisterId, {
+//           username: "Admin1",
+//           email_id: "admin@example.com",
+//           profile_img: "fgfggf",
+//           description: "This is a sample profile description.",
+//           contact_number: "123-456-7890",
+//           twitter_id: "@admin_twitter",
+//           telegram: "@admin_telegram",
+//           website: "https://admin.com",
+//           tag_defines: ["ICP", "Blockchain", "NFT Artist"],
+//           // image_content: profileData.image_content ? [new Uint8Array(profileData.image_content)] : [],
+//           // image_title: profileData.image_title || "",
+//           image_title:  "DGF",
+
+//           image_content: [10],
+//           // image_content_type: profileData.image_content_type || "",
+//           image_content_type:  "FDSFSD",
+
+//         });
+//         // After profile creation, fetch user profile
+//         await fetchUserProfile();
+// =======
         // Fetch image data and convert to Uint8Array
         const response = await fetch(aboutImg);
         const blob = await response.blob();
@@ -112,6 +157,7 @@ const {profile}=useUserProfile()
         } catch (error) {
           console.error("Error creating user profile:", error);
         }
+// >>>>>>> main
       } catch (error) {
         console.error("Error in createAndFetchUserProfile:", error);
       }

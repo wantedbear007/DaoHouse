@@ -70,7 +70,7 @@ type Profileinput = record {
   tag_defines : vec text;
 
   // image 
-  image_content: opt blob;
+  image_content:  blob;
   image_title: text;
   image_content_type: text;
 
