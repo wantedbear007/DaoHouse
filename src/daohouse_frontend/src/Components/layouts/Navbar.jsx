@@ -181,7 +181,7 @@ const {profile}=useUserProfile()
           console.log({ response });
     
           await fetchUserProfile();
-          console.log("user data is ", userData)
+          // console.log("user data is ", userData)
         } catch (error) {
           console.error("Error creating user profile:", error);
         }

@@ -89,7 +89,7 @@ const EditProfile = () => {
       telegram: profileData.telegram,
       website: profileData.website,
       tag_defines: profileData.tag_defines,
-      image_content: profileData.image_content ? [new Uint8Array(profileData.image_content)] : [],
+      image_content: profileData.image_content ? new Uint8Array(profileData.image_content) : [],
       image_title: profileData.image_title || "",
       image_content_type: profileData.image_content_type || "",
     };
