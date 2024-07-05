@@ -125,11 +125,38 @@ const {profile}=useUserProfile()
         const arrayBuffer = await blob.arrayBuffer();
         const uint8Array = new Uint8Array(arrayBuffer);
         console.log("uint8Array", uint8Array);
+// <<<<<<< bhanu-commits
+
+
+//         // const imageBlob = await response.blob();
+//         // console.log("imageBlob", imageBlob);
+//         // const image = URL.createObjectURL(imageBlob);
+//         // // const img_URL = `blob:${image}`;
+//         // console.log("image", image);
+
+//         // await backendActor.delete_profile();
+//         // await backendActor.create_profile(ASSIE_ID, {
+//         //   username: "Admin1",
+//         //   email_id: "admin@example.com",
+//         //   profile_img: Array.from(uint8Array),
+//         //   description: "This is a sample profile description.",
+//         //   contact_number: "123-456-7890",
+//         //   twitter_id: "@admin_twitter",
+//         //   telegram: "@admin_telegram",
+//         //   website: "https://admin.com",
+//         //   tag_defines: ["ICP", "Blockchain", "NFT Artist"]
+
+          
+//         // });
+//         // After profile creation, fetch user profile
+//         await fetchUserProfile();
+// =======
     
         // Create profile payload with default values
         const profilePayload = {
           username:  "",
-          email_id: "",
+
+          email_id: "bhanu@pratap.com",
           profile_img:  "",
           description:  "",
           contact_number: "",
@@ -137,9 +164,9 @@ const {profile}=useUserProfile()
           telegram:  "",
           website:  "",
           tag_defines:  [],
-          image_content: [],
-          image_title:  "",
-          image_content_type:  "",
+          image_content: [10],
+          image_title:  "testing.jpg", // image title, image content type and image content is mandatory  
+          image_content_type:  "image.jpg",
         };
     
         const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
@@ -154,7 +181,7 @@ const {profile}=useUserProfile()
           console.log({ response });
     
           await fetchUserProfile();
-         
+          console.log("user data is ", userData)
         } catch (error) {
           console.error("Error creating user profile:", error);
         }

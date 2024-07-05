@@ -54,7 +54,7 @@ type PostInput = record {
 
 
   // image 
-  image_content: blob;
+  image_content:  blob;
   image_title: text;
   image_content_type: text;
 };
@@ -70,7 +70,7 @@ type Profileinput = record {
   tag_defines : vec text;
 
   // image 
-  image_content:  blob;
+  image_content: blob;
   image_title: text;
   image_content_type: text;
 
@@ -127,6 +127,11 @@ type Analytics = record {
     post_count : nat64;
 };
 
+type Pagination = record {
+  start : nat32;
+  end : nat32;
+};
+
 
 
 service : {
@@ -136,16 +141,16 @@ service : {
   create_profile : (text, Profileinput) -> (Result_1);
   delete_profile : () -> (Result_1);
   follow_user : (principal) -> (Result_1);
-  get_all_posts : () -> (vec record { text; PostInfo }) query;
+  get_all_posts : (Pagination) -> (vec record { text; PostInfo }) query;
   get_post_byid : (text) -> (Result_2) query;
   get_user_profile : () -> (Result_3) query;
   like_post : (text) -> (Result);
   update_profile : (Profileinput) -> (Result_1);
-  get_my_post: () -> (Result_4);
+  get_my_post: (Pagination) -> (Result_4) query;
   reply_comment: (CommentInfo) -> (Result);
   get_my_follower: () -> (Result_5);
   get_my_following: () -> (Result_5);
-  get_all_dao: () -> (vec DaoDetails);
+  get_all_dao: (Pagination) -> (vec DaoDetails);
   get_dao_details: (text) -> (text);
   get_analytics: () -> (AnalyticsResponse) query;
 }
