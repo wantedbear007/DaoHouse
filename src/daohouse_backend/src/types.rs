@@ -1,33 +1,49 @@
-use candid::{CandidType, Nat, Principal};
-use serde::{Deserialize, Serialize};
-use ic_stable_structures::{storable::Bound,Storable};
-use candid::{ Decode, Encode};
-use serde_bytes::{self, ByteBuf};
+use candid::{ CandidType, Nat, Principal };
+use serde::{ Deserialize, Serialize };
+use ic_stable_structures::{ storable::Bound, Storable };
+use candid::{ Decode, Encode };
+use serde_bytes::{ self, ByteBuf };
 use std::borrow::Cow;
-
-
 
 pub type CanisterId = Principal;
 
-
 #[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Default,
+    CandidType,
+    Serialize,
+    Deserialize,
+    Debug,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Hash,
+    Clone,
+    Default
 )]
 pub struct CanisterSettings {
-    
     pub controllers: Option<Vec<Principal>>,
-    
+
     pub compute_allocation: Option<Nat>,
-   
+
     pub memory_allocation: Option<Nat>,
-    
+
     pub freezing_threshold: Option<Nat>,
-    
+
     pub reserved_cycles_limit: Option<Nat>,
 }
 
 #[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Default,
+    CandidType,
+    Serialize,
+    Deserialize,
+    Debug,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Hash,
+    Clone,
+    Default
 )]
 pub struct CreateCanisterArgument {
     /// See [CanisterSettings].
@@ -35,7 +51,17 @@ pub struct CreateCanisterArgument {
 }
 
 #[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Default,
+    CandidType,
+    Serialize,
+    Deserialize,
+    Debug,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Hash,
+    Clone,
+    Default
 )]
 pub(crate) struct CreateCanisterArgumentExtended {
     /// See [CanisterSettings].
@@ -44,20 +70,14 @@ pub(crate) struct CreateCanisterArgumentExtended {
     pub sender_canister_version: Option<u64>,
 }
 
-
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct UpdateSettingsArgument {
-    
     pub canister_id: CanisterId,
     /// See [CanisterSettings].
     pub settings: CanisterSettings,
 }
 
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub(crate) struct UpdateSettingsArgumentExtended {
     /// Principal of the canister.
     pub canister_id: CanisterId,
@@ -67,44 +87,30 @@ pub(crate) struct UpdateSettingsArgumentExtended {
     pub sender_canister_version: Option<u64>,
 }
 
-
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct UploadChunkArgument {
-    
     pub canister_id: CanisterId,
-   
+
     #[serde(with = "serde_bytes")]
     pub chunk: Vec<u8>,
 }
 
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct ChunkHash {
     /// The hash of an uploaded chunk
     #[serde(with = "serde_bytes")]
     pub hash: Vec<u8>,
 }
 
-
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct ClearChunkStoreArgument {
-   
     pub canister_id: CanisterId,
 }
 
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct StoredChunksArgument {
-    
     pub canister_id: CanisterId,
 }
-
 
 #[derive(
     CandidType,
@@ -118,7 +124,7 @@ pub struct StoredChunksArgument {
     Hash,
     Clone,
     Copy,
-    Default,
+    Default
 )]
 pub enum CanisterInstallMode {
     /// A fresh install of a new canister.
@@ -145,16 +151,14 @@ pub enum CanisterInstallMode {
     Hash,
     Clone,
     Copy,
-    Default,
+    Default
 )]
 pub struct SkipPreUpgrade(pub Option<bool>);
 
 /// WASM module.
 pub type WasmModule = Vec<u8>;
 
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct InstallCodeArgument {
     /// See [CanisterInstallMode].
     pub mode: CanisterInstallMode,
@@ -166,9 +170,7 @@ pub struct InstallCodeArgument {
     pub arg: Vec<u8>,
 }
 
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub(crate) struct InstallCodeArgumentExtended {
     /// See [CanisterInstallMode].
     pub mode: CanisterInstallMode,
@@ -183,9 +185,7 @@ pub(crate) struct InstallCodeArgumentExtended {
 }
 
 /// Argument type of [install_chunked_code](super::install_chunked_code).
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct InstallChunkedCodeArgument {
     /// See [CanisterInstallMode].
     pub mode: CanisterInstallMode,
@@ -203,9 +203,7 @@ pub struct InstallChunkedCodeArgument {
     pub arg: Vec<u8>,
 }
 
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub(crate) struct InstallChunkedCodeArgumentExtended {
     /// See [CanisterInstallMode].
     pub mode: CanisterInstallMode,
@@ -227,7 +225,17 @@ pub(crate) struct InstallChunkedCodeArgumentExtended {
 
 /// A wrapper of canister id.
 #[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy,
+    CandidType,
+    Serialize,
+    Deserialize,
+    Debug,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Hash,
+    Clone,
+    Copy
 )]
 pub struct CanisterIdRecord {
     /// Principal of the canister.
@@ -235,7 +243,17 @@ pub struct CanisterIdRecord {
 }
 
 #[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy,
+    CandidType,
+    Serialize,
+    Deserialize,
+    Debug,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Hash,
+    Clone,
+    Copy
 )]
 pub(crate) struct CanisterIdRecordExtended {
     /// Principal of the canister.
@@ -246,7 +264,17 @@ pub(crate) struct CanisterIdRecordExtended {
 
 /// Status of a canister.
 #[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy,
+    CandidType,
+    Serialize,
+    Deserialize,
+    Debug,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Hash,
+    Clone,
+    Copy
 )]
 pub enum CanisterStatusType {
     /// The canister is running.
@@ -262,7 +290,17 @@ pub enum CanisterStatusType {
 
 /// Like [CanisterSettings].
 #[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Default,
+    CandidType,
+    Serialize,
+    Deserialize,
+    Debug,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Hash,
+    Clone,
+    Default
 )]
 pub struct DefiniteCanisterSettings {
     /// Controllers of the canister.
@@ -278,9 +316,7 @@ pub struct DefiniteCanisterSettings {
 }
 
 /// Query statistics, returned by [canister_status](super::canister_status).
-#[derive(
-    CandidType, Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize,
-)]
+#[derive(CandidType, Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct QueryStats {
     /// Total number of query calls.
     pub num_calls_total: candid::Nat,
@@ -293,9 +329,7 @@ pub struct QueryStats {
 }
 
 /// Return type of [canister_status](super::canister_status).
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct CanisterStatusResponse {
     /// See [CanisterStatusType].
     pub status: CanisterStatusType,
@@ -319,18 +353,14 @@ pub struct CanisterStatusResponse {
 }
 
 /// Details about a canister change initiated by a user.
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct FromUserRecord {
     /// Principal of the user.
     pub user_id: Principal,
 }
 
 /// Details about a canister change initiated by a canister (called _originator_).
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct FromCanisterRecord {
     /// Principal of the originator.
     pub canister_id: Principal,
@@ -341,9 +371,7 @@ pub struct FromCanisterRecord {
 }
 
 /// Provides details on who initiated a canister change.
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub enum CanisterChangeOrigin {
     /// See [FromUserRecord].
     #[serde(rename = "from_user")]
@@ -354,9 +382,7 @@ pub enum CanisterChangeOrigin {
 }
 
 /// Details about a canister creation.
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct CreationRecord {
     /// Initial set of canister controllers.
     pub controllers: Vec<Principal>,
@@ -364,7 +390,17 @@ pub struct CreationRecord {
 
 /// The mode with which a canister is installed.
 #[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy,
+    CandidType,
+    Serialize,
+    Deserialize,
+    Debug,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Hash,
+    Clone,
+    Copy
 )]
 // #[serde(rename_all = "lowercase")]
 pub enum CodeDeploymentMode {
@@ -380,9 +416,7 @@ pub enum CodeDeploymentMode {
 }
 
 /// Details about a canister code deployment.
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct CodeDeploymentRecord {
     /// See [CodeDeploymentMode].
     pub mode: CodeDeploymentMode,
@@ -391,18 +425,14 @@ pub struct CodeDeploymentRecord {
 }
 
 /// Details about updating canister controllers.
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct ControllersChangeRecord {
     /// The full new set of canister controllers.
     pub controllers: Vec<Principal>,
 }
 
 /// Provides details on the respective canister change.
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub enum CanisterChangeDetails {
     /// See [CreationRecord].
     #[serde(rename = "creation")]
@@ -419,9 +449,7 @@ pub enum CanisterChangeDetails {
 }
 
 /// Represents a canister change as stored in the canister history.
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct CanisterChange {
     /// The system timestamp (in nanoseconds since Unix Epoch) at which the change was performed
     pub timestamp_nanos: u64,
@@ -434,9 +462,7 @@ pub struct CanisterChange {
 }
 
 /// Argument type of [canister_info](super::canister_info).
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct CanisterInfoRequest {
     /// Principal of the canister.
     pub canister_id: Principal,
@@ -446,9 +472,7 @@ pub struct CanisterInfoRequest {
 }
 
 /// Return type of [canister_info](super::canister_info).
-#[derive(
-    CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone,
-)]
+#[derive(CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct CanisterInfoResponse {
     /// Total number of changes ever recorded in canister history.
     /// This might be higher than the number of canister changes in `recent_changes`
@@ -463,68 +487,65 @@ pub struct CanisterInfoResponse {
     pub controllers: Vec<Principal>,
 }
 
-#[derive(Clone, CandidType, PartialEq, Debug,Serialize,Deserialize)]
-pub struct UserProfile{
+#[derive(Clone, CandidType, PartialEq, Debug, Serialize, Deserialize)]
+pub struct UserProfile {
     pub user_id: Principal,
     pub email_id: String,
     pub profile_img: String,
     pub username: String,
     pub dao_ids: Vec<String>,
-    pub post_count:u32,
-    pub post_id:Vec<String>,
-    pub followers_count:u32,
-    pub followers_list:Vec<Principal>,
-    pub followings_count:u32,
-    pub followings_list:Vec<Principal>,
-    pub description:String,
-    pub tag_defines:Vec<String>,
-    pub contact_number:String,
-    pub twitter_id:String,
-    pub telegram:String,
-    pub website:String,
+    pub post_count: u32,
+    pub post_id: Vec<String>,
+    pub followers_count: u32,
+    pub followers_list: Vec<Principal>,
+    pub followings_count: u32,
+    pub followings_list: Vec<Principal>,
+    pub description: String,
+    pub tag_defines: Vec<String>,
+    pub contact_number: String,
+    pub twitter_id: String,
+    pub telegram: String,
+    pub website: String,
 }
 
-
-#[derive(Clone,CandidType,Serialize,Deserialize)]
-pub struct Profileinput{
+#[derive(Clone, CandidType, Serialize, Deserialize)]
+pub struct Profileinput {
     pub email_id: String,
     pub profile_img: String,
     pub username: String,
-    pub description:String,
-    pub contact_number:String,
-    pub twitter_id:String,
-    pub telegram:String,
-    pub website:String,
+    pub description: String,
+    pub contact_number: String,
+    pub twitter_id: String,
+    pub telegram: String,
+    pub website: String,
     pub tag_defines: Vec<String>,
 
     // image data
     pub image_content: Option<ByteBuf>,
     pub image_title: String,
     pub image_content_type: String,
-} 
+}
 
-#[derive(Clone,CandidType,Serialize,Deserialize)]
-pub struct DaoInput{
-    pub dao_name:String,
-    pub purpose:String,
-    pub daotype:String,
-    pub link_of_document:String,
-    pub cool_down_period:String,
-    pub members:Vec<Principal>,
-    pub tokenissuer:String,
-    pub linksandsocials:Vec<String>,
-    pub required_votes:i8,
+#[derive(Clone, CandidType, Serialize, Deserialize)]
+pub struct DaoInput {
+    pub dao_name: String,
+    pub purpose: String,
+    pub daotype: String,
+    pub link_of_document: String,
+    pub cool_down_period: String,
+    pub members: Vec<Principal>,
+    pub tokenissuer: String,
+    pub linksandsocials: Vec<String>,
+    pub required_votes: i8,
 
-
-        // image data
+    // image data
     pub image_id: Option<String>,
     pub image_content: Option<ByteBuf>,
     pub image_title: String,
     pub image_content_type: String,
-
 }
 
-#[derive(Clone,CandidType,Serialize,Deserialize)]
+#[derive(Clone, CandidType, Serialize, Deserialize)]
 pub struct DaoDetails {
     pub dao_id: Principal,
     pub dao_name: String,
@@ -532,29 +553,26 @@ pub struct DaoDetails {
     pub dao_canister_id: String,
 }
 
-
-
-
-#[derive(Clone,CandidType,Serialize,Deserialize)]
-pub struct PostInfo{
+#[derive(Clone, CandidType, Serialize, Deserialize)]
+pub struct PostInfo {
     pub principal_id: Principal,
     pub username: String,
-    pub post_id:String,
-   // pub post_title:String,
-    pub post_description:String,
-    pub post_img:String,
+    pub post_id: String,
+    // pub post_title:String,
+    pub post_description: String,
+    pub post_img: String,
     // pub post_created_at:String,
-    pub post_created_at:u64,
-    pub like_count:u32,
-    pub like_id_list:Vec<Principal>,
-    pub comment_count:u32,
-    pub comment_list:Vec<Comment>,  
+    pub post_created_at: u64,
+    pub like_count: u32,
+    pub like_id_list: Vec<Principal>,
+    pub comment_count: u32,
+    pub comment_list: Vec<Comment>,
 }
 
-#[derive(Clone,CandidType,Serialize,Deserialize)]
-pub struct PostInput{
-  //  pub post_title:String,
-    pub post_description:String,
+#[derive(Clone, CandidType, Serialize, Deserialize)]
+pub struct PostInput {
+    //  pub post_title:String,
+    pub post_description: String,
     pub username: String,
     //pub post_img:String,
 
@@ -562,8 +580,6 @@ pub struct PostInput{
     pub image_content: Option<ByteBuf>,
     pub image_title: String,
     pub image_content_type: String,
-    
-    
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
@@ -579,7 +595,7 @@ pub struct Comment {
     pub author_principal: Principal,
     pub comment_text: String,
     pub comment_id: Option<String>,
-    pub replies: Vec<String>
+    pub replies: Vec<String>,
 }
 
 // reply comment data
@@ -587,25 +603,24 @@ pub struct Comment {
 pub struct ReplyCommentData {
     pub comment_id: String,
     pub comment: String,
-    pub post_id: String
+    pub post_id: String,
 }
 
 // dao response
-#[derive(Clone,CandidType,Serialize,Deserialize, Debug)]
+#[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
 pub struct DaoResponse {
-    pub dao_id:Principal,
-    pub dao_name:String,
-    pub purpose:String,
-    pub daotype:String,
-    pub link_of_document:String,
-    pub cool_down_period:String,
-    pub tokenissuer:String,
-    pub linksandsocials:Vec<String>,
-    pub required_votes:i8,
-    pub groups_count:u64,
-    pub group_name:Vec<String>,
+    pub dao_id: Principal,
+    pub dao_name: String,
+    pub purpose: String,
+    pub daotype: String,
+    pub link_of_document: String,
+    pub cool_down_period: String,
+    pub tokenissuer: String,
+    pub linksandsocials: Vec<String>,
+    pub required_votes: i8,
+    pub groups_count: u64,
+    pub group_name: Vec<String>,
 }
-
 
 #[derive(CandidType, Clone, Serialize, Debug, Deserialize)]
 pub struct Analytics {
@@ -621,15 +636,30 @@ pub struct Pagination {
     pub end: u32,
 }
 
-const MAX_VALUE_SIZE: u32 = 700;
-const  MAX_VALUE_SIZE_ANALYTICS: u32 = 300;
-const  MAX_VALUE_SIZE_DAO: u32 = 400;
+const MAX_VALUE_SIZE: u32 = 800;
+const MAX_VALUE_SIZE_ANALYTICS: u32 = 300;
+const MAX_VALUE_SIZE_DAO: u32 = 400;
 // const MAX_VALUE_SIZE: u32 = 600;
 
+impl Storable for UserProfile {
+    fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
 
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
 
+    // IF MEMORY ERROR UNCOMMENT BELOW LINE 
+    // const BOUND: Bound = Bound::Unbounded;
 
-impl Storable for UserProfile{
+    const BOUND: Bound = Bound::Bounded {
+        max_size: MAX_VALUE_SIZE,
+        is_fixed_size: false,
+    };
+}
+
+impl Storable for PostInfo {
     fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
         Cow::Owned(Encode!(self).unwrap())
     }
@@ -644,24 +674,7 @@ impl Storable for UserProfile{
     };
 }
 
-
-
-impl Storable for PostInfo{
-    fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
-        Cow::Owned(Encode!(self).unwrap())
-    }
-
-    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
-        Decode!(bytes.as_ref(), Self).unwrap()
-    }
-
-    const BOUND: Bound = Bound::Bounded {
-        max_size: MAX_VALUE_SIZE,
-        is_fixed_size: false,
-    };
-}
-
-impl  Storable for DaoDetails {
+impl Storable for DaoDetails {
     fn to_bytes(&self) -> Cow<[u8]> {
         Cow::Owned(Encode!(self).unwrap())
     }
@@ -671,17 +684,18 @@ impl  Storable for DaoDetails {
     }
 
     const BOUND: Bound = Bound::Bounded { max_size: MAX_VALUE_SIZE_DAO, is_fixed_size: false };
-    
 }
 
-impl  Storable for Analytics {
+impl Storable for Analytics {
     fn to_bytes(&self) -> Cow<[u8]> {
         Cow::Owned(Encode!(self).unwrap())
     }
 
     fn from_bytes(bytes: Cow<[u8]>) -> Self {
         Decode!(bytes.as_ref(), Self).unwrap()
-
     }
-    const BOUND: Bound = Bound::Bounded { max_size: MAX_VALUE_SIZE_ANALYTICS, is_fixed_size: false };
+    const BOUND: Bound = Bound::Bounded {
+        max_size: MAX_VALUE_SIZE_ANALYTICS,
+        is_fixed_size: false,
+    };
 }

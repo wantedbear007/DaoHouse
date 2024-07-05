@@ -269,7 +269,7 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
 
     let mut user_profile_detail = match user_profile_detail {
         Some(data) => data,
-        None => panic!("Error ho gya bhanu")
+        None => panic!("User profile doesn't exist !")
     }; 
     let arg = CreateCanisterArgument {
         settings: None,
@@ -299,32 +299,31 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
 
     user_profile_detail.dao_ids.push(canister_id_principal.to_string());
 
-    let new_profile = UserProfile {
-        user_id: user_profile_detail.user_id,
-        email_id: user_profile_detail.email_id,
-        profile_img: user_profile_detail.profile_img,
-        username: user_profile_detail.username,
-        dao_ids: user_profile_detail.dao_ids,
-        post_count: user_profile_detail.post_count,
-        post_id: user_profile_detail.post_id,
-        followers_count: user_profile_detail.followers_count,
-        followers_list:user_profile_detail.followers_list,
-        followings_count: user_profile_detail.followings_count,
-        followings_list: user_profile_detail.followings_list,
-        description: user_profile_detail.description,
-        tag_defines: user_profile_detail.tag_defines,
-        contact_number: user_profile_detail.contact_number,
-        twitter_id: user_profile_detail.twitter_id,
-        telegram: user_profile_detail.telegram,
-        website: user_profile_detail.website,
-    };
+    // let new_profile = UserProfile {
+    //     user_id: user_profile_detail.user_id,
+    //     email_id: user_profile_detail.email_id,
+    //     profile_img: user_profile_detail.profile_img,
+    //     username: user_profile_detail.username,
+    //     dao_ids: user_profile_detail.dao_ids,
+    //     post_count: user_profile_detail.post_count,
+    //     post_id: user_profile_detail.post_id,
+    //     followers_count: user_profile_detail.followers_count,
+    //     followers_list:user_profile_detail.followers_list,
+    //     followings_count: user_profile_detail.followings_count,
+    //     followings_list: user_profile_detail.followings_list,
+    //     description: user_profile_detail.description,
+    //     tag_defines: user_profile_detail.tag_defines,
+    //     contact_number: user_profile_detail.contact_number,
+    //     twitter_id: user_profile_detail.twitter_id,
+    //     telegram: user_profile_detail.telegram,
+    //     website: user_profile_detail.website,
+    // };
 
     with_state(|state| {
         let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
         analytics.dao_counts += 1;
-        // state.analytics_content.borrow_mut().get(&0).unwrap().members_count += 1;
          state.analytics_content.insert(0, analytics);
-        state.user_profile.insert(principal_id, new_profile)});
+        state.user_profile.insert(principal_id, user_profile_detail)});
     let arg1 = InstallCodeArgument {
         mode: CanisterInstallMode::Install, 
         canister_id: canister_id_principal, 
