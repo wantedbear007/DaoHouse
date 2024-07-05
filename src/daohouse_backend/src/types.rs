@@ -651,12 +651,12 @@ impl Storable for UserProfile {
     }
 
     // IF MEMORY ERROR UNCOMMENT BELOW LINE 
-    // const BOUND: Bound = Bound::Unbounded;
+    const BOUND: Bound = Bound::Unbounded;
 
-    const BOUND: Bound = Bound::Bounded {
-        max_size: MAX_VALUE_SIZE,
-        is_fixed_size: false,
-    };
+    // const BOUND: Bound = Bound::Bounded {
+    //     max_size: MAX_VALUE_SIZE,
+    //     is_fixed_size: false,
+    // };
 }
 
 impl Storable for PostInfo {
