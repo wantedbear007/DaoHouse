@@ -1,15 +1,15 @@
 // use std::collections::BTreeMap;
 
-use std::borrow::{Borrow, BorrowMut};
+use std::borrow::Borrow;
 
 use crate::routes::upload_image;
-use crate::types::{Comment, PostInfo, PostInput};
-use crate::{with_state, Analytics, DaoDetails, ImageData, ReplyCommentData};
+use crate::types::{ Comment, PostInfo, PostInput };
+use crate::{ with_state, Analytics, DaoDetails, ImageData, Pagination, ReplyCommentData };
 use candid::Principal;
 use ic_cdk::api;
 use ic_cdk::api::management_canister::main::raw_rand;
-use ic_cdk::{query, update};
-use sha2::{Digest, Sha256};
+use ic_cdk::{ query, update };
+use sha2::{ Digest, Sha256 };
 // use uuid::Uuid;
 
 #[update]
@@ -22,27 +22,24 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
     let post_id = format!("{:x}", Sha256::digest(&uuids));
 
     // upload image
-    let image_id: Result<String, String> = upload_image(
-        canister_id,
-        ImageData {
-            content: post_details.image_content,
-            name: post_details.image_title,
-            content_type: post_details.image_content_type,
-        },
-    )
-    .await;
+    let image_id: Result<String, String> = upload_image(canister_id, ImageData {
+        content: post_details.image_content,
+        name: post_details.image_title,
+        content_type: post_details.image_content_type,
+    }).await;
     let mut id = String::new();
-    let image_create_res: bool = match image_id {
-        Ok(value) => {
-            id = value;
-            Ok(())
+    let image_create_res: bool = (
+        match image_id {
+            Ok(value) => {
+                id = value;
+                Ok(())
+            }
+            Err(er) => {
+                ic_cdk::println!("error {}", er.to_string());
+                Err(())
+            }
         }
-        Err(er) => {
-            ic_cdk::println!("error {}", er.to_string());
-            Err(())
-        }
-    }
-    .is_err();
+    ).is_err();
 
     if image_create_res {
         return Err("Image upload failed".to_string());
@@ -63,17 +60,15 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
         comment_list: Vec::new(),
     };
 
-    with_state(|state| 
-        {
-            // state.analytics_content.borrow_mut().get(&0).unwrap().post_count += 1;      
-            // state.analytics_content.borrow_mut().get(&0).unwrap().members_count += 1;            
-            let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
-            analytics.post_count += 1;
-            // state.analytics_content.borrow_mut().get(&0).unwrap().members_count += 1;
-             state.analytics_content.insert(0, analytics);
-            state.post_detail.insert(post_id, new_post)}
-        
-        );
+    with_state(|state| {
+        // state.analytics_content.borrow_mut().get(&0).unwrap().post_count += 1;
+        // state.analytics_content.borrow_mut().get(&0).unwrap().members_count += 1;
+        let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
+        analytics.post_count += 1;
+        // state.analytics_content.borrow_mut().get(&0).unwrap().members_count += 1;
+        state.analytics_content.insert(0, analytics);
+        state.post_detail.insert(post_id, new_post)
+    });
 
     Ok("Post created successfully".to_string())
 
@@ -82,14 +77,30 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
     // with_state(|state| routes::create_new_post(state, post_id,postdetail.clone()))
 }
 #[query]
-fn get_all_posts() -> Vec<(String, PostInfo)> {
-    let mut vec = Vec::new();
+fn get_all_posts(page_data: Pagination) -> Vec<(String, PostInfo)> {
+    let mut all_posts = Vec::new();
+
     with_state(|state| {
         for (k, v) in state.post_detail.iter() {
-            vec.push((k.clone(), v.clone()));
+            all_posts.push((k.clone(), v.clone()));
         }
     });
-    vec
+
+    let ending = all_posts.len();
+
+    if ending == 0 {
+        return all_posts;
+    }
+
+    let start = page_data.start as usize;
+    let end = page_data.end as usize;
+
+    if start < ending {
+        let end = end.min(ending);
+        return all_posts[start..end].to_vec();
+    }
+    // all_posts
+    Vec::new()
 }
 
 #[update]
@@ -155,7 +166,7 @@ async fn comment_post(post_id: String, comment: String) -> Result<String, String
         comment_text: comment,
         replies: Vec::new(),
         comment_id: Some(unique_commend_id), // comment_id: Some(Uuid::new_v4().to_string())
-                                             // comment_id: Some(String::from("value")),
+        // comment_id: Some(String::from("value")),
     };
 
     updated_list.push(new_comment);
@@ -187,8 +198,9 @@ fn reply_comment(comment_data: ReplyCommentData) -> Result<String, String> {
         return Err("Anonymous users not allowed".to_string());
     }
 
-    let post = with_state(|state| state.post_detail.get(&comment_data.post_id).clone()).expect("Post not found");
-
+    let post = with_state(|state| state.post_detail.get(&comment_data.post_id).clone()).expect(
+        "Post not found"
+    );
 
     let mut updated_comment_list = post.comment_list.clone();
 
@@ -204,24 +216,19 @@ fn reply_comment(comment_data: ReplyCommentData) -> Result<String, String> {
     //     return Err("Comment not found".to_string());
     // }
 
-
     let updated_post = PostInfo {
         comment_count: post.comment_count + 1,
         comment_list: updated_comment_list,
         ..post
     };
 
-    with_state(|state| {
-        state
-            .post_detail
-            .insert(updated_post.post_id.clone(), updated_post)
-    });
+    with_state(|state| { state.post_detail.insert(updated_post.post_id.clone(), updated_post) });
 
     Ok("commented on post".to_string())
 }
 
-#[update]
-fn get_my_post() -> Result<Vec<(String, PostInfo)>, String> {
+#[query]
+fn get_my_post(page_data: Pagination) -> Result<Vec<(String, PostInfo)>, String> {
     let principal_id = api::caller();
     if principal_id == Principal::anonymous() {
         return Err("Anonymous user not allowed, register.".to_string());
@@ -233,19 +240,31 @@ fn get_my_post() -> Result<Vec<(String, PostInfo)>, String> {
         for (k, v) in state.post_detail.iter() {
             if v.principal_id == principal_id {
                 // posts.push(v)
-                posts.push((k.clone(), v.clone()))
+                posts.push((k.clone(), v.clone()));
             }
         }
     });
-    Ok(posts)
-    // Ok("sfsd".to_string())
+
+    let ending = posts.len();
+
+    if ending == 0 {
+        return Ok(posts);
+    }
+
+    let start = page_data.start as usize;
+    let end = page_data.end as usize;
+
+    if start < ending {
+        let end = end.min(ending);
+        return Ok(posts[start..end].to_vec());
+    }
+    Ok(Vec::new())
+    // Ok(posts)
 }
 
-
-#[query] 
-fn get_all_dao() -> Vec<DaoDetails> {
+#[query]
+fn get_all_dao(page_data: Pagination) -> Vec<DaoDetails> {
     let mut daos: Vec<DaoDetails> = Vec::new();
-
 
     with_state(|state| {
         for y in state.dao_details.iter() {
@@ -253,22 +272,35 @@ fn get_all_dao() -> Vec<DaoDetails> {
         }
     });
 
-    daos
+    let ending = daos.len();
+
+    if ending == 0 {
+        return daos;
+    }
+
+    let start = page_data.start as usize;
+    let end = page_data.end as usize;
+
+    if start < ending {
+        let end = end.min(ending);
+        return daos[start..end].to_vec();
+    }
+    Vec::new()
+
+    // daos
 }
 
 #[query]
 fn get_analytics() -> Result<Analytics, String> {
-    
     with_state(|state| {
         let data = state.analytics_content.get(&0);
 
         match data {
             Some(res) => Ok(res),
-            None => Err("data not found !!!!!".to_string())
+            None => Err("data not found !!!!!".to_string()),
         }
     })
 }
-
 
 // #[update]
 // fn update_proposals_count() {

@@ -125,6 +125,32 @@ const {profile}=useUserProfile()
         const arrayBuffer = await blob.arrayBuffer();
         const uint8Array = new Uint8Array(arrayBuffer);
         console.log("uint8Array", uint8Array);
+// <<<<<<< bhanu-commits
+
+
+//         // const imageBlob = await response.blob();
+//         // console.log("imageBlob", imageBlob);
+//         // const image = URL.createObjectURL(imageBlob);
+//         // // const img_URL = `blob:${image}`;
+//         // console.log("image", image);
+
+//         // await backendActor.delete_profile();
+//         // await backendActor.create_profile(ASSIE_ID, {
+//         //   username: "Admin1",
+//         //   email_id: "admin@example.com",
+//         //   profile_img: Array.from(uint8Array),
+//         //   description: "This is a sample profile description.",
+//         //   contact_number: "123-456-7890",
+//         //   twitter_id: "@admin_twitter",
+//         //   telegram: "@admin_telegram",
+//         //   website: "https://admin.com",
+//         //   tag_defines: ["ICP", "Blockchain", "NFT Artist"]
+
+          
+//         // });
+//         // After profile creation, fetch user profile
+//         await fetchUserProfile();
+// =======
     
         // Create profile payload with default values
         const profilePayload = {
