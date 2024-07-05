@@ -110,17 +110,17 @@ const {profile}=useUserProfile()
         // Create profile payload with default values
         const profilePayload = {
           username:  "",
-          email_id: "",
-          profile_img:  [],
+          email_id: "bhanu@pratap.com",
+          profile_img:  "",
           description:  "",
           contact_number: "",
           twitter_id: "",
           telegram:  "",
           website:  "",
           tag_defines:  [],
-          image_content: [],
-          image_title:  "",
-          image_content_type:  "",
+          image_content: [10],
+          image_title:  "testing.jpg", // image title, image content type and image content is mandatory  
+          image_content_type:  "image.jpg",
         };
     
         const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
@@ -135,6 +135,7 @@ const {profile}=useUserProfile()
           console.log({ response });
     
           await fetchUserProfile();
+          console.log("user data is ", userData)
         } catch (error) {
           console.error("Error creating user profile:", error);
         }
