@@ -29,35 +29,51 @@ const CreateDao = () => {
 
   const handleDaoClick = async () => {
     const { step1,step2,step3, step6} = data;
+    const x = step3[0]["members"];
 
+    x.forEach(function (element) {
+      console.log(element)
+      Principal.fromText(element);
+    });
+
+
+
+    // let val = step3.members.map(member => Principal.fromText(member))
+    console.log("val is ", x)
     const daoPayload = {
       dao_name: step1.DAOIdentifier || '',
       purpose: step1.Purpose || '',
       daotype: step1.DAOType || '',
       link_of_document: '',
       cool_down_period: step2.setUpPeriod || '',
-      members: step3.members ? step3.members.map(member => Principal.fromText(member)) : [],
+      members: [Principal.fromText("qnrhg-uveun-uk5ve-46qq6-eeqio-rnh2l-f6mvk-hbhan-vccrc-wdmbn-fqe")],
+
       tokenissuer: step1.initialTokenSupply || '',
-      linksandsocials: [], 
+      linksandsocials: [],
       required_votes: 10,
       image_content: step6.image_content || '',
       image_title: step6.image_title || '',
       image_content_type: step6.image_content_type || '',
 
+
+
+
     };
-    
-    console.log(daoPayload);
+
+    console.log("integration",daoPayload);
     const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
 
     try {
       console.log("canister id of asset ", canisterId);
       const response = await backendActor.create_dao(canisterId, daoPayload);
       console.log({ response });
+      window.location.href = '/dao';
 
       if (response.Err) {
         toast.error(`${response.Err}`);
       } else {
         toast.success("Dao created successfully");
+
       }
     } catch (error) {
       console.error("Error creating Dao:", error);
@@ -65,6 +81,7 @@ const CreateDao = () => {
   };
 
   const Step1Ref = useRef(null);
+
   const Step4Ref = useRef(null);
 
   const Form = () => {
