@@ -6,6 +6,7 @@ import defaultImage from "../../../assets/defaultImage.png";
 const Step6 = ({ data, setData, setActiveStep ,handleDaoClick }) => {
   const [file, setFile] = useState(null);
   const [fileURL, setFileURL] = useState(defaultImage);
+  const [shouldCreateDAO, setShouldCreateDAO] = useState(false);
   const className = "DAO__Step6";
 
   const handleFileInput = async (event) => {
@@ -44,8 +45,7 @@ const Step6 = ({ data, setData, setActiveStep ,handleDaoClick }) => {
         },
       }));
     }
-
-    handleDaoClick();
+    setShouldCreateDAO(true);
   };
 
   const readFileContent = (file) => {
@@ -58,9 +58,13 @@ const Step6 = ({ data, setData, setActiveStep ,handleDaoClick }) => {
   };
 
   useEffect(() => {
-    console.log(data);
-  }, [data]);
+    if (shouldCreateDAO) {
+      handleDaoClick();
+      setShouldCreateDAO(false);
+    }
+  }, [data, shouldCreateDAO, handleDaoClick]);
 
+  console.log("data of all steps: ",data)
   return (
     <React.Fragment>
       <div
@@ -119,3 +123,5 @@ const Step6 = ({ data, setData, setActiveStep ,handleDaoClick }) => {
 };
 
 export default Step6;
+
+

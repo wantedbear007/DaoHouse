@@ -3,6 +3,8 @@ import { FaPlus } from "react-icons/fa6";
 import { FaSquarePlus } from "react-icons/fa6";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
+import { Principal } from "@dfinity/principal";
+
 
 const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
   const [count, setCount] = useState(1);
@@ -11,8 +13,9 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
   const [groupNameInputIndex, setGropuNameInputIndex] = useState(null);
   const [addMemberIndex, setAddMemberIndex] = useState(null);
 
+
   const [list, setList] = useState([
-    { name: "Council", members: ["nzbdchsvvksckshcbkjscb kc"] },
+    { name: "Council", members: ["qnrhg-uveun-uk5ve-46qq6-eeqio-rnh2l-f6mvk-hbhan-vccrc-wdmbn-fqe",] },
     { name: "All", index: 0 },
   ]);
 
