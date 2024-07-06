@@ -67,7 +67,7 @@ const CreateDao = () => {
       console.log("canister id of asset ", canisterId);
       const response = await backendActor.create_dao(canisterId, daoPayload);
       console.log({ response });
-      // window.location.href = '/dao';
+      window.location.href = '/dao';
 
       if (response.Err) {
         toast.error(`${response.Err}`);
