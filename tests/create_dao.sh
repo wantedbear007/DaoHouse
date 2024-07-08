@@ -3,7 +3,7 @@
 ASSET_HANDLER_ID=$(dfx canister id ic_asset_handler)
 echo "ASSET_HANDLER_ID: $ASSET_HANDLER_ID"
 
-COUNT=100
+COUNT=10
 
 for ((i = 1; i <= COUNT; i++)) 
 do 
