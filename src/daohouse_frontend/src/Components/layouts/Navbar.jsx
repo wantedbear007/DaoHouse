@@ -8,12 +8,13 @@ import avatarprofile from "../../../assets/avatarprofile.png";
 import logo from "../../../assets/ColorLogo.png";
 import aboutImg from "../../../assets/avatar.png";
 import { useUserProfile } from "../../context/UserProfileContext";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-const {profile}=useUserProfile()
+  const { profile } = useUserProfile()
 
   const {
     login,
@@ -67,14 +68,14 @@ const {profile}=useUserProfile()
 
   useEffect(() => {
 
-    if(backendActor===null){
-      return 
+    if (backendActor === null) {
+      return
     }
 
     const createAndFetchUserProfile = async () => {
       try {
-// <<<<<<< prabhjot
-//  // Fetch the image and convert to Uint8Array
+        // <<<<<<< prabhjot
+        //  // Fetch the image and convert to Uint8Array
         //  const response = await fetch(aboutImg);
         //  const arrayBuffer = await response.arrayBuffer();
         //  const uint8Array = new Uint8Array(arrayBuffer);
@@ -104,20 +105,20 @@ const {profile}=useUserProfile()
         //   contact_number: "123-456-7890",
         //   twitter_id: "@admin_twitter",
         //   telegram: "@admin_telegram",
-//            website: "https://admin.com",
-//           tag_defines: ["ICP", "Blockchain", "NFT Artist"],
-//           // image_content: profileData.image_content ? [new Uint8Array(profileData.image_content)] : [],
-//           // image_title: profileData.image_title || "",
-//           image_title:  "DGF",
+        //            website: "https://admin.com",
+        //           tag_defines: ["ICP", "Blockchain", "NFT Artist"],
+        //           // image_content: profileData.image_content ? [new Uint8Array(profileData.image_content)] : [],
+        //           // image_title: profileData.image_title || "",
+        //           image_title:  "DGF",
 
-//              image_content: [10],
-//              // image_content_type: profileData.image_content_type || "",
-//             image_content_type:  "FDSFSD",
+        //              image_content: [10],
+        //              // image_content_type: profileData.image_content_type || "",
+        //             image_content_type:  "FDSFSD",
 
-//         });
+        //         });
         // // After profile creation, fetch user profile
         // await fetchUserProfile();
-// =======
+        // =======
         // Fetch image data and convert to Uint8Array
         const response = await fetch(aboutImg);
         const blob = await response.blob();
@@ -125,75 +126,128 @@ const {profile}=useUserProfile()
         const arrayBuffer = await blob.arrayBuffer();
         const uint8Array = new Uint8Array(arrayBuffer);
         console.log("uint8Array", uint8Array);
-// <<<<<<< bhanu-commits
+        // <<<<<<< bhanu-commits
 
 
-//         // const imageBlob = await response.blob();
-//         // console.log("imageBlob", imageBlob);
-//         // const image = URL.createObjectURL(imageBlob);
-//         // // const img_URL = `blob:${image}`;
-//         // console.log("image", image);
+        //         // const imageBlob = await response.blob();
+        //         // console.log("imageBlob", imageBlob);
+        //         // const image = URL.createObjectURL(imageBlob);
+        //         // // const img_URL = `blob:${image}`;
+        //         // console.log("image", image);
 
-//         // await backendActor.delete_profile();
-//         // await backendActor.create_profile(ASSIE_ID, {
-//         //   username: "Admin1",
-//         //   email_id: "admin@example.com",
-//         //   profile_img: Array.from(uint8Array),
-//         //   description: "This is a sample profile description.",
-//         //   contact_number: "123-456-7890",
-//         //   twitter_id: "@admin_twitter",
-//         //   telegram: "@admin_telegram",
-//         //   website: "https://admin.com",
-//         //   tag_defines: ["ICP", "Blockchain", "NFT Artist"]
+        //         // await backendActor.delete_profile();
+        //         // await backendActor.create_profile(ASSIE_ID, {
+        //         //   username: "Admin1",
+        //         //   email_id: "admin@example.com",
+        //         //   profile_img: Array.from(uint8Array),
+        //         //   description: "This is a sample profile description.",
+        //         //   contact_number: "123-456-7890",
+        //         //   twitter_id: "@admin_twitter",
+        //         //   telegram: "@admin_telegram",
+        //         //   website: "https://admin.com",
+        //         //   tag_defines: ["ICP", "Blockchain", "NFT Artist"]
 
-          
-//         // });
-//         // After profile creation, fetch user profile
-//         await fetchUserProfile();
-// =======
-    
+
+        //         // });
+        //         // After profile creation, fetch user profile
+        //         await fetchUserProfile();
+        // =======
+
         // Create profile payload with default values
         const profilePayload = {
-          username:  "",
-
+          username: "",
           email_id: "bhanu@pratap.com",
-          profile_img:  "",
-          description:  "",
+          profile_img: "",
+          description: "",
           contact_number: "",
           twitter_id: "",
-          telegram:  "",
-          website:  "",
-          tag_defines:  [],
+          telegram: "",
+          website: "",
+          tag_defines: [],
           image_content: [10],
-          image_title:  "testing.jpg", // image title, image content type and image content is mandatory  
-          image_content_type:  "image.jpg",
+          image_title: "testing.jpg", // image title, image content type and image content is mandatory  
+          image_content_type: "image.jpg",
         };
-    
+
+
         const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
-        
+
         if (!canisterId) {
           throw new Error("Canister ID is not defined");
         }
-    
+
         try {
           console.log("canister id of asset", canisterId);
-          const response = await backendActor.create_profile(canisterId, profilePayload);
-          console.log({ response });
-    
-          await fetchUserProfile();
+          // const response = await backendActor.create_profile(canisterId, profilePayload);
+          // console.log({ response });
+          const a = await backendActor.check_user_existance();
+          console.log(a);
+
+          if (a["Ok"]) {
+            await fetchUserProfile();
+                toast.success("Login created successfully");
+            console.log("user exist krta hai")
+          } else {
+
+                  const response = await backendActor.create_profile(canisterId, profilePayload);
+            console.log({ response });
+
+            if (response) {
+              console.log('Profile created successfully:', response);
+            } else {
+              console.log('Failed to create profile.');
+            }
+            await fetchUserProfile();
+            toast.error("user does not exist")
+            console.log("user exist nhi krta")
+          }
+
+          // if (a["Err"] == "User already exist") {
+          //   console.log('User already exist');
+          //   toast.success("Login created successfully");
+          //   await fetchUserProfile();
+
+          // } else {
+          //    console.log("user does not already exist")
+          //   const response = await backendActor.create_profile(canisterId, profilePayload);
+          //   console.log({ response });
+
+          //   if (response) {
+          //     console.log('Profile created successfully:', response);
+          //   } else {
+          //     console.log('Failed to create profile.');
+          //   }
+          //   await fetchUserProfile();
+          // }
+
+          // if (a) {
+          //   console.log('User already exist');
+          //   toast.success("Login created successfully");
+          //   await fetchUserProfile();
+
+          // } else {
+          //   //  console.log("user does not already exist")
+          //   const response = await backendActor.create_profile(canisterId, profilePayload);
+          //   console.log({ response });
+
+          //   if (response) {
+          //     console.log('Profile created successfully:', response);
+          //   } else {
+          //     console.log('Failed to create profile.');
+          //   }
+          //   await fetchUserProfile();
+          // }
+
+          // await fetchUserProfile();
           // console.log("user data is ", userData)
         } catch (error) {
           console.error("Error creating user profile:", error);
         }
-// >>>>>>> main
+        // >>>>>>> main
       } catch (error) {
         console.error("Error in createAndFetchUserProfile:", error);
       }
     };
-    
- 
-    
-
     createAndFetchUserProfile();
   }, [backendActor, principal]);
 
@@ -217,7 +271,7 @@ const {profile}=useUserProfile()
     },
   ];
 
-  console.log({backendActor})
+  console.log({ backendActor })
   return (
     <nav>
       <div className="bg-bg-color shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50">
@@ -230,11 +284,10 @@ const {profile}=useUserProfile()
               >
                 <Link
                   to={item.route}
-                  className={`hover:text-[#05212C] hover:font-medium cursor-pointer text-[16px] text-[#829095] ${
-                    location.pathname === item.route
+                  className={`hover:text-[#05212C] hover:font-medium cursor-pointer text-[16px] text-[#829095] ${location.pathname === item.route
                       ? "font-semibold border-b-2 border-[#05212C] text-black"
                       : "border-transparent border-b-0.5"
-                  }`}
+                    }`}
                 >
                   {item.label}
                 </Link>
