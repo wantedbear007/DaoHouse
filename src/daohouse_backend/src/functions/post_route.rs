@@ -1,12 +1,14 @@
 // use std::collections::BTreeMap;
 
 use std::borrow::Borrow;
+use std::result;
 
 use crate::routes::upload_image;
 use crate::types::{ Comment, PostInfo, PostInput };
 use crate::{ with_state, Analytics, DaoDetails, ImageData, Pagination, ReplyCommentData };
 use candid::Principal;
 use ic_cdk::api;
+use ic_cdk::api::call::{ call_with_payment, CallResult, RejectionCode };
 use ic_cdk::api::management_canister::main::raw_rand;
 use ic_cdk::{ query, update };
 use sha2::{ Digest, Sha256 };
@@ -302,6 +304,55 @@ fn get_analytics() -> Result<Analytics, String> {
     })
 }
 
+// get canister cycles
+#[query]
+fn get_cycles() -> u64 {
+    api::canister_balance()
+}
+
+// add canister cycles
+#[update]
+fn recieve_cycles() {
+    let cycles_recieved = api::call::msg_cycles_available();
+    ic_cdk::println!("cycles are {}", cycles_recieved);
+    if cycles_recieved > 0 {
+        api::call::msg_cycles_accept(cycles_recieved);
+    }
+}
+
+// get caller
+#[query]
+fn get_caller() -> Principal {
+    api::caller()
+}
+
+#[query]
+fn get_canister_id() -> String {
+    api::id().to_string()
+}
+
+#[update]
+async fn add_cycles() -> String {
+    let response: CallResult<()> = call_with_payment(
+        api::id(),
+        "deposit_cycles",
+        (),
+        10_000_000_000
+    ).await;
+
+    match response {
+        Ok(call_result) => {
+            ic_cdk::println!("Call succeeded with result: {:?}", call_result);
+            return format!("result success is {:?}", call_result);
+        }
+        Err((rejection_code, error_msg)) => {
+            ic_cdk::println!("Call failed with rejection code {:?}: {}", rejection_code, error_msg);
+            return format!("result failed is {:?}", rejection_code);
+        }
+    }
+
+    // "hello".to_string()
+}
 // #[update]
 // fn update_proposals_count() {
 //     with_state(|state| state.analytics_content.get(&0))

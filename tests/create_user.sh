@@ -3,7 +3,7 @@
 ASSET_HANDLER_ID=$(dfx canister id ic_asset_handler)
 echo "ASSET_HANDLER_ID: $ASSET_HANDLER_ID"
 
-ENDING=1500
+ENDING=1
 
 for ((i = 1; i <= ENDING; i++))
 do
@@ -27,7 +27,7 @@ do
       telegram = \"@bhanupra_telegram\";
       website = \"https://bhanuprawebsite.com\";
       tag_defines = vec {\"tag1\"};
-      image_content = opt vec {200};
+      image_content = vec {200};
       image_title = \"bhanuprofile.png\";
       image_content_type = \"image/png\";
     }
@@ -56,8 +56,9 @@ done
 done
 
 
-# # # TO DELETE IDENTITIES
+# # TO DELETE IDENTITIES
 # for ((i = 1; i <= $ENDING; i++))
 # do
 #   IDENTITY=$(dfx identity remove "bhanu$i")
 #   echo $IDENTITY
+# done
