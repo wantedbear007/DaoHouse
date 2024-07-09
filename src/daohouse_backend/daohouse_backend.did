@@ -73,7 +73,7 @@ type Profileinput = record {
   image_content: blob;
   image_title: text;
   image_content_type: text;
-
+  image_updated: text;
 
 };
 
@@ -137,7 +137,9 @@ type UserResponse = variant {
 };
 
 
+
 service : {
+  update_profile: (text, Profileinput) -> (Result_1);
   comment_post : (text, text) -> (Result);
   create_dao : (text, DaoInput) -> (Result);
   create_new_post : (text, PostInput) -> (Result);

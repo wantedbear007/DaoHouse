@@ -1,8 +1,9 @@
-use crate::State;
+use crate::{ImageData, State};
 
 use ic_cdk::api;
 use candid:: Principal;
 use crate::types::{Profileinput, UserProfile};
+
 
 pub fn create_new_profile(state: &mut State, profile: Profileinput) -> Result<(), String> {
     let principal_id = api::caller();
@@ -105,6 +106,8 @@ pub fn update_profile(state: &mut State, profile: Profileinput) -> Result<(), St
     if !state.user_profile.contains_key(&principal_id) {
         return Err("User not registered".to_string());
     }
+
+   
 
     // Validate email format
     if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
