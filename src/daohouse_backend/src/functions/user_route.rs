@@ -133,15 +133,25 @@ async fn update_profile(
 
     // Check if the user is already registered
     let is_registered = with_state(|state| {
-        if state.user_profile.contains_key(&principal_id) {
-            return Err("User already registered".to_string());
+        if !state.user_profile.contains_key(&principal_id) {
+            return Err("User is not registered".to_string());
         }
         Ok(())
     }).is_err();
 
     if is_registered {
-        return Err("User already exist".to_string());
+        return Err("User dosen't exist ".to_string());
     }
+    // let is_registered = with_state(|state| {
+    //     if !state.user_profile.contains_key(&principal_id) {
+    //         return Err("User is not registered".to_string());
+    //     }
+    //     Ok(())
+    // }).is_err();
+
+    // if !is_registered {
+    //     return Err("User dosen't exist ".to_string());
+    // }
     // Validate email format
     if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
         return Err("Enter correct Email ID".to_string());
