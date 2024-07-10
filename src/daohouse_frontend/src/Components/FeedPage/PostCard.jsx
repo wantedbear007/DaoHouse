@@ -8,6 +8,8 @@ import { MdOutlineInsertComment } from "react-icons/md";
 const PostCard = ({ post }) => {
   const className = "postCard";
 
+ 
+
   return (
     <div
       className={

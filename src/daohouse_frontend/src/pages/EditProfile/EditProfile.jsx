@@ -98,9 +98,12 @@ const EditProfile = () => {
     // const canisterId = data["ic-asset-handler"]["ic"]
 
     try {
+      let response;
       console.log("canister id of asset ", canisterId)
-      const response = await backendActor.create_profile(canisterId, profilePayload);
-      console.log({ response })
+   
+        response = await backendActor.create_profile(canisterId, profilePayload);
+        console.log('user is creating')
+      
 
       if (response.Err) {
         toast.error(`${response.Err}`);

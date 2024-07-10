@@ -7,6 +7,7 @@ import Decentralization from "../../Components/Home/Decentralization";
 import SupportingPartners from "../../Components/Home/SupportingPartners";
 
 const Dashboard = () => {
+
   return (
     <React.Fragment>
       <HeroSection />
@@ -15,6 +16,7 @@ const Dashboard = () => {
       <Feature />
       <Decentralization />
       <SupportingPartners />
+
     </React.Fragment>
   );
 };
