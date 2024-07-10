@@ -29,6 +29,7 @@ const Navbar = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const { userProfile, fetchUserProfile } = useUserProfile();
 
+
   const menuItems = [
     { label: "Home", route: "/" },
     { label: "Social Feed", route: "/social-feed" },
@@ -66,6 +67,8 @@ const Navbar = () => {
     setIsModalOpen(true);
   };
 
+  const [username, setUsername] = useState("");
+
   useEffect(() => {
 
     if (backendActor === null) {
@@ -74,51 +77,7 @@ const Navbar = () => {
 
     const createAndFetchUserProfile = async () => {
       try {
-        // <<<<<<< prabhjot
-        //  // Fetch the image and convert to Uint8Array
-        //  const response = await fetch(aboutImg);
-        //  const arrayBuffer = await response.arrayBuffer();
-        //  const uint8Array = new Uint8Array(arrayBuffer);
 
-        // const response = await fetch(aboutImg);
-        // const blob = await response.blob();
-        // console.log("blob", blob);
-        // // // Convert to Uint8Array
-        // const arrayBuffer = await blob.arrayBuffer();
-        // const uint8Array = new Uint8Array(arrayBuffer);
-        // console.log("uint8Array", uint8Array);
-
-
-        // const imageBlob = await response.blob();
-        // console.log("imageBlob", imageBlob);
-        // const image = URL.createObjectURL(imageBlob);
-        // // const img_URL = `blob:${image}`;
-        // console.log("image", image);
-        // const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
-
-        // await backendActor.delete_profile();
-        // await backendActor.create_profile(canisterId, {
-        //   username: "Admin1",
-        //   email_id: "admin@example.com",
-        //   profile_img: "fgfggf",
-        //   description: "This is a sample profile description.",
-        //   contact_number: "123-456-7890",
-        //   twitter_id: "@admin_twitter",
-        //   telegram: "@admin_telegram",
-        //            website: "https://admin.com",
-        //           tag_defines: ["ICP", "Blockchain", "NFT Artist"],
-        //           // image_content: profileData.image_content ? [new Uint8Array(profileData.image_content)] : [],
-        //           // image_title: profileData.image_title || "",
-        //           image_title:  "DGF",
-
-        //              image_content: [10],
-        //              // image_content_type: profileData.image_content_type || "",
-        //             image_content_type:  "FDSFSD",
-
-        //         });
-        // // After profile creation, fetch user profile
-        // await fetchUserProfile();
-        // =======
         // Fetch image data and convert to Uint8Array
         const response = await fetch(aboutImg);
         const blob = await response.blob();
@@ -126,37 +85,11 @@ const Navbar = () => {
         const arrayBuffer = await blob.arrayBuffer();
         const uint8Array = new Uint8Array(arrayBuffer);
         console.log("uint8Array", uint8Array);
-        // <<<<<<< bhanu-commits
-
-
-        //         // const imageBlob = await response.blob();
-        //         // console.log("imageBlob", imageBlob);
-        //         // const image = URL.createObjectURL(imageBlob);
-        //         // // const img_URL = `blob:${image}`;
-        //         // console.log("image", image);
-
-        //         // await backendActor.delete_profile();
-        //         // await backendActor.create_profile(ASSIE_ID, {
-        //         //   username: "Admin1",
-        //         //   email_id: "admin@example.com",
-        //         //   profile_img: Array.from(uint8Array),
-        //         //   description: "This is a sample profile description.",
-        //         //   contact_number: "123-456-7890",
-        //         //   twitter_id: "@admin_twitter",
-        //         //   telegram: "@admin_telegram",
-        //         //   website: "https://admin.com",
-        //         //   tag_defines: ["ICP", "Blockchain", "NFT Artist"]
-
-
-        //         // });
-        //         // After profile creation, fetch user profile
-        //         await fetchUserProfile();
-        // =======
 
         // Create profile payload with default values
         const profilePayload = {
           username: "",
-          email_id: "bhanu@pratap.com",
+          email_id: "",
           profile_img: "",
           description: "",
           contact_number: "",
@@ -178,68 +111,35 @@ const Navbar = () => {
 
         try {
           console.log("canister id of asset", canisterId);
-          // const response = await backendActor.create_profile(canisterId, profilePayload);
-          // console.log({ response });
+
           const a = await backendActor.check_user_existance();
           console.log(a);
 
           if (a["Ok"]) {
             await fetchUserProfile();
-                toast.success("Login created successfully");
-            console.log("user exist krta hai")
+            toast.success("Login created successfully");
+            console.log("user exist krta hai");
+            setUsername(userProfile.username);
+
+
           } else {
 
-                  const response = await backendActor.create_profile(canisterId, profilePayload);
+            const response = await backendActor.create_profile(canisterId, profilePayload);
             console.log({ response });
 
             if (response) {
               console.log('Profile created successfully:', response);
+              setUsername(profilePayload.username);
             } else {
               console.log('Failed to create profile.');
             }
             await fetchUserProfile();
             toast.error("user does not exist")
+            setUsername(userProfile.username);
             console.log("user exist nhi krta")
           }
 
-          // if (a["Err"] == "User already exist") {
-          //   console.log('User already exist');
-          //   toast.success("Login created successfully");
-          //   await fetchUserProfile();
 
-          // } else {
-          //    console.log("user does not already exist")
-          //   const response = await backendActor.create_profile(canisterId, profilePayload);
-          //   console.log({ response });
-
-          //   if (response) {
-          //     console.log('Profile created successfully:', response);
-          //   } else {
-          //     console.log('Failed to create profile.');
-          //   }
-          //   await fetchUserProfile();
-          // }
-
-          // if (a) {
-          //   console.log('User already exist');
-          //   toast.success("Login created successfully");
-          //   await fetchUserProfile();
-
-          // } else {
-          //   //  console.log("user does not already exist")
-          //   const response = await backendActor.create_profile(canisterId, profilePayload);
-          //   console.log({ response });
-
-          //   if (response) {
-          //     console.log('Profile created successfully:', response);
-          //   } else {
-          //     console.log('Failed to create profile.');
-          //   }
-          //   await fetchUserProfile();
-          // }
-
-          // await fetchUserProfile();
-          // console.log("user data is ", userData)
         } catch (error) {
           console.error("Error creating user profile:", error);
         }
@@ -285,8 +185,8 @@ const Navbar = () => {
                 <Link
                   to={item.route}
                   className={`hover:text-[#05212C] hover:font-medium cursor-pointer text-[16px] text-[#829095] ${location.pathname === item.route
-                      ? "font-semibold border-b-2 border-[#05212C] text-black"
-                      : "border-transparent border-b-0.5"
+                    ? "font-semibold border-b-2 border-[#05212C] text-black"
+                    : "border-transparent border-b-0.5"
                     }`}
                 >
                   {item.label}
@@ -332,7 +232,7 @@ const Navbar = () => {
                     className="w-8 h-8 object-cover rounded-full"
                   />
                 </div>
-                <p className="text-black font-medium">asdsssaddsfad</p>
+                <p className="text-black font-medium">{username}</p>
                 <LuChevronDown />
                 {dropdownVisible && (
                   <div className="absolute top-full right-0 bg-white rounded-md border border-gray-300 shadow-md py-2 w-40">
