@@ -3,7 +3,6 @@ use std::borrow::Borrow;
 use crate::routes::upload_image;
 use crate::types::{ DaoInput, Profileinput, UserProfile };
 use crate::{ routes, with_state, DaoDetails, DaoResponse, ImageData };
-use ic_cdk::api::call::call_with_payment;
 use ic_cdk::{ query, update };
 use crate::types::{
     CreateCanisterArgument,
@@ -79,14 +78,9 @@ async fn create_profile(
 
     with_state(
         |state| -> Result<(), String> {
-            // let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
-            // analytics.members_count += 1;
             let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
             analytics.members_count += 1;
-            // state.analytics_content.borrow_mut().get(&0).unwrap().members_count += 1;
             state.analytics_content.insert(0, analytics);
-            // state.analytics_content.borrow_mut().get(&0).unwrap().members_count += 1;
-            //  state.analytics_content.insert(0, analytics);
             state.user_profile.insert(principal_id, new_profile);
             Ok(())
         }
@@ -126,8 +120,65 @@ async fn get_user_profile() -> Result<UserProfile, String> {
 }
 
 #[update]
-async fn update_profile(profile: Profileinput) -> Result<(), String> {
-    with_state(|state| routes::update_profile(state, profile.clone()))
+async fn update_profile(
+    asset_handler_canister_id: String,
+    profile: Profileinput
+) -> Result<(), String> {
+    let principal_id = api::caller();
+
+    // Check if the caller is anonymous
+    if principal_id == Principal::anonymous() {
+        return Err("Anonymous principal not allowed to make calls.".to_string());
+    }
+
+    // Check if the user is already registered
+    let is_registered = with_state(|state| {
+        if state.user_profile.contains_key(&principal_id) {
+            return Err("User already registered".to_string());
+        }
+        Ok(())
+    }).is_err();
+
+    if is_registered {
+        return Err("User already exist".to_string());
+    }
+    // Validate email format
+    if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
+        return Err("Enter correct Email ID".to_string());
+    }
+
+    let mut image_id: String = profile.profile_img.to_string();
+
+    if profile.image_title != "na".to_string() {
+        image_id = upload_image(asset_handler_canister_id, ImageData {
+            content: profile.image_content,
+            name: profile.image_title.clone(),
+            content_type: profile.image_content_type.clone(),
+        }).await.map_err(|err| format!("Image upload failed: {}", err))?;
+    }
+
+    // image upload
+    
+
+    // Clone the old profile and update the fields with new information
+
+    with_state(|state| {
+        let mut new_profile = state.user_profile.get(&principal_id).unwrap().clone();
+        new_profile.email_id = profile.email_id;
+        new_profile.profile_img = image_id;
+        new_profile.username = profile.username;
+        new_profile.description = profile.description;
+        new_profile.contact_number = profile.contact_number;
+        new_profile.twitter_id = profile.twitter_id;
+        new_profile.telegram = profile.telegram;
+        new_profile.website = profile.website;
+
+        state.user_profile.insert(principal_id, new_profile);
+    });
+
+    Ok(())
+
+    // with_state(|state| routes::update_profile(state, profile.clone()))
 }
 
 #[update]
