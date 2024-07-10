@@ -3,7 +3,7 @@
 ASSET_HANDLER_ID=$(dfx canister id ic_asset_handler)
 echo "ASSET_HANDLER_ID: $ASSET_HANDLER_ID"
 
-ENDING=1
+ENDING=30
 
 for ((i = 1; i <= ENDING; i++))
 do
@@ -33,7 +33,7 @@ do
     }
   )")
 
-  for ((j = 1; j <= 15; j++))
+  for ((j = 1; j <= 40; j++))
   do
 
   test3=$(dfx canister call daohouse_backend create_new_post "(
