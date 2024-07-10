@@ -15,27 +15,7 @@ const MyPosts = () => {
   const { setSelectedPost } = usePostContext();
   const className = "MyPosts";
 
-  useEffect(() => {
-    const profilePayload = {
-      username: profileData.name,
-      email_id: profileData.email_id,
-      profile_img: profileData.profile_img,
-      description: profileData.description,
-      contact_number: profileData.contact_number,
-      twitter_id: profileData.twitter_id,
-      telegram: profileData.telegram,
-      website: profileData.website,
-      tag_defines: profileData.tag_defines,
-      image_content: profileData.image_content ? new Uint8Array(profileData.image_content) : [],
-      image_title: profileData.image_title || "",
-      image_content_type: profileData.image_content_type || "",
-    };
 
-    const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
-    // const canisterId = data["ic-asset-handler"]["ic"]
-
-
-  })
   return (
     <div className={className}>
       <div className="md:ml-10 mx-5 md:mt-12 mt-5">
@@ -180,4 +160,5 @@ const postsList = [
     content:
       "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatem aspernatur quae perspiciatis doloremque quaerat tempore saepe hic mollitia.",
   },
+
 ];
