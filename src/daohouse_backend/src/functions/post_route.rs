@@ -79,12 +79,14 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
     // with_state(|state| routes::create_new_post(state, post_id,postdetail.clone()))
 }
 #[query]
-fn get_all_posts(page_data: Pagination) -> Vec<(String, PostInfo)> {
+fn get_all_posts(page_data: Pagination) -> Vec<PostInfo> {
     let mut all_posts = Vec::new();
 
     with_state(|state| {
-        for (k, v) in state.post_detail.iter() {
-            all_posts.push((k.clone(), v.clone()));
+        for (_k, v) in state.post_detail.iter() {
+            // all_posts.push((k.clone(), v.clone()));
+            all_posts.push(v.clone());
+
         }
     });
 
