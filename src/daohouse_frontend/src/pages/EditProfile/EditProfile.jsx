@@ -15,7 +15,7 @@ import BigCircleComponent from "../../Components/Ellipse-Animation/BigCircle/Big
 import SmallCircleComponent from "../../Components/Ellipse-Animation/SmallCircle/SmallCircleComponent";
 import MediumCircleComponent from "../../Components/Ellipse-Animation/MediumCircle/MediumCircleComponent";
 import { useAuth } from "../../Components/utils/useAuthClient";
-import { useUserProfile } from "../../context/UserProfileContext";
+// import { useUserProfile } from "../../context/UserProfileContext";
 import Lottie from "react-lottie";
 import { AssetManager } from "@dfinity/assets";
 import { HttpAgent } from "@dfinity/agent";
@@ -25,7 +25,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const EditProfile = () => {
-  const { userProfile, fetchUserProfile } = useUserProfile();
+  // const { userProfile, fetchUserProfile } = useUserProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { backendActor, frontendCanisterId, identity } = useAuth();
   const navigate = useNavigate();
@@ -41,7 +41,6 @@ const EditProfile = () => {
     agent.fetchRootKey();
   }
 
-
   // Initiate AssetManager
   const assetManager = new AssetManager({
     canisterId: frontendCanisterId,
@@ -49,8 +48,6 @@ const EditProfile = () => {
   });
 
   useEffect(() => {
-
-
     const fetchData = async () => {
       try {
         const files = await assetManager.list();
@@ -62,18 +59,16 @@ const EditProfile = () => {
     fetchData();
   }, [])
 
- 
-
   const [profileData, setProfileData] = useState({
-    name: userProfile?.name || "",
-    email_id: userProfile?.email_id || "",
-    contact_number: userProfile?.contact_number || "",
-    twitter_id: userProfile?.twitter_id || "",
-    telegram: userProfile?.telegram || "",
-    website: userProfile?.website || "",
-    description: userProfile?.description || "",
-    profile_img: userProfile?.profile_img ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}` : MyProfileImage,
-    tag_defines: userProfile?.tag_defines || [],
+    name:  "",
+    email_id: "",
+    contact_number: "",
+    twitter_id: "",
+    telegram: "",
+    website: "",
+    description: "",
+    profile_img: MyProfileImage,
+    tag_defines:  [],
   });
 
   const handleSaveChangesClick = async () => {
@@ -82,7 +77,7 @@ const EditProfile = () => {
     const profilePayload = {
       username: profileData.name,
       email_id: profileData.email_id,
-      profile_img: profileData.profile_img,
+      profile_img: profileData.profile_img ? profileData.profile_img : MyProfileImage,
       description: profileData.description,
       contact_number: profileData.contact_number,
       twitter_id: profileData.twitter_id,
@@ -90,31 +85,23 @@ const EditProfile = () => {
       website: profileData.website,
       tag_defines: profileData.tag_defines,
       image_content: profileData.image_content ? new Uint8Array(profileData.image_content) : [],
-      image_title: profileData.image_title || "",
-      image_content_type: profileData.image_content_type || "",
+      image_title: profileData.image_title || "default title",
+      image_content_type: profileData.image_content_type || "default content type",
     };
 
     const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
-    // const canisterId = data["ic-asset-handler"]["ic"]
 
     try {
-      let response;
-      if(userProfile){
-         response = await backendActor.update_profile(canisterId, profilePayload);
-         console.log('update API')
-      }else{
-         response = await backendActor.create_profile();
-         console.log('create API')
-      }
-      console.log(response,'this is responsve' )
+      console.log(profileData)
+      let response = await backendActor.update_profile(canisterId, profilePayload);
+      console.log(response, 'this is responsve')
       if (response.Err) {
         toast.error(`${response.Err}`);
       } else {
         toast.success("Profile created successfully");
       }
-
     } catch (error) {
-      console.error("Error creating profile:", error);
+      console.log("Error creating profile:", error);
     }
   };
 
@@ -185,7 +172,6 @@ const EditProfile = () => {
     setProfileData((prevData) => ({ ...prevData, tag_defines: tags }));
   };
 
-  console.log(userProfile,'userProfile')
   return (
     <div className="bg-zinc-200 w-full pb-20 relative">
       <div
