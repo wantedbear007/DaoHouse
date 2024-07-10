@@ -98,10 +98,15 @@ const EditProfile = () => {
     // const canisterId = data["ic-asset-handler"]["ic"]
 
     try {
-      console.log("canister id of asset ", canisterId)
-      const response = await backendActor.create_profile(canisterId, profilePayload);
-      console.log({ response })
-
+      let response;
+      if(userProfile){
+         response = await backendActor.update_profile(canisterId, profilePayload);
+         console.log('update API')
+      }else{
+         response = await backendActor.create_profile();
+         console.log('create API')
+      }
+      console.log(response,'this is responsve' )
       if (response.Err) {
         toast.error(`${response.Err}`);
       } else {
@@ -180,7 +185,7 @@ const EditProfile = () => {
     setProfileData((prevData) => ({ ...prevData, tag_defines: tags }));
   };
 
-  console.log(profileData.profile_img)
+  console.log(userProfile,'userProfile')
   return (
     <div className="bg-zinc-200 w-full pb-20 relative">
       <div

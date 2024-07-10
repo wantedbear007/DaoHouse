@@ -8,14 +8,16 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { useAuth } from "../utils/useAuthClient";
 import { constant } from "../utils/constants";
 import { toast } from "react-toastify";
-
+import { useUserProfile } from "../../context/UserProfileContext";
+import MyProfileImage from "../../../assets/MyProfile-img.png";
 
 const CreatePostPopup = ({ onClose }) => {
   const [showDescription, setShowDescription] = useState(false);
   const [description, setDescription] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   // const [selectedImages, setSelectedImages] = useState([]);
-
+  const { userProfile, fetchUserProfile } = useUserProfile();
+  console.log({profile : userProfile})
   const [imageData, setImageData] = useState({
     base64: "",
     image_content: [],
@@ -34,9 +36,9 @@ const CreatePostPopup = ({ onClose }) => {
     console.log(canisterId);
 
     const postPayload = {
-      username: "User",
-      post_img: "This is Post image",
-      post_description: "This is a sample post description.",
+      username:  userProfile?.username || "",
+      post_img: userProfile?.profile_img ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}` : MyProfileImage,
+      post_description: description || "",
       image_content: imageData.image_content || "",
       image_title: imageData.image_title || "",
       image_content_type: imageData.image_content_type || "",
