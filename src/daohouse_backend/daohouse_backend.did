@@ -140,7 +140,8 @@ service : {
   create_dao : (text, DaoInput) -> (Result);
   create_new_post : (text, PostInput) -> (Result);
   check_user_existance: () -> (UserResponse) query;
-  create_profile : (text, Profileinput) -> (Result_1);
+  // create_profile : (text, Profileinput) -> (Result_1);
+  create_profile : () -> (Result_1);
   delete_profile : () -> (Result_1);
   follow_user : (principal) -> (Result_1);
   get_all_posts : (Pagination) -> (vec record { text; PostInfo }) query;
