@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { HiPlus } from "react-icons/hi";
 
 import allFeed from "../../Components/FeedPage/AllFeeds";
@@ -13,6 +13,7 @@ const FeedPage = () => {
   const [feed, setFeed] = useState(allFeed);
   const [active, setActive] = useState({ all: true, latest: false });
   const [showPopup, setShowPopup] = useState(false);
+  const [posts, setPosts] = useState([]);
 
   const className = "FeedPage";
   const { backendActor } = useAuth();
@@ -31,9 +32,29 @@ const FeedPage = () => {
   const handleCreatePostClick = () => {
     setShowPopup(!showPopup);
 
-  
-    
+
+
   };
+
+
+
+  const getdetails = async () => {
+    const pagination = {
+      start: 0,
+      end: 12,
+    }
+    try {
+      const response = await backendActor.get_all_posts(pagination);
+      console.log("res", response)
+      setPosts(response);
+
+    } catch (error) {
+      console.error("Error fetching post:", error);
+    }
+  }
+  useEffect(() => {
+    getdetails();
+  }, []);
 
   return (
     <div className={className + " " + "w-full"}>
@@ -94,11 +115,12 @@ const FeedPage = () => {
         <button
           className="bg-white small_phone:gap-2 gap-1 mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl rounded-full shadow-md flex items-center rounded-2xl hover:bg-[#ececec] hover:scale-105 transition"
           onClick={handleCreatePostClick}
-          
+
         >
           <HiPlus />
           Create Post
         </button>
+
       </div>
 
       <div
@@ -107,7 +129,7 @@ const FeedPage = () => {
           "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col"
         }
       >
-        {feed && feed.map((post, i) => <PostCard post={post} key={i} />)}
+        {posts && posts.map((posts, i) => <PostCard posts={posts} key={i} />)}
       </div>
 
       {showPopup && <CreatePostPopup onClose={() => setShowPopup(false)} />}
