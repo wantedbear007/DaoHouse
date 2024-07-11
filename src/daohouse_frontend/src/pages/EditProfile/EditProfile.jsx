@@ -99,12 +99,23 @@ const EditProfile = () => {
 
     try {
       let response;
-      console.log("canister id of asset ", canisterId)
+// <<<<<<< prabhjot
+//       console.log("canister id of asset ", canisterId)
    
-        response = await backendActor.create_profile(canisterId, profilePayload);
-        console.log('user is creating')
+//         response = await backendActor.create_profile(canisterId, profilePayload);
+//         console.log('user is creating')
       
 
+// =======
+      if(userProfile){
+         response = await backendActor.update_profile(canisterId, profilePayload);
+         console.log('update API')
+      }else{
+         response = await backendActor.create_profile();
+         console.log('create API')
+      }
+      console.log(response,'this is responsve' )
+// >>>>>>> main
       if (response.Err) {
         toast.error(`${response.Err}`);
       } else {
