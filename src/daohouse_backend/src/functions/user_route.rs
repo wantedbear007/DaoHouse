@@ -21,13 +21,13 @@ use ic_cdk::println;
 
 #[update]
 async fn create_profile(
-    asset_handler_canister_id: String,
-    profile: Profileinput
+    // asset_handler_canister_id: String,
+    // profile: Profileinput
 ) -> Result<(), String> {
     // Validate email format
-    if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
-        return Err("Enter correct Email ID".to_string());
-    }
+    // if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
+    //     return Err("Enter correct Email ID".to_string());
+    // }
     let principal_id = api::caller();
 
     // Check if the caller is anonymous
@@ -36,29 +36,29 @@ async fn create_profile(
     }
 
     // Check if the user is already registered
-    let is_registered = with_state(|state| {
-        if state.user_profile.contains_key(&principal_id) {
-            return Err("User already registered".to_string());
-        }
-        Ok(())
-    }).is_err();
+    // let is_registered = with_state(|state| {
+    //     if state.user_profile.contains_key(&principal_id) {
+    //         return Err("User already registered".to_string());
+    //     }
+    //     Ok(())
+    // }).is_err();
 
-    if is_registered {
-        return Err("User already exist".to_string());
-    }
+    // if is_registered {
+    //     return Err("User already exist".to_string());
+    // }
 
     // image upload
-    let image_id = upload_image(asset_handler_canister_id, ImageData {
-        content: profile.image_content,
-        name: profile.image_title.clone(),
-        content_type: profile.image_content_type.clone(),
-    }).await.map_err(|err| format!("Image upload failed: {}", err))?;
+    // let image_id = upload_image(asset_handler_canister_id, ImageData {
+    //     content: profile.image_content,
+    //     name: profile.image_title.clone(),
+    //     content_type: profile.image_content_type.clone(),
+    // }).await.map_err(|err| format!("Image upload failed: {}", err))?;
 
     let new_profile = UserProfile {
         user_id: principal_id,
-        email_id: profile.email_id,
-        profile_img: image_id,
-        username: profile.username,
+        email_id: "".to_string(),
+        profile_img: "1".to_string(),
+        username: "".to_string(),
         dao_ids: Vec::new(),
         post_count: 0,
         post_id: Vec::new(),
@@ -66,12 +66,12 @@ async fn create_profile(
         followers_list: Vec::new(),
         followings_count: 0,
         followings_list: Vec::new(),
-        description: profile.description,
-        tag_defines: profile.tag_defines,
-        contact_number: profile.contact_number,
-        twitter_id: profile.twitter_id,
-        telegram: profile.telegram,
-        website: profile.website,
+        description: "".to_string(),
+        tag_defines: Vec::new(),
+        contact_number: "".to_string(),
+        twitter_id: "".to_string(),
+        telegram: "".to_string(),
+        website: "".to_string(),
     };
 
     // with_state(|state| routes::create_new_profile(state, profile.clone()))
@@ -133,15 +133,25 @@ async fn update_profile(
 
     // Check if the user is already registered
     let is_registered = with_state(|state| {
-        if state.user_profile.contains_key(&principal_id) {
-            return Err("User already registered".to_string());
+        if !state.user_profile.contains_key(&principal_id) {
+            return Err("User is not registered".to_string());
         }
         Ok(())
     }).is_err();
 
     if is_registered {
-        return Err("User already exist".to_string());
+        return Err("User dosen't exist ".to_string());
     }
+    // let is_registered = with_state(|state| {
+    //     if !state.user_profile.contains_key(&principal_id) {
+    //         return Err("User is not registered".to_string());
+    //     }
+    //     Ok(())
+    // }).is_err();
+
+    // if !is_registered {
+    //     return Err("User dosen't exist ".to_string());
+    // }
     // Validate email format
     if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
         return Err("Enter correct Email ID".to_string());

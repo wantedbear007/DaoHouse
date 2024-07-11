@@ -183,7 +183,7 @@ const EditProfile = () => {
     setProfileData((prevData) => ({ ...prevData, tag_defines: tags }));
   };
 
-  console.log(profileData.profile_img)
+  console.log(userProfile,'userProfile')
   return (
     <div className="bg-zinc-200 w-full pb-20 relative">
       <div

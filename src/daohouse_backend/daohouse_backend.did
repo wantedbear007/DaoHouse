@@ -37,10 +37,7 @@ type PostInfo = record {
  comment_list : vec Comment;
   post_created_at : nat64;
 
- // image
- // image_content: opt blob;
-//  image_title: text;
-//  image_content_type: text;
+
 
 };
 
@@ -73,7 +70,6 @@ type Profileinput = record {
   image_content: blob;
   image_title: text;
   image_content_type: text;
-  image_updated: text;
 
 };
 
@@ -144,14 +140,14 @@ service : {
   create_dao : (text, DaoInput) -> (Result);
   create_new_post : (text, PostInput) -> (Result);
   check_user_existance: () -> (UserResponse) query;
-  create_profile : (text, Profileinput) -> (Result_1);
+  // create_profile : (text, Profileinput) -> (Result_1);
+  create_profile : () -> (Result_1);
   delete_profile : () -> (Result_1);
   follow_user : (principal) -> (Result_1);
-  get_all_posts : (Pagination) -> (vec record { text; PostInfo }) query;
+  get_all_posts : (Pagination) -> (vec PostInfo) query;
   get_post_byid : (text) -> (Result_2) query;
   get_user_profile : () -> (Result_3) query;
   like_post : (text) -> (Result);
-  update_profile : (Profileinput) -> (Result_1);
   get_my_post: (Pagination) -> (Result_4) query;
   reply_comment: (CommentInfo) -> (Result);
   get_my_follower: () -> (Result_5);
@@ -163,5 +159,5 @@ service : {
   recieve_cycles: () -> ();
   get_caller: () -> (principal) query;
   get_canister_id: () -> (text) query;
-  add_cycles: () -> (text);
+  add_cycles: ()  -> (text); 
 }

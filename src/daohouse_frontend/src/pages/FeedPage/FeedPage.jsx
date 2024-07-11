@@ -32,8 +32,8 @@ const FeedPage = () => {
   const handleCreatePostClick = () => {
     setShowPopup(!showPopup);
 
-  
-    
+
+
   };
 
   // get data from backend 
@@ -121,7 +121,7 @@ useEffect(() => {
         <button
           className="bg-white small_phone:gap-2 gap-1 mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl rounded-full shadow-md flex items-center rounded-2xl hover:bg-[#ececec] hover:scale-105 transition"
           onClick={handleCreatePostClick}
-          
+
         >
           <HiPlus />
           Create Post
