@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Children } from "react";
 // import Login from './Components/Auth/Login';
 
 import PostProvider from "./PostProvider";
@@ -29,11 +29,23 @@ import { ToastContainer, toast } from 'react-toastify';
 
 
 const App = () => {
+  const Container = ({ children }) => {
+    return (
+      <div className="max-w-screen-xl mx-auto ">
+        {children}
+      </div>
+    );
+  };
+   
   return (
+     
     <PostProvider>
       <Router>
+    
         <Navbar />
+        <Container>
         <Routes>
+
           <Route path="/*" element={<Error404 />} />
           <Route path="/" element={<Dashboard />} />
           <Route path="/social-feed" element={<FeedPage />} />
@@ -64,6 +76,7 @@ const App = () => {
             element={<MyProfile childComponent={<Following />} />}
           />
         </Routes>
+        </Container>
         <Footer />
       </Router>
       <ToastContainer />

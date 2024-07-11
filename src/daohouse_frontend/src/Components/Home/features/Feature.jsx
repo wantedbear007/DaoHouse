@@ -32,13 +32,15 @@ const Feature = () => {
       </div>
 
 
-      <div className="flex flex-col big_phone:flex-row justify-center items-center gap-4 px-4">
+      <div className="flex flex-col big_phone:flex-row justify-center items-center gap-4 px-4
+       ">
         {cardData.map((data, index) => (
           <Card
             key={index}
             title={data.title}
             subtitle={data.subtitle}
             imageSrc={data.imageSrc}
+
           />
         ))}
       </div>
