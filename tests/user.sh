@@ -18,8 +18,8 @@ echo $ASSET_HANDLER_ID
 
 
 # To access image via URL
-# http://fhj5a-wmaaa-aaaaa-qaa2q-cai.localhost:4943/f/1
-
+# 
+http://fhj5a-wmaaa-aaaaa-qaa2q-cai.localhost:4943/f/1
 # creare_profile function
     test1=$(dfx canister call daohouse_backend create_profile '(
     "bw4dl-smaaa-aaaaa-qaacq-cai",

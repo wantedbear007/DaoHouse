@@ -34,33 +34,35 @@ const FeedPage = () => {
 
 
 
+
+
   };
 
   // get data from backend 
   // console the data 
 
-  const getdetails = async() =>{
+  const getdetails = async() => {
 
-  const pagination = {
-    "end": 12,
-    "start": 0,
-  }
+    const pagination = {
+      "end": 12,
+      "start": 0,
+    }
 
-  const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
+    const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
 
-  try {
-    const response = await backendActor.get_all_posts(pagination);
-    console.log("res",response);
-    setPosts(response);
-  } 
+    try {
+      const response = await backendActor.get_all_posts(pagination);
+      console.log("res", response);
+      setPosts(response);
+    }
     catch (error) {
       console.error("Error fetching post:", error);
-  }
-};
+    }
+  };
 
-useEffect(() => {
-  getdetails();
-}, []);
+  useEffect(() => {
+    getdetails();
+  }, []);
 
   return (
     <div className={className + " " + "w-full"}>
@@ -122,22 +124,16 @@ useEffect(() => {
           className="bg-white small_phone:gap-2 gap-1 mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl rounded-full shadow-md flex items-center rounded-2xl hover:bg-[#ececec] hover:scale-105 transition"
           onClick={handleCreatePostClick}
 
+
         >
           <HiPlus />
           Create Post
         </button>
 
-        <button
-        className="bg-white small_phone:gap-2 gap-1 mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl rounded-full shadow-md flex items-center rounded-2xl hover:bg-[#ececec] hover:scale-105 transition"
-        onClick={getdetails}
-        
-      >
-        <HiPlus />
-        Create 
-      </button>
-      
-        
-   
+
+
+
+
       </div>
 
       <div
@@ -146,10 +142,10 @@ useEffect(() => {
           "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col"
         }
       >
-        {feed && feed.map((post, i) => <PostCard post={post} key={i} 
- 
+        {posts && posts.map((posts, i) => <PostCard posts={posts} key={i}
+
         />)}
-       
+
 
 
       </div>

@@ -3,9 +3,6 @@ import img1 from "../../../assets/postMedia1.png";
 import img2 from "../../../assets/postMedia2.png";
 import img3 from "../../../assets/postMedia3.png";
 
-
-
-
 export default [
   {
     userImg: img,

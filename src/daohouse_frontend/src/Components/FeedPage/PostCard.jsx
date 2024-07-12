@@ -27,12 +27,19 @@ const convertTimestampToDateString = (timestamp) => {
   return `${month} ${day}`;
 };
 
+
 const PostCard = ({ posts }) => {
   const [formattedDate, setFormattedDate] = useState('');
   const className = "postCard";
   const { backendActor } = useAuth();
+  const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
+
+  const image_url = `http://${canisterId}.localhost:4943/f/5`;
+  console.log(image_url);
+  
 
   useEffect(() => {
+    console.log("data are ", posts)
     if (posts && posts.post_created_at) {
       const formatted = convertTimestampToDateString(BigInt(posts.post_created_at));
       setFormattedDate(formatted);
@@ -84,7 +91,8 @@ const PostCard = ({ posts }) => {
         <div className="flex flex-row items-center justify-between">
           <section className={className + "__userData flex flex-row items-center gap-2"}>
             <img
-              src={posts.post_img}
+              src={image_url}
+            
               alt="userImage"
               className="rounded-[50%] w-10 h-10"
             />
