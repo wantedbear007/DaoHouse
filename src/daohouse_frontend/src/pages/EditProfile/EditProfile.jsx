@@ -60,7 +60,7 @@ const EditProfile = () => {
   }, [])
 
   const [profileData, setProfileData] = useState({
-    name:  "",
+    name: "",
     email_id: "",
     contact_number: "",
     twitter_id: "",
@@ -68,10 +68,26 @@ const EditProfile = () => {
     website: "",
     description: "",
     profile_img: MyProfileImage,
-    tag_defines:  [],
+    tag_defines: [],
   });
 
+  const fetchDefaultImageAsFile = async (imageUrl) => {
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+    return new File([blob], "MyProfile-img.png", { type: blob.type });
+  };
+
   const handleSaveChangesClick = async () => {
+    if (!profileData.profile_img || profileData.profile_img === MyProfileImage) {
+      const defaultFile = await fetchDefaultImageAsFile(MyProfileImage);
+      const arrayBuffer = await defaultFile.arrayBuffer();
+      const content = new Uint8Array(arrayBuffer);
+      profileData.profile_img = URL.createObjectURL(defaultFile);
+      profileData.image_content = Array.from(content);
+      profileData.image_title = defaultFile.name;
+      profileData.image_content_type = defaultFile.type;
+    }
+
     setIsModalOpen(true);
 
     const profilePayload = {
@@ -102,6 +118,13 @@ const EditProfile = () => {
       }
     } catch (error) {
       console.log("Error creating profile:", error);
+    }
+
+    try {
+     const userdata = await backendActor.get_user_profile()
+     console.log(userdata)
+    } catch (error) {
+      console.log("error coming : ", error)
     }
   };
 
