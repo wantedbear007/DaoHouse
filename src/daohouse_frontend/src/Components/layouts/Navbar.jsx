@@ -117,14 +117,14 @@ const Navbar = () => {
 
           if (a["Ok"]) {
             await fetchUserProfile();
-            toast.success("Login created successfully");
             console.log("user exist krta hai");
+            toast.success("Login created successfully");
             setUsername(userProfile.username);
 
 
           } else {
-
-            const response = await backendActor.create_profile(canisterId, profilePayload);
+              
+            const response = await backendActor.create_profile();
             console.log({ response });
 
             if (response) {

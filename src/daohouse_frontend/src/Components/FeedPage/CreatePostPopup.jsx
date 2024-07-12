@@ -23,6 +23,7 @@ const CreatePostPopup = ({ onClose }) => {
     image_content: [],
     image_title: "",
     image_content_type: "",
+    post_image : ''
   });
 
   const { handleFileUpload } = constant();
@@ -37,7 +38,7 @@ const CreatePostPopup = ({ onClose }) => {
 
     const postPayload = {
       username:  userProfile?.username || "",
-      post_img: userProfile?.profile_img ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}` : MyProfileImage,
+      post_img: imageData?.post_image ? imageData?.post_image  : MyProfileImage,
       post_description: description || "",
       image_content: imageData.image_content || "",
       image_title: imageData.image_title || "",
@@ -70,13 +71,14 @@ const CreatePostPopup = ({ onClose }) => {
 
     try {
       const { base64 } = await handleFileUpload(event);
-
+      const file = event.target.files[0];
       setImageData((prevData) => ({
         ...prevData,
         base64,
         image_content: Array.from(content),
         image_title: file.name,
         image_content_type: file.type,
+        post_image : URL.createObjectURL(file),
       }));
     } catch (error) {
       if (typeof error === "string") {
