@@ -172,6 +172,10 @@ const Navbar = () => {
   ];
 
   console.log({ backendActor })
+  const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
+
+  const image_url = `http://${canisterId}.localhost:4943/f/5`;
+  console.log(image_url);
   return (
     <nav>
       <div className="bg-bg-color shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50">
@@ -227,7 +231,8 @@ const Navbar = () => {
               >
                 <div className="w-10 h-10 flex items-center rounded-full overflow-hidden my-auto">
                   <img
-                    src={avatarprofile}
+                    // src={avatarprofile}
+                    src={image_url}
                     alt="User Avatar"
                     className="w-8 h-8 object-cover rounded-full"
                   />
