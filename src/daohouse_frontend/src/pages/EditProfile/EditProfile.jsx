@@ -45,8 +45,7 @@ const EditProfile = () => {
   if (isLocal) {
     agent.fetchRootKey();
   }
-
-
+  
   // Initiate AssetManager
   const assetManager = new AssetManager({
     canisterId: frontendCanisterId,
@@ -183,6 +182,28 @@ const EditProfile = () => {
   const handleTagsChange = (tags) => {
     setProfileData((prevData) => ({ ...prevData, tag_defines: tags }));
   };
+
+  useEffect(() => {
+    console.log('calling useefect')
+    setProfileData({
+      name: userProfile?.username || "",
+      email_id: userProfile?.email_id || "",
+      contact_number: userProfile?.contact_number || "",
+      twitter_id: userProfile?.twitter_id || "",
+      telegram: userProfile?.telegram || "",
+      website: userProfile?.website || "",
+      description: userProfile?.description || "",
+      profile_img: userProfile?.profile_img || "",
+      tag_defines: userProfile?.tag_defines || [],
+      image_content: [10],
+      image_title: "na",
+      image_content_type: "image/jpg",
+    })
+    setImageSrc(userProfile?.profile_img
+        ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
+        : MyProfileImage)
+    }, [userProfile?.profile_img])
+  
   return (
     <div className="bg-zinc-200 w-full pb-20 relative">
       <div
