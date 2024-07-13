@@ -21,6 +21,8 @@ export const UserProfileProvider = ({ children }) => {
       console.log({ userProfile });
       if (userProfile) {
         setUserProfile(userProfile);
+        localStorage.setItem('username', userProfile?.username);
+        localStorage.setItem('userImageId', userProfile?.profile_img);
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
