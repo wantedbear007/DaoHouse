@@ -22,12 +22,17 @@ import { HttpAgent } from "@dfinity/agent";
 import { toast } from "react-toastify";
 import data from "../../../../../canister_ids.json"
 import { useNavigate } from "react-router-dom";
- 
- 
+
+
 const EditProfile = () => {
   const { userProfile, fetchUserProfile } = useUserProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { backendActor, frontendCanisterId, identity } = useAuth();
+  const [imageSrc, setImageSrc] = useState(
+    userProfile?.profile_img
+      ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
+      : MyProfileImage
+  );
   const navigate = useNavigate();
   const handleDiscardClick = () => {
     navigate("/my-profile");
@@ -40,17 +45,15 @@ const EditProfile = () => {
   if (isLocal) {
     agent.fetchRootKey();
   }
- 
- 
+
+
   // Initiate AssetManager
   const assetManager = new AssetManager({
     canisterId: frontendCanisterId,
     agent: agent,
   });
- 
+
   useEffect(() => {
- 
- 
     const fetchData = async () => {
       try {
         const files = await assetManager.list();
@@ -61,7 +64,7 @@ const EditProfile = () => {
     };
     fetchData();
   }, [])
-  console.log(userProfile,'userProfile : ')
+
   const [profileData, setProfileData] = useState({
     name: userProfile?.username || "",
     email_id: userProfile?.email_id || "",
@@ -70,29 +73,15 @@ const EditProfile = () => {
     telegram: userProfile?.telegram || "",
     website: userProfile?.website || "",
     description: userProfile?.description || "",
-    profile_img: userProfile?.profile_img ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}` : MyProfileImage,
+    profile_img: userProfile?.profile_img || "",
     tag_defines: userProfile?.tag_defines || [],
+    image_content: [10],
+    image_title: "na",
+    image_content_type: "image/jpg",
   });
 
-
-  const fetchDefaultImageAsFile = async (imageUrl) => {
-    const response = await fetch(imageUrl);
-    const blob = await response.blob();
-    return new File([blob], "MyProfile-img.png", { type: blob.type });
-  };
- 
   const handleSaveChangesClick = async () => {
-    if (!profileData.profile_img || profileData.profile_img === MyProfileImage) {
-      const defaultFile = await fetchDefaultImageAsFile(MyProfileImage);
-      const arrayBuffer = await defaultFile.arrayBuffer();
-      const content = new Uint8Array(arrayBuffer);
-      profileData.profile_img = URL.createObjectURL(defaultFile);
-      profileData.image_content = Array.from(content);
-      profileData.image_title = defaultFile.name;
-      profileData.image_content_type = defaultFile.type;
-    }
     setIsModalOpen(true);
- 
     const profilePayload = {
       username: profileData.name,
       email_id: profileData.email_id,
@@ -103,61 +92,62 @@ const EditProfile = () => {
       telegram: profileData.telegram,
       website: profileData.website,
       tag_defines: profileData.tag_defines,
-      image_content: profileData.image_content ? new Uint8Array(profileData.image_content) : [],
-      image_title: profileData.image_title || "default title",
+      image_content: profileData.image_content ? new Uint8Array(profileData.image_content) : [10],
+      image_title: profileData.image_title || "na",
       image_content_type: profileData.image_content_type || "default content type",
     };
- 
+
     const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
     // const canisterId = data["ic-asset-handler"]["ic"]
- 
+
     try {
-      console.log("canister id of asset ", canisterId)
       const response = await backendActor.update_profile(canisterId, profilePayload);
       console.log({ response })
- 
       if (response.Err) {
         toast.error(`${response.Err}`);
       } else {
         toast.success("Profile created successfully");
       }
- 
     } catch (error) {
       console.error("Error creating profile:", error);
     }
+    finally {
+      fetchUserProfile();
+    }
   };
- 
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
- 
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProfileData((prevData) => ({ ...prevData, [name]: value }));
   };
- 
+
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
+      setImageSrc(URL.createObjectURL(file));
       const arrayBuffer = await file.arrayBuffer();
       const content = new Uint8Array(arrayBuffer);
       setProfileData((prevData) => ({
         ...prevData,
-        profile_img: URL.createObjectURL(file),
+        // profile_img: "abc",
         image_content: Array.from(content),
         image_title: file.name,
         image_content_type: file.type,
       }));
     }
   };
- 
+
   const handleRemoveImage = () => {
     setProfileData((prevData) => ({
       ...prevData,
       profile_img: MyProfileImage,
     }));
   };
- 
+
   // Animation options for the big circle
   const defaultOptions = {
     loop: true,
@@ -168,7 +158,7 @@ const EditProfile = () => {
       id: "lottie-bigCircle",
     },
   };
- 
+
   // Animation options for the small circle
   const defaultOptions2 = {
     loop: true,
@@ -189,12 +179,10 @@ const EditProfile = () => {
       id: "lottie-mediumCircle",
     },
   };
- 
+
   const handleTagsChange = (tags) => {
     setProfileData((prevData) => ({ ...prevData, tag_defines: tags }));
   };
- 
-  console.log(profileData.profile_img)
   return (
     <div className="bg-zinc-200 w-full pb-20 relative">
       <div
@@ -212,7 +200,7 @@ const EditProfile = () => {
             <div className="relative tablet:w-[96px] tablet:h-[96px] md:w-[88.19px] md:h-[88.19px] w-[65px] h-[65px]">
               <BigCircleComponent imgSrc={BigCircle} />
             </div>
- 
+
             {/* Big circle animation */}
             <div className="absolute inset-0 flex items-center justify-center z-20">
               <div className="tablet:w-[112px] tablet:h-[112px] md:w-[104px] md:h-[104px] w-[75px] h-[75px]">
@@ -223,14 +211,14 @@ const EditProfile = () => {
               </div>
             </div>
           </div>
- 
+
           <div className="absolute right-[25%] -translate-y-full top-[30%]">
             <div className="relative tablet:w-[43px] tablet:h-[43px] md:w-[33.3px] md:h-[33.3px] w-[21.19px] h-[21.19px]">
               {/* Smallest circle image */}
- 
+
               <SmallCircleComponent imgSrc={SmallestCircle} />
             </div>
- 
+
             {/* Small circle animation */}
             <div className="absolute inset-0 flex items-center justify-center z-20">
               <div className="tablet:w-[47px] tablet:h-[47px] md:w-[37.3px] md:h-[37.3px] w-[23.19px] h-[23.19px]">
@@ -241,13 +229,13 @@ const EditProfile = () => {
               </div>
             </div>
           </div>
- 
+
           {/* Medium circle image */}
           <div className="absolute right-[45%] -translate-y-full top-[95%]">
             <div className="relative tablet:w-[52px] tablet:h-[52px] md:w-[43.25px] md:h-[43.25px] w-[29.28px] h-[29.28px] ">
               <MediumCircleComponent imgSrc={MediumCircle} />
             </div>
- 
+
             {/* Medium circle animation */}
             <div className="absolute inset-0 flex items-center justify-center z-20">
               <div className="tablet:w-[60px] tablet:h-[60px] md:w-[47.25px] md:h-[47.25px] w-[33.28px] h-[33.28px]">
@@ -266,7 +254,7 @@ const EditProfile = () => {
           <div className="flex items-center gap-2">
             <img
               className="rounded-md lg:w-[105px] md:w-[85px] w-[69px] lg:mr-12 md:mr-4 mr-1 "
-              src={profileData.profile_img}
+              src={imageSrc}
               alt="profile-pic"
               style={{
                 boxShadow:
@@ -296,7 +284,7 @@ const EditProfile = () => {
               Remove<span className="hidden sm:inline-block ml-1">Photo</span>
             </button>
           </div>
- 
+
           <div className="lg:ml-40 md:ml-24 lg:mr-5 md:mt-12 mt-5">
             <h3 className="text-[#05212C] text-[16px] md:text-[18px] lg:text-[24px] md:font-semibold font-medium ml-3">
               About Me
@@ -357,12 +345,12 @@ const EditProfile = () => {
         </div>
       </div>
       <SuccessModal isOpen={isModalOpen} onClose={closeModal} />
- 
+
       {isModalOpen && (
         <div className="fixed inset-0 bg-black opacity-40 z-40"></div>
       )}
     </div>
   );
 };
- 
+
 export default EditProfile;
