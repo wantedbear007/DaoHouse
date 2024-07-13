@@ -8,7 +8,7 @@ import SupportingPartners from "../../Components/Home/SupportingPartners";
 
 
 const Container = ({children}) => (
-  <div className="max-w-screen-xl mx-auto">
+  <div className="max-w-screen-xl mx-auto ">
     {children}
   </div>
 ) 
