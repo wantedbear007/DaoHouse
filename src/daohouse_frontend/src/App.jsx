@@ -29,23 +29,12 @@ import { ToastContainer, toast } from 'react-toastify';
 
 
 const App = () => {
-  const Container = ({ children }) => {
-    return (
-      <div className="max-w-screen-xl mx-auto ">
-        {children}
-      </div>
-    );
-  };
-   
   return (
      
     <PostProvider>
       <Router>
-    
         <Navbar />
-        <Container>
         <Routes>
-
           <Route path="/*" element={<Error404 />} />
           <Route path="/" element={<Dashboard />} />
           <Route path="/social-feed" element={<FeedPage />} />
@@ -62,7 +51,6 @@ const App = () => {
           />
           <Route path="/my-proposals" element={<MyProposals />} />
           <Route path="/my-proposals/:id" element={<SingleProposal />} />
-
           <Route
             path="/my-profile/my-post"
             element={<MyProfile childComponent={<MyPosts />} />}
@@ -76,11 +64,9 @@ const App = () => {
             element={<MyProfile childComponent={<Following />} />}
           />
         </Routes>
-        </Container>
         <Footer />
       </Router>
       <ToastContainer />
-
     </PostProvider>
   );
 };
