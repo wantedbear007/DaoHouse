@@ -336,16 +336,6 @@ fn get_cycles() -> u64 {
     api::canister_balance()
 }
 
-// // add canister cycles
-// #[update]
-// fn recieve_cycles() {
-//     let cycles_recieved = api::call::msg_cycles_available();
-//     ic_cdk::println!("cycles are {}", cycles_recieved);
-//     if cycles_recieved > 0 {
-//         api::call::msg_cycles_accept(cycles_recieved);
-//     }
-// }
-
 // // get caller
 #[query]
 fn get_caller() -> Principal {
@@ -393,4 +383,15 @@ async fn make_payment(tokens: u64, user: Principal) -> String {
     ic_cdk::println!("response is {:?}", response);
     // response
     format!("response is {:?}", response)
+}
+
+// increase proposals count
+#[update]
+fn update_proposal_count() -> String {
+    with_state(|state| {
+        let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
+        analytics.proposals_count += 1;
+        state.analytics_content.insert(0, analytics);
+    });
+    "success".to_string()
 }

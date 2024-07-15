@@ -59,7 +59,7 @@ type JoinDaoResponse = variant { Ok: text; Err: text};
 
 service : (DaoInput) -> {
   add_member_to_group : (text, principal) -> (text);
-  create_proposal : (ProposalInput) -> (text);
+  create_proposal : (text, ProposalInput) -> (text);
   get_dao_detail : () -> (Dao) query;
   get_members_of_group : (text) -> (Result) query;
   get_proposal_by_id : (text) -> (Proposals) query;
@@ -68,4 +68,5 @@ service : (DaoInput) -> {
   get_my_proposals: () -> (ProposalResponse) query;
   join_dao: () -> (JoinDaoResponse); 
   get_dao_members: () -> (vec principal) query;
+  // testing: (text) -> (text);
 }
