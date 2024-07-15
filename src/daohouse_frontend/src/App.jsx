@@ -34,10 +34,7 @@ const App = () => {
     <PostProvider>
       <Router>
         <Navbar />
-// <<<<<<< prabhjot
-//        <Container>
-// =======
-// >>>>>>> main
+
         <Routes>
           <Route path="/*" element={<Error404 />} />
           <Route path="/" element={<Dashboard />} />
