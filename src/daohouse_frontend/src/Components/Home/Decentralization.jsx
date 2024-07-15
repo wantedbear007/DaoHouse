@@ -1,13 +1,14 @@
 import React from "react";
 import "./Decentralization.scss";
 import decentralize from "../../../assets/gif/cropped.gif";
+import Container from "../Container/Container";
 
 const Decentralization = () => {
   const className = "Decentralization";
 
   return (
     <div className={className + " w-full bg-image-background pb-28"}>
-      <div className="w-full flex flex-col items-center justify-center">
+      <Container classes={'flex flex-col items-center justify-center'}> 
         <div className={className + "__movingTexts pointer-events-none select-none w-full py-6 flex flex-row overflow-auto"}>
           <h1 className="text-white text-6xl  md:text-9xl font-semibold">DECENTRALIZATION.</h1>
           <h1 className="text-white text-6xl md:text-9xl font-semibold">DECENTRALIZATION.</h1>
@@ -40,7 +41,7 @@ const Decentralization = () => {
             />
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   );
 };

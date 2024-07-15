@@ -3,6 +3,7 @@ import Card from './Card';
 import feature1 from "../../../../assets/feature1.png"
 import feature2 from "../../../../assets/feature2.png"
 import feature3 from "../../../../assets/feature3.png"
+import Container from '../../Container/Container';
 
 const Feature = () => {
   const cardData = [
@@ -23,27 +24,27 @@ const Feature = () => {
     }
   ];
   return (
-    <div className="bg-[#dadee4] mobile:py-16 py-6">
-      <div className="flex big_phone:justify-center justify-start py-5 mobile:px-12 px-8">
-        <div className="flex flex-col">
-          <h2 className="text-about-heading font-mulish text-[#0E3746] font-normal text-[16ox] md:text-[16ox] lg:text-[16ox] leading-tight">Our Features</h2>
-          <p className="text-about-subheading font-mulish text-[#0E3746] font-[500] small_phone:text-3xl text-2xl leading-tight  mb-3">Engaging Management Suite</p>
+    <div className='bg-[#dadee4] mobile:py-16 py-6'>
+      <Container>
+        <div className="flex big_phone:justify-center justify-start py-5 mobile:px-12 px-8">
+          <div className="flex flex-col">
+            <h2 className="text-about-heading font-mulish text-[#0E3746] font-normal text-[16ox] md:text-[16ox] lg:text-[16ox] leading-tight">Our Features</h2>
+            <p className="text-about-subheading font-mulish text-[#0E3746] font-[500] small_phone:text-3xl text-2xl leading-tight  mb-3">Engaging Management Suite</p>
+          </div>
         </div>
-      </div>
-
-
-      <div className="flex flex-col big_phone:flex-row justify-center items-center gap-4 px-4
+        <div className="flex flex-col big_phone:flex-row justify-center items-center gap-4 px-4
        ">
-        {cardData.map((data, index) => (
-          <Card
-            key={index}
-            title={data.title}
-            subtitle={data.subtitle}
-            imageSrc={data.imageSrc}
+          {cardData.map((data, index) => (
+            <Card
+              key={index}
+              title={data.title}
+              subtitle={data.subtitle}
+              imageSrc={data.imageSrc}
 
-          />
-        ))}
-      </div>
+            />
+          ))}
+        </div>
+      </Container>
     </div>
   );
 };
