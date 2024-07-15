@@ -20,25 +20,16 @@ const Dashboard = () => {
 
   return (
     <React.Fragment>
-// <<<<<<< prabhjot
-//      <Container>
      
     
-// =======
-// >>>>>>> main
       <HeroSection />
       <Empowering />
       <About />
       <Feature />
       <Decentralization />
       <SupportingPartners />
-// <<<<<<< prabhjot
     
-//       </Container>
-//       </React.Fragment>
-// =======
     </React.Fragment>
-// >>>>>>> main
   );
 };
 
