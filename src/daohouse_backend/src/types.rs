@@ -636,6 +636,15 @@ pub struct Pagination {
     pub end: u32,
 }
 
+#[derive(CandidType, Deserialize, Debug)]
+pub struct PaymentRecipientAccount {
+    pub payment_recipient: Principal // payment recipient principal address
+    // pub payment_recipient: String // payment recipient principal address
+
+
+}
+
+
 const MAX_VALUE_SIZE: u32 = 800;
 const MAX_VALUE_SIZE_ANALYTICS: u32 = 300;
 const MAX_VALUE_SIZE_DAO: u32 = 400;

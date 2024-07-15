@@ -29,11 +29,12 @@ import { ToastContainer, toast } from 'react-toastify';
 
 
 const App = () => {
+
   return (
-     
     <PostProvider>
       <Router>
         <Navbar />
+
         <Routes>
           <Route path="/*" element={<Error404 />} />
           <Route path="/" element={<Dashboard />} />
@@ -65,6 +66,7 @@ const App = () => {
           />
         </Routes>
         <Footer />
+ 
       </Router>
       <ToastContainer />
     </PostProvider>
