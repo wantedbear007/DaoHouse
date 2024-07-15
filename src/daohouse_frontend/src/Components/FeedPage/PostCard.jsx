@@ -6,6 +6,7 @@ import { PiTelegramLogoBold } from "react-icons/pi";
 import { MdOutlineInsertComment } from "react-icons/md";
 import { useAuth } from "../../Components/utils/useAuthClient";
 
+
 const convertTimestampToDateString = (timestamp) => {
   // Convert the BigInt timestamp to milliseconds
   const milliseconds = Number(timestamp / BigInt(1e6));
@@ -29,14 +30,16 @@ const convertTimestampToDateString = (timestamp) => {
 
 
 const PostCard = ({ posts }) => {
+  console.log("posts",posts)
   const [formattedDate, setFormattedDate] = useState('');
   const className = "postCard";
   const { backendActor } = useAuth();
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
 
-  const image_url = `http://${canisterId}.localhost:4943/f/5`;
-  console.log(image_url);
+  const image_url = `http://${canisterId}.localhost:4943/f/`;
+  console.log("image",image_url);
   
+  const [likeCount, setLikeCount] = useState(posts.like_count); // Initialize with initial like count
 
   useEffect(() => {
     console.log("data are ", posts)
@@ -64,9 +67,9 @@ const PostCard = ({ posts }) => {
       console.error("Error fetching like:", error);
     }
   };
-  // useEffect(() => {
-  //   getlike();
-  // });
+  useEffect(() => {
+    getlike();
+  },[posts.post_id]);
 
 
   // const getreplycomment = async() =>{
@@ -91,7 +94,7 @@ const PostCard = ({ posts }) => {
         <div className="flex flex-row items-center justify-between">
           <section className={className + "__userData flex flex-row items-center gap-2"}>
             <img
-              src={image_url}
+              src={posts.post_img}
             
               alt="userImage"
               className="rounded-[50%] w-10 h-10"
@@ -134,7 +137,7 @@ const PostCard = ({ posts }) => {
       <section className={className + "__leftSide tablet:w-2/5 big_phone:w-1/2 w-full h-full"}>
         {posts.post_img && (
           <img
-            src={posts.post_img}
+            src={image_url + posts.post_img}
             alt="POST Media"
             className="w-full h-full object-cover rounded-lg"
           />
@@ -158,6 +161,7 @@ const PostCard = ({ posts }) => {
           <IoLink className="text-lg" />
         </button>
       </section>
+      
     </div>
   );
 };
