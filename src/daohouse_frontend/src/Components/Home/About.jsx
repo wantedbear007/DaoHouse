@@ -1,22 +1,23 @@
 import React from "react";
 import about from "../../../assets/gif/about.gif";
 import smallelipse from "../../../assets/smallElipse.png";
-import smallelipsegif from "../../../assets/smallellipsegif.png";
+// import smallelipsegif from "../../../assets/smallellipsegif.png";
 import bigellipse from "../../../assets/bigEllipse.png";
-import bigelipsegif from "../../../assets/bigelipsegif.png";
+// import bigelipsegif from "../../../assets/bigelipsegif.png";
 import SmallCircleAnimation from "../../Components/Ellipse-Animation/SmallCircle/SmallCircleAnimation.json";
 import Lottie from "react-lottie";
+import Container from "../Container/Container";
 
 const About = () => {
-  const defaultOptions1 = {
-    loop: true,
-    autoplay: true,
-    animationData: SmallCircleAnimation,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-      id: "lottie-smallCircle",
-    },
-  };
+  // const defaultOptions1 = {
+  //   loop: true,
+  //   autoplay: true,
+  //   animationData: SmallCircleAnimation,
+  //   rendererSettings: {
+  //     preserveAspectRatio: "xMidYMid slice",
+  //     id: "lottie-smallCircle",
+  //   },
+  // };
   const defaultOptions2 = {
     loop: true,
     autoplay: true,
@@ -27,7 +28,8 @@ const About = () => {
     },
   };
   return (
-    <div className="bg-[#05212C] relative flex justify-center items-center py-8 w-full">
+    <div className="bg-[#05212C] ">
+      <Container classes={'relative flex justify-center items-center py-8'}>
       <div className="absolute pointer-events-none select-none xl:left-[32%] 2xl:left-[35%] lg:left-[29%] md:left-[30%] left-0 md:top-0 top-[18%] mt-8">
         <div>
           <img
@@ -114,6 +116,7 @@ const About = () => {
           </div>
         </div>
       </div>
+      </Container>
     </div>
   );
 };

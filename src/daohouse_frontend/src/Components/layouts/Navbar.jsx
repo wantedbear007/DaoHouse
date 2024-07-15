@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, } from "react-router-dom";
 import { useAuth } from "../utils/useAuthClient";
 import { LuChevronDown } from "react-icons/lu";
 import LoginModal from "../Auth/LoginModal";
 import { FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
-import avatarprofile from "../../../assets/avatarprofile.png";
 import logo from "../../../assets/ColorLogo.png";
 import aboutImg from "../../../assets/avatar.png";
 import { useUserProfile } from "../../context/UserProfileContext";
 import { toast } from "react-toastify";
-
+import MyProfileImage from "../../../assets/MyProfile-img.png";
+import Container from "../Container/Container";
 const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const { profile } = useUserProfile()
 
   const {
     login,
@@ -28,7 +26,11 @@ const Navbar = () => {
   const location = useLocation();
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const { userProfile, fetchUserProfile } = useUserProfile();
-
+  const [imageSrc, setImageSrc] = useState(
+    userProfile?.profile_img
+      ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
+      : MyProfileImage
+  );
 
   const menuItems = [
     { label: "Home", route: "/" },
@@ -43,16 +45,20 @@ const Navbar = () => {
     await login().then(() => window.location.reload());
   };
 
-  // Function to handle login
   const handleLogout = async () => {
     setIsLoading(true);
-    await logout()
-      .then(() => {
-        window.location.reload();
-      })
-      .catch(() => {
-        toast.error(t("dashboard.errorText"));
-      });
+    try {
+      await logout()
+        .then(() => {
+          window.location.reload();
+        })
+    } catch (error) {
+      toast.error(t("dashboard.errorText"));
+    } finally {
+      localStorage.removeItem('username');
+      localStorage.removeItem('userImageId');
+      window.location.href = '/';
+    }
   };
 
   const handleLoginPlug = async () => {
@@ -71,13 +77,12 @@ const Navbar = () => {
 
   useEffect(() => {
 
-    if (backendActor === null) {
+    if (backendActor === null || userProfile) {
       return
     }
 
     const createAndFetchUserProfile = async () => {
       try {
-
         // Fetch image data and convert to Uint8Array
         const response = await fetch(aboutImg);
         const blob = await response.blob();
@@ -101,8 +106,6 @@ const Navbar = () => {
           image_title: "testing.jpg", // image title, image content type and image content is mandatory  
           image_content_type: "image.jpg",
         };
-
-
         const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
 
         if (!canisterId) {
@@ -117,33 +120,25 @@ const Navbar = () => {
 
           if (a["Ok"]) {
             await fetchUserProfile();
-            console.log("user exist krta hai");
-            toast.success("Login created successfully");
             setUsername(userProfile.username);
-
-
           } else {
-              
             const response = await backendActor.create_profile();
-            console.log({ response });
-
-            if (response) {
-              console.log('Profile created successfully:', response);
+            console.log(response, "that is an response ::::::");
+            if (response.Ok === null) {
+              toast.success("User login successfully")
               setUsername(profilePayload.username);
             } else {
-              console.log('Failed to create profile.');
+              toast.error("User login field")
             }
             await fetchUserProfile();
-            toast.error("user does not exist")
+            toast.warning("Please update your details")
             setUsername(userProfile.username);
-            console.log("user exist nhi krta")
           }
 
 
         } catch (error) {
           console.error("Error creating user profile:", error);
         }
-        // >>>>>>> main
       } catch (error) {
         console.error("Error in createAndFetchUserProfile:", error);
       }
@@ -172,100 +167,112 @@ const Navbar = () => {
   ];
 
   console.log({ backendActor })
-  const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
+  // const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
 
-  const image_url = `http://${canisterId}.localhost:4943/f/5`;
-  console.log(image_url);
+  // const image_url = `http://${canisterId}.localhost:4943/f/5`;
+
+  useEffect(() => {
+    setImageSrc(userProfile?.profile_img
+      ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile?.profile_img}`
+      : MyProfileImage)
+    setUsername(userProfile?.username);
+  }, [userProfile?.profile_img])
   return (
     <nav>
-      <div className="bg-bg-color shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50">
-        <div className="tablet:px-20 small_phone:px-8 px-4 small_phone:py-5 py-3 flex justify-between items-center w-full">
-          <div className="big_phone:flex items-center tablet:space-x-8 space-x-4 hidden ">
-            {menuItems.map((item, index) => (
-              <div
-                key={index}
-                className="text-lg font-normal font-inter leading-[19.36px] text-[#829095]"
-              >
-                <Link
-                  to={item.route}
-                  className={`hover:text-[#05212C] hover:font-medium cursor-pointer text-[16px] text-[#829095] ${location.pathname === item.route
-                    ? "font-semibold border-b-2 border-[#05212C] text-black"
-                    : "border-transparent border-b-0.5"
-                    }`}
+      <div className="bg-bg-color shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50 ">
+        <Container>
+          <div className="tablet:px-20 small_phone:px-8 px-4 small_phone:py-5 py-3 flex justify-between items-center w-full">
+            <div className="big_phone:flex items-center tablet:space-x-8 space-x-4 hidden lg:w-[33%]">
+              {menuItems.map((item, index) => (
+                <div
+                  key={index}
+                  className="text-lg font-normal font-inter leading-[19.36px] text-[#829095]"
                 >
-                  {item.label}
-                </Link>
-              </div>
-            ))}
-          </div>
-          <Link to="/">
-            <div className="flex items-center">
+                  <Link
+                    to={item.route}
+                    className={`hover:text-[#05212C] hover:font-medium cursor-pointer text-[16px] text-[#829095] ${location.pathname === item.route
+                      ? "font-semibold border-b-2 border-[#05212C] text-black"
+                      : "border-transparent border-b-0.5"
+                      }`}
+                  >
+                    {item.label}
+                  </Link>
+                </div>
+              ))}
+            </div>
+            <Link className="w-[33%]" to="/">
               <img
                 src={logo}
                 alt="DAO House"
-                className="mobile:h-10 small_phone:w-30 w-25 h-8 object-contain"
+                className="mobile:h-10 small_phone:w-30 w-25 h-8"
               />
-            </div>
+            </Link>
+            <div >
+              {!isAuthenticated ? (
+                <div className="flex items-center tablet:space-x-4 space-x-2">
+                  {/* <button
+//             </div>
       
-          </Link>
+//           </Link>
 
-          {!isAuthenticated ? (
-            <div className="flex items-center tablet:space-x-4 space-x-2">
-              {/* <button
+//           {!isAuthenticated ? (
+//             <div className="flex items-center tablet:space-x-4 space-x-2">
+//               {/* <button
                 onClick={handleLoginModalOpen}
                 className="mobile:px-8 px-4 py-2 rounded-[27.5px] bg-[#0E3746] text-white whitespace-nowrap big_phone:text-base small_phone:text-sm text-xs"
               >
                 {isLoading ? "Connecting" : "Sign In"}
               </button> */}
-              <button
-                onClick={handleLoginModalOpen}
-                className="mobile:px-8 px-4 py-2 rounded-[27.5px] bg-[#FFFFFF] big_phone:text-base small_phone:text-sm text-xs"
-              >
-                {isLoading ? "Connecting" : "Connect"}
-              </button>
-            </div>
-          ) : (
-            <div className="relative">
-              <div
-                className="flex items-center space-x-4 relative bg-white rounded-full px-4 cursor-pointer shadow-lg"
-                onClick={() => setDropdownVisible(!dropdownVisible)}
-              >
-                <div className="w-10 h-10 flex items-center rounded-full overflow-hidden my-auto">
-                  <img
-                    // src={avatarprofile}
-                    src={image_url}
-                    alt="User Avatar"
-                    className="w-8 h-8 object-cover rounded-full"
-                  />
+                  <button
+                    onClick={handleLoginModalOpen}
+                    className="mobile:px-8 px-4 py-2 rounded-[27.5px] bg-[#FFFFFF] big_phone:text-base small_phone:text-sm text-xs"
+                  >
+                    {isLoading ? "Connecting" : "Connect"}
+                  </button>
                 </div>
-                <p className="text-black font-medium">{username}</p>
-                <LuChevronDown />
-                {dropdownVisible && (
-                  <div className="absolute top-full right-0 bg-white rounded-md border border-gray-300 shadow-md py-2 w-40">
-                    {dropdownItems.map((item, index) => (
-                      <Link
-                        key={index}
-                        to={item.route || "#"}
-                        onClick={item.onClick}
-                        className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
-                      >
-                        {item.icon}
-                        <span>{item.label}</span>
-                      </Link>
-                    ))}
+              ) : (
+                <div className="relative">
+                  <div
+                    className="flex items-center space-x-4 relative bg-white rounded-full px-4 cursor-pointer shadow-lg"
+                    onClick={() => setDropdownVisible(!dropdownVisible)}
+                  >
+                    <div className="w-10 h-10 flex items-center rounded-full overflow-hidden my-auto">
+                      <img
+                        src={imageSrc}
+                        alt="User Avatar"
+                        className="w-8 h-8 object-cover rounded-full"
+                      />
+                    </div>
+                    <p className="text-black font-medium">{username}</p>
+                    <LuChevronDown />
+                    {dropdownVisible && (
+                      <div className="absolute top-full right-0 bg-white rounded-md border border-gray-300 shadow-md py-2 w-40">
+                        {dropdownItems.map((item, index) => (
+                          <Link
+                            key={index}
+                            to={item.route || "#"}
+                            onClick={item.onClick}
+                            className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                          >
+                            {item.icon}
+                            <span>{item.label}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </div>
+        </Container>
+        <LoginModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onLogin={handleLogin}
+          onLoginPlug={handleLoginPlug}
+        />
       </div>
-      <LoginModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onLogin={handleLogin}
-        onLoginPlug={handleLoginPlug}
-      />
     </nav>
   );
 };

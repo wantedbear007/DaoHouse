@@ -21,6 +21,11 @@ import { useUserProfile } from "../../context/UserProfileContext";
 // Main component function
 const MyProfile = ({ childComponent }) => {
   const { userProfile, fetchUserProfile } = useUserProfile();
+  const [imageSrc, setImageSrc] = useState(
+    userProfile?.profile_img
+      ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
+      : MyProfileImage
+  );
   console.log({ userProfile });
   const [activeTab, setActiveTab] = useState(0);
   const navigate = useNavigate();
@@ -60,6 +65,11 @@ const MyProfile = ({ childComponent }) => {
     },
   };
 
+  useEffect(() => {
+    setImageSrc(userProfile?.profile_img
+        ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
+        : MyProfileImage)
+    }, [userProfile?.profile_img])
   // Main return statement
   return (
     <div className={className + " bg-zinc-200 w-full relative"}>
@@ -218,8 +228,8 @@ const MyProfile = ({ childComponent }) => {
             <div className="flex items-start md:-ml-[10%] tablet:ml-[-90px]  relative">
               <div>
                 <img
-                  className="rounded-tablet tablet:w-full md:w-[90px] w-[70px]  min-w-[60px] mt-[-20px] rounded-md z-50"
-                  src={userProfile?.profileImage || MyProfileImage}
+                  className="rounded-tablet tablet:w-full md:w-[90px] max-h-[120px] max-w-[130px]  min-w-[60px] mt-[-20px] rounded-md z-50"
+                  src={imageSrc}
                   alt="profile-pic"
                   style={{
                     boxShadow:
