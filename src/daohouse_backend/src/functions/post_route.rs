@@ -1,16 +1,19 @@
 // use std::collections::BTreeMap;
 
-use std::borrow::Borrow;
+use std::borrow::{Borrow, BorrowMut};
 use std::result;
 
 use crate::routes::upload_image;
 use crate::types::{ Comment, PostInfo, PostInput };
 use crate::{ with_state, Analytics, DaoDetails, ImageData, Pagination, ReplyCommentData };
-use candid::Principal;
+use candid::{Nat, Principal};
 use ic_cdk::api;
 use ic_cdk::api::call::{ call_with_payment, CallResult, RejectionCode };
 use ic_cdk::api::management_canister::main::raw_rand;
 use ic_cdk::{ query, update };
+use icrc_ledger_types::icrc1::account::Account;
+use icrc_ledger_types::icrc1::transfer::BlockIndex;
+use icrc_ledger_types::icrc2::transfer_from::{TransferFromArgs, TransferFromError};
 use sha2::{ Digest, Sha256 };
 // use uuid::Uuid;
 
@@ -46,6 +49,9 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
     if image_create_res {
         return Err("Image upload failed".to_string());
     }
+
+    // getting user profile picture
+    
 
     let new_post = PostInfo {
         principal_id,
@@ -312,50 +318,100 @@ fn get_cycles() -> u64 {
     api::canister_balance()
 }
 
-// add canister cycles
-#[update]
-fn recieve_cycles() {
-    let cycles_recieved = api::call::msg_cycles_available();
-    ic_cdk::println!("cycles are {}", cycles_recieved);
-    if cycles_recieved > 0 {
-        api::call::msg_cycles_accept(cycles_recieved);
-    }
-}
+// // add canister cycles
+// #[update]
+// fn recieve_cycles() {
+//     let cycles_recieved = api::call::msg_cycles_available();
+//     ic_cdk::println!("cycles are {}", cycles_recieved);
+//     if cycles_recieved > 0 {
+//         api::call::msg_cycles_accept(cycles_recieved);
+//     }
+// }
 
-// get caller
+// // get caller
 #[query]
 fn get_caller() -> Principal {
     api::caller()
 }
 
-#[query]
-fn get_canister_id() -> String {
-    api::id().to_string()
-}
+// #[query]
+// fn get_canister_id() -> String {
+//     api::id().to_string()
+// }
 
-#[update]
-async fn add_cycles() -> String {
-    let response: CallResult<()> = call_with_payment(
-        api::id(),
-        "deposit_cycles",
-        (),
-        10_000_000_000
-    ).await;
+// #[update]
+// async fn add_cycles() -> String {
+//     let response: CallResult<()> = call_with_payment(
+//         api::id(),
+//         "deposit_cycles",
+//         (),
+//         10_000_000_000
+//     ).await;
 
-    match response {
-        Ok(call_result) => {
-            ic_cdk::println!("Call succeeded with result: {:?}", call_result);
-            return format!("result success is {:?}", call_result);
-        }
-        Err((rejection_code, error_msg)) => {
-            ic_cdk::println!("Call failed with rejection code {:?}: {}", rejection_code, error_msg);
-            return format!("result failed is {:?}", rejection_code);
-        }
-    }
+//     match response {
+//         Ok(call_result) => {
+//             ic_cdk::println!("Call succeeded with result: {:?}", call_result);
+//             return format!("result success is {:?}", call_result);
+//         }
+//         Err((rejection_code, error_msg)) => {
+//             ic_cdk::println!("Call failed with rejection code {:?}: {}", rejection_code, error_msg);
+//             return format!("result failed is {:?}", rejection_code);
+//         }
+//     }
 
-    // "hello".to_string()
-}
+//     // "hello".to_string()
+// }
 // #[update]
 // fn update_proposals_count() {
 //     with_state(|state| state.analytics_content.get(&0))
 // }
+
+// ledger handlers 
+async fn transfer(tokens: u64, user_principal: Principal) -> Result<BlockIndex, String>  {
+
+    let payment_recipient = with_state(|state| state.borrow_mut().get_payment_recipient());
+
+    ic_cdk::println!("id is {}", payment_recipient.to_string());
+    // let payment_recipient = STATE.with(|state| {
+    //     let state = state.borrow();
+    //     state.get_payment_recipient()
+    // });
+    
+    ic_cdk::println!("Transferring {} tokens to principal {}", tokens, payment_recipient);
+    let transfer_args = TransferFromArgs {
+        amount: tokens.into(),
+        to: Account { owner: payment_recipient, subaccount: None },
+        fee: None,
+        memo: None,
+        created_at_time: None,
+        spender_subaccount: None,
+        from: Account { owner: user_principal, subaccount: None },
+    };
+
+
+    ic_cdk::call::<(TransferFromArgs,), (Result<BlockIndex, TransferFromError>,)>(
+        Principal::from_text("mxzaz-hqaaa-aaaar-qaada-cai")
+            .expect("Could not decode the principal."),
+        "icrc2_transfer_from",
+        (transfer_args,),
+    )
+    .await 
+    .map_err(|e| format!("failed to call ledger: {:?}", e))?
+    .0
+    .map_err(|e| format!("ledger transfer error {:?}", e))
+
+}
+
+
+// make payment 
+#[update]
+async fn make_payment(tokens: u64, user: Principal) -> String {
+    // add check for admin
+    let response = transfer(tokens, user).await;
+    ic_cdk::println!("response is {:?}", response);
+    // response
+
+    format!("response is {:?}", response)
+
+}   
+

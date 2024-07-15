@@ -132,9 +132,18 @@ type UserResponse = variant {
   Ok: text; Err: text
 };
 
+type PaymentResponse = variant {
+  Ok: nat64;
+  Err: text
+};
+
+type InitArgs = record {
+    payment_recipient : principal;
+};
 
 
-service : {
+
+service : (InitArgs) -> {
   update_profile: (text, Profileinput) -> (Result_1);
   comment_post : (text, text) -> (Result);
   create_dao : (text, DaoInput) -> (Result);
@@ -155,9 +164,11 @@ service : {
   get_all_dao: (Pagination) -> (vec DaoDetails);
   get_dao_details: (text) -> (text);
   get_analytics: () -> (AnalyticsResponse) query;
-  get_cycles: () -> (nat64) query;
-  recieve_cycles: () -> ();
+  // get_cycles: () -> (nat64) query;
+  // recieve_cycles: () -> ();
   get_caller: () -> (principal) query;
   get_canister_id: () -> (text) query;
-  add_cycles: ()  -> (text); 
+  // add_cycles: ()  -> (text); 
+  make_payment: (nat64, principal) -> (text);
+
 }
