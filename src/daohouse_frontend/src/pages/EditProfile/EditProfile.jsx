@@ -28,6 +28,11 @@ const EditProfile = () => {
   const { userProfile, fetchUserProfile } = useUserProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { backendActor, frontendCanisterId, identity } = useAuth();
+  const [imageSrc, setImageSrc] = useState(
+    userProfile?.profile_img
+      ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
+      : MyProfileImage
+  );
   const navigate = useNavigate();
   const handleDiscardClick = () => {
     navigate("/my-profile");
@@ -40,8 +45,7 @@ const EditProfile = () => {
   if (isLocal) {
     agent.fetchRootKey();
   }
-
-
+  
   // Initiate AssetManager
   const assetManager = new AssetManager({
     canisterId: frontendCanisterId,
@@ -49,8 +53,6 @@ const EditProfile = () => {
   });
 
   useEffect(() => {
-
-
     const fetchData = async () => {
       try {
         const files = await assetManager.list();
@@ -62,68 +64,54 @@ const EditProfile = () => {
     fetchData();
   }, [])
 
- 
-
   const [profileData, setProfileData] = useState({
-    name: userProfile?.name || "",
+    name: userProfile?.username || "",
     email_id: userProfile?.email_id || "",
     contact_number: userProfile?.contact_number || "",
     twitter_id: userProfile?.twitter_id || "",
     telegram: userProfile?.telegram || "",
     website: userProfile?.website || "",
     description: userProfile?.description || "",
-    profile_img: userProfile?.profile_img ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}` : MyProfileImage,
+    profile_img: userProfile?.profile_img || "",
     tag_defines: userProfile?.tag_defines || [],
+    image_content: [10],
+    image_title: "na",
+    image_content_type: "image/jpg",
   });
 
   const handleSaveChangesClick = async () => {
     setIsModalOpen(true);
-
     const profilePayload = {
       username: profileData.name,
       email_id: profileData.email_id,
-      profile_img: profileData.profile_img,
+      profile_img: profileData.profile_img ? profileData.profile_img : MyProfileImage,
       description: profileData.description,
       contact_number: profileData.contact_number,
       twitter_id: profileData.twitter_id,
       telegram: profileData.telegram,
       website: profileData.website,
       tag_defines: profileData.tag_defines,
-      image_content: profileData.image_content ? new Uint8Array(profileData.image_content) : [],
-      image_title: profileData.image_title || "",
-      image_content_type: profileData.image_content_type || "",
+      image_content: profileData.image_content ? new Uint8Array(profileData.image_content) : [10],
+      image_title: profileData.image_title || "na",
+      image_content_type: profileData.image_content_type || "default content type",
     };
 
     const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
     // const canisterId = data["ic-asset-handler"]["ic"]
 
     try {
-      let response;
-// <<<<<<< prabhjot
-//       console.log("canister id of asset ", canisterId)
-   
-//         response = await backendActor.create_profile(canisterId, profilePayload);
-//         console.log('user is creating')
-      
-
-// =======
-      if(userProfile){
-         response = await backendActor.update_profile(canisterId, profilePayload);
-         console.log('update API')
-      }else{
-         response = await backendActor.create_profile();
-         console.log('create API')
-      }
-      console.log(response,'this is responsve' )
-// >>>>>>> main
+      const response = await backendActor.update_profile(canisterId, profilePayload);
+      console.log({ response })
       if (response.Err) {
         toast.error(`${response.Err}`);
       } else {
         toast.success("Profile created successfully");
       }
-
     } catch (error) {
       console.error("Error creating profile:", error);
+    }
+    finally {
+      fetchUserProfile();
     }
   };
 
@@ -139,11 +127,12 @@ const EditProfile = () => {
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
+      setImageSrc(URL.createObjectURL(file));
       const arrayBuffer = await file.arrayBuffer();
       const content = new Uint8Array(arrayBuffer);
       setProfileData((prevData) => ({
         ...prevData,
-        profile_img: URL.createObjectURL(file),
+        // profile_img: "abc",
         image_content: Array.from(content),
         image_title: file.name,
         image_content_type: file.type,
@@ -194,7 +183,27 @@ const EditProfile = () => {
     setProfileData((prevData) => ({ ...prevData, tag_defines: tags }));
   };
 
-  console.log(userProfile,'userProfile')
+  useEffect(() => {
+    console.log('calling useefect')
+    setProfileData({
+      name: userProfile?.username || "",
+      email_id: userProfile?.email_id || "",
+      contact_number: userProfile?.contact_number || "",
+      twitter_id: userProfile?.twitter_id || "",
+      telegram: userProfile?.telegram || "",
+      website: userProfile?.website || "",
+      description: userProfile?.description || "",
+      profile_img: userProfile?.profile_img || "",
+      tag_defines: userProfile?.tag_defines || [],
+      image_content: [10],
+      image_title: "na",
+      image_content_type: "image/jpg",
+    })
+    setImageSrc(userProfile?.profile_img
+        ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
+        : MyProfileImage)
+    }, [userProfile?.profile_img])
+  
   return (
     <div className="bg-zinc-200 w-full pb-20 relative">
       <div
@@ -266,7 +275,7 @@ const EditProfile = () => {
           <div className="flex items-center gap-2">
             <img
               className="rounded-md lg:w-[105px] md:w-[85px] w-[69px] lg:mr-12 md:mr-4 mr-1 "
-              src={profileData.profile_img}
+              src={imageSrc}
               alt="profile-pic"
               style={{
                 boxShadow:
@@ -306,7 +315,7 @@ const EditProfile = () => {
               <input
                 type="text"
                 name="name"
-                value={profileData.username}
+                value={profileData.name}
                 onChange={handleInputChange}
                 placeholder="Username.user"
                 className="border-solid border border-[#DFE9EE] py-2 pl-4 md:w-[40%] w-[82%] rounded-[6px]"

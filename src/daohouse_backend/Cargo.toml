@@ -21,4 +21,5 @@ ciborium = { git = "https://github.com/enarx/ciborium", rev = "e719537c99b564c36
 ic-cdk-macros = "0.8.4"
 getrandom = { version = "0.2", features = ["js"] }
 sha2 = "0.9.8"
+icrc-ledger-types = "0.1.5"
 

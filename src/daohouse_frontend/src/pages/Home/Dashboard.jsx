@@ -7,28 +7,38 @@ import Decentralization from "../../Components/Home/Decentralization";
 import SupportingPartners from "../../Components/Home/SupportingPartners";
 
 
+// <<<<<<< prabhjot
 
-const Container = ({children}) => (
-  <div className="max-w-screen-xl mx-auto">
-    {children}
-  </div>
-) 
+// const Container = ({children}) => (
+//   <div className="max-w-screen-xl mx-auto">
+//     {children}
+//   </div>
+// ) 
+// =======
+// >>>>>>> main
 const Dashboard = () => {
 
   return (
     <React.Fragment>
-     <Container>
+// <<<<<<< prabhjot
+//      <Container>
      
     
+// =======
+// >>>>>>> main
       <HeroSection />
       <Empowering />
       <About />
       <Feature />
       <Decentralization />
       <SupportingPartners />
+// <<<<<<< prabhjot
     
-      </Container>
-      </React.Fragment>
+//       </Container>
+//       </React.Fragment>
+// =======
+    </React.Fragment>
+// >>>>>>> main
   );
 };
 
