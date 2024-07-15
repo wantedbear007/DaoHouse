@@ -1,13 +1,13 @@
 mod types;
 use ic_cdk::{api, export_candid, init};
-use std::cell::RefCell;
+use std::{borrow::BorrowMut, cell::RefCell};
 pub mod routes;
 pub mod functions;
 mod state_handler;
 use state_handler::State;
 mod memory;
 use memory::Memory; 
-use candid:: Principal;
+use candid::{Nat,  Principal};
 
 
 // mod user_route;
@@ -26,7 +26,9 @@ pub fn with_state<R>(f: impl FnOnce(&mut State) -> R) -> R {
 }
 
 #[init]
-async fn init() {
+async fn init(args: PaymentRecipientAccount) {
+    // async fn init() {
+    ic_cdk::println!("values are {:?}", args.payment_recipient.to_string());
     let analytics = Analytics {
         dao_counts: 0,
         members_count: 0,
@@ -35,6 +37,11 @@ async fn init() {
     };
 
     with_state(|state| {
+
+
+        // state.borrow_mut().set_payment_recipient(Principal::from_text("aewmz-wl3z4-dzfeh-7j2ub-ah46w-iltzd-xt77x-v7got-zrvqk-ybk22-xae").expect("")); // adding payment recipient id 
+
+        state.borrow_mut().set_payment_recipient(args.payment_recipient); // adding payment recipient id 
         if let Some(_) = state.analytics_content.get(&0) {
             ic_cdk::println!("Analytics already available.");
         } else {
@@ -42,6 +49,8 @@ async fn init() {
         }
         ()
     });
+
+
 }
 
 

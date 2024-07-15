@@ -206,6 +206,7 @@ const Navbar = () => {
                 className="mobile:h-10 small_phone:w-30 w-25 h-8 object-contain"
               />
             </div>
+      
           </Link>
 
           {!isAuthenticated ? (
