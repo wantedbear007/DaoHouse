@@ -211,6 +211,13 @@ const Navbar = () => {
               {!isAuthenticated ? (
                 <div className="flex items-center tablet:space-x-4 space-x-2">
                   {/* <button
+//             </div>
+      
+//           </Link>
+
+//           {!isAuthenticated ? (
+//             <div className="flex items-center tablet:space-x-4 space-x-2">
+//               {/* <button
                 onClick={handleLoginModalOpen}
                 className="mobile:px-8 px-4 py-2 rounded-[27.5px] bg-[#0E3746] text-white whitespace-nowrap big_phone:text-base small_phone:text-sm text-xs"
               >

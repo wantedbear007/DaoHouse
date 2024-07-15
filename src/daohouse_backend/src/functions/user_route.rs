@@ -168,7 +168,6 @@ async fn update_profile(
     }
 
     // image upload
-    
 
     // Clone the old profile and update the fields with new information
 
