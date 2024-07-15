@@ -36,14 +36,11 @@ const App = () => {
       </div>
     );
   };
-   
   return (
-     
     <PostProvider>
       <Router>
-    
         <Navbar />
-        <Container>
+       <Container>
         <Routes>
 
           <Route path="/*" element={<Error404 />} />
@@ -78,6 +75,7 @@ const App = () => {
         </Routes>
         </Container>
         <Footer />
+ 
       </Router>
       <ToastContainer />
 

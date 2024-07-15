@@ -1,68 +1,75 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { HiPlus } from "react-icons/hi";
-
-import allFeed from "../../Components/FeedPage/AllFeeds";
-import latestFeed from "../../Components/FeedPage/LatestFeed";
 import PostCard from "../../Components/FeedPage/PostCard";
 import image from "../../../assets/bg_image.png";
 import CreatePostPopup from "../../Components/FeedPage/CreatePostPopup";
-
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useAuth } from "../../Components/utils/useAuthClient";
+import NoDataComponent from "../../Components/Dao/NoDataComponent";
 
 const FeedPage = () => {
-  const [feed, setFeed] = useState(allFeed);
   const [active, setActive] = useState({ all: true, latest: false });
   const [showPopup, setShowPopup] = useState(false);
   const [posts, setPosts] = useState([]);
-  console.log("my feed data---------", posts)
-  const className = "FeedPage";
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 140;
   const { backendActor } = useAuth();
-  // console.log(backendActor);
+  const className = "FeedPage";
+
+  console.log("myposts", posts)
 
   const setAllActive = () => {
-    setFeed(allFeed);
+   
+    const allFeed = [
+     
+    ];
+    setPosts(allFeed);
+
     setActive({ all: true, latest: false });
   };
 
   const setLatestActive = () => {
-    setFeed(latestFeed);
+
+    const latestFeed = [
+   
+    ];
+    setPosts(latestFeed);
     setActive({ all: false, latest: true });
   };
 
   const handleCreatePostClick = () => {
     setShowPopup(!showPopup);
-
-
-
-
-
   };
 
-  // get data from backend 
-  // console the data 
+  const prevPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
 
-  const getdetails = async() => {
-
-    const pagination = {
-      "end": 12,
-      "start": 0,
-    }
-
-    const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
-
-    try {
-      const response = await backendActor.get_all_posts(pagination);
-      console.log("res", response);
-      setPosts(response);
-    }
-    catch (error) {
-      console.error("Error fetching post:", error);
-    }
+  const nextPage = () => {
+    setCurrentPage(currentPage + 1);
   };
 
   useEffect(() => {
-    getdetails();
-  }, []);
+    const getDetails = async () => {
+      const pagination = {
+        start: (currentPage - 1) * postsPerPage,
+        end: currentPage * postsPerPage,
+      };
+
+      try {
+        const response = await backendActor.get_all_posts(pagination);
+        console.log("Fetched posts:", response);
+        setPosts(response);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+
+    getDetails();
+  }, [currentPage, backendActor, postsPerPage]);
+
+  const totalItems = posts.length;
+  const totalPages = Math.ceil(totalItems / postsPerPage);
 
   return (
     <div className={className + " " + "w-full"}>
@@ -123,17 +130,10 @@ const FeedPage = () => {
         <button
           className="bg-white small_phone:gap-2 gap-1 mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl rounded-full shadow-md flex items-center rounded-2xl hover:bg-[#ececec] hover:scale-105 transition"
           onClick={handleCreatePostClick}
-
-
         >
           <HiPlus />
           Create Post
         </button>
-
-
-
-
-
       </div>
 
       <div
@@ -142,17 +142,48 @@ const FeedPage = () => {
           "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col"
         }
       >
-        {posts && posts.map((posts, i) => <PostCard posts={posts} key={i}
-
-        />)}
-
-
-
+        {totalItems > 0 ? (
+          posts.map((post, i) => <PostCard posts={post} key={i} />)
+        ) : (
+          <NoDataComponent className="border border-red-500" />
+        )}
       </div>
 
       {showPopup && <CreatePostPopup onClose={() => setShowPopup(false)} />}
+
+      <div className="flex items-center justify-center mt-5 ">
+        <button
+          onClick={prevPage}
+          className="text-black  hover:text-gray-500 ml-6 text-xl"
+          style={{ display: "flex", alignItems: "center" }}
+          disabled={currentPage === 1}
+        >
+          <FaArrowLeft /> Prev
+        </button>
+
+        <button
+          onClick={nextPage}
+          className="text-black hover:text-gray-500 ml-6 text-xl"
+          style={{ display: "flex", alignItems: "center" }}
+          disabled={currentPage === totalPages}
+        >
+          Next <FaArrowRight />
+        </button>
+      </div>
+
+      <div className="flex items-center justify-center mb-7 text-xl">
+        <span className="text-lg mx-4">
+          {currentPage} of {totalPages}
+        </span>
+      </div>
     </div>
   );
 };
 
 export default FeedPage;
+
+
+
+
+
+
