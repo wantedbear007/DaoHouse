@@ -385,7 +385,7 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         wasm_module: vec![],
         arg: dao_detail_bytes,
     };
-    let installcode = install_code(arg1).await;
+    let _installcode = install_code(arg1).await;
     println!("Canister ID: {:?}", canister_id);
     Ok("DAO created successfully".to_string())
 }

@@ -140,7 +140,6 @@ service : (InitArgs) -> {
   create_dao : (text, DaoInput) -> (Result);
   create_new_post : (text, PostInput) -> (Result);
   check_user_existance : () -> (UserResponse) query;
-  // create_profile : (text, Profileinput) -> (Result_1);
   create_profile : () -> (Result_1);
   delete_profile : () -> (Result_1);
   follow_user : (principal) -> (Result_1);
@@ -155,12 +154,9 @@ service : (InitArgs) -> {
   get_all_dao : (Pagination) -> (vec DaoDetails);
   get_dao_details : (text) -> (text);
   get_analytics : () -> (AnalyticsResponse) query;
-  // get_cycles: () -> (nat64) query;
-  // recieve_cycles: () -> ();
   get_caller : () -> (principal) query;
   get_canister_id : () -> (text) query;
-  // add_cycles: ()  -> (text);
   make_payment : (nat64, principal) -> (text);
   get_latest_post : () -> (variant { Ok : vec PostInfo; Err : text }) query;
-
+  update_proposal_count: () -> (text);
 };
