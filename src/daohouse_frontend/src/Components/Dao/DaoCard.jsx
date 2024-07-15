@@ -10,6 +10,7 @@ const DaoCard = ({ name, funds, members, groups, proposals }) => {
 
   return (
     <div className="bg-[#F4F2EC] rounded-lg shadow-lg tablet:p-6 big_phone:p-3 small_phone:p-5 p-3 rounded-lg">
+      
       <div className="flex justify-start items-start mb-4 gap-4">
         <div className="mobile:w-[207px] mobile:h-[120px] w-[150px] h-[70px] bg-zinc-300 rounded"></div>
         <h2 className="mobile:text-2xl text-lg font-semibold">{name}</h2>

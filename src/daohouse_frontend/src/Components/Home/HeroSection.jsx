@@ -12,7 +12,7 @@ const HeroSection = () => {
   }
   return (
     <Container>
-      <div className="relative flex flex-col md:flex-row justify-center items-center">
+      <div className="relative flex flex-col md:flex-row justify-center items-center min-h-[90vh]">
         {/* Left Side */}
         <div className="md:w-1/2 pl-20 w-full px-10 z-10 md:text-left text-center small_phone:mt-0 mt-8 flex flex-col mobile:gap-8 gap-4">
           <p className="text-[#0E3746] font-mulish font-semibold laptop:text-6xl small_phone:text-5xl text-4xl mt-10 sm:mt-8 lg:mt-0">

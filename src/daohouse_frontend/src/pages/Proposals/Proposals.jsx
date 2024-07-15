@@ -5,6 +5,7 @@ import { BsPlusLg } from "react-icons/bs";
 import ProposalList from "../../Components/Proposals/ProposalList";
 import { useNavigate } from "react-router-dom";
 import { proposalsArray } from "../../Components/Proposals/proposalsData";
+import Container from "../../Components/Container/Container";
 
 const Proposals = () => {
   const [Recent, setRecent] = useState(true);
@@ -14,29 +15,21 @@ const Proposals = () => {
 
   return (
     <div className="bg-zinc-200 w-full">
-      <div
-        className={
-          className +
-          "__filter w-100 lg:h-[25vh] md:h-[21vh] h-[18vh] md:p-20 pl-6 pt-8 flex flex-col items-start md:justify-center"
-        }
-        style={{
+      <div style={{
           backgroundImage: `url("${proposals}")`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
-        }}
-      >
+        }}>
+        <Container classes={`__filter w-100 lg:h-[25vh] md:h-[21vh] h-[18vh] md:p-20 pl-6 pt-8 flex flex-col items-start md:justify-center ${className}`}>
         <h1 className="md:text-[40px] text-[26px] p-2 text-white border-b-2 border-white">
           Proposals
         </h1>
+        </Container>
       </div>
 
-      <div
-        className={
-          className +
-          "__label bg-[#c8ced3] py-8 lg:px-10 px-4 flex flex-row gap-2 w-full justify-between items-center"
-        }
-      >
+      <div className={"bg-[#c8ced3] "}>
+        <Container classes={`__label py-8 lg:px-10 px-4 flex flex-row gap-2 w-full justify-between items-center ${className}`}>
         <div className="lg:text-[40px] md:text-[32px] text-[20px] text-black lg:px-8 flex flex-row justify-center items-center md:gap-4 gap-2">
           {Recent ? "Most Recent" : "Joined"}
           <div className="flex flex-col items-start">
@@ -81,15 +74,16 @@ const Proposals = () => {
             Create Proposals
           </button>
         </div>
+        </Container>
       </div>
 
-      <div
-        className={
-          className + "__proposalsCard  bg-[#c8ced3] gap-8 flex flex-col w-full"
-        }
-      >
-        <ProposalList />
+
+      <div className={"bg-[#c8ced3]"}>
+        <Container classes={`gap-8 flex flex-col __proposalsCard ${className}`}>
+          <ProposalList />
+        </Container>
       </div>
+
     </div>
   );
 };
