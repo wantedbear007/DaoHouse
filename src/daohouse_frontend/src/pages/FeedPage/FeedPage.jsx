@@ -149,13 +149,6 @@ const FeedPage = () => {
             Create Post
           </button>
         </Container>
-        <button
-          className="bg-white small_phone:gap-2 gap-1 mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl rounded-full shadow-md flex items-center rounded-2xl hover:bg-[#ececec] hover:scale-105 transition"
-          onClick={handleCreatePostClick}
-        >
-          <HiPlus />
-          Create Post
-        </button>
       </div>
 
       <div
@@ -169,14 +162,6 @@ const FeedPage = () => {
 
           />)}
         </Container>
-
-
-
-        {totalItems > 0 ? (
-          posts.map((post, i) => <PostCard posts={post} key={i} />)
-        ) : (
-          <NoDataComponent className="border border-red-500" />
-        )}
       </div>
 
       {showPopup && <CreatePostPopup onClose={() => setShowPopup(false)} />}
@@ -202,7 +187,7 @@ const FeedPage = () => {
       </div>
 
       <div className="flex items-center justify-center mb-7 text-xl">
-        <span className="text-lg mx-4">
+        <span className="text-lg mx-6">
           {currentPage} of {totalPages}
         </span>
       </div>
