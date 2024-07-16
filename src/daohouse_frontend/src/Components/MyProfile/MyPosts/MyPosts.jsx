@@ -7,6 +7,7 @@ import { usePostContext } from "../../../PostProvider";
 import image1 from "../../../../assets/post1.png";
 import image2 from "../../../../assets/post2.png";
 import image3 from "../../../../assets/post3.png";
+import NoPostProfile from "../../Dao/NoPostProfile";
 
 const MyPosts = () => {
   const [postsList, setPostsList] = useState([]);
@@ -23,78 +24,83 @@ const MyPosts = () => {
           Post
         </h3>
 
-        <div className="grid grid-cols-2 md:mt-4 mt-2 mb-6 bg-[#F4F2EC] p-4 rounded-lg gap-4">
-          {postsList.map((post, index) => {
-            return (
-              <div
-                key={index}
-                className="post relative w-full"
-                onMouseEnter={() => setHoverIndex(index)}
-                onMouseLeave={() => {
-                  setHoverIndex(null);
-                  setReadMoreIndex(null);
-                }}
-              >
-                <Link
-                  to={`/post/${index}`}
-                  onClick={() => setSelectedPost(post)}
-                >
-                  <img
-                    src={post.image}
-                    alt="Post"
-                    className="postImage w-full rounded-md object-cover"
-                  />
-                </Link>
-
+        {postsList.length === 0 ? (
+          <NoPostProfile />
+        ) : (
+          <div className="grid grid-cols-2 md:mt-4 mt-2 mb-6 bg-[#F4F2EC] p-4 rounded-lg gap-4">
+            {postsList.map((post, index) => {
+              return (
                 <div
-                  style={{ opacity: hoverIndex === index ? 1 : 0 }}
-                  className="postContant w-full max-h-full flex flex-col gap-4 p-2 overflow-y-auto bg-[#05212C80] backdrop-blur absolute bottom-0 text-white rounded-b-lg transition-opacity duration-500"
+                  key={index}
+                  className="post relative w-full"
+                  onMouseEnter={() => setHoverIndex(index)}
+                  onMouseLeave={() => {
+                    setHoverIndex(null);
+                    setReadMoreIndex(null);
+                  }}
                 >
-                  <p className="laptop:text-base text-sm">
-                    {readMoreIndex === index
-                      ? post.content
-                      : post.content.slice(0, 50)}
+                  <Link
+                    to={`/post/${index}`}
+                    onClick={() => setSelectedPost(post)}
+                  >
+                    <img
+                      src={post.image}
+                      alt="Post"
+                      className="postImage w-full rounded-md object-cover"
+                    />
+                  </Link>
 
-                    {post.content.length > 120 && readMoreIndex !== index && (
-                      <span
-                        id="readMore"
-                        className="text-blue-500 cursor-pointer"
-                        onClick={() => setReadMoreIndex(index)}
-                      >
-                        ..more
-                      </span>
-                    )}
-                    {post.content.length > 120 && readMoreIndex == index && (
-                      <span
-                        id="readMore"
-                        className="text-blue-500 cursor-pointer"
-                        onClick={() => setReadMoreIndex(null)}
-                      >
-                        ..close
-                      </span>
-                    )}
-                  </p>
+                  <div
+                    style={{ opacity: hoverIndex === index ? 1 : 0 }}
+                    className="postContant w-full max-h-full flex flex-col gap-4 p-2 overflow-y-auto bg-[#05212C80] backdrop-blur absolute bottom-0 text-white rounded-b-lg transition-opacity duration-500"
+                  >
+                    <p className="laptop:text-base text-sm">
+                      {readMoreIndex === index
+                        ? post.content
+                        : post.content.slice(0, 50)}
 
-                  <div className="w-full flex flex-row items-center justify-evenly">
-                    <span className="flex flex-row gap-2 items-center text-lg">
-                      <FaHeart />
-                      {post.likes}
-                    </span>
-                    <span className="flex flex-row gap-2 items-center text-lg">
-                      <FaTelegramPlane />
-                      {post.comments}
-                    </span>
-                    <span className="flex flex-row gap-2 items-center text-lg">
-                      <BiSolidCommentDetail />
-                      {post.shares}
-                    </span>
+                      {post.content.length > 120 && readMoreIndex !== index && (
+                        <span
+                          id="readMore"
+                          className="text-blue-500 cursor-pointer"
+                          onClick={() => setReadMoreIndex(index)}
+                        >
+                          ..more
+                        </span>
+                      )}
+                      {post.content.length > 120 && readMoreIndex == index && (
+                        <span
+                          id="readMore"
+                          className="text-blue-500 cursor-pointer"
+                          onClick={() => setReadMoreIndex(null)}
+                        >
+                          ..close
+                        </span>
+                      )}
+                    </p>
+
+                    <div className="w-full flex flex-row items-center justify-evenly">
+                      <span className="flex flex-row gap-2 items-center text-lg">
+                        <FaHeart />
+                        {post.likes}
+                      </span>
+                      <span className="flex flex-row gap-2 items-center text-lg">
+                        <FaTelegramPlane />
+                        {post.comments}
+                      </span>
+                      <span className="flex flex-row gap-2 items-center text-lg">
+                        <BiSolidCommentDetail />
+                        {post.shares}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )};
       </div>
+
     </div>
   );
 };

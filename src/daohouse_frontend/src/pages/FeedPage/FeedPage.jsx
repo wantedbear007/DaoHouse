@@ -15,9 +15,10 @@ const FeedPage = () => {
   const [uplodedPost, setUplodedPost] = useState('')
   const [getLike, setGetLike] = useState(null)
   const { backendActor } = useAuth();
+  const [totalPages, setTotalPages] = useState(0)
+  const [currentPage, setCurrentPage] =useState(0)
   const className = "FeedPage";
-  console.log(active.latest , active.all,'active');
-
+  
   const setAllActive = () => {
     setActive({ all: true, latest: false });
   };
@@ -39,25 +40,19 @@ const FeedPage = () => {
     try {
       let response;
       if(active.all){
-        console.log('1111111111')
          response = await backendActor.get_all_posts(pagination);
-         console.log("all", response)
          setPosts(response);
+         setTotalPages(response.length)
       }
       else if(active.latest){
-        console.log('222222')
         response = await backendActor.get_latest_post(pagination);
-        console.log('latest : ', response)
         setPosts(response);
+        setTotalPages(response.length)
       }
     } catch (error) {
       console.log("Error fetching posts:", error);
     }
   };
-
-  useEffect(() => {
-    getDetails();
-  }, [backendActor, uplodedPost, getLike,active.all]);
 
   const handleGetResponse = (res) => {
     setUplodedPost(res?.Ok);
@@ -65,8 +60,17 @@ const FeedPage = () => {
 
   const handleGetLikePost = (response)=>{
     setGetLike(response)
-    console.log(response,'like is response : ::')
   }
+  const prevPage = ()=>{
+
+  }
+  const nextPage = ()=>{
+
+  }
+
+  useEffect(() => {
+    getDetails();
+  }, [backendActor, uplodedPost, getLike,active.all]);
 
   return (
     <div className={className + " " + "w-full"}>
@@ -141,12 +145,12 @@ const FeedPage = () => {
 
       {showPopup && <CreatePostPopup handleGetResponse={handleGetResponse} onClose={() => setShowPopup(false)} />}
 
-      {/* <div className="flex items-center justify-center mt-5 ">
+      <div className="flex items-center justify-center mt-5 ">
         <button
           onClick={prevPage}
           className="text-black  hover:text-gray-500 ml-6 text-xl"
           style={{ display: "flex", alignItems: "center" }}
-          disabled={currentPage === 1}
+          // disabled={currentPage === 1}
         >
           <FaArrowLeft /> Prev
         </button>
@@ -155,7 +159,7 @@ const FeedPage = () => {
           onClick={nextPage}
           className="text-black hover:text-gray-500 ml-6 text-xl"
           style={{ display: "flex", alignItems: "center" }}
-          disabled={currentPage === totalPages}
+          // disabled={currentPage === totalPages}
         >
           Next <FaArrowRight />
         </button>
@@ -165,7 +169,7 @@ const FeedPage = () => {
         <span className="text-lg mx-6">
           {currentPage} of {totalPages}
         </span>
-      </div> */}
+      </div>
     </div>
   );
 };

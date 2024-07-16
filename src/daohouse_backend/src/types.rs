@@ -566,6 +566,7 @@ pub struct PostInfo {
     pub like_count: u32,
     pub like_id_list: Vec<Principal>,
     pub comment_count: u32,
+    pub user_image_id: String,
     pub comment_list: Vec<Comment>,
 }
 
@@ -574,6 +575,7 @@ pub struct PostInput {
     //  pub post_title:String,
     pub post_description: String,
     pub username: String,
+    pub user_image_id: String,
     //pub post_img:String,
 
     // image data

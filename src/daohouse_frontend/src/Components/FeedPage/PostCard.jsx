@@ -32,7 +32,8 @@ const PostCard = ({ posts,handleGetLikePost }) => {
   const { backendActor } = useAuth();
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
   const ImageUrl = `http://${canisterId}.localhost:4943/f/${posts?.post_img}`  
-  
+  const userImage = `http://${canisterId}.localhost:4943/f/${posts?.user_image_id}`  
+
   const getlike = async () => {
     try {
       const response = await backendActor.like_post(posts.post_id);
@@ -50,6 +51,15 @@ const PostCard = ({ posts,handleGetLikePost }) => {
 
   }, [posts]);
 
+
+  // const getreplycomment = async() =>{
+  //   try {
+  //     const response = await backendActor.reply_comment(posts.post_id);
+  //     console.log("Response from like_post:", response)
+  //   } catch (error) {
+  //     console.error("Error creating comment:", error);
+  //   }
+  // }
   return (
     <div
       className={
@@ -64,7 +74,7 @@ const PostCard = ({ posts,handleGetLikePost }) => {
         <div className="flex flex-row items-center justify-between">
           <section className={className + "__userData flex flex-row items-center gap-2"}>
             <img
-              src={ImageUrl}            
+              src={userImage}            
               alt="userImage"
               className="rounded-[50%] w-10 h-10"
             />

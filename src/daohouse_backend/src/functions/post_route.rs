@@ -64,6 +64,7 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
         like_id_list: Vec::new(),
         comment_count: 0,
         comment_list: Vec::new(),
+        user_image_id: post_details.user_image_id
     };
 
     with_state(|state| {
@@ -130,7 +131,7 @@ async fn like_post(post_id: String) -> Result<String, String> {
     let new_post = PostInfo {
         principal_id: getpost.principal_id,
         post_id: getpost.post_id.clone(),
-        username: getpost.username,
+        username: getpost.username.clone(),
         //    post_title: getpost.post_title.clone(),
         post_description: getpost.post_description.clone(),
         post_img: getpost.post_img.clone(),
@@ -139,6 +140,7 @@ async fn like_post(post_id: String) -> Result<String, String> {
         like_id_list: updated_like_id_list,
         comment_count: getpost.comment_count.clone(),
         comment_list: getpost.comment_list.clone(),
+        user_image_id: getpost.user_image_id.clone()
     };
     with_state(|state| state.post_detail.insert(new_post.post_id.clone(), new_post));
 
@@ -191,6 +193,7 @@ async fn comment_post(post_id: String, comment: String) -> Result<String, String
         like_id_list: getpost.like_id_list.clone(),
         comment_count: updated_comment_count,
         comment_list: updated_list,
+        user_image_id: getpost.user_image_id.clone()
     };
     with_state(|state| state.post_detail.insert(new_post.post_id.clone(), new_post));
 
@@ -235,10 +238,10 @@ fn reply_comment(comment_data: ReplyCommentData) -> Result<String, String> {
 }
 
 #[query]
-fn get_latest_post() -> Result<Vec<PostInfo>, String> {
-    if api::caller() == Principal::anonymous() {
-        return Err("Anonymous user not allowed".to_string());
-    }
+fn get_latest_post(page_data: Pagination) -> Vec<PostInfo> {
+    // if api::caller() == Principal::anonymous() {
+    //     return Err("Anonymous user not allowed".to_string());
+    // }
 
     let mut posts: Vec<PostInfo> = Vec::new();
 
@@ -252,7 +255,24 @@ fn get_latest_post() -> Result<Vec<PostInfo>, String> {
 
     posts.sort_by(|a, b| b.post_created_at.cmp(&a.post_created_at));
 
-    return Ok(posts);
+
+       let ending = posts.len();
+
+    if ending == 0 {
+        return posts;
+    }
+
+    let start = page_data.start as usize;
+    let end = page_data.end as usize;
+
+    if start < ending {
+        let end = end.min(ending);
+        return posts[start..end].to_vec();
+    }
+    // all_posts
+    // Ok(Vec::new())
+
+    return posts;
 }
 
 #[query]

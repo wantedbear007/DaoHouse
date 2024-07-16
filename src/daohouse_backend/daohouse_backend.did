@@ -35,6 +35,7 @@ type PostInfo = record {
   // comment_list : vec text;
   comment_list : vec Comment;
   post_created_at : nat64;
+  user_image_id : text;
 
 };
 
@@ -43,6 +44,7 @@ type PostInput = record {
   post_img : text;
   //  post_title : text;
   post_description : text;
+  user_image_id : text;
 
   // image
   image_content : blob;
@@ -59,6 +61,7 @@ type Profileinput = record {
   profile_img : text;
   telegram : text;
   tag_defines : vec text;
+  user_image_id : text;
 
   // image
   image_content : blob;
@@ -157,6 +160,6 @@ service : (InitArgs) -> {
   get_caller : () -> (principal) query;
   get_canister_id : () -> (text) query;
   make_payment : (nat64, principal) -> (text);
-  get_latest_post : () -> (variant { Ok : vec PostInfo; Err : text }) query;
-  update_proposal_count: () -> (text);
+  get_latest_post : (Pagination) -> (vec PostInfo) query;
+  update_proposal_count : () -> (text);
 };
