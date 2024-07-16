@@ -45,6 +45,7 @@ do
     image_content = vec {10};
     image_title = \"bhanuprofile.png\";
     image_content_type = \"image/png\";
+    user_image_id = \"1\";
   }
 )")
 
