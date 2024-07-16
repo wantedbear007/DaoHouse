@@ -238,10 +238,10 @@ fn reply_comment(comment_data: ReplyCommentData) -> Result<String, String> {
 }
 
 #[query]
-fn get_latest_post() -> Result<Vec<PostInfo>, String> {
-    if api::caller() == Principal::anonymous() {
-        return Err("Anonymous user not allowed".to_string());
-    }
+fn get_latest_post(page_data: Pagination) -> Vec<PostInfo> {
+    // if api::caller() == Principal::anonymous() {
+    //     return Err("Anonymous user not allowed".to_string());
+    // }
 
     let mut posts: Vec<PostInfo> = Vec::new();
 
@@ -255,7 +255,24 @@ fn get_latest_post() -> Result<Vec<PostInfo>, String> {
 
     posts.sort_by(|a, b| b.post_created_at.cmp(&a.post_created_at));
 
-    return Ok(posts);
+
+       let ending = posts.len();
+
+    if ending == 0 {
+        return posts;
+    }
+
+    let start = page_data.start as usize;
+    let end = page_data.end as usize;
+
+    if start < ending {
+        let end = end.min(ending);
+        return posts[start..end].to_vec();
+    }
+    // all_posts
+    // Ok(Vec::new())
+
+    return posts;
 }
 
 #[query]

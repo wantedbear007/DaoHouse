@@ -160,6 +160,6 @@ service : (InitArgs) -> {
   get_caller : () -> (principal) query;
   get_canister_id : () -> (text) query;
   make_payment : (nat64, principal) -> (text);
-  get_latest_post : () -> (variant { Ok : vec PostInfo; Err : text }) query;
+  get_latest_post : (Pagination) -> (vec PostInfo) query;
   update_proposal_count : () -> (text);
 };
