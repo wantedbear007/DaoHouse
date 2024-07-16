@@ -36,6 +36,8 @@ const CreatePostPopup = ({ onClose }) => {
 
     console.log(canisterId);
 
+    const userImageId = localStorage.getItem('userImageId')
+    console.log(userImageId,"i")
     const postPayload = {
       username:  userProfile?.username || "",
       post_img: imageData?.post_image ? imageData?.post_image  : MyProfileImage,
@@ -43,13 +45,14 @@ const CreatePostPopup = ({ onClose }) => {
       image_content: imageData.image_content || "",
       image_title: imageData.image_title || "",
       image_content_type: imageData.image_content_type || "",
+      user_image_id  : userImageId ? userImageId : " ",
     };
-    console.log(postPayload);
+    console.log("userImage",userImageId)
+    console.log("postpay",postPayload);
 
     try {
       console.log("Inside try");
       const ans = await backendActor.create_new_post(canisterId, postPayload);
-
       toast.success("Post created successfully");
       console.log("Post created successfully", ans);
       onClose();

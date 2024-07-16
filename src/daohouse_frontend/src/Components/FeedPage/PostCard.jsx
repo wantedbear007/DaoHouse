@@ -57,11 +57,11 @@ const PostCard = ({ posts }) => {
       const response = await backendActor.like_post(posts.post_id);
       console.log("Response from like_post:", response)
 
-      if (response && response.success) {
-        setLikeCount(likeCount + 1);
-      } else {
-        console.log("Failed to like the post:", response);
-      }
+      // if (response && response.success) {
+      //   setLikeCount(likeCount + 1);
+      // } else {
+      //   console.log("Failed to like the post:", response);
+      // }
 
     } catch (error) {
       console.error("Error fetching like:", error);
