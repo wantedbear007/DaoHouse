@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import { useUserProfile } from "../../context/UserProfileContext";
 import MyProfileImage from "../../../assets/MyProfile-img.png";
 
-const CreatePostPopup = ({ onClose }) => {
+const CreatePostPopup = ({ onClose , handleGetResponse}) => {
   const [showDescription, setShowDescription] = useState(false);
   const [description, setDescription] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -49,9 +49,8 @@ const CreatePostPopup = ({ onClose }) => {
     try {
       console.log("Inside try");
       const ans = await backendActor.create_new_post(canisterId, postPayload);
-
-      toast.success("Post created successfully");
-      console.log("Post created successfully", ans);
+      toast.success(ans.Ok);
+      handleGetResponse(ans);
       onClose();
       enableBtn(button);
     } catch (error) {

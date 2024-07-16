@@ -18,7 +18,6 @@ export const UserProfileProvider = ({ children }) => {
     try {
       const userProfileResponse = await backendActor.get_user_profile();
       const userProfile = userProfileResponse.Ok;
-      console.log({ userProfile });
       if (userProfile) {
         setUserProfile(userProfile);
         localStorage.setItem('username', userProfile?.username);

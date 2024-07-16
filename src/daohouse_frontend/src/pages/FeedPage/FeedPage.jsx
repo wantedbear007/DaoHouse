@@ -12,83 +12,61 @@ const FeedPage = () => {
   const [active, setActive] = useState({ all: true, latest: false });
   const [showPopup, setShowPopup] = useState(false);
   const [posts, setPosts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 140;
+  const [uplodedPost, setUplodedPost] = useState('')
+  const [getLike, setGetLike] = useState(null)
   const { backendActor } = useAuth();
   const className = "FeedPage";
-
-  console.log("myposts", posts)
+  console.log(active.latest , active.all,'active');
 
   const setAllActive = () => {
-   
-    const allFeed = [
-     
-    ];
-    setPosts(allFeed);
-
     setActive({ all: true, latest: false });
   };
 
   const setLatestActive = () => {
-
-    const latestFeed = [
-   
-    ];
-    setPosts(latestFeed);
     setActive({ all: false, latest: true });
   };
 
   const handleCreatePostClick = () => {
     setShowPopup(!showPopup);
-
-
-
-
-
   };
 
-  // get data from backend 
-  // console the data 
-
-  const getdetails = async () => {
-
+  const getDetails = async () => {
     const pagination = {
-      "end": 12,
-      "start": 0,
+      start: 0,
+      end: 100,
+    };
+
+    try {
+      let response;
+      if(active.all){
+        console.log('1111111111')
+         response = await backendActor.get_all_posts(pagination);
+         console.log("all", response)
+         setPosts(response);
+      }
+      else if(active.latest){
+        console.log('222222')
+        response = await backendActor.get_latest_post(pagination);
+        console.log('latest : ', response)
+        setPosts(response);
+      }
+    } catch (error) {
+      console.log("Error fetching posts:", error);
     }
-
-    const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
-  };
-
-  const prevPage = () => {
-    setCurrentPage(currentPage - 1);
-  };
-
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
   };
 
   useEffect(() => {
-    const getDetails = async () => {
-      const pagination = {
-        start: (currentPage - 1) * postsPerPage,
-        end: currentPage * postsPerPage,
-      };
-
-      try {
-        const response = await backendActor.get_all_posts(pagination);
-        console.log("Fetched posts:", response);
-        setPosts(response);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      }
-    };
-
     getDetails();
-  }, [currentPage, backendActor, postsPerPage]);
+  }, [backendActor, uplodedPost, getLike,active.all]);
 
-  const totalItems = posts.length;
-  const totalPages = Math.ceil(totalItems / postsPerPage);
+  const handleGetResponse = (res) => {
+    setUplodedPost(res?.Ok);
+  }
+
+  const handleGetLikePost = (response)=>{
+    setGetLike(response)
+    console.log(response,'like is response : ::')
+  }
 
   return (
     <div className={className + " " + "w-full"}>
@@ -96,13 +74,13 @@ const FeedPage = () => {
         <div className="fixed inset-0 bg-black opacity-40 z-40"></div>
       )}
 
-      <div  style={{
-          backgroundImage: `url("${image}")`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          
-        }}>
+      <div style={{
+        backgroundImage: `url("${image}")`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+
+      }}>
         <Container classes={`__filter w-100 mobile:h-[25vh] h-[17vh] big_phone:p-20 small_phone:p-10 p-4 flex flex-col items-start justify-center ${className}`}>
           <h1 className="mobile:text-5xl text-3xl p-3 text-white">Social Feed</h1>
 
@@ -155,18 +133,15 @@ const FeedPage = () => {
         className={
           className +
           "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col"
-        }
-      >
+        }>
         <Container>
-          {posts && posts.map((posts, i) => <PostCard posts={posts} key={i}
-
-          />)}
+          {posts && posts.map((posts, i) => <PostCard handleGetLikePost={handleGetLikePost} posts={posts} key={i} />)}
         </Container>
       </div>
 
-      {showPopup && <CreatePostPopup onClose={() => setShowPopup(false)} />}
+      {showPopup && <CreatePostPopup handleGetResponse={handleGetResponse} onClose={() => setShowPopup(false)} />}
 
-      <div className="flex items-center justify-center mt-5 ">
+      {/* <div className="flex items-center justify-center mt-5 ">
         <button
           onClick={prevPage}
           className="text-black  hover:text-gray-500 ml-6 text-xl"
@@ -190,7 +165,7 @@ const FeedPage = () => {
         <span className="text-lg mx-6">
           {currentPage} of {totalPages}
         </span>
-      </div>
+      </div> */}
     </div>
   );
 };

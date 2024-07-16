@@ -13,6 +13,7 @@ import Container from "../Container/Container";
 const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [username, setUsername] = useState("");
 
   const {
     login,
@@ -64,7 +65,6 @@ const Navbar = () => {
   const handleLoginPlug = async () => {
     setIsLoading(true);
     await signInPlug().then(() => {
-      console.log("logined");
       setIsModalOpen(false);
     });
   };
@@ -72,9 +72,6 @@ const Navbar = () => {
     setIsLoading(true);
     setIsModalOpen(true);
   };
-
-  const [username, setUsername] = useState("");
-
   useEffect(() => {
 
     if (backendActor === null || userProfile) {
@@ -86,10 +83,8 @@ const Navbar = () => {
         // Fetch image data and convert to Uint8Array
         const response = await fetch(aboutImg);
         const blob = await response.blob();
-        console.log("blob", blob);
         const arrayBuffer = await blob.arrayBuffer();
         const uint8Array = new Uint8Array(arrayBuffer);
-        console.log("uint8Array", uint8Array);
 
         // Create profile payload with default values
         const profilePayload = {
@@ -113,26 +108,20 @@ const Navbar = () => {
         }
 
         try {
-          console.log("canister id of asset", canisterId);
 
           const a = await backendActor.check_user_existance();
-          console.log(a);
 
           if (a["Ok"]) {
             await fetchUserProfile();
-            setUsername(userProfile.username);
           } else {
             const response = await backendActor.create_profile();
-            console.log(response, "that is an response ::::::");
             if (response.Ok === null) {
               toast.success("User login successfully")
-              setUsername(profilePayload.username);
             } else {
               toast.error("User login field")
             }
             await fetchUserProfile();
             toast.warning("Please update your details")
-            setUsername(userProfile.username);
           }
 
 
@@ -165,8 +154,6 @@ const Navbar = () => {
       icon: <FaSignOutAlt className="mr-2" />,
     },
   ];
-
-  console.log({ backendActor })
   // const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
 
   // const image_url = `http://${canisterId}.localhost:4943/f/5`;
