@@ -7,7 +7,6 @@ use crate::types::{ Comment, PostInfo, PostInput };
 use crate::{ with_state, Analytics, DaoDetails, ImageData, Pagination, ReplyCommentData };
 use candid::Principal;
 use ic_cdk::api;
-use ic_cdk::api::call::{ call_with_payment, CallResult, RejectionCode };
 use ic_cdk::api::management_canister::main::raw_rand;
 use ic_cdk::{ query, update };
 use icrc_ledger_types::icrc1::account::Account;
@@ -22,7 +21,15 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
     if principal_id == Principal::anonymous() {
         return Err("Anonymous principal not allowed to make calls.".to_string());
     }
-    let uuids = raw_rand().await.unwrap().0;
+
+    // let uuids = raw_rand().await.unwrap().0;
+    // let post_id = format!("{:x}", Sha256::digest(&uuids));
+    let uuids = match raw_rand().await {
+        Ok(uuids) => uuids.0,
+        Err(_) => {
+            return Err("Failed to generate UUID".to_string());
+        }
+    };
     let post_id = format!("{:x}", Sha256::digest(&uuids));
 
     // upload image
@@ -31,6 +38,19 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
         name: post_details.image_title,
         content_type: post_details.image_content_type,
     }).await;
+    // let image_id = upload_image(canister_id, ImageData {
+    //     content: post_details.image_content,
+    //     name: post_details.image_title,
+    //     content_type: post_details.image_content_type,
+    // }).await;
+
+    // let image_id = match image_id {
+    //     Ok(id) => id,
+    //     Err(er) => {
+    //         ic_cdk::println!("error {}", er);
+    //         return Err("Image upload failed".to_string());
+    //     }
+    // };
     let mut id = String::new();
     let image_create_res: bool = (
         match image_id {
@@ -64,15 +84,12 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
         like_id_list: Vec::new(),
         comment_count: 0,
         comment_list: Vec::new(),
-        user_image_id: post_details.user_image_id
+        user_image_id: post_details.user_image_id,
     };
 
     with_state(|state| {
-        // state.analytics_content.borrow_mut().get(&0).unwrap().post_count += 1;
-        // state.analytics_content.borrow_mut().get(&0).unwrap().members_count += 1;
         let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
         analytics.post_count += 1;
-        // state.analytics_content.borrow_mut().get(&0).unwrap().members_count += 1;
         state.analytics_content.insert(0, analytics);
         state.post_detail.insert(post_id, new_post)
     });
@@ -140,7 +157,7 @@ async fn like_post(post_id: String) -> Result<String, String> {
         like_id_list: updated_like_id_list,
         comment_count: getpost.comment_count.clone(),
         comment_list: getpost.comment_list.clone(),
-        user_image_id: getpost.user_image_id.clone()
+        user_image_id: getpost.user_image_id.clone(),
     };
     with_state(|state| state.post_detail.insert(new_post.post_id.clone(), new_post));
 
@@ -157,17 +174,32 @@ async fn get_post_byid(id: String) -> Result<PostInfo, String> {
 
 #[update]
 async fn comment_post(post_id: String, comment: String) -> Result<String, String> {
-    let getpost = with_state(|state| state.post_detail.get(&post_id).unwrap().clone());
+    // let getpost = with_state(|state| state.post_detail.get(&post_id).unwrap().clone());
 
     let principal_id = api::caller();
     if principal_id == Principal::anonymous() {
         return Err("Anonymous principal not allowed to make calls.".to_string());
     }
 
-    let updated_comment_count = getpost.comment_count + 1;
+    let getpost = match with_state(|state| state.post_detail.get(&post_id).clone()) {
+        Some(post) => post,
+        None => {
+            return Err("Post not found.".to_string());
+        }
+    };
+
+    // let updated_comment_count = getpost.comment_count + 1;
     let mut updated_list = getpost.comment_list.clone();
 
-    let uuids = raw_rand().await.unwrap().0;
+    // let uuids = raw_rand().await.unwrap().0;
+    // let unique_commend_id = format!("{:x}", Sha256::digest(&uuids));
+
+    let uuids = match raw_rand().await {
+        Ok(uuids) => uuids.0,
+        Err(_) => {
+            return Err("Failed to generate UUID".to_string());
+        }
+    };
     let unique_commend_id = format!("{:x}", Sha256::digest(&uuids));
 
     let new_comment = Comment {
@@ -191,9 +223,9 @@ async fn comment_post(post_id: String, comment: String) -> Result<String, String
         post_created_at: getpost.post_created_at.clone(),
         like_count: getpost.like_count.clone(),
         like_id_list: getpost.like_id_list.clone(),
-        comment_count: updated_comment_count,
+        comment_count: getpost.comment_count + 1,
         comment_list: updated_list,
-        user_image_id: getpost.user_image_id.clone()
+        user_image_id: getpost.user_image_id.clone(),
     };
     with_state(|state| state.post_detail.insert(new_post.post_id.clone(), new_post));
 
@@ -203,8 +235,8 @@ async fn comment_post(post_id: String, comment: String) -> Result<String, String
 // reply comment
 #[update]
 fn reply_comment(comment_data: ReplyCommentData) -> Result<String, String> {
-    let principal_id = api::caller();
-    if principal_id == Principal::anonymous() {
+    // let principal_id = api::caller();
+    if api::caller() == Principal::anonymous() {
         return Err("Anonymous users not allowed".to_string());
     }
 
@@ -251,12 +283,9 @@ fn get_latest_post(page_data: Pagination) -> Vec<PostInfo> {
         }
     });
 
-    // posts.sort_by()
-
     posts.sort_by(|a, b| b.post_created_at.cmp(&a.post_created_at));
 
-
-       let ending = posts.len();
+    let ending = posts.len();
 
     if ending == 0 {
         return posts;
@@ -276,19 +305,18 @@ fn get_latest_post(page_data: Pagination) -> Vec<PostInfo> {
 }
 
 #[query]
-fn get_my_post(page_data: Pagination) -> Result<Vec<(String, PostInfo)>, String> {
+fn get_my_post(page_data: Pagination) -> Result<Vec<PostInfo>, String> {
     let principal_id = api::caller();
     if principal_id == Principal::anonymous() {
         return Err("Anonymous user not allowed, register.".to_string());
     }
 
-    let mut posts: Vec<(String, PostInfo)> = Vec::new();
+    let mut posts: Vec<PostInfo> = Vec::new();
 
     with_state(|state| {
-        for (k, v) in state.post_detail.iter() {
-            if v.principal_id == principal_id {
-                // posts.push(v)
-                posts.push((k.clone(), v.clone()));
+        for v in state.post_detail.iter() {
+            if v.1.principal_id == principal_id {
+                posts.push(v.1.clone());
             }
         }
     });
@@ -409,9 +437,15 @@ async fn make_payment(tokens: u64, user: Principal) -> String {
 #[update]
 fn update_proposal_count() -> String {
     with_state(|state| {
-        let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
-        analytics.proposals_count += 1;
-        state.analytics_content.insert(0, analytics);
+        match state.analytics_content.borrow().get(&0) {
+            Some(mut val) => {
+                val.proposals_count += 1;
+                state.analytics_content.insert(0, val);
+            }
+            None => {
+                "Failed to update count".to_string();
+            }
+        }
     });
     "success".to_string()
 }
