@@ -5,8 +5,6 @@ import { FaRegHeart } from "react-icons/fa6";
 import { PiTelegramLogoBold } from "react-icons/pi";
 import { MdOutlineInsertComment } from "react-icons/md";
 import { useAuth } from "../../Components/utils/useAuthClient";
-
-
 const convertTimestampToDateString = (timestamp) => {
   // Convert the BigInt timestamp to milliseconds
   const milliseconds = Number(timestamp / BigInt(1e6));
@@ -28,48 +26,30 @@ const convertTimestampToDateString = (timestamp) => {
   return `${month} ${day}`;
 };
 
-
-const PostCard = ({ posts }) => {
-  console.log("posts",posts)
+const PostCard = ({ posts,handleGetLikePost }) => {
   const [formattedDate, setFormattedDate] = useState('');
   const className = "postCard";
   const { backendActor } = useAuth();
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
+  const ImageUrl = `http://${canisterId}.localhost:4943/f/${posts?.post_img}`  
+  const userImage = `http://${canisterId}.localhost:4943/f/${posts?.user_image_id}`  
 
-  const image_url = `http://${canisterId}.localhost:4943/f/`;
-  console.log("image",image_url);
+  const getlike = async () => {
+    try {
+      const response = await backendActor.like_post(posts.post_id);
+      handleGetLikePost(response);
+    } catch (error) {
+      console.error("Error fetching like:", error);
+    }
+  };
   
-  const [likeCount, setLikeCount] = useState(posts.like_count); // Initialize with initial like count
-
   useEffect(() => {
-    console.log("data are ", posts)
     if (posts && posts.post_created_at) {
       const formatted = convertTimestampToDateString(BigInt(posts.post_created_at));
       setFormattedDate(formatted);
     }
 
   }, [posts]);
-
-  const getlike = async () => {
-
-
-    try {
-      const response = await backendActor.like_post(posts.post_id);
-      console.log("Response from like_post:", response)
-
-      // if (response && response.success) {
-      //   setLikeCount(likeCount + 1);
-      // } else {
-      //   console.log("Failed to like the post:", response);
-      // }
-
-    } catch (error) {
-      console.error("Error fetching like:", error);
-    }
-  };
-  useEffect(() => {
-    getlike();
-  },[posts.post_id]);
 
 
   // const getreplycomment = async() =>{
@@ -85,7 +65,7 @@ const PostCard = ({ posts }) => {
       className={
         className +
         " " +
-        "w-full flex big_phone:flex-row flex-col items-start big_phone:gap-12 gap-4 bg-white big_phone:p-8 p-6 rounded-lg justify-between mobile:mt-0 mt-4"
+        "w-full flex big_phone:flex-row flex-col items-start big_phone:gap-12 gap-4 bg-white big_phone:p-8 p-6 rounded-lg justify-between mobile:mt-0 mt-4 my-9"
       }
     >
       <section
@@ -94,8 +74,7 @@ const PostCard = ({ posts }) => {
         <div className="flex flex-row items-center justify-between">
           <section className={className + "__userData flex flex-row items-center gap-2"}>
             <img
-              src={posts.post_img}
-            
+              src={userImage}            
               alt="userImage"
               className="rounded-[50%] w-10 h-10"
             />
@@ -137,7 +116,7 @@ const PostCard = ({ posts }) => {
       <section className={className + "__leftSide tablet:w-2/5 big_phone:w-1/2 w-full h-full"}>
         {posts.post_img && (
           <img
-            src={image_url + posts.post_img}
+            src={ImageUrl}
             alt="POST Media"
             className="w-full h-full object-cover rounded-lg"
           />
