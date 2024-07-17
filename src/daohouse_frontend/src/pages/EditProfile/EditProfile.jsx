@@ -24,10 +24,18 @@ import data from "../../../../../canister_ids.json"
 import { useNavigate } from "react-router-dom";
 
 
-const EditProfile = () => {
+const EditProfile =  () => {
   const { userProfile, fetchUserProfile } = useUserProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { backendActor, frontendCanisterId, identity } = useAuth();
+  const { backendActor, frontendCanisterId, identity,principal } = useAuth();
+
+  console.log({principal})
+  // const principalIdArray = Array.from(principal?._arr || []);
+  // const princi = Buffer.from(principalIdArray).toString("base64");
+  // console.log("principal value is ", princi)
+
+  // const principal0 = await window.ic.plug.agent.getPrincipal(); 
+
   const [imageSrc, setImageSrc] = useState(
     userProfile?.profile_img
       ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
