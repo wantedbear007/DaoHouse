@@ -45,13 +45,15 @@ const FeedPage = () => {
       let response;
       if (active.all) {
         response = await backendActor.get_all_posts(pagination);
-        setTotalItems(response?.length);
-        setPosts(response);
+        const dataLength = response?.size / 4;
+        setTotalItems(Math.ceil(dataLength))
+        setPosts(response?.posts);
       }
       else if (active.latest) {
         response = await backendActor.get_latest_post(pagination);
-        setPosts(response);
-        setTotalItems(response.length)
+        const dataLength = response?.size / 4;
+        setTotalItems(Math.ceil(dataLength))
+        setPosts(response?.posts);
       }
     } catch (error) {
       console.log("Error fetching posts:", error);
@@ -59,7 +61,7 @@ const FeedPage = () => {
   };
 
   const handleGetResponse = (res) => {
-    setUplodedPost(res?.Ok);
+    setUplodedPost(res);
   }
 
   const handleGetLikePost = (response) => {
@@ -150,7 +152,7 @@ const FeedPage = () => {
           "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col"
         }>
         <Container>
-          {posts && posts.map((posts, i) => <PostCard handleGetLikePost={handleGetLikePost} posts={posts} key={i} />)}
+          {posts && posts?.map((posts, i) => <PostCard handleGetLikePost={handleGetLikePost} posts={posts} key={i} />)}
         </Container>
       </div>
 
@@ -164,7 +166,7 @@ const FeedPage = () => {
 
         <button onClick={handleNextPage}
           disabled={currentPage === totalItems}
-          className={`text-black hover:text-gray-500 ml-6 text-xl flex items-center {currentPage === totalItems ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
+          className={`text-black hover:text-gray-500 ml-6 text-xl flex items-center ${currentPage === totalItems ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
           Next <FaArrowRight />
         </button>
       </div>

@@ -17,7 +17,6 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   // const [selectedImages, setSelectedImages] = useState([]);
   const { userProfile, fetchUserProfile } = useUserProfile();
-  console.log({profile : userProfile})
   const [imageData, setImageData] = useState({
     base64: "",
     image_content: [],
@@ -33,11 +32,7 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
   async function handleCreatePost(button) {
     disableBtn(button);
     const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
-
-    console.log(canisterId);
-
     const userImageId = localStorage.getItem('userImageId')
-    console.log(userImageId,"i")
     const postPayload = {
       username:  userProfile?.username || "",
       post_img: imageData?.post_image ? imageData?.post_image  : MyProfileImage,
@@ -47,11 +42,8 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
       image_content_type: imageData.image_content_type || "",
       user_image_id  : userImageId ? userImageId : " ",
     };
-    console.log("userImage",userImageId)
-    console.log("postpay",postPayload);
 
     try {
-      console.log("Inside try");
       const ans = await backendActor.create_new_post(canisterId, postPayload);
       toast.success(ans.Ok);
       handleGetResponse(ans);
@@ -86,7 +78,6 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
     } catch (error) {
       if (typeof error === "string") {
         toast.error(error);
-        console.error("Error:", error);
       } else {
         console.error("Error:", error);
       }
@@ -137,8 +128,6 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
       
       const data = await backendActor.get_all_posts();
       const lol = await backendActor.get_user_profile()
-      console.log("user data is: ", lol)
-      console.log("data: ", data);
     }
     callMe();
   }, []);
@@ -156,7 +145,6 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
   useEffect(() => {
     async function callMe() {
       const data = await backendActor.get_all_posts();
-      console.log("All posts: ", data);
     }
     callMe();
   }, []);

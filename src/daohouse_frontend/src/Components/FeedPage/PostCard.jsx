@@ -84,8 +84,8 @@ const PostCard = ({ posts,handleGetLikePost }) => {
           <section className={className + "__time text-slate-500 mobile:text-base text-sm"}>
             {formattedDate}
           </section>
-        </div>
 
+        </div>
         <div>
           <p className="h-full mobile:text-base text-sm">{posts.post_description}</p>
         </div>
@@ -111,6 +111,8 @@ const PostCard = ({ posts,handleGetLikePost }) => {
             <IoLink className="text-2xl" />
           </button>
         </div>
+
+        
       </section>
 
       <section className={className + "__leftSide tablet:w-2/5 big_phone:w-1/2 w-full h-full"}>
