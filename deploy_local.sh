@@ -57,7 +57,7 @@ dfx deploy dao_canister --argument '(record{
 
 
 dfx deploy daohouse_backend --argument "(record { payment_recipient = principal \"${RECIEVER}\"; })"
-dfx deploy internet_identity 
-dfx deploy daohouse_frontend 
-dfx deploy ic_asset_handler 
+# dfx deploy internet_identity 
+# dfx deploy daohouse_frontend 
+# dfx deploy ic_asset_handler 
 # dfx generate

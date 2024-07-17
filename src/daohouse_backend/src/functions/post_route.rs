@@ -4,7 +4,7 @@ use std::borrow::{ Borrow, BorrowMut };
 
 use crate::routes::upload_image;
 use crate::types::{ Comment, PostInfo, PostInput };
-use crate::{ with_state, Analytics, DaoDetails, ImageData, Pagination, ReplyCommentData };
+use crate::{ with_state, Analytics, DaoDetails, GetAllPostsResponse, ImageData, Pagination, PostSize, ReplyCommentData };
 use candid::Principal;
 use ic_cdk::api;
 use ic_cdk::api::management_canister::main::raw_rand;
@@ -100,8 +100,11 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
     // state.post_detail.insert(post_id, new_post);
     // with_state(|state| routes::create_new_post(state, post_id,postdetail.clone()))
 }
+
 #[query]
-fn get_all_posts(page_data: Pagination) -> Vec<PostInfo> {
+// fn get_all_posts(page_data: Pagination) -> Vec<PostInfo> {
+    fn get_all_posts(page_data: Pagination) -> GetAllPostsResponse {
+
     let mut all_posts = Vec::new();
 
     with_state(|state| {
@@ -114,7 +117,12 @@ fn get_all_posts(page_data: Pagination) -> Vec<PostInfo> {
     let ending = all_posts.len();
 
     if ending == 0 {
-        return all_posts;
+        return GetAllPostsResponse {
+            posts: all_posts,
+            size: 0 as u64,
+            // all_posts,
+            // "0".to_string()
+        };
     }
 
     let start = page_data.start as usize;
@@ -122,10 +130,21 @@ fn get_all_posts(page_data: Pagination) -> Vec<PostInfo> {
 
     if start < ending {
         let end = end.min(ending);
-        return all_posts[start..end].to_vec();
+        return GetAllPostsResponse {
+            posts: all_posts[start..end].to_vec(),
+            size: ending as u64
+        };
+            // all_posts[start..end].to_vec(), ending.to_string());
+    }
+
+    GetAllPostsResponse {
+        posts: all_posts,
+        size: ending as u64
+        // all_posts,
+        // "0".to_string()
     }
     // all_posts
-    Vec::new()
+    // (Vec::new(), 0.to_string())
 }
 
 #[update]
