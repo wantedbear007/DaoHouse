@@ -4,6 +4,7 @@ import createProposal from "../../../assets/proposal.gif"
 import ReactQuill from 'react-quill';
 import { quillFormats, quillModules } from '../../utils/quilConfig';
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
+import Container from '../../Components/Container/Container';
 
 
 function CreateProposal() {
@@ -102,19 +103,19 @@ function CreateProposal() {
 
     return (
         <div className="bg-zinc-200 w-full">
-            <div
-                className={`${className}__filter w-full h-[25vh] p-20 flex flex-col items-start justify-center`}
-                style={{
+            <div style={{
                     backgroundImage: `url("${proposals}")`,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
-                }}
-            >
+                }}>
+                <Container classes={`${className}__filter w-full h-[25vh] p-20 flex flex-col items-start justify-center`}>
                 <h1 className="text-[40px] p-2 text-white border-b-2 border-white">Proposals</h1>
+                </Container>
             </div>
 
-            <div className={`${className}__label bg-[#c8ced3] relative py-8 px-10 flex gap-2 flex-col w-full justify-between items-center`}>
+            <div className='bg-[#c8ced3]'>
+            <Container classes={`${className}__label  relative py-8 px-10 flex gap-2 flex-col w-full justify-between items-center`}>
                 <p className="text-[40px] text-black px-8 mr-auto flex flex-row justify-start items-center gap-4">
                     Create Proposal
                     <div className="flex flex-col items-start">
@@ -186,6 +187,7 @@ function CreateProposal() {
                     <img src={createProposal} alt="Illustration" className="w-[350px] h-[350px]" />
                 </div>
 
+            </Container>
             </div>
         </div>
     );

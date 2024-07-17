@@ -15,10 +15,11 @@ const FeedPage = () => {
   const [uplodedPost, setUplodedPost] = useState('')
   const [getLike, setGetLike] = useState(null)
   const { backendActor } = useAuth();
-  const [totalPages, setTotalPages] = useState(0)
-  const [currentPage, setCurrentPage] =useState(0)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(4);
+  const [totalItems, setTotalItems] = useState(0);
   const className = "FeedPage";
-  
+
   const setAllActive = () => {
     setActive({ all: true, latest: false });
   };
@@ -32,22 +33,25 @@ const FeedPage = () => {
   };
 
   const getDetails = async () => {
-    const pagination = {
-      start: 0,
-      end: 100,
-    };
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    console.log('start : ', start, 'end', end)
 
+    const pagination = {
+      start,
+      end,
+    };
     try {
       let response;
-      if(active.all){
-         response = await backendActor.get_all_posts(pagination);
-         setPosts(response);
-         setTotalPages(response.length)
+      if (active.all) {
+        response = await backendActor.get_all_posts(pagination);
+        setTotalItems(response?.length);
+        setPosts(response);
       }
-      else if(active.latest){
+      else if (active.latest) {
         response = await backendActor.get_latest_post(pagination);
         setPosts(response);
-        setTotalPages(response.length)
+        setTotalItems(response.length)
       }
     } catch (error) {
       console.log("Error fetching posts:", error);
@@ -58,19 +62,26 @@ const FeedPage = () => {
     setUplodedPost(res?.Ok);
   }
 
-  const handleGetLikePost = (response)=>{
+  const handleGetLikePost = (response) => {
     setGetLike(response)
   }
-  const prevPage = ()=>{
 
-  }
-  const nextPage = ()=>{
 
-  }
+  const handleNextPage = () => {
+    if (currentPage < totalItems) {
+      setCurrentPage(prevPage => prevPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prevPage => prevPage - 1);
+    }
+  };
 
   useEffect(() => {
     getDetails();
-  }, [backendActor, uplodedPost, getLike,active.all]);
+  }, [backendActor, uplodedPost, getLike, active.all, active?.latest, currentPage]);
 
   return (
     <div className={className + " " + "w-full"}>
@@ -146,28 +157,21 @@ const FeedPage = () => {
       {showPopup && <CreatePostPopup handleGetResponse={handleGetResponse} onClose={() => setShowPopup(false)} />}
 
       <div className="flex items-center justify-center mt-5 ">
-        <button
-          onClick={prevPage}
-          className="text-black  hover:text-gray-500 ml-6 text-xl"
-          style={{ display: "flex", alignItems: "center" }}
-          // disabled={currentPage === 1}
-        >
+        <button onClick={handlePrevPage} disabled={currentPage === 1}
+          className={`text-black hover:text-gray-500 ml-6 text-xl flex items-center ${currentPage === 1 ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
           <FaArrowLeft /> Prev
         </button>
 
-        <button
-          onClick={nextPage}
-          className="text-black hover:text-gray-500 ml-6 text-xl"
-          style={{ display: "flex", alignItems: "center" }}
-          // disabled={currentPage === totalPages}
-        >
+        <button onClick={handleNextPage}
+          disabled={currentPage === totalItems}
+          className={`text-black hover:text-gray-500 ml-6 text-xl flex items-center {currentPage === totalItems ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
           Next <FaArrowRight />
         </button>
       </div>
 
       <div className="flex items-center justify-center mb-7 text-xl">
         <span className="text-lg mx-6">
-          {currentPage} of {totalPages}
+          {currentPage} of {totalItems}
         </span>
       </div>
     </div>

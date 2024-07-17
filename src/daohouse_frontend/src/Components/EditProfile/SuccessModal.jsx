@@ -1,11 +1,12 @@
 import React from "react";
 import closeIcon from "../../../assets/close-icon.png";
+import Container from "../Container/Container";
 
 const SuccessModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
+    <Container  classes="fixed inset-0 flex items-center justify-center z-50">
       <div className="bg-[#0E3746] md:w-[60%] w-[90%] md:h-[42%] h-[25%] rounded-lg p-6 text-white flex flex-col justify-center items-center relative">
         <h1 className="md:text-3xl text-xl font-semibold mb-4">
           Profile Updated
@@ -21,7 +22,7 @@ const SuccessModal = ({ isOpen, onClose }) => {
           />
         </button>
       </div>
-    </div>
+    </Container>
   );
 };
 
