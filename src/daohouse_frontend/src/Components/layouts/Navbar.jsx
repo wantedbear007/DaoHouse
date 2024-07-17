@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, } from "react-router-dom";
-import { useAuth } from "../utils/useAuthClient";
+import { useAuth, useAuthClient } from "../utils/useAuthClient";
 import { LuChevronDown } from "react-icons/lu";
 import LoginModal from "../Auth/LoginModal";
 import { FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
@@ -44,6 +44,10 @@ const Navbar = () => {
     setIsLoading(true);
     await login().then(() => window.location.reload());
   };
+
+
+  const abc = useAuthClient()
+  abc
 
   const handleLogout = async () => {
     setIsLoading(true);

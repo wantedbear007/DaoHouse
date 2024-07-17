@@ -4,7 +4,7 @@ use std::borrow::{ Borrow, BorrowMut };
 
 use crate::routes::upload_image;
 use crate::types::{ Comment, PostInfo, PostInput };
-use crate::{ with_state, Analytics, DaoDetails, GetAllPostsResponse, ImageData, Pagination, PostSize, ReplyCommentData };
+use crate::{ with_state, Analytics, DaoDetails, GetAllPostsResponse, ImageData, Pagination, ReplyCommentData };
 use candid::Principal;
 use ic_cdk::api;
 use ic_cdk::api::management_canister::main::raw_rand;
@@ -119,7 +119,7 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
     if ending == 0 {
         return GetAllPostsResponse {
             posts: all_posts,
-            size: 0 as u64,
+            size: 0 as u32,
             // all_posts,
             // "0".to_string()
         };
@@ -132,14 +132,14 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
         let end = end.min(ending);
         return GetAllPostsResponse {
             posts: all_posts[start..end].to_vec(),
-            size: ending as u64
+            size: ending as u32
         };
             // all_posts[start..end].to_vec(), ending.to_string());
     }
 
     GetAllPostsResponse {
         posts: all_posts,
-        size: ending as u64
+        size: ending as u32
         // all_posts,
         // "0".to_string()
     }

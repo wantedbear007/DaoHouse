@@ -570,12 +570,11 @@ pub struct PostInfo {
     pub comment_list: Vec<Comment>,
 }
 
-pub type PostSize = String;
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
 pub struct GetAllPostsResponse {
     pub posts: Vec<PostInfo>,
-    pub size: u64,
+    pub size: u32,
 }
 
 

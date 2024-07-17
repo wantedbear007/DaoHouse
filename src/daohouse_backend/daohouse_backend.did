@@ -137,14 +137,10 @@ type InitArgs = record {
   payment_recipient : principal;
 };
 
-type PostResponse = record {
-  0: vec PostInfo;
-  1: text;
-};
 
 
 
-type PostSize = nat64; 
+type PostSize = nat32; 
 
 type GetAllPostsResult = record {
   posts : vec PostInfo;
