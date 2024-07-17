@@ -176,6 +176,6 @@ service : (InitArgs) -> {
   get_caller : () -> (principal) query;
   get_canister_id : () -> (text) query;
   make_payment : (nat64, principal) -> (text);
-  get_latest_post : (Pagination) -> (vec PostInfo) query;
+  get_latest_post : (Pagination) -> (GetAllPostsResult) query;
   update_proposal_count : () -> (text);
 };

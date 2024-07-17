@@ -1,18 +1,20 @@
 // use std::collections::BTreeMap;
 
-use std::borrow::{ Borrow, BorrowMut };
+use std::borrow::{Borrow, BorrowMut};
 
 use crate::routes::upload_image;
-use crate::types::{ Comment, PostInfo, PostInput };
-use crate::{ with_state, Analytics, DaoDetails, GetAllPostsResponse, ImageData, Pagination, ReplyCommentData };
+use crate::types::{Comment, PostInfo, PostInput};
+use crate::{
+    with_state, Analytics, DaoDetails, GetAllPostsResponse, ImageData, Pagination, ReplyCommentData,
+};
 use candid::Principal;
 use ic_cdk::api;
 use ic_cdk::api::management_canister::main::raw_rand;
-use ic_cdk::{ query, update };
+use ic_cdk::{query, update};
 use icrc_ledger_types::icrc1::account::Account;
 use icrc_ledger_types::icrc1::transfer::BlockIndex;
-use icrc_ledger_types::icrc2::transfer_from::{ TransferFromArgs, TransferFromError };
-use sha2::{ Digest, Sha256 };
+use icrc_ledger_types::icrc2::transfer_from::{TransferFromArgs, TransferFromError};
+use sha2::{Digest, Sha256};
 // use uuid::Uuid;
 
 #[update]
@@ -33,11 +35,15 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
     let post_id = format!("{:x}", Sha256::digest(&uuids));
 
     // upload image
-    let image_id: Result<String, String> = upload_image(canister_id, ImageData {
-        content: post_details.image_content,
-        name: post_details.image_title,
-        content_type: post_details.image_content_type,
-    }).await;
+    let image_id: Result<String, String> = upload_image(
+        canister_id,
+        ImageData {
+            content: post_details.image_content,
+            name: post_details.image_title,
+            content_type: post_details.image_content_type,
+        },
+    )
+    .await;
     // let image_id = upload_image(canister_id, ImageData {
     //     content: post_details.image_content,
     //     name: post_details.image_title,
@@ -52,18 +58,17 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
     //     }
     // };
     let mut id = String::new();
-    let image_create_res: bool = (
-        match image_id {
-            Ok(value) => {
-                id = value;
-                Ok(())
-            }
-            Err(er) => {
-                ic_cdk::println!("error {}", er.to_string());
-                Err(())
-            }
+    let image_create_res: bool = (match image_id {
+        Ok(value) => {
+            id = value;
+            Ok(())
         }
-    ).is_err();
+        Err(er) => {
+            ic_cdk::println!("error {}", er.to_string());
+            Err(())
+        }
+    })
+    .is_err();
 
     if image_create_res {
         return Err("Image upload failed".to_string());
@@ -103,8 +108,7 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
 
 #[query]
 // fn get_all_posts(page_data: Pagination) -> Vec<PostInfo> {
-    fn get_all_posts(page_data: Pagination) -> GetAllPostsResponse {
-
+fn get_all_posts(page_data: Pagination) -> GetAllPostsResponse {
     let mut all_posts = Vec::new();
 
     with_state(|state| {
@@ -132,16 +136,15 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
         let end = end.min(ending);
         return GetAllPostsResponse {
             posts: all_posts[start..end].to_vec(),
-            size: ending as u32
+            size: ending as u32,
         };
-            // all_posts[start..end].to_vec(), ending.to_string());
+        // all_posts[start..end].to_vec(), ending.to_string());
     }
 
     GetAllPostsResponse {
         posts: all_posts,
-        size: ending as u32
-        // all_posts,
-        // "0".to_string()
+        size: ending as u32, // all_posts,
+                             // "0".to_string()
     }
     // all_posts
     // (Vec::new(), 0.to_string())
@@ -226,7 +229,7 @@ async fn comment_post(post_id: String, comment: String) -> Result<String, String
         comment_text: comment,
         replies: Vec::new(),
         comment_id: Some(unique_commend_id), // comment_id: Some(Uuid::new_v4().to_string())
-        // comment_id: Some(String::from("value")),
+                                             // comment_id: Some(String::from("value")),
     };
 
     updated_list.push(new_comment);
@@ -259,9 +262,8 @@ fn reply_comment(comment_data: ReplyCommentData) -> Result<String, String> {
         return Err("Anonymous users not allowed".to_string());
     }
 
-    let post = with_state(|state| state.post_detail.get(&comment_data.post_id).clone()).expect(
-        "Post not found"
-    );
+    let post = with_state(|state| state.post_detail.get(&comment_data.post_id).clone())
+        .expect("Post not found");
 
     let mut updated_comment_list = post.comment_list.clone();
 
@@ -283,44 +285,50 @@ fn reply_comment(comment_data: ReplyCommentData) -> Result<String, String> {
         ..post
     };
 
-    with_state(|state| { state.post_detail.insert(updated_post.post_id.clone(), updated_post) });
+    with_state(|state| {
+        state
+            .post_detail
+            .insert(updated_post.post_id.clone(), updated_post)
+    });
 
     Ok("commented on post".to_string())
 }
 
 #[query]
-fn get_latest_post(page_data: Pagination) -> Vec<PostInfo> {
-    // if api::caller() == Principal::anonymous() {
-    //     return Err("Anonymous user not allowed".to_string());
-    // }
-
-    let mut posts: Vec<PostInfo> = Vec::new();
+fn get_latest_post(page_data: Pagination) -> GetAllPostsResponse {
+    let mut posts = Vec::new();
 
     with_state(|state| {
-        for v in state.post_detail.iter() {
-            posts.push(v.1);
+        for (_k, v) in state.post_detail.iter() {
+            posts.push(v.clone());
         }
     });
 
-    posts.sort_by(|a, b| b.post_created_at.cmp(&a.post_created_at));
-
-    let ending = posts.len();
-
-    if ending == 0 {
-        return posts;
+    let length = posts.len();
+    if length == 0 {
+        return GetAllPostsResponse {
+            posts: posts,
+            size: 0 as u32,
+        };
     }
+
+    posts.sort_by(|a, b| b.post_created_at.cmp(&a.post_created_at));
 
     let start = page_data.start as usize;
     let end = page_data.end as usize;
 
-    if start < ending {
-        let end = end.min(ending);
-        return posts[start..end].to_vec();
+    if start < length {
+        let end = end.min(length);
+        return GetAllPostsResponse {
+            posts: posts[start..end].to_vec(),
+            size: length as u32,
+        };
     }
-    // all_posts
-    // Ok(Vec::new())
 
-    return posts;
+    GetAllPostsResponse {
+        posts: posts,
+        size: length as u32,
+    }
 }
 
 #[query]
@@ -419,27 +427,37 @@ async fn transfer(tokens: u64, user_principal: Principal) -> Result<BlockIndex, 
     //     state.get_payment_recipient()
     // });
 
-    ic_cdk::println!("Transferring {} tokens to principal {}", tokens, payment_recipient);
+    ic_cdk::println!(
+        "Transferring {} tokens to principal {}",
+        tokens,
+        payment_recipient
+    );
     let transfer_args = TransferFromArgs {
         amount: tokens.into(),
-        to: Account { owner: payment_recipient, subaccount: None },
+        to: Account {
+            owner: payment_recipient,
+            subaccount: None,
+        },
         fee: None,
         memo: None,
         created_at_time: None,
         spender_subaccount: None,
-        from: Account { owner: user_principal, subaccount: None },
+        from: Account {
+            owner: user_principal,
+            subaccount: None,
+        },
     };
 
-    ic_cdk
-        ::call::<(TransferFromArgs,), (Result<BlockIndex, TransferFromError>,)>(
-            Principal::from_text("mxzaz-hqaaa-aaaar-qaada-cai").expect(
-                "Could not decode the principal."
-            ),
-            "icrc2_transfer_from",
-            (transfer_args,)
-        ).await
-        .map_err(|e| format!("failed to call ledger: {:?}", e))?
-        .0.map_err(|e| format!("ledger transfer error {:?}", e))
+    ic_cdk::call::<(TransferFromArgs,), (Result<BlockIndex, TransferFromError>,)>(
+        Principal::from_text("mxzaz-hqaaa-aaaar-qaada-cai")
+            .expect("Could not decode the principal."),
+        "icrc2_transfer_from",
+        (transfer_args,),
+    )
+    .await
+    .map_err(|e| format!("failed to call ledger: {:?}", e))?
+    .0
+    .map_err(|e| format!("ledger transfer error {:?}", e))
 }
 
 // make payment
@@ -455,15 +473,13 @@ async fn make_payment(tokens: u64, user: Principal) -> String {
 // increase proposals count
 #[update]
 fn update_proposal_count() -> String {
-    with_state(|state| {
-        match state.analytics_content.borrow().get(&0) {
-            Some(mut val) => {
-                val.proposals_count += 1;
-                state.analytics_content.insert(0, val);
-            }
-            None => {
-                "Failed to update count".to_string();
-            }
+    with_state(|state| match state.analytics_content.borrow().get(&0) {
+        Some(mut val) => {
+            val.proposals_count += 1;
+            state.analytics_content.insert(0, val);
+        }
+        None => {
+            "Failed to update count".to_string();
         }
     });
     "success".to_string()
