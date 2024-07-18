@@ -15,9 +15,7 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
   const [showDescription, setShowDescription] = useState(false);
   const [description, setDescription] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
-  // const [selectedImages, setSelectedImages] = useState([]);
   const { userProfile, fetchUserProfile } = useUserProfile();
-  console.log({profile : userProfile})
   const [imageData, setImageData] = useState({
     base64: "",
     image_content: [],
@@ -27,15 +25,12 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
   });
 
   const { handleFileUpload } = constant();
-  // const userData = userProfile();
   const { backendActor } = useAuth();
 
   async function handleCreatePost(button) {
     disableBtn(button);
     const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
-
-    console.log(canisterId);
-
+    const userImageId = localStorage.getItem('userImageId')
     const postPayload = {
       username:  userProfile?.username || "",
       post_img: imageData?.post_image ? imageData?.post_image  : MyProfileImage,
@@ -43,11 +38,10 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
       image_content: imageData.image_content || "",
       image_title: imageData.image_title || "",
       image_content_type: imageData.image_content_type || "",
+      user_image_id  : userImageId ? userImageId : " ",
     };
-    console.log(postPayload);
 
     try {
-      console.log("Inside try");
       const ans = await backendActor.create_new_post(canisterId, postPayload);
       toast.success(ans.Ok);
       handleGetResponse(ans);
@@ -82,7 +76,6 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
     } catch (error) {
       if (typeof error === "string") {
         toast.error(error);
-        console.error("Error:", error);
       } else {
         console.error("Error:", error);
       }
@@ -119,43 +112,6 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
     button.removeAttribute("disabled");
     button.style.opacity = "1";
   }
-
-  // React.useEffect(() => {
-  //   const postButton = document.getElementById("postButton");
-
-  //   if (postButton) {
-  //     postButton.addEventListener("click", handleCreatePost(postButton));
-  //   }
-  // }, []);
-
-  useEffect(() => {
-    async function callMe() {
-      
-      const data = await backendActor.get_all_posts();
-      const lol = await backendActor.get_user_profile()
-      console.log("user data is: ", lol)
-      console.log("data: ", data);
-    }
-    callMe();
-  }, []);
-
-  // useEffect(() => {
-  //   console.log("function calleddddd")
-  //   async function callMe() {
-  //     const data = await backendActor.get_user_profile();
-  //     console.log("user profile is : ", data);
-  //   }
-
-  //   callMe();
-  // }, []);
-
-  useEffect(() => {
-    async function callMe() {
-      const data = await backendActor.get_all_posts();
-      console.log("All posts: ", data);
-    }
-    callMe();
-  }, []);
 
   return (
     <div

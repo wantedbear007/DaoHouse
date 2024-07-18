@@ -6,6 +6,8 @@ import DaoCard from "../../Components/Dao/DaoCard";
 import NoDataComponent from "../../Components/Dao/NoDataComponent";
 import TopComponent from "../../Components/Dao/TopComponent";
 import Container from "../../Components/Container/Container";
+import SearchProposals from "../../Components/Proposals/SearchProposals";
+import { DiBlackberry } from "react-icons/di";
 
 const Dao = () => {
   const [showAll, setShowAll] = useState(true);
@@ -44,13 +46,33 @@ const Dao = () => {
             </div>
           </p>
 
-          <Link to="/dao/create-dao">
+       
+        <div className="flex-grow lg:flex justify-center px-6 mx-2 hidden">
+          <SearchProposals
+            width="100%"
+            bgColor="transparent"
+            placeholder="Search here"
+            className="border-2 border-[#AAC8D6] w-full max-w-lg"
+
+          />
+        </div>
+        <Link to="/dao/create-dao">
             <button className="bg-white small_phone:gap-2 gap-1 mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl rounded-full shadow-md flex items-center rounded-2xl hover:bg-[#ececec] hover:scale-105 transition">
               <HiPlus />
               Create DAO
             </button>
           </Link>
+        <style jsx>{`
+          .placeholder-custom::placeholder {
+            color: black;
+            font-weight: bold;
+            borderText:black;
+          }
+   
+`}
+        </style>
         </Container>
+
       </div>
 
       {showAll ? (

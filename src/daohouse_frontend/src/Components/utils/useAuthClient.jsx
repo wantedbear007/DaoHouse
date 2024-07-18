@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthClient } from "@dfinity/auth-client";
 import { createActor, idlFactory as BackendidlFactory } from "../../../../declarations/daohouse_backend/index";
-import { Principal } from "@dfinity/candid/lib/cjs/idl";
-
+// import { Principal } from "@dfinity/candid/lib/cjs/idl";
+import { Principal } from "@dfinity/principal";
 const AuthContext = createContext();
 
 export const useAuthClient = () => {
@@ -11,6 +11,7 @@ export const useAuthClient = () => {
   const [identity, setIdentity] = useState(null);
   const [principal, setPrincipal] = useState(null);
   const [backendActor, setBackendActor] = useState(null);
+  const [stringPrincipal, setStringPrincipal] = useState(null);
 
   const getPrincipalId = (principal) => {
     if (principal) {
@@ -35,6 +36,7 @@ export const useAuthClient = () => {
     setIsAuthenticated(isAuthenticated);
     setIdentity(identity);
     setPrincipal(principal);
+    setStringPrincipal(principal.toString());
     if (isAuthenticated && identity && principal && principal.isAnonymous() === false) {
       const backendActor = createActor(backendCanisterId, { agentOptions: { identity: identity } });
       setBackendActor(backendActor);
@@ -43,28 +45,18 @@ export const useAuthClient = () => {
     return true;
   };
 
-
-  if (principal !== null) {
-    console.log("principal", Principal.valueToString(principal));
-  }
-
-
-
   useEffect(() => {
     const initializeAuth = async () => {
 
       const authClient = await AuthClient.create();
       clientInfo(authClient, authClient.getIdentity());
-
       if (window.ic?.plug) {
         const isPlugConnected = await window.ic.plug.isConnected();
         if (isPlugConnected) {
-          // Ensure agent is available and principal is retrieved
           if (!window.ic.plug.agent) {
             await window.ic.plug.createAgent();
           }
           const principal = await window.ic.plug.agent.getPrincipal();
-
 
           // Create the backend actor
           const backendActor = await window.ic.plug.createActor({
@@ -113,7 +105,6 @@ export const useAuthClient = () => {
 
   const signInPlug = async () => {
     if (!window.ic?.plug) {
-      console.error("Plug wallet is not available.");
       window.open("https://plugwallet.ooo", "_blank");
       return;
     }
@@ -128,7 +119,6 @@ export const useAuthClient = () => {
       return;
     }
 
-
     try {
       // Retrieve the principal ID
       const principal = await window.ic.plug.agent.getPrincipal();
@@ -140,7 +130,6 @@ export const useAuthClient = () => {
       });
 
       setBackendActor(backendActor);
-
       // Additional logic if needed
       setIdentity(principal);
       setIsAuthenticated(true);
@@ -162,6 +151,7 @@ export const useAuthClient = () => {
         setIdentity(null);
         setPrincipal(null);
         setBackendActor(null);
+        console.log("Disconnected from Plug wallet.");
       } catch (error) {
         console.error("Failed to disconnect from Plug wallet:", error);
       }
@@ -185,6 +175,7 @@ export const useAuthClient = () => {
     frontendCanisterId,
     backendCanisterId,
     backendActor,
+    stringPrincipal,
   };
 };
 

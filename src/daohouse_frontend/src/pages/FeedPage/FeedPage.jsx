@@ -3,10 +3,11 @@ import { HiPlus } from "react-icons/hi";
 import PostCard from "../../Components/FeedPage/PostCard";
 import image from "../../../assets/bg_image.png";
 import CreatePostPopup from "../../Components/FeedPage/CreatePostPopup";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useAuth } from "../../Components/utils/useAuthClient";
 import Container from "../../Components/Container/Container";
-import NoDataComponent from "../../Components/Dao/NoDataComponent";
+import Pagignation from "../../Components/pagignation/Pagignation";
+import NoPostProfile from "../../Components/Dao/NoPostProfile";
+import nodata from "../../../assets/nodata.png";
 
 const FeedPage = () => {
   const [active, setActive] = useState({ all: true, latest: false });
@@ -15,9 +16,8 @@ const FeedPage = () => {
   const [uplodedPost, setUplodedPost] = useState('')
   const [getLike, setGetLike] = useState(null)
   const { backendActor } = useAuth();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(4);
   const [totalItems, setTotalItems] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const className = "FeedPage";
 
   const setAllActive = () => {
@@ -33,26 +33,26 @@ const FeedPage = () => {
   };
 
   const getDetails = async () => {
-    const start = (currentPage - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    console.log('start : ', start, 'end', end)
-
-    const pagination = {
-      start,
-      end,
-    };
     try {
       let response;
+      const itemsPerPage = 4;
+      const start = (currentPage - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const paginationPayload = {
+        start,
+        end,
+      }
+
       if (active.all) {
-        response = await backendActor.get_all_posts(pagination);
-        const dataLength = response?.size / 4;
-        setTotalItems(Math.ceil(dataLength))
+        response = await backendActor.get_all_posts(paginationPayload);
+        const dataLength = response?.size || 0;
+        setTotalItems(Math.ceil(dataLength / 4));
         setPosts(response?.posts);
       }
       else if (active.latest) {
-        response = await backendActor.get_latest_post(pagination);
-        const dataLength = response?.size / 4;
-        setTotalItems(Math.ceil(dataLength))
+        response = await backendActor.get_latest_post(paginationPayload);
+        const dataLength = response?.size || 0;
+        setTotalItems(Math.ceil(dataLength / 4));
         setPosts(response?.posts);
       }
     } catch (error) {
@@ -67,19 +67,6 @@ const FeedPage = () => {
   const handleGetLikePost = (response) => {
     setGetLike(response)
   }
-
-
-  const handleNextPage = () => {
-    if (currentPage < totalItems) {
-      setCurrentPage(prevPage => prevPage + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(prevPage => prevPage - 1);
-    }
-  };
 
   useEffect(() => {
     getDetails();
@@ -148,39 +135,34 @@ const FeedPage = () => {
           className +
           "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col"
         }>
-        <Container>
-          {posts && posts?.map((posts, i) => <PostCard handleGetLikePost={handleGetLikePost} posts={posts} key={i} />)}
-        </Container>
+        {
+          posts.length === 0 ?
+            <Container classes="w-full flex flex-col items-center justify-center p-2">
+              <img src={nodata} alt="No Data" className="mb-1 " />
+              <p className="text-center text-gray-700 text-2xl">
+                There are no post availabel yet!
+              </p>
+            </Container>
+            :
+            <Container>
+              {posts?.reverse().map((posts, i) => <PostCard handleGetLikePost={handleGetLikePost} posts={posts} key={i} />)}
+            </Container>
+        }
       </div>
 
       {showPopup && <CreatePostPopup handleGetResponse={handleGetResponse} onClose={() => setShowPopup(false)} />}
 
-      <div className="flex items-center justify-center mt-5 ">
-        <button onClick={handlePrevPage} disabled={currentPage === 1}
-          className={`text-black hover:text-gray-500 ml-6 text-xl flex items-center ${currentPage === 1 ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
-          <FaArrowLeft /> Prev
-        </button>
-
-        <button onClick={handleNextPage}
-          disabled={currentPage === totalItems || totalItems == 0}
-          className={`text-black hover:text-gray-500 ml-6 text-xl flex items-center ${(currentPage === totalItems || totalItems == 0 ) ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
-          Next <FaArrowRight />
-        </button>
+      <div
+        className={
+          className +
+          "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col"
+        }>
+        <Pagignation totalItems={totalItems} currentPage={currentPage}
+          setCurrentPage={setCurrentPage} />
       </div>
 
-      <div className="flex items-center justify-center mb-7 text-xl">
-        <span className="text-lg mx-6">
-          {currentPage} of {totalItems}
-        </span>
-      </div>
     </div>
   );
 };
 
 export default FeedPage;
-
-
-
-
-
-
