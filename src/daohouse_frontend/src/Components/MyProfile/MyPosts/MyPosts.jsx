@@ -9,13 +9,40 @@ import image1 from "../../../../assets/post1.png";
 import image2 from "../../../../assets/post2.png";
 import image3 from "../../../../assets/post3.png";
 import NoPostProfile from "../../Dao/NoPostProfile";
+import { useAuth } from "../../utils/useAuthClient";
 
 const MyPosts = () => {
+  const { backendActor, frontendCanisterId, identity } = useAuth();
   const [postsList, setPostsList] = useState([]);
   const [hoverIndex, setHoverIndex] = useState(null); // Initialize as null instead of false
   const [readMoreIndex, setReadMoreIndex] = useState(null); // Initialize as null instead of false
   const { setSelectedPost } = usePostContext();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(4);
+  const [totalItems, setTotalItems] = useState(0);
   const className = "MyPosts";
+  const[post,setpost] =useState({})
+  console.log("post info----",post)
+
+  const getpost =async()=>{
+
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    console.log('start : ', start, 'end', end)
+    const pagination = {
+      start,
+      end,
+    };
+    try {
+      const res = await backendActor.get_my_post(pagination);
+      console.log("---res--",res);
+      setpost(res);
+      const dataLength = res?.size / 4;
+      setTotalItems(Math.ceil(dataLength))
+    } catch (error) {
+      console.log("error fetching post",error)
+    }
+  }
 
   return (
     <div className={className}>
@@ -23,6 +50,12 @@ const MyPosts = () => {
         <h3 className="text-[#05212C] md:text-[24px] text-[18px] md:font-bold font-semibold ml-4">
           Post
         </h3>
+     
+
+     <button onClick={getpost}
+     >post
+     </button>
+
 
         {postsList.length === 0 ? (
           <NoPostProfile />

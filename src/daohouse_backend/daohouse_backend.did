@@ -167,7 +167,7 @@ service : (InitArgs) -> {
   get_post_byid : (text) -> (Result_2) query;
   get_user_profile : () -> (Result_3) query;
   like_post : (text) -> (Result);
-  get_my_post : (Pagination) -> (Result_4) query;
+ get_my_post  : (Pagination) -> (Result_4) query;
   reply_comment : (CommentInfo) -> (Result);
   get_my_follower : () -> (Result_5);
   get_my_following : () -> (Result_5);
