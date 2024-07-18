@@ -32,7 +32,8 @@ const PostCard = ({ posts,handleGetLikePost }) => {
   const { backendActor } = useAuth();
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
   const ImageUrl = `http://${canisterId}.localhost:4943/f/${posts?.post_img}`  
-  
+  const userImage = `http://${canisterId}.localhost:4943/f/${posts?.user_image_id}`  
+
   const getlike = async () => {
     try {
       const response = await backendActor.like_post(posts.post_id);
@@ -50,6 +51,15 @@ const PostCard = ({ posts,handleGetLikePost }) => {
 
   }, [posts]);
 
+
+  // const getreplycomment = async() =>{
+  //   try {
+  //     const response = await backendActor.reply_comment(posts.post_id);
+  //     console.log("Response from like_post:", response)
+  //   } catch (error) {
+  //     console.error("Error creating comment:", error);
+  //   }
+  // }
   return (
     <div
       className={
@@ -64,7 +74,7 @@ const PostCard = ({ posts,handleGetLikePost }) => {
         <div className="flex flex-row items-center justify-between">
           <section className={className + "__userData flex flex-row items-center gap-2"}>
             <img
-              src={ImageUrl}            
+              src={userImage}            
               alt="userImage"
               className="rounded-[50%] w-10 h-10"
             />
@@ -74,8 +84,8 @@ const PostCard = ({ posts,handleGetLikePost }) => {
           <section className={className + "__time text-slate-500 mobile:text-base text-sm"}>
             {formattedDate}
           </section>
-        </div>
 
+        </div>
         <div>
           <p className="h-full mobile:text-base text-sm">{posts.post_description}</p>
         </div>
@@ -101,6 +111,8 @@ const PostCard = ({ posts,handleGetLikePost }) => {
             <IoLink className="text-2xl" />
           </button>
         </div>
+
+        
       </section>
 
       <section className={className + "__leftSide tablet:w-2/5 big_phone:w-1/2 w-full h-full"}>
@@ -116,13 +128,25 @@ const PostCard = ({ posts,handleGetLikePost }) => {
       <section className={className + "__buttons w-full mobile:hidden flex flex-row items-center justify-between"}>
         <div className="flex flex-row items-center justify-between gap-x-4">
           <button>
-            <FaRegHeart className="text-[#0E3746] text-lg" />
+            <div className="flex gap-2">
+            <FaRegHeart className="text-[#0E3746] text-lg mt-1" onClick={getlike}/>
+            <div className="text-lg">
+            {posts.like_count}
+            </div>
+            </div>
           </button>
           <button>
-            <MdOutlineInsertComment className="text-[#0E3746] text-lg" />
+            <div className="flex gap-2">
+            <MdOutlineInsertComment className="text-[#0E3746] text-lg mt-1"/>
+            <div className="text-lg">
+            {posts.comment_count}
+            </div>
+            </div>
           </button>
           <button>
-            <PiTelegramLogoBold className="text-[#0E3746] text-lg" />
+          <div className="flex gap-2">
+            <PiTelegramLogoBold className="text-[#0E3746] text-lg mt-1"/>
+            </div>
           </button>
         </div>
 

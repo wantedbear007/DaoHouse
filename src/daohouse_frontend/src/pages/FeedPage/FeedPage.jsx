@@ -15,8 +15,10 @@ const FeedPage = () => {
   const [uplodedPost, setUplodedPost] = useState('')
   const [getLike, setGetLike] = useState(null)
   const { backendActor } = useAuth();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(4);
+  const [totalItems, setTotalItems] = useState(0);
   const className = "FeedPage";
-  console.log(active.latest , active.all,'active');
 
   const setAllActive = () => {
     setActive({ all: true, latest: false });
@@ -31,42 +33,57 @@ const FeedPage = () => {
   };
 
   const getDetails = async () => {
-    const pagination = {
-      start: 0,
-      end: 100,
-    };
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    console.log('start : ', start, 'end', end)
 
+    const pagination = {
+      start,
+      end,
+    };
     try {
       let response;
-      if(active.all){
-        console.log('1111111111')
-         response = await backendActor.get_all_posts(pagination);
-         console.log("all", response)
-         setPosts(response);
+      if (active.all) {
+        response = await backendActor.get_all_posts(pagination);
+        const dataLength = response?.size / 4;
+        setTotalItems(Math.ceil(dataLength))
+        setPosts(response?.posts);
       }
-      else if(active.latest){
-        console.log('222222')
+      else if (active.latest) {
         response = await backendActor.get_latest_post(pagination);
-        console.log('latest : ', response)
-        setPosts(response);
+        const dataLength = response?.size / 4;
+        setTotalItems(Math.ceil(dataLength))
+        setPosts(response?.posts);
       }
     } catch (error) {
       console.log("Error fetching posts:", error);
     }
   };
 
+  const handleGetResponse = (res) => {
+    setUplodedPost(res);
+  }
+
+  const handleGetLikePost = (response) => {
+    setGetLike(response)
+  }
+
+
+  const handleNextPage = () => {
+    if (currentPage < totalItems) {
+      setCurrentPage(prevPage => prevPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prevPage => prevPage - 1);
+    }
+  };
+
   useEffect(() => {
     getDetails();
-  }, [backendActor, uplodedPost, getLike,active.all]);
-
-  const handleGetResponse = (res) => {
-    setUplodedPost(res?.Ok);
-  }
-
-  const handleGetLikePost = (response)=>{
-    setGetLike(response)
-    console.log(response,'like is response : ::')
-  }
+  }, [backendActor, uplodedPost, getLike, active.all, active?.latest, currentPage]);
 
   return (
     <div className={className + " " + "w-full"}>
@@ -119,10 +136,7 @@ const FeedPage = () => {
 
           <button
             className="bg-white small_phone:gap-2 gap-1 mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl rounded-full shadow-md flex items-center rounded-2xl hover:bg-[#ececec] hover:scale-105 transition"
-            onClick={handleCreatePostClick}
-
-
-          >
+            onClick={handleCreatePostClick}>
             <HiPlus />
             Create Post
           </button>
@@ -135,37 +149,30 @@ const FeedPage = () => {
           "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col"
         }>
         <Container>
-          {posts && posts.map((posts, i) => <PostCard handleGetLikePost={handleGetLikePost} posts={posts} key={i} />)}
+          {posts && posts?.map((posts, i) => <PostCard handleGetLikePost={handleGetLikePost} posts={posts} key={i} />)}
         </Container>
       </div>
 
       {showPopup && <CreatePostPopup handleGetResponse={handleGetResponse} onClose={() => setShowPopup(false)} />}
 
-      {/* <div className="flex items-center justify-center mt-5 ">
-        <button
-          onClick={prevPage}
-          className="text-black  hover:text-gray-500 ml-6 text-xl"
-          style={{ display: "flex", alignItems: "center" }}
-          disabled={currentPage === 1}
-        >
+      <div className="flex items-center justify-center mt-5 ">
+        <button onClick={handlePrevPage} disabled={currentPage === 1}
+          className={`text-black hover:text-gray-500 ml-6 text-xl flex items-center ${currentPage === 1 ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
           <FaArrowLeft /> Prev
         </button>
 
-        <button
-          onClick={nextPage}
-          className="text-black hover:text-gray-500 ml-6 text-xl"
-          style={{ display: "flex", alignItems: "center" }}
-          disabled={currentPage === totalPages}
-        >
+        <button onClick={handleNextPage}
+          disabled={currentPage === totalItems || totalItems == 0}
+          className={`text-black hover:text-gray-500 ml-6 text-xl flex items-center ${(currentPage === totalItems || totalItems == 0 ) ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
           Next <FaArrowRight />
         </button>
       </div>
 
       <div className="flex items-center justify-center mb-7 text-xl">
         <span className="text-lg mx-6">
-          {currentPage} of {totalPages}
+          {currentPage} of {totalItems}
         </span>
-      </div> */}
+      </div>
     </div>
   );
 };

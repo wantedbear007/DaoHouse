@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, } from "react-router-dom";
-import { useAuth } from "../utils/useAuthClient";
+import { useAuth, useAuthClient } from "../utils/useAuthClient";
 import { LuChevronDown } from "react-icons/lu";
 import LoginModal from "../Auth/LoginModal";
 import { FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
@@ -45,6 +45,10 @@ const Navbar = () => {
     setIsLoading(true);
     await login().then(() => window.location.reload());
   };
+
+
+  const abc = useAuthClient()
+  abc
 
   const handleLogout = async () => {
     setIsLoading(true);
@@ -163,7 +167,8 @@ const Navbar = () => {
       ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile?.profile_img}`
       : MyProfileImage)
     setUsername(userProfile?.username);
-  }, [userProfile?.profile_img])
+    console.log('user deatils inside nvbar use efect', userProfile)
+  }, [userProfile?.profile_img, userProfile?.username])
   return (
     <nav>
       <div className="bg-bg-color shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50 ">
