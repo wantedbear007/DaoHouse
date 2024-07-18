@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthClient } from "@dfinity/auth-client";
 import { createActor, idlFactory as BackendidlFactory } from "../../../../declarations/daohouse_backend/index";
-import { Principal } from "@dfinity/candid/lib/cjs/idl";
-
+// import { Principal } from "@dfinity/candid/lib/cjs/idl";
+import { Principal } from "@dfinity/principal";
 const AuthContext = createContext();
 
 export const useAuthClient = () => {
@@ -11,30 +11,40 @@ export const useAuthClient = () => {
   const [identity, setIdentity] = useState(null);
   const [principal, setPrincipal] = useState(null);
   const [backendActor, setBackendActor] = useState(null);
+// <<<<<<< prabhjot
+  const [stringPrincipal, setStringPrincipal] = useState(null);
+  console.log({backendActor})
+// =======
+// >>
 
-  const getPrincipalId = (principal) => {
-    if (principal) {
-      const principalIdArray = Array.from(principal?._arr || []);
-      return Buffer.from(principalIdArray).toString("base64");
-    }
-    return null;
-  };
+//   const getPrincipalId = (principal) => {
+//     if (principal) {
+//       const principalIdArray = Array.from(principal?._arr || []);
+//       return Buffer.from(principalIdArray).toString("base64");
+//     }
+//     return null;
+//   };
 
-  const backendCanisterId =
-    process.env.CANISTER_ID_DAOHOUSE_BACKEND ||
-    process.env.BACKEND_CANISTER_CANISTER_ID;
+//   const backendCanisterId =
+//     process.env.CANISTER_ID_DAOHOUSE_BACKEND ||
+//     process.env.BACKEND_CANISTER_CANISTER_ID;
 
-  const frontendCanisterId =
-    process.env.CANISTER_ID_DAOHOUSE_FRONTEND ||
-    process.env.FRONTEND_CANISTER_CANISTER_ID;
+//   const frontendCanisterId =
+//     process.env.CANISTER_ID_DAOHOUSE_FRONTEND ||
+//     process.env.FRONTEND_CANISTER_CANISTER_ID;
 
-  const clientInfo = async (client, identity) => {
-    const isAuthenticated = await client.isAuthenticated();
-    const principal = identity.getPrincipal();
-    setAuthClient(client);
-    setIsAuthenticated(isAuthenticated);
-    setIdentity(identity);
-    setPrincipal(principal);
+//   const clientInfo = async (client, identity) => {
+//     const isAuthenticated = await client.isAuthenticated();
+//     const principal = identity.getPrincipal();
+//     setAuthClient(client);
+//     setIsAuthenticated(isAuthenticated);
+//     setIdentity(identity);
+//     setPrincipal(principal);
+// <<<<<<< prabhjot
+//     setStringPrincipal(principal.toString());
+//     console.log("HERE IN CLIENTINFO");
+// =======
+// >>>>>>> main
     if (isAuthenticated && identity && principal && principal.isAnonymous() === false) {
       const backendActor = createActor(backendCanisterId, { agentOptions: { identity: identity } });
       setBackendActor(backendActor);
@@ -42,11 +52,10 @@ export const useAuthClient = () => {
 
     return true;
   };
-
-
-  if (principal !== null) {
-    console.log("principal", Principal.valueToString(principal));
-  }
+// if (principal !== null) {
+    // console.log("principal", Principal.valueToString(principal));
+//     setPrincipal(Principal.valueToString(principal));
+//   }
 
 
 
@@ -55,7 +64,6 @@ export const useAuthClient = () => {
 
       const authClient = await AuthClient.create();
       clientInfo(authClient, authClient.getIdentity());
-
       if (window.ic?.plug) {
         const isPlugConnected = await window.ic.plug.isConnected();
         if (isPlugConnected) {
@@ -185,6 +193,7 @@ export const useAuthClient = () => {
     frontendCanisterId,
     backendCanisterId,
     backendActor,
+    stringPrincipal,
   };
 };
 

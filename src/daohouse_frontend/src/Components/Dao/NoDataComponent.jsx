@@ -1,7 +1,7 @@
 import React from "react";
 import nodata from "../../../assets/nodata.png";
 
-const NoDataComponent = ({ setJoinedDAO }) => {
+const NoDataComponent = ({ setJoinedDAO  }) => {
   return (
     <div className="w-full flex flex-col items-center justify-center p-20">
       <img src={nodata} alt="No Data" className="mb-4" />
