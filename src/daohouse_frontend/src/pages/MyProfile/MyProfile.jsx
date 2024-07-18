@@ -17,6 +17,7 @@ import MediumCircleComponent from "../../Components/Ellipse-Animation/MediumCirc
 import SmallCircleComponent from "../../Components/Ellipse-Animation/SmallCircle/SmallCircleComponent";
 import ProfileTitleDivider from "../../Components/ProfileTitleDivider/ProfileTitleDivider";
 import { useUserProfile } from "../../context/UserProfileContext";
+import Container from "../../Components/Container/Container";
 
 // Main component function
 const MyProfile = ({ childComponent }) => {
@@ -74,18 +75,13 @@ const MyProfile = ({ childComponent }) => {
   return (
     <div className={className + " bg-zinc-200 w-full relative"}>
       {/* Background image container */}
-      <div
-        className={
-          className +
-          "__topComponent w-full lg:h-[25vh] h-[18vh] md:p-20 pt-6 pl-2 flex flex-col items-start md:justify-center relative"
-        }
-        style={{
+      <div style={{
           backgroundImage: `url("${MyProfileRectangle}")`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
-        }}
-      >
+        }}>
+        <Container classes={` ${className} __topComponent w-full lg:h-[25vh] h-[18vh] md:p-20 pt-6 pl-2 flex flex-col items-start md:justify-center relative`}>
         <div className="absolute z-22 top-0 left-0 w-full h-full overflow-x-hidden">
           {/* Big circle image */}
           <div className="absolute md:right-[3.7%] -right-[3.7%] top-1/2 -translate-y-1/2">
@@ -141,15 +137,12 @@ const MyProfile = ({ childComponent }) => {
         </div>
 
         <ProfileTitleDivider title="My Profile" />
+        </Container>
       </div>
 
       {/* Main profile content */}
-      <div
-        className={
-          className +
-          "__mainComponent bg-[#c8ced3] big_phone:py-8 big_phone:pb-20 py-6 md:px-8 flex md:flex-row gap-2 flex-col w-full user-container"
-        }
-      >
+      <div className={`bg-[#c8ced3]`}>
+        <Container classes={`__mainComponent big_phone:py-8 big_phone:pb-20 py-6 md:px-8 flex md:flex-row gap-2 flex-col w-full user-container`}>
         {/* Left side content */}
         <div
           className={
@@ -300,6 +293,7 @@ const MyProfile = ({ childComponent }) => {
           {/*Child Components */}
           {childComponent}
         </div>
+        </Container>
       </div>
     </div>
   );

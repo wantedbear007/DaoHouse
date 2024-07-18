@@ -22,6 +22,7 @@ import { HttpAgent } from "@dfinity/agent";
 import { toast } from "react-toastify";
 import data from "../../../../../canister_ids.json"
 import { useNavigate } from "react-router-dom";
+import Container from "../../Components/Container/Container";
 
 
 const EditProfile =  () => {
@@ -53,7 +54,7 @@ const EditProfile =  () => {
   if (isLocal) {
     agent.fetchRootKey();
   }
-  
+
   // Initiate AssetManager
   const assetManager = new AssetManager({
     canisterId: frontendCanisterId,
@@ -100,6 +101,7 @@ const EditProfile =  () => {
       website: profileData.website,
       tag_defines: profileData.tag_defines,
       image_content: profileData.image_content ? new Uint8Array(profileData.image_content) : [10],
+      user_image_id: "1",
       image_title: profileData.image_title || "na",
       image_content_type: profileData.image_content_type || "default content type",
     };
@@ -208,14 +210,13 @@ const EditProfile =  () => {
       image_content_type: "image/jpg",
     })
     setImageSrc(userProfile?.profile_img
-        ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
-        : MyProfileImage)
-    }, [userProfile?.profile_img])
-  
+      ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
+      : MyProfileImage)
+  }, [userProfile?.profile_img])
+
   return (
     <div className="bg-zinc-200 w-full pb-20 relative">
       <div
-        className="w-full lg:h-[25vh] h-[18vh] md:p-20 pt-6 pl-2 flex flex-col items-start md:justify-center relative hero-container"
         style={{
           backgroundImage: `url("${MyProfileRectangle}")`,
           backgroundRepeat: "no-repeat",
@@ -223,61 +224,65 @@ const EditProfile =  () => {
           backgroundPosition: "center",
         }}
       >
-        <div className="absolute z-22 top-0 left-0 w-full h-full overflow-x-hidden">
-          {/* Big circle image */}
-          <div className="absolute md:right-[3.7%] -right-[3.7%] top-1/2 -translate-y-1/2">
-            <div className="relative tablet:w-[96px] tablet:h-[96px] md:w-[88.19px] md:h-[88.19px] w-[65px] h-[65px]">
-              <BigCircleComponent imgSrc={BigCircle} />
+        <Container classes="w-full lg:h-[25vh] h-[18vh] md:p-20 pt-6 pl-2 flex flex-col items-start md:justify-center relative hero-container">
+
+          <div className="absolute z-22 top-0 left-0 w-full h-full overflow-x-hidden">
+            {/* Big circle image */}
+            <div className="absolute md:right-[3.7%] -right-[3.7%] top-1/2 -translate-y-1/2">
+              <div className="relative tablet:w-[96px] tablet:h-[96px] md:w-[88.19px] md:h-[88.19px] w-[65px] h-[65px]">
+                <BigCircleComponent imgSrc={BigCircle} />
+              </div>
+
+              {/* Big circle animation */}
+              <div className="absolute inset-0 flex items-center justify-center z-20">
+                <div className="tablet:w-[112px] tablet:h-[112px] md:w-[104px] md:h-[104px] w-[75px] h-[75px]">
+                  <Lottie
+                    options={defaultOptions}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                </div>
+              </div>
             </div>
 
-            {/* Big circle animation */}
-            <div className="absolute inset-0 flex items-center justify-center z-20">
-              <div className="tablet:w-[112px] tablet:h-[112px] md:w-[104px] md:h-[104px] w-[75px] h-[75px]">
-                <Lottie
-                  options={defaultOptions}
-                  style={{ width: "100%", height: "100%" }}
-                />
+            <div className="absolute right-[25%] -translate-y-full top-[30%]">
+              <div className="relative tablet:w-[43px] tablet:h-[43px] md:w-[33.3px] md:h-[33.3px] w-[21.19px] h-[21.19px]">
+                {/* Smallest circle image */}
+
+                <SmallCircleComponent imgSrc={SmallestCircle} />
+              </div>
+
+              {/* Small circle animation */}
+              <div className="absolute inset-0 flex items-center justify-center z-20">
+                <div className="tablet:w-[47px] tablet:h-[47px] md:w-[37.3px] md:h-[37.3px] w-[23.19px] h-[23.19px]">
+                  <Lottie
+                    options={defaultOptions2}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Medium circle image */}
+            <div className="absolute right-[45%] -translate-y-full top-[95%]">
+              <div className="relative tablet:w-[52px] tablet:h-[52px] md:w-[43.25px] md:h-[43.25px] w-[29.28px] h-[29.28px] ">
+                <MediumCircleComponent imgSrc={MediumCircle} />
+              </div>
+
+              {/* Medium circle animation */}
+              <div className="absolute inset-0 flex items-center justify-center z-20">
+                <div className="tablet:w-[60px] tablet:h-[60px] md:w-[47.25px] md:h-[47.25px] w-[33.28px] h-[33.28px]">
+                  <Lottie
+                    options={defaultOptions3}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                </div>
               </div>
             </div>
           </div>
-
-          <div className="absolute right-[25%] -translate-y-full top-[30%]">
-            <div className="relative tablet:w-[43px] tablet:h-[43px] md:w-[33.3px] md:h-[33.3px] w-[21.19px] h-[21.19px]">
-              {/* Smallest circle image */}
-
-              <SmallCircleComponent imgSrc={SmallestCircle} />
-            </div>
-
-            {/* Small circle animation */}
-            <div className="absolute inset-0 flex items-center justify-center z-20">
-              <div className="tablet:w-[47px] tablet:h-[47px] md:w-[37.3px] md:h-[37.3px] w-[23.19px] h-[23.19px]">
-                <Lottie
-                  options={defaultOptions2}
-                  style={{ width: "100%", height: "100%" }}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Medium circle image */}
-          <div className="absolute right-[45%] -translate-y-full top-[95%]">
-            <div className="relative tablet:w-[52px] tablet:h-[52px] md:w-[43.25px] md:h-[43.25px] w-[29.28px] h-[29.28px] ">
-              <MediumCircleComponent imgSrc={MediumCircle} />
-            </div>
-
-            {/* Medium circle animation */}
-            <div className="absolute inset-0 flex items-center justify-center z-20">
-              <div className="tablet:w-[60px] tablet:h-[60px] md:w-[47.25px] md:h-[47.25px] w-[33.28px] h-[33.28px]">
-                <Lottie
-                  options={defaultOptions3}
-                  style={{ width: "100%", height: "100%" }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <ProfileTitleDivider title="Edit Profile" />
+          <ProfileTitleDivider title="Edit Profile" />
+        </Container>
       </div>
+      <Container> 
       <div className={`relative ${isModalOpen ? "blur-sm" : ""}`}>
         <div className="md:mt-12 mt-8 md:mx-24 mx-6 bg-[#F4F2EC] md:p-6 p-4 rounded-lg">
           <div className="flex items-center gap-2">
@@ -373,6 +378,7 @@ const EditProfile =  () => {
           </div>
         </div>
       </div>
+      </Container>
       <SuccessModal isOpen={isModalOpen} onClose={closeModal} />
 
       {isModalOpen && (

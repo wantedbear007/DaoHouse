@@ -71,6 +71,10 @@ const Navbar = () => {
     await login().then(() => window.location.reload());
   };
 
+
+  const abc = useAuthClient()
+  abc
+
   const handleLogout = async () => {
     setIsLoading(true);
     try {
@@ -112,7 +116,6 @@ const Navbar = () => {
       icon: <FaSignOutAlt className="mr-2" />,
     },
   ];
-
   return (
     <nav>
       <div className="bg-bg-color shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50">

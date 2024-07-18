@@ -138,6 +138,16 @@ type InitArgs = record {
   payment_recipient : principal;
 };
 
+
+
+
+type PostSize = nat32; 
+
+type GetAllPostsResult = record {
+  posts : vec PostInfo;
+  size : PostSize;
+};
+
 service : (InitArgs) -> {
   update_profile : (text, Profileinput) -> (Result_1);
   comment_post : (text, text) -> (Result);
@@ -147,7 +157,13 @@ service : (InitArgs) -> {
   create_profile : () -> (Result_1);
   delete_profile : () -> (Result_1);
   follow_user : (principal) -> (Result_1);
-  get_all_posts : (Pagination) -> (vec PostInfo) query;
+  // get_all_posts : (Pagination) -> (vec PostInfo) query;
+  // get_all_posts : (Pagination) -> (variant {vec PostInfo; text}) query;
+  // get_all_posts : (Pagination) -> (PostResponse) query;
+  get_all_posts : (Pagination) -> (GetAllPostsResult) query;
+
+
+
   get_post_byid : (text) -> (Result_2) query;
   get_user_profile : () -> (Result_3) query;
   like_post : (text) -> (Result);
@@ -161,6 +177,6 @@ service : (InitArgs) -> {
   get_caller : () -> (principal) query;
   get_canister_id : () -> (text) query;
   make_payment : (nat64, principal) -> (text);
-  get_latest_post : (Pagination) -> (vec PostInfo) query;
+  get_latest_post : (Pagination) -> (GetAllPostsResult) query;
   update_proposal_count : () -> (text);
 };

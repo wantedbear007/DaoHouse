@@ -11,36 +11,41 @@ export const useAuthClient = () => {
   const [identity, setIdentity] = useState(null);
   const [principal, setPrincipal] = useState(null);
   const [backendActor, setBackendActor] = useState(null);
+// <<<<<<< prabhjot
   const [stringPrincipal, setStringPrincipal] = useState(null);
   console.log({backendActor})
+// =======
+// >>
 
-  const getPrincipalId = (principal) => {
-    if (principal) {
-      const principalIdArray = Array.from(principal?._arr || []);
-      return Buffer.from(principalIdArray).toString("base64");
-    }
-    return null;
-  };
+//   const getPrincipalId = (principal) => {
+//     if (principal) {
+//       const principalIdArray = Array.from(principal?._arr || []);
+//       return Buffer.from(principalIdArray).toString("base64");
+//     }
+//     return null;
+//   };
 
-  const backendCanisterId =
-    process.env.CANISTER_ID_DAOHOUSE_BACKEND ||
-    process.env.BACKEND_CANISTER_CANISTER_ID;
+//   const backendCanisterId =
+//     process.env.CANISTER_ID_DAOHOUSE_BACKEND ||
+//     process.env.BACKEND_CANISTER_CANISTER_ID;
 
-  const frontendCanisterId =
-    process.env.CANISTER_ID_DAOHOUSE_FRONTEND ||
-    process.env.FRONTEND_CANISTER_CANISTER_ID;
+//   const frontendCanisterId =
+//     process.env.CANISTER_ID_DAOHOUSE_FRONTEND ||
+//     process.env.FRONTEND_CANISTER_CANISTER_ID;
 
-  const clientInfo = async (client, identity) => {
-    const isAuthenticated = await client.isAuthenticated();
-    const principal = identity.getPrincipal();
-    setAuthClient(client);
-    setIsAuthenticated(isAuthenticated);
-    setIdentity(identity);
-    setPrincipal(principal);
-    setStringPrincipal(principal.toString());
-    console.log("HERE IN CLIENTINFO");
+//   const clientInfo = async (client, identity) => {
+//     const isAuthenticated = await client.isAuthenticated();
+//     const principal = identity.getPrincipal();
+//     setAuthClient(client);
+//     setIsAuthenticated(isAuthenticated);
+//     setIdentity(identity);
+//     setPrincipal(principal);
+// <<<<<<< prabhjot
+//     setStringPrincipal(principal.toString());
+//     console.log("HERE IN CLIENTINFO");
+// =======
+// >>>>>>> main
     if (isAuthenticated && identity && principal && principal.isAnonymous() === false) {
-      console.log("HERE IN IF");
       const backendActor = createActor(backendCanisterId, { agentOptions: { identity: identity } });
       setBackendActor(backendActor);
     }
@@ -131,13 +136,10 @@ export const useAuthClient = () => {
       return;
     }
 
-    console.log("Plug wallet is connected.");
 
     try {
       // Retrieve the principal ID
       const principal = await window.ic.plug.agent.getPrincipal();
-      console.log("plugID", principal.toText());
-      console.log(backendCanisterId);
 
       // Create the backend actor
       const backendActor = await window.ic.plug.createActor({
@@ -146,7 +148,6 @@ export const useAuthClient = () => {
       });
 
       setBackendActor(backendActor);
-      console.log(window.ic.plug.sessionManager)
 
       // Additional logic if needed
       setIdentity(principal);
@@ -155,10 +156,6 @@ export const useAuthClient = () => {
 
       // Call clientInfo to update the state
       await clientInfo({ isAuthenticated: () => true, getIdentity: () => ({ getPrincipal: () => principal }) }, principal);
-
-      console.log("Integration actor initialized successfully.");
-      console.log({ backendActor });
-      console.log(window.ic);
     } catch (e) {
       console.error("Failed to initialize the actor with Plug.", e);
     }
@@ -173,7 +170,6 @@ export const useAuthClient = () => {
         setIdentity(null);
         setPrincipal(null);
         setBackendActor(null);
-        console.log("Disconnected from Plug wallet.");
       } catch (error) {
         console.error("Failed to disconnect from Plug wallet:", error);
       }
