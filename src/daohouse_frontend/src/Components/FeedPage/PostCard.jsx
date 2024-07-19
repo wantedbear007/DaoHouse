@@ -108,12 +108,12 @@ const PostCard = ({ posts,handleGetLikePost }) => {
         </div>
       </section>
 
-      <section className={className + "__leftSide tablet:w-2/5 big_phone:w-1/2 w-full h-full"}>
+      <section className={className + "__leftSide tablet:w-2/5 big_phone:w-1/2 w-full h-full flex justify-end item-end"}>
         {posts.post_img && (
           <img
             src={ImageUrl}
             alt="POST Media"
-            className="w-full h-full object-cover rounded-lg"
+            className="max-w-[500px] max-h-[200px] object-cover rounded-lg"
           />
         )}
       </section>
