@@ -47,18 +47,8 @@ const MyPosts = () => {
       <div className="md:ml-10 mx-5 mt-5">
         <h3 className="text-[#05212C] md:text-[24px] text-[18px] md:font-bold font-semibold ml-4" onClick={getpost}>
           Post
-//         </h3>
-// <<<<<<< anishbranch
-//         {myPost?.length === 0 ? (
-// =======
-//         {postsList.length === 0 ? (
-
-   
-//         <button>
-//         Create
-//         </button>
-        {myPost.length === 0 ? (
-// >>>>>>> main
+        </h3>
+        {myPost?.length === 0 ? (
           <NoPostProfile />
         ) : (
           <div className="grid grid-cols-2 md:mt-4 mt-2 mb-6 bg-[#F4F2EC] p-2 rounded-lg gap-2">

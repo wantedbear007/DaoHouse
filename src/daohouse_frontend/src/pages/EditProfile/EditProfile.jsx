@@ -94,7 +94,7 @@ const EditProfile =  () => {
         return;
       }
       
-      setIsModalOpen(true);
+     
     const profilePayload = {
       username: profileData.name,
       email_id: profileData.email_id,
@@ -122,6 +122,7 @@ const EditProfile =  () => {
         // toast.error("a",response.Err);
       } else {
         toast.success("Profile updated successfully");
+        setIsModalOpen(true);
       }
     } catch (error) {
       console.error("Error creating profile:", error);

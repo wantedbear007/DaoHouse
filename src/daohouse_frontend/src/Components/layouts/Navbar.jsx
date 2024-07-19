@@ -135,7 +135,7 @@ const Navbar = () => {
               ))}
             </div>
             <Link className="w-[33%]" to="/">
-              <img src={logo} alt="DAO House" className="mobile:h-10 small_phone:w-30 w-25 h-8" />
+              <img src={logo} alt="DAO House" className="mobile:h-10 small_phone:w-30 w-25 h-8 lg:ml-6" />
             </Link>
             <div>
               {!isAuthenticated ? (
