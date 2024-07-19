@@ -89,7 +89,12 @@ const EditProfile =  () => {
   });
 
   const handleSaveChangesClick = async () => {
-    setIsModalOpen(true);
+      if (!profileData.email_id) {
+        toast.error("Email ID is required.");
+        return;
+      }
+      
+      setIsModalOpen(true);
     const profilePayload = {
       username: profileData.name,
       email_id: profileData.email_id,
@@ -113,9 +118,10 @@ const EditProfile =  () => {
       const response = await backendActor.update_profile(canisterId, profilePayload);
       console.log({ response })
       if (response.Err) {
-        toast.error(`${response.Err}`);
+        // toast.error(`${response.Err}`);
+        // toast.error("a",response.Err);
       } else {
-        toast.success("Profile created successfully");
+        toast.success("Profile updated successfully");
       }
     } catch (error) {
       console.error("Error creating profile:", error);
@@ -379,6 +385,7 @@ const EditProfile =  () => {
         </div>
       </div>
       </Container>
+      
       <SuccessModal isOpen={isModalOpen} onClose={closeModal} />
 
       {isModalOpen && (

@@ -6,7 +6,6 @@ import { BiSolidCommentDetail } from "react-icons/bi";
 import { usePostContext } from "../../../PostProvider";
 import NoPostProfile from "../../Dao/NoPostProfile";
 import { useAuth } from "../../utils/useAuthClient";
-//<<<<<<< anishbranch
 import Pagination from "../../pagignation/Pagignation";
 
 const MyPosts = () => {
@@ -82,21 +81,13 @@ const getpost =async()=>{
         <h3 className="text-[#05212C] md:text-[24px] text-[18px] md:font-bold font-semibold ml-4" onClick={getpost}>
           Post
         </h3>
-     
-// <<<<<<< anishbranch
+        {postsList.length === 0 ? (
+
+   
         <button>
         Create
         </button>
         {myPost.length === 0 ? (
-// =======
-
-//      <button onClick={getpost}
-//      >post
-//      </button>
-
-
-//         {postsList.length === 0 ? (
-// >>>>>>> main
           <NoPostProfile />
         ) : (
           <div className="grid grid-cols-2 md:mt-4 mt-2 mb-6 bg-[#F4F2EC] p-4 rounded-lg gap-4">

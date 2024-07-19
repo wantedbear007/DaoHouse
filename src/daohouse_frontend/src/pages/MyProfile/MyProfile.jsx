@@ -78,7 +78,7 @@ const MyProfile = ({ childComponent }) => {
   const getdata = async () => {
     try {
       const response = await backendActor.get_user_profile();
-      console.log("anltyics_API_response", response)
+      console.log("common_resp", response)
       setdata(response.Ok || {})
     } catch (error) {
       console.error("Error :", error);
@@ -238,10 +238,10 @@ const MyProfile = ({ childComponent }) => {
           <div className={className + "__rightSide w-full"}>
             {/* Profile picture and details */}
             <div className="flex md:justify-between justify-around w-full gap-2 z-50 relative">
-              <div className="flex items-start md:-ml-[10%] tablet:ml-[-90px]  relative">
-                <div>
+              <div className="flex items-start md:-ml-[10%] tablet:ml-[-90px]  relative ">
+                <div className="h-full">
                   <img
-                    className="rounded-tablet tablet:w-full md:w-[90px] max-h-[120px] max-w-[130px]  min-w-[60px] mt-[-20px] rounded-md z-50"
+                    className="rounded-tablet tablet:w-full md:w-[90px] max-h-[120px] max-w-[130px]  min-w-[60px] mt-[-20px] h-full rounded-md z-50 object-cover object-center"
                     src={imageSrc}
                     alt="profile-pic"
                     style={{
