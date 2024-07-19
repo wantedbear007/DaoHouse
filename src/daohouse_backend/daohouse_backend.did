@@ -157,9 +157,6 @@ service : (InitArgs) -> {
   create_profile : () -> (Result_1);
   delete_profile : () -> (Result_1);
   follow_user : (principal) -> (Result_1);
-  // get_all_posts : (Pagination) -> (vec PostInfo) query;
-  // get_all_posts : (Pagination) -> (variant {vec PostInfo; text}) query;
-  // get_all_posts : (Pagination) -> (PostResponse) query;
   get_all_posts : (Pagination) -> (GetAllPostsResult) query;
 
 
@@ -167,7 +164,10 @@ service : (InitArgs) -> {
   get_post_byid : (text) -> (Result_2) query;
   get_user_profile : () -> (Result_3) query;
   like_post : (text) -> (Result);
- get_my_post  : (Pagination) -> (Result_4) query;
+
+  get_my_post : (Pagination) -> (variant {Ok: GetAllPostsResult; Err: text }) query;
+
+
   reply_comment : (CommentInfo) -> (Result);
   get_my_follower : () -> (Result_5);
   get_my_following : () -> (Result_5);

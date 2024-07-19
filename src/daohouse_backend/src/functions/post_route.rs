@@ -332,7 +332,7 @@ fn get_latest_post(page_data: Pagination) -> GetAllPostsResponse {
 }
 
 #[query]
-fn get_my_post(page_data: Pagination) -> Result<Vec<PostInfo>, String> {
+fn get_my_post(page_data: Pagination) -> Result<GetAllPostsResponse,String> {
     let principal_id = api::caller();
     if principal_id == Principal::anonymous() {
         return Err("Anonymous user not allowed, register.".to_string());
@@ -349,19 +349,43 @@ fn get_my_post(page_data: Pagination) -> Result<Vec<PostInfo>, String> {
     });
 
     let ending = posts.len();
-
     if ending == 0 {
-        return Ok(posts);
+        return Ok(GetAllPostsResponse {
+            posts: posts,
+            size: 0 as u32,
+            // all_posts,
+            // "0".to_string()
+        });
     }
+
 
     let start = page_data.start as usize;
     let end = page_data.end as usize;
 
     if start < ending {
         let end = end.min(ending);
-        return Ok(posts[start..end].to_vec());
+        return Ok(GetAllPostsResponse {
+            posts: posts[start..end].to_vec(),
+            size: ending as u32
+        });
+            // all_posts[start..end].to_vec(), ending.to_string());
     }
-    Ok(Vec::new())
+
+    Ok(GetAllPostsResponse {
+        posts: posts,
+        size: ending as u32
+        // all_posts,
+        // "0".to_string()
+    })
+
+    // let start = page_data.start as usize;
+    // let end = page_data.end as usize;
+
+    // if start < ending {
+    //     let end = end.min(ending);
+    //     return Ok(posts[start..end].to_vec());
+    // }
+    // Ok(Vec::new())
     // Ok(posts)
 }
 
