@@ -135,11 +135,7 @@ pub fn update_profile(state: &mut State, profile: Profileinput) -> Result<(), St
 pub fn delete_profile(state: &mut State) -> Result<(), String> {
     let principal_id = api::caller();
     
-    // Check if the caller is anonymous
-    if principal_id == Principal::anonymous() {
-        return Err("Anonymous principal not allowed to make calls.".to_string());
-    }
-
+    
     // Check if the user is registered
     if !state.user_profile.contains_key(&principal_id) {
         return Err("User not registered".to_string());

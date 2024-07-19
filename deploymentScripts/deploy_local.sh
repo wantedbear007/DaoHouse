@@ -18,6 +18,9 @@ TRANSFER_FEE=1000
 PRE_MINTED_TOKENS=100000000000
 echo $RECIEVER
 
+
+dfx canister create --all
+
 dfx deploy icrc1_ledger_canister --argument "(variant {Init = 
 record {
      token_symbol = \"${TOKEN_SYMBOL}\";
@@ -57,7 +60,12 @@ dfx deploy dao_canister --argument '(record{
 
 
 dfx deploy daohouse_backend --argument "(record { payment_recipient = principal \"${RECIEVER}\"; })"
+dfx deploy ic_asset_handler 
+# to upload first image
+./assets_upload.sh
 dfx deploy internet_identity 
 dfx deploy daohouse_frontend 
-dfx deploy ic_asset_handler 
+
+
+
 # dfx generate
