@@ -1,6 +1,6 @@
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
-const Pagination = ({ totalItems, currentPage, setCurrentPage }) => {
+const Pagination = ({ totalItems, currentPage, setCurrentPage , costomClass}) => {
     const handleNextPage = () => {
             if (currentPage < totalItems) {
               setCurrentPage(prevPage => prevPage + 1);
@@ -14,7 +14,7 @@ const Pagination = ({ totalItems, currentPage, setCurrentPage }) => {
     };
 
     return (
-        <div>
+        <div className={`${costomClass}`}>
             <div className="flex items-center gap-12 justify-center mt-5">
                 <button
                     onClick={handlePrevPage}
