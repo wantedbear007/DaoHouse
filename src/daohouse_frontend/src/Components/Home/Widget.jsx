@@ -28,10 +28,10 @@ export default function Widget() {
         getanaltics()
     }, [backendActor]);
     const statistics = [
-        { label: 'Members', value: membersdata + "K+" },
-        { label: 'Proposals', value: propsaldata + "K+" },
-        { label: 'DAOs', value: daosdata + "+" },
-        { label: 'Posts', value: postsdata + "K+" }
+        { label: 'Members', value: membersdata + "" },
+        { label: 'Proposals', value: propsaldata + "" },
+        { label: 'DAOs', value: daosdata + "" },
+        { label: 'Posts', value: postsdata + "" }
     ];
 
     return (
