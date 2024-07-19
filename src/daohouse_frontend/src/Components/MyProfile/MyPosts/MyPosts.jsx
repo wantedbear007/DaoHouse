@@ -50,13 +50,6 @@ const MyPosts = () => {
         <h3 className="text-[#05212C] md:text-[24px] text-[18px] md:font-bold font-semibold ml-4">
           Post
         </h3>
-     
-
-     <button onClick={getpost}
-     >post
-     </button>
-
-
         {postsList.length === 0 ? (
           <NoPostProfile />
         ) : (
