@@ -17,7 +17,6 @@ const Navbar = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const { userProfile, fetchUserProfile } = useUserProfile();
   const { login, isAuthenticated, signInPlug, logout, principal, backendActor, getPrincipalId, stringPrincipal} = useAuth();
- console.log("value_of_string_principal:", stringPrincipal)
   const location = useLocation();
   
   const [username, setUsername] = useState("");

@@ -12,7 +12,10 @@ export const useAuthClient = () => {
   const [principal, setPrincipal] = useState(null);
   const [backendActor, setBackendActor] = useState(null);
   const [stringPrincipal, setStringPrincipal] = useState(null);
-  console.log({ backendActor })
+// <<<<<<< anishbranch
+//=======
+ // console.log({ backendActor })
+// >>>>>>> main
 
   const getPrincipalId = (principal) => {
     if (principal) {
@@ -38,7 +41,10 @@ export const useAuthClient = () => {
     setIdentity(identity);
     setPrincipal(principal);
     setStringPrincipal(principal.toString());
+// <<<<<<< anishbranch
+//=======
     console.log("HERE IN CLIENTINFO");
+//>>>>>>> main
     if (isAuthenticated && identity && principal && principal.isAnonymous() === false) {
       console.log("HERE IN IF");
       const backendActor = createActor(backendCanisterId, { agentOptions: { identity: identity } });
@@ -47,11 +53,14 @@ export const useAuthClient = () => {
 
     return true;
   };
+//<<<<<<< anishbranch
+// =======
   // if (principal !== null) {
   // console.log("principal", Principal.valueToString(principal));
   //     setPrincipal(Principal.valueToString(principal));
   //   }
 
+//>>>>>>> main
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -61,7 +70,6 @@ export const useAuthClient = () => {
       if (window.ic?.plug) {
         const isPlugConnected = await window.ic.plug.isConnected();
         if (isPlugConnected) {
-          // Ensure agent is available and principal is retrieved
           if (!window.ic.plug.agent) {
             await window.ic.plug.createAgent();
           }
@@ -114,7 +122,6 @@ export const useAuthClient = () => {
 
   const signInPlug = async () => {
     if (!window.ic?.plug) {
-      console.error("Plug wallet is not available.");
       window.open("https://plugwallet.ooo", "_blank");
       return;
     }
@@ -129,8 +136,11 @@ export const useAuthClient = () => {
       return;
     }
 
-    console.log("Plug wallet is connected.");
+//<<<<<<< anishbranch
+//=======
+  //  console.log("Plug wallet is connected.");
 
+// >>>>>>> main
     try {
       // Retrieve the principal ID
       const principal = await window.ic.plug.agent.getPrincipal();
@@ -144,8 +154,11 @@ export const useAuthClient = () => {
       });
 
       setBackendActor(backendActor);
-      console.log(window.ic.plug.sessionManager)
+//<<<<<<< anishbranch
+// =======
+  //    console.log(window.ic.plug.sessionManager)
 
+//>>>>>>> main
       // Additional logic if needed
       setIdentity(principal);
       setIsAuthenticated(true);

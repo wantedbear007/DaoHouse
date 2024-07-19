@@ -25,6 +25,7 @@ const convertTimestampToDateString = (timestamp) => {
   // Return the formatted date string
   return `${month} ${day}`;
 };
+import { toast } from "react-toastify";
 
 const PostCard = ({ posts,handleGetLikePost }) => {
   const [formattedDate, setFormattedDate] = useState('');
@@ -38,6 +39,12 @@ const PostCard = ({ posts,handleGetLikePost }) => {
     try {
       const response = await backendActor.like_post(posts.post_id);
       handleGetLikePost(response);
+      console.log(response)
+      if(response?.Ok){
+        toast.success("post like successfully")
+      }else if(response?.Err){
+        toast.warning('you already like this post')
+      }
     } catch (error) {
       console.error("Error fetching like:", error);
     }
@@ -50,16 +57,6 @@ const PostCard = ({ posts,handleGetLikePost }) => {
     }
 
   }, [posts]);
-
-
-  // const getreplycomment = async() =>{
-  //   try {
-  //     const response = await backendActor.reply_comment(posts.post_id);
-  //     console.log("Response from like_post:", response)
-  //   } catch (error) {
-  //     console.error("Error creating comment:", error);
-  //   }
-  // }
   return (
     <div
       className={
@@ -68,9 +65,7 @@ const PostCard = ({ posts,handleGetLikePost }) => {
         "w-full flex big_phone:flex-row flex-col items-start big_phone:gap-12 gap-4 bg-white big_phone:p-8 p-6 rounded-lg justify-between mobile:mt-0 mt-4 my-9"
       }
     >
-      <section
-        className={className + "__rightSide h-full tablet:w-3/5 big_phone:w-1/2 flex flex-col gap-y-4 justify-between"}
-      >
+      <section className={className + "__rightSide h-full tablet:w-3/5 big_phone:w-1/2 flex flex-col gap-y-4 justify-between"}>
         <div className="flex flex-row items-center justify-between">
           <section className={className + "__userData flex flex-row items-center gap-2"}>
             <img
@@ -111,8 +106,6 @@ const PostCard = ({ posts,handleGetLikePost }) => {
             <IoLink className="text-2xl" />
           </button>
         </div>
-
-        
       </section>
 
       <section className={className + "__leftSide tablet:w-2/5 big_phone:w-1/2 w-full h-full"}>
@@ -128,13 +121,25 @@ const PostCard = ({ posts,handleGetLikePost }) => {
       <section className={className + "__buttons w-full mobile:hidden flex flex-row items-center justify-between"}>
         <div className="flex flex-row items-center justify-between gap-x-4">
           <button>
-            <FaRegHeart className="text-[#0E3746] text-lg" />
+            <div className="flex gap-2">
+            <FaRegHeart className="text-[#0E3746] text-lg mt-1" onClick={getlike}/>
+            <div className="text-lg">
+            {posts.like_count}
+            </div>
+            </div>
           </button>
           <button>
-            <MdOutlineInsertComment className="text-[#0E3746] text-lg" />
+            <div className="flex gap-2">
+            <MdOutlineInsertComment className="text-[#0E3746] text-lg mt-1"/>
+            <div className="text-lg">
+            {posts.comment_count}
+            </div>
+            </div>
           </button>
           <button>
-            <PiTelegramLogoBold className="text-[#0E3746] text-lg" />
+          <div className="flex gap-2">
+            <PiTelegramLogoBold className="text-[#0E3746] text-lg mt-1"/>
+            </div>
           </button>
         </div>
 
@@ -142,7 +147,6 @@ const PostCard = ({ posts,handleGetLikePost }) => {
           <IoLink className="text-lg" />
         </button>
       </section>
-      
     </div>
   );
 };

@@ -15,7 +15,6 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
   const [showDescription, setShowDescription] = useState(false);
   const [description, setDescription] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
-  // const [selectedImages, setSelectedImages] = useState([]);
   const { userProfile, fetchUserProfile } = useUserProfile();
   const [imageData, setImageData] = useState({
     base64: "",
@@ -26,7 +25,6 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
   });
 
   const { handleFileUpload } = constant();
-  // const userData = userProfile();
   const { backendActor } = useAuth();
 
   async function handleCreatePost(button) {
@@ -114,40 +112,6 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
     button.removeAttribute("disabled");
     button.style.opacity = "1";
   }
-
-  // React.useEffect(() => {
-  //   const postButton = document.getElementById("postButton");
-
-  //   if (postButton) {
-  //     postButton.addEventListener("click", handleCreatePost(postButton));
-  //   }
-  // }, []);
-
-  useEffect(() => {
-    async function callMe() {
-      
-      const data = await backendActor.get_all_posts();
-      const lol = await backendActor.get_user_profile()
-    }
-    callMe();
-  }, []);
-
-  // useEffect(() => {
-  //   console.log("function calleddddd")
-  //   async function callMe() {
-  //     const data = await backendActor.get_user_profile();
-  //     console.log("user profile is : ", data);
-  //   }
-
-  //   callMe();
-  // }, []);
-
-  useEffect(() => {
-    async function callMe() {
-      const data = await backendActor.get_all_posts();
-    }
-    callMe();
-  }, []);
 
   return (
     <div
