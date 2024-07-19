@@ -26,6 +26,7 @@ const convertTimestampToDateString = (timestamp) => {
   return `${month} ${day}`;
 };
 import { toast } from "react-toastify";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const PostCard = ({ posts,handleGetLikePost }) => {
   const [formattedDate, setFormattedDate] = useState('');
@@ -34,9 +35,11 @@ const PostCard = ({ posts,handleGetLikePost }) => {
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
   const ImageUrl = `http://${canisterId}.localhost:4943/f/${posts?.post_img}`  
   const userImage = `http://${canisterId}.localhost:4943/f/${posts?.user_image_id}`  
+  const [loading, setLoading] = useState(false)
 
   const getlike = async () => {
     try {
+      setLoading(true)
       const response = await backendActor.like_post(posts.post_id);
       handleGetLikePost(response);
       console.log(response)
@@ -47,6 +50,9 @@ const PostCard = ({ posts,handleGetLikePost }) => {
       }
     } catch (error) {
       console.error("Error fetching like:", error);
+    }
+    finally{
+      setLoading(false)
     }
   };
   
@@ -87,9 +93,11 @@ const PostCard = ({ posts,handleGetLikePost }) => {
 
         <div className={className + "__buttons mobile:flex hidden flex-row items-center tablet:justify-between tablet:gap-x-4 gap-x-2 big_phone:mt-8 mt-4"}>
           <button
-            onClick={getlike}
             className="flex flex-row tablet:gap-2 gap-1 items-center bg-[#0E3746] text-white tablet:text-base text-sm tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]">
-            <FaRegHeart />
+              {
+                loading ? <CircularProgress /> :
+                <FaRegHeart onClick={getlike} />
+              }
             {posts.like_count}
           </button>
           <button
@@ -113,7 +121,7 @@ const PostCard = ({ posts,handleGetLikePost }) => {
           <img
             src={ImageUrl}
             alt="POST Media"
-            className="max-w-[500px] max-h-[200px] object-cover rounded-lg"
+            className="sm:max-w-[500px] sm:max-h-[200px] object-cover rounded-lg"
           />
         )}
       </section>
@@ -122,12 +130,15 @@ const PostCard = ({ posts,handleGetLikePost }) => {
         <div className="flex flex-row items-center justify-between gap-x-4">
           <button>
             <div className="flex gap-2">
-            <FaRegHeart className="text-[#0E3746] text-lg mt-1" onClick={getlike}/>
+              {  
+              loading ? <CircularProgress /> : <FaRegHeart className="text-[#0E3746] text-lg mt-1" onClick={getlike}/>
+              }
+            
             <div className="text-lg">
             {posts.like_count}
             </div>
             </div>
-          </button>
+          </button> 
           <button>
             <div className="flex gap-2">
             <MdOutlineInsertComment className="text-[#0E3746] text-lg mt-1"/>
