@@ -6,6 +6,7 @@ import { BiSolidCommentDetail } from "react-icons/bi";
 import { usePostContext } from "../../../PostProvider";
 import NoPostProfile from "../../Dao/NoPostProfile";
 import { useAuth } from "../../utils/useAuthClient";
+//<<<<<<< anishbranch
 import Pagination from "../../pagignation/Pagignation";
 
 const MyPosts = () => {
@@ -16,7 +17,41 @@ const MyPosts = () => {
   const[myPost,setMyPost] =useState([])
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+// =======
+
+// const MyPosts = () => {
+//   const { backendActor, frontendCanisterId, identity } = useAuth();
+//   const [postsList, setPostsList] = useState([]);
+//   const [hoverIndex, setHoverIndex] = useState(null); // Initialize as null instead of false
+//   const [readMoreIndex, setReadMoreIndex] = useState(null); // Initialize as null instead of false
+//   const { setSelectedPost } = usePostContext();
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const [itemsPerPage, setItemsPerPage] = useState(4);
+//   const [totalItems, setTotalItems] = useState(0);
+//  >>>>>>> main
   const className = "MyPosts";
+  const[post,setpost] =useState({})
+  console.log("post info----",post)
+
+  const getpost =async()=>{
+
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    console.log('start : ', start, 'end', end)
+    const pagination = {
+      start,
+      end,
+    };
+    try {
+      const res = await backendActor.get_my_post(pagination);
+      console.log("---res--",res);
+      setpost(res);
+      const dataLength = res?.size / 4;
+      setTotalItems(Math.ceil(dataLength))
+    } catch (error) {
+      console.log("error fetching post",error)
+    }
+  }
 
 const getpost =async()=>{
   const itemsPerPage = 4;
@@ -48,10 +83,20 @@ const getpost =async()=>{
           Post
         </h3>
      
+// <<<<<<< anishbranch
         <button>
         Create
         </button>
         {myPost.length === 0 ? (
+// =======
+
+//      <button onClick={getpost}
+//      >post
+//      </button>
+
+
+//         {postsList.length === 0 ? (
+// >>>>>>> main
           <NoPostProfile />
         ) : (
           <div className="grid grid-cols-2 md:mt-4 mt-2 mb-6 bg-[#F4F2EC] p-4 rounded-lg gap-4">
