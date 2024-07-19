@@ -171,6 +171,7 @@ async fn update_profile(
         new_profile.twitter_id = profile.twitter_id;
         new_profile.telegram = profile.telegram;
         new_profile.website = profile.website;
+        new_profile.tag_defines = profile.tag_defines;
 
         state.user_profile.insert(principal_id, new_profile);
     });
