@@ -27,6 +27,7 @@ import Container from "../../Components/Container/Container";
 
 const EditProfile =  () => {
   const { userProfile, fetchUserProfile } = useUserProfile();
+  console.log(userProfile,'userProfile')
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { backendActor, frontendCanisterId, identity,principal } = useAuth();
 
@@ -89,12 +90,7 @@ const EditProfile =  () => {
   });
 
   const handleSaveChangesClick = async () => {
-      if (!profileData.email_id) {
-        toast.error("Email ID is required.");
-        return;
-      }
-      
-     
+    setIsModalOpen(true);
     const profilePayload = {
       username: profileData.name,
       email_id: profileData.email_id,
@@ -118,11 +114,9 @@ const EditProfile =  () => {
       const response = await backendActor.update_profile(canisterId, profilePayload);
       console.log({ response })
       if (response.Err) {
-        // toast.error(`${response.Err}`);
-        // toast.error("a",response.Err);
+        toast.error(`${response.Err}`);
       } else {
-        toast.success("Profile updated successfully");
-        setIsModalOpen(true);
+        toast.success("Profile created successfully");
       }
     } catch (error) {
       console.error("Error creating profile:", error);
@@ -386,7 +380,6 @@ const EditProfile =  () => {
         </div>
       </div>
       </Container>
-      
       <SuccessModal isOpen={isModalOpen} onClose={closeModal} />
 
       {isModalOpen && (
