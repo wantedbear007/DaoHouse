@@ -23,6 +23,9 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
     image_content_type: "",
     post_image : ''
   });
+  const [userImage, setUserImage] = useState( userProfile?.profile_img
+    ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
+    : avtarProfileIcon)
 
   const { handleFileUpload } = constant();
   const { backendActor } = useAuth();
@@ -148,9 +151,9 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
                   <div className="flex justify-between items-center">
                     <span className="flex items-center md:gap-3 gap-2">
                       <img
-                        src={avtarProfileIcon}
+                        src={userImage}
                         alt="avtarProfileIcon"
-                        className="md:w-full w-7 "
+                        className="w-10 h-10 rounded-full"
                       />
 
                       <p className="md:text-[14px] text-[10px] text-[#05212C] font-medium">
