@@ -17,6 +17,7 @@ import Members from "../../Components/DaoProfile/Members";
 import FollowersContent from "../../Components/DaoProfile/FollowersContent";
 import FundsContent from "../../Components/DaoProfile/FundsContent";
 import DaoSettings from "../../Components/DaoSettings/DaoSettings";
+import Container from "../../Components/Container/Container";
 
 const DaoProfile = () => {
   const className = "DaoProfile";
@@ -129,12 +130,8 @@ const DaoProfile = () => {
           </div>
         </div>
       </div>
-      <div
-        className={
-          className +
-          "__mainComponent bg-[#c8ced3] lg:py-8 lg:pb-20 py-6 big_phone:px-8 px-6 tablet:flex-row gap-2 flex-col w-full"
-        }
-      >
+      <div className={"bg-[#c8ced3]"}>
+        <Container classes={`${className} __mainComponent lg:py-8 lg:pb-20 py-6 big_phone:px-8 px-6 tablet:flex-row gap-2 flex-col w-full`}>
         <div className="flex md:justify-between w-full md:gap-2 gap-10 z-50 relative flex-wrap">
           <div className="flex items-center">
             <div
@@ -295,6 +292,7 @@ const DaoProfile = () => {
         {activeLink === "followers" && <FollowersContent />}
         {activeLink === "funds" && <FundsContent />}
         {activeLink === "settings" && <DaoSettings />}
+        </Container>
       </div>
     </div>
   );
