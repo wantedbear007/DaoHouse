@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthClient } from "@dfinity/auth-client";
 import { createActor, idlFactory as BackendidlFactory } from "../../../../declarations/daohouse_backend/index";
-import { Principal } from "@dfinity/candid/lib/cjs/idl";
-
+// import { Principal } from "@dfinity/candid/lib/cjs/idl";
+import { Principal } from "@dfinity/principal";
 const AuthContext = createContext();
 
 export const useAuthClient = () => {
@@ -11,7 +11,7 @@ export const useAuthClient = () => {
   const [identity, setIdentity] = useState(null);
   const [principal, setPrincipal] = useState(null);
   const [backendActor, setBackendActor] = useState(null);
-  console.log({backendActor})
+  const [stringPrincipal, setStringPrincipal] = useState(null);
 
   const getPrincipalId = (principal) => {
     if (principal) {
@@ -36,38 +36,32 @@ export const useAuthClient = () => {
     setIsAuthenticated(isAuthenticated);
     setIdentity(identity);
     setPrincipal(principal);
-    console.log("HERE IN CLIENTINFO");
+    setStringPrincipal(principal.toString());
     if (isAuthenticated && identity && principal && principal.isAnonymous() === false) {
-      console.log("HERE IN IF");
       const backendActor = createActor(backendCanisterId, { agentOptions: { identity: identity } });
       setBackendActor(backendActor);
     }
 
     return true;
   };
-
-
-  if (principal !== null) {
-    console.log("principal", Principal.valueToString(principal));
-  }
-
-
+  
+  // if (principal !== null) {
+  // console.log("principal", Principal.valueToString(principal));
+  //     setPrincipal(Principal.valueToString(principal));
+  //   }
 
   useEffect(() => {
     const initializeAuth = async () => {
 
       const authClient = await AuthClient.create();
       clientInfo(authClient, authClient.getIdentity());
-
       if (window.ic?.plug) {
         const isPlugConnected = await window.ic.plug.isConnected();
         if (isPlugConnected) {
-          // Ensure agent is available and principal is retrieved
           if (!window.ic.plug.agent) {
             await window.ic.plug.createAgent();
           }
           const principal = await window.ic.plug.agent.getPrincipal();
-
 
           // Create the backend actor
           const backendActor = await window.ic.plug.createActor({
@@ -116,7 +110,6 @@ export const useAuthClient = () => {
 
   const signInPlug = async () => {
     if (!window.ic?.plug) {
-      console.error("Plug wallet is not available.");
       window.open("https://plugwallet.ooo", "_blank");
       return;
     }
@@ -130,9 +123,6 @@ export const useAuthClient = () => {
       console.error("Connection was refused.");
       return;
     }
-
-    console.log("Plug wallet is connected.");
-
     try {
       // Retrieve the principal ID
       const principal = await window.ic.plug.agent.getPrincipal();
@@ -146,14 +136,10 @@ export const useAuthClient = () => {
       });
 
       setBackendActor(backendActor);
-      console.log(window.ic.plug.sessionManager)
-
-      // Additional logic if needed
       setIdentity(principal);
       setIsAuthenticated(true);
       setPrincipal(principal);
 
-      // Call clientInfo to update the state
       await clientInfo({ isAuthenticated: () => true, getIdentity: () => ({ getPrincipal: () => principal }) }, principal);
 
       console.log("Integration actor initialized successfully.");
@@ -197,6 +183,7 @@ export const useAuthClient = () => {
     frontendCanisterId,
     backendCanisterId,
     backendActor,
+    stringPrincipal,
   };
 };
 

@@ -23,6 +23,7 @@ import ProfileTitleDivider from "../../Components/ProfileTitleDivider/ProfileTit
 const Post = () => {
   const { selectedPost } = usePostContext();
   const className = "Post";
+  const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
 
   console.log(selectedPost);
 
@@ -135,29 +136,29 @@ const Post = () => {
                     <section className="w-full flex flex-row items-center justify-between">
                       <div className="flex flex-row items-center gap-x-4">
                         <img
-                          src={MyProfileImage}
+                          src={`http://${canisterId}.localhost:4943/f/${selectedPost.user_image_id}`}
                           alt="ProfileImage"
                           className="w-10 rounded-[50%]"
                         />
 
                         <p className="font-semibold text-lg">
-                          {"Username.user"}
+                          {selectedPost.username}
                         </p>
                       </div>
 
-                      <p className="text-slate-500">{selectedPost.date}</p>
+                      <p className="text-slate-500">{selectedPost?.post_created_at }</p>
                     </section>
 
                     <section className="content w-full">
-                      {selectedPost.content}
+                      {selectedPost.post_description}
                     </section>
                   </div>
 
                   {/**Bottom */}
-                  <section className="w-full flex flex-row items-center justify-evenly">
+                  <section className="w-full flex flex-row items-center justify-evenly mt-5">
                     <span className="flex flex-row gap-x-2 items-center text-lg text-dark-green">
                       <FaHeart />
-                      {selectedPost.likes} Likes
+                      {selectedPost.like_count} Likes
                     </span>
                     <span className="flex flex-row gap-x-2 items-center text-lg text-dark-green">
                       <FaTelegramPlane />
@@ -165,14 +166,14 @@ const Post = () => {
                     </span>
                     <span className="flex flex-row gap-x-2 items-center text-lg text-dark-green">
                       <BiSolidCommentDetail />
-                      {selectedPost.comments} Comments
+                      {selectedPost.comment_count} Comments
                     </span>
                   </section>
                 </section>
 
                 <section className="w-1/2">
                   <img
-                    src={selectedPost.image}
+                    src={`http://${canisterId}.localhost:4943/f/${selectedPost.post_img}`}
                     alt="selectedPost"
                     className="w-full h-100 object-cover"
                   />
@@ -185,7 +186,10 @@ const Post = () => {
                 <h1 className="text-dark-green font-semibold text-2xl">
                   Comments
                 </h1>
-                <Comments />
+                {
+                 selectedPost?.comment_list.length >0 &&
+                 <Comments />
+                }
               </div>
             </React.Fragment>
           ) : (
