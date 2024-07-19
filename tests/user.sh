@@ -19,14 +19,14 @@ echo $ASSET_HANDLER_ID
 
 # To access image via URL
 # 
-http://fhj5a-wmaaa-aaaaa-qaa2q-cai.localhost:4943/f/1
+# http://fhj5a-wmaaa-aaaaa-qaa2q-cai.localhost:4943/f/1
 # creare_profile function
     test1=$(dfx canister call daohouse_backend create_profile '(
     "bw4dl-smaaa-aaaaa-qaacq-cai",
 
     record {
         email_id = "bhanupradddd@gmail.com";
-        profile_img = "abc";  
+        profile_img = "1";  
         username = "bhanupra123";
         description = "This is a sample profile description.";
         contact_number = "123-456-7890";

@@ -4,7 +4,15 @@ use std::borrow::{ Borrow, BorrowMut };
 
 use crate::routes::upload_image;
 use crate::types::{ Comment, PostInfo, PostInput };
-use crate::{ with_state, Analytics, DaoDetails, GetAllPostsResponse, ImageData, Pagination, ReplyCommentData };
+use crate::{
+    with_state,
+    Analytics,
+    DaoDetails,
+    GetAllPostsResponse,
+    ImageData,
+    Pagination,
+    ReplyCommentData,
+};
 use candid::Principal;
 use ic_cdk::api;
 use ic_cdk::api::management_canister::main::raw_rand;
@@ -13,14 +21,14 @@ use icrc_ledger_types::icrc1::account::Account;
 use icrc_ledger_types::icrc1::transfer::BlockIndex;
 use icrc_ledger_types::icrc2::transfer_from::{ TransferFromArgs, TransferFromError };
 use sha2::{ Digest, Sha256 };
-// use uuid::Uuid;
+use crate::guards::*;
 
-#[update]
+#[update(guard = prevent_anonymous)]
 async fn create_new_post(canister_id: String, post_details: PostInput) -> Result<String, String> {
     let principal_id = api::caller();
-    if principal_id == Principal::anonymous() {
-        return Err("Anonymous principal not allowed to make calls.".to_string());
-    }
+    // if principal_id == Principal::anonymous() {
+    //     return Err("Anonymous principal not allowed to make calls.".to_string());
+    // }
 
     // let uuids = raw_rand().await.unwrap().0;
     // let post_id = format!("{:x}", Sha256::digest(&uuids));
@@ -87,24 +95,38 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
         user_image_id: post_details.user_image_id,
     };
 
-    with_state(|state| {
+    let result = with_state(|state| {
         let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
         analytics.post_count += 1;
         state.analytics_content.insert(0, analytics);
-        state.post_detail.insert(post_id, new_post)
+        state.post_detail.insert(post_id, new_post);
+
+        match state.user_profile.get(&principal_id) {
+            Some(mut val) => {
+                val.post_count += 1;
+                state.user_profile.insert(principal_id, val);
+                Ok(())
+            }
+            None => {
+                return Err(String::from("Failed to update post count "));
+            }
+        }
     });
 
-    Ok("Post created successfully".to_string())
+    match result {
+        Ok(_) => Ok("Post created successfully".to_string()),
+        Err(e) => Err(e),
+    }
+
+    // Ok("Post created successfully".to_string())
 
     // async closures are not stable in rust (JUNE 24)
     // state.post_detail.insert(post_id, new_post);
     // with_state(|state| routes::create_new_post(state, post_id,postdetail.clone()))
 }
 
-#[query]
-// fn get_all_posts(page_data: Pagination) -> Vec<PostInfo> {
-    fn get_all_posts(page_data: Pagination) -> GetAllPostsResponse {
-
+#[query(guard = prevent_anonymous)]
+fn get_all_posts(page_data: Pagination) -> GetAllPostsResponse {
     let mut all_posts = Vec::new();
 
     with_state(|state| {
@@ -132,14 +154,14 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
         let end = end.min(ending);
         return GetAllPostsResponse {
             posts: all_posts[start..end].to_vec(),
-            size: ending as u32
+            size: ending as u32,
         };
-            // all_posts[start..end].to_vec(), ending.to_string());
+        // all_posts[start..end].to_vec(), ending.to_string());
     }
 
     GetAllPostsResponse {
         posts: all_posts,
-        size: ending as u32
+        size: ending as u32,
         // all_posts,
         // "0".to_string()
     }
@@ -147,14 +169,11 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
     // (Vec::new(), 0.to_string())
 }
 
-#[update]
+#[update(guard = prevent_anonymous)]
 async fn like_post(post_id: String) -> Result<String, String> {
     let getpost = with_state(|state| state.post_detail.get(&post_id).unwrap().clone());
 
     let principal_id = api::caller();
-    if principal_id == Principal::anonymous() {
-        return Err("Anonymous principal not allowed to make calls.".to_string());
-    }
 
     if getpost.like_id_list.contains(&principal_id) {
         return Err("You have already liked this post".to_string());
@@ -183,7 +202,7 @@ async fn like_post(post_id: String) -> Result<String, String> {
     return Ok("Post liked successfully".to_string());
 }
 
-#[query]
+#[query(guard = prevent_anonymous)]
 async fn get_post_byid(id: String) -> Result<PostInfo, String> {
     match with_state(|state| state.post_detail.get(&id)) {
         Some(post) => Ok(post),
@@ -191,15 +210,8 @@ async fn get_post_byid(id: String) -> Result<PostInfo, String> {
     }
 }
 
-#[update]
+#[update(guard = prevent_anonymous)]
 async fn comment_post(post_id: String, comment: String) -> Result<String, String> {
-    // let getpost = with_state(|state| state.post_detail.get(&post_id).unwrap().clone());
-
-    let principal_id = api::caller();
-    if principal_id == Principal::anonymous() {
-        return Err("Anonymous principal not allowed to make calls.".to_string());
-    }
-
     let getpost = match with_state(|state| state.post_detail.get(&post_id).clone()) {
         Some(post) => post,
         None => {
@@ -207,7 +219,6 @@ async fn comment_post(post_id: String, comment: String) -> Result<String, String
         }
     };
 
-    // let updated_comment_count = getpost.comment_count + 1;
     let mut updated_list = getpost.comment_list.clone();
 
     // let uuids = raw_rand().await.unwrap().0;
@@ -222,7 +233,7 @@ async fn comment_post(post_id: String, comment: String) -> Result<String, String
     let unique_commend_id = format!("{:x}", Sha256::digest(&uuids));
 
     let new_comment = Comment {
-        author_principal: principal_id,
+        author_principal: api::caller(),
         comment_text: comment,
         replies: Vec::new(),
         comment_id: Some(unique_commend_id), // comment_id: Some(Uuid::new_v4().to_string())
@@ -252,13 +263,8 @@ async fn comment_post(post_id: String, comment: String) -> Result<String, String
 }
 
 // reply comment
-#[update]
+#[update(guard = prevent_anonymous)]
 fn reply_comment(comment_data: ReplyCommentData) -> Result<String, String> {
-    // let principal_id = api::caller();
-    if api::caller() == Principal::anonymous() {
-        return Err("Anonymous users not allowed".to_string());
-    }
-
     let post = with_state(|state| state.post_detail.get(&comment_data.post_id).clone()).expect(
         "Post not found"
     );
@@ -323,12 +329,9 @@ fn get_latest_post(page_data: Pagination) -> Vec<PostInfo> {
     return posts;
 }
 
-#[query]
-fn get_my_post(page_data: Pagination) -> Result<GetAllPostsResponse,String> {
+#[query(guard = prevent_anonymous)]
+fn get_my_post(page_data: Pagination) -> Result<GetAllPostsResponse, String> {
     let principal_id = api::caller();
-    if principal_id == Principal::anonymous() {
-        return Err("Anonymous user not allowed, register.".to_string());
-    }
 
     let mut posts: Vec<PostInfo> = Vec::new();
 
@@ -350,7 +353,6 @@ fn get_my_post(page_data: Pagination) -> Result<GetAllPostsResponse,String> {
         });
     }
 
-
     let start = page_data.start as usize;
     let end = page_data.end as usize;
 
@@ -358,14 +360,14 @@ fn get_my_post(page_data: Pagination) -> Result<GetAllPostsResponse,String> {
         let end = end.min(ending);
         return Ok(GetAllPostsResponse {
             posts: posts[start..end].to_vec(),
-            size: ending as u32
+            size: ending as u32,
         });
-            // all_posts[start..end].to_vec(), ending.to_string());
+        // all_posts[start..end].to_vec(), ending.to_string());
     }
 
     Ok(GetAllPostsResponse {
         posts: posts,
-        size: ending as u32
+        size: ending as u32,
         // all_posts,
         // "0".to_string()
     })
@@ -467,7 +469,7 @@ async fn transfer(tokens: u64, user_principal: Principal) -> Result<BlockIndex, 
 }
 
 // make payment
-#[update]
+#[update(guard = prevent_anonymous)]
 async fn make_payment(tokens: u64, user: Principal) -> String {
     // add check for admin
     let response = transfer(tokens, user).await;

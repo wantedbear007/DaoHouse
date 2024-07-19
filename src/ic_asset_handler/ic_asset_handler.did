@@ -102,8 +102,6 @@ service : () -> {
   admin_set_auditors : (vec principal) -> (Result);
   admin_set_managers : (vec principal) -> (Result);
   api_version : () -> (nat16) query;
-//  create_file : (CreateFileInput, opt blob) -> (Result_1);
-
   create_file : (CreateFileInput, opt blob) -> (Result_7);
   delete_file : (nat32, opt blob) -> (Result);
 // get_bucket_info : (opt blob) -> (Result_2) query;

@@ -17,6 +17,7 @@ use crate::api::canister_version;
 use ic_cdk::api;
 use candid::{ Principal, encode_one };
 use ic_cdk::println;
+use crate::guards::*;
 // use ic_cdk::trap;
 
 #[update]
@@ -87,49 +88,41 @@ async fn create_profile(
     )
 }
 
-#[query]
+#[query(guard = prevent_anonymous)]
 fn get_my_follower() -> Result<Vec<Principal>, String> {
-    let principal_id = api::caller();
+    // let principal_id = api::caller();
 
-    if principal_id == Principal::anonymous() {
-        return Err("Anonymous user not allowed".to_string());
-    }
-    let followers = with_state(|state| state.user_profile.get(&principal_id).clone()).expect(
+    let followers = with_state(|state| state.user_profile.get(&api::caller()).clone()).expect(
         "User not found"
     );
     Ok(followers.followers_list)
 }
 
-#[query]
+#[query(guard = prevent_anonymous)]
 fn get_my_following() -> Result<Vec<Principal>, String> {
-    let principal_id = api::caller();
-
-    if principal_id == Principal::anonymous() {
-        return Err(String::from("Anonymous user not allowed, try logging in"));
-    }
+    // let principal_id = api::caller();
 
     let following: UserProfile = with_state(|state|
-        state.user_profile.get(&principal_id).clone()
+        state.user_profile.get(&api::caller()).clone()
     ).expect("User not found");
     Ok(following.followings_list)
 }
 
-#[query]
+#[query(guard = prevent_anonymous)]
 async fn get_user_profile() -> Result<UserProfile, String> {
     with_state(|state| routes::get_user_profile(state))
 }
 
-#[update]
+#[update(guard = prevent_anonymous)]
 async fn update_profile(
     asset_handler_canister_id: String,
     profile: Profileinput
 ) -> Result<(), String> {
-    let principal_id = api::caller();
-
-    // Check if the caller is anonymous
-    if principal_id == Principal::anonymous() {
-        return Err("Anonymous principal not allowed to make calls.".to_string());
+    if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
+        return Err("Enter correct Email ID".to_string());
     }
+
+    let principal_id = api::caller();
 
     // Check if the user is already registered
     let is_registered = with_state(|state| {
@@ -153,9 +146,6 @@ async fn update_profile(
     //     return Err("User dosen't exist ".to_string());
     // }
     // Validate email format
-    if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
-        return Err("Enter correct Email ID".to_string());
-    }
 
     let mut image_id: String = profile.profile_img.to_string();
 
@@ -190,12 +180,12 @@ async fn update_profile(
     // with_state(|state| routes::update_profile(state, profile.clone()))
 }
 
-#[update]
+#[update(guard = prevent_anonymous)]
 async fn delete_profile() -> Result<(), String> {
     with_state(|state| routes::delete_profile(state))
 }
 
-#[update]
+#[update(guard = prevent_anonymous)]
 async fn follow_user(userid: Principal) -> Result<(), String> {
     let principal_id = api::caller();
 
@@ -265,7 +255,7 @@ async fn follow_user(userid: Principal) -> Result<(), String> {
     Ok(())
 }
 
-#[update]
+#[update(guard = prevent_anonymous)]
 pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<String, String> {
     let principal_id = api::caller();
     if principal_id == Principal::anonymous() {
@@ -454,7 +444,7 @@ async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
 // }
 
 // check user existance
-#[query]
+#[query(guard = prevent_anonymous)]
 fn check_user_existance() -> Result<String, String> {
     let principal_id = api::caller();
     if principal_id == Principal::anonymous() {

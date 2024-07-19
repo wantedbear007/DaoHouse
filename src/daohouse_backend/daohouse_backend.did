@@ -137,14 +137,17 @@ type InitArgs = record {
   payment_recipient : principal;
 };
 
-
-
-
-type PostSize = nat32; 
+type PostSize = nat32;
 
 type GetAllPostsResult = record {
   posts : vec PostInfo;
   size : PostSize;
+};
+
+type ImageParams = record {
+  content : opt blob;
+  name : text;
+  content_type : text;
 };
 
 service : (InitArgs) -> {
@@ -158,12 +161,10 @@ service : (InitArgs) -> {
   follow_user : (principal) -> (Result_1);
   get_all_posts : (Pagination) -> (GetAllPostsResult) query;
 
-
-
   get_post_byid : (text) -> (Result_2) query;
   get_user_profile : () -> (Result_3) query;
   like_post : (text) -> (Result);
-  get_my_post : (Pagination) -> (variant {Ok: GetAllPostsResult; Err: text }) query;
+  get_my_post : (Pagination) -> (variant { Ok : GetAllPostsResult; Err : text }) query;
   reply_comment : (CommentInfo) -> (Result);
   get_my_follower : () -> (Result_5);
   get_my_following : () -> (Result_5);
@@ -175,4 +176,5 @@ service : (InitArgs) -> {
   make_payment : (nat64, principal) -> (text);
   get_latest_post : (Pagination) -> (vec PostInfo) query;
   update_proposal_count : () -> (text);
+  upload_image : (text, ImageParams) -> (variant {Ok: text; Err: text});
 };

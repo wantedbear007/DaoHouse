@@ -3,6 +3,7 @@ use ic_cdk::{api, export_candid, init};
 use std::{borrow::BorrowMut, cell::RefCell};
 pub mod routes;
 pub mod functions;
+pub mod guards;
 mod state_handler;
 use state_handler::State;
 mod memory;
