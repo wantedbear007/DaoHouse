@@ -29,7 +29,6 @@ const MyProfile = ({ childComponent }) => {
       ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
       : MyProfileImage
   );
-  console.log({ userProfile });
   const [activeTab, setActiveTab] = useState(0);
   const navigate = useNavigate();
   const className = "MyProfile";
