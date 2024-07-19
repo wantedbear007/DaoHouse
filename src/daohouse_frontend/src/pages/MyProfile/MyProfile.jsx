@@ -68,17 +68,12 @@ const MyProfile = ({ childComponent }) => {
   };
 
   const [data, setdata] = useState({})
-  console.log("my data---", data);
   const followers = data?.followers_count ? Number(data.followers_count) : 0;
   const post = data?.post_count ? Number(data.post_count) : 0;
   const following = data?.followings_count ? Number(data.followings_count) : 0;
-  console.log("followers",followers);
-  console.log("posts",post);
-  console.log("following",following);
   const getdata = async () => {
     try {
       const response = await backendActor.get_user_profile();
-      console.log("anltyics_API_response", response)
       setdata(response.Ok || {})
     } catch (error) {
       console.error("Error :", error);

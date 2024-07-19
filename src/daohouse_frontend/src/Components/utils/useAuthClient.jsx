@@ -12,10 +12,6 @@ export const useAuthClient = () => {
   const [principal, setPrincipal] = useState(null);
   const [backendActor, setBackendActor] = useState(null);
   const [stringPrincipal, setStringPrincipal] = useState(null);
-// <<<<<<< anishbranch
-//=======
- // console.log({ backendActor })
-// >>>>>>> main
 
   const getPrincipalId = (principal) => {
     if (principal) {
@@ -41,26 +37,18 @@ export const useAuthClient = () => {
     setIdentity(identity);
     setPrincipal(principal);
     setStringPrincipal(principal.toString());
-// <<<<<<< anishbranch
-//=======
-    console.log("HERE IN CLIENTINFO");
-//>>>>>>> main
     if (isAuthenticated && identity && principal && principal.isAnonymous() === false) {
-      console.log("HERE IN IF");
       const backendActor = createActor(backendCanisterId, { agentOptions: { identity: identity } });
       setBackendActor(backendActor);
     }
 
     return true;
   };
-//<<<<<<< anishbranch
-// =======
+  
   // if (principal !== null) {
   // console.log("principal", Principal.valueToString(principal));
   //     setPrincipal(Principal.valueToString(principal));
   //   }
-
-//>>>>>>> main
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -135,12 +123,6 @@ export const useAuthClient = () => {
       console.error("Connection was refused.");
       return;
     }
-
-//<<<<<<< anishbranch
-//=======
-  //  console.log("Plug wallet is connected.");
-
-// >>>>>>> main
     try {
       // Retrieve the principal ID
       const principal = await window.ic.plug.agent.getPrincipal();
@@ -154,17 +136,10 @@ export const useAuthClient = () => {
       });
 
       setBackendActor(backendActor);
-//<<<<<<< anishbranch
-// =======
-  //    console.log(window.ic.plug.sessionManager)
-
-//>>>>>>> main
-      // Additional logic if needed
       setIdentity(principal);
       setIsAuthenticated(true);
       setPrincipal(principal);
 
-      // Call clientInfo to update the state
       await clientInfo({ isAuthenticated: () => true, getIdentity: () => ({ getPrincipal: () => principal }) }, principal);
 
       console.log("Integration actor initialized successfully.");
