@@ -68,21 +68,16 @@ const MyProfile = ({ childComponent }) => {
   };
 
   const [data, setdata] = useState({})
-  console.log("my data---", data);
   const followers = data?.followers_count ? Number(data.followers_count) : 0;
   const post = data?.post_count ? Number(data.post_count) : 0;
   const following = data?.followings_count ? Number(data.followings_count) : 0;
-  const email= data?.email_id;
-  const name=data?.username;
-console.log("name",name);
-  console.log("email",email);
-  console.log("followers",followers);
-  console.log("posts",post);
-  console.log("following",following);
+  const email = data?.email_id;
+  const name = data?.username;
+  console.log("name", name);
+  console.log("email", email);
   const getdata = async () => {
     try {
       const response = await backendActor.get_user_profile();
-      console.log("common_api_resp", response)
       setdata(response.Ok || {})
     } catch (error) {
       console.error("Error :", error);
@@ -242,10 +237,10 @@ console.log("name",name);
           <div className={className + "__rightSide w-full"}>
             {/* Profile picture and details */}
             <div className="flex md:justify-between justify-around w-full gap-2 z-50 relative">
-              <div className="flex items-start md:-ml-[10%] tablet:ml-[-90px]  relative ">
-                <div className="h-full">
+              <div className="flex items-start md:-ml-[10%] tablet:ml-[-90px]  relative">
+                <div>
                   <img
-                    className="rounded-tablet tablet:w-full md:w-[90px] max-h-[120px] max-w-[130px]  min-w-[60px] mt-[-20px] h-full rounded-md z-50 object-cover object-center"
+                    className="rounded-tablet tablet:w-full md:w-[90px] max-h-[120px] max-w-[130px]  min-w-[60px] mt-[-20px] rounded-md z-50"
                     src={imageSrc}
                     alt="profile-pic"
                     style={{
@@ -256,14 +251,14 @@ console.log("name",name);
                 </div>
                 <div className="ml-5">
                   <h2 className="tablet:text-[32px] md:text-[24px] text-[16px] tablet:font-normal font-medium text-left text-[#05212C]">
-                   {name || "abc"}{ " "}
+                    {name || "Username.user"}{" "}
                   </h2>
                   <p className="md:text-[14px] text-[10px]  tablet:text-[16px] font-normal text-left text-[#646464]">
                     {email || "gmail@gmail.xyz"}{" "}
                   </p>
                   <div className="md:flex hidden justify-between mt-3">
                     <span className="md:mr-5 tablet:text-[32px] text-[24px] font-normal text-[#05212C] user-acc-info">
-                    {post}
+                      {post}
                       <span className=" tablet:text-[16px] text-[14px] mx-1">
                         Posts
                       </span>

@@ -19,8 +19,8 @@ const Comments = () => {
           likes,
           shares,
           date,
-        }) => (
-          <div className="flex flex-col gap-4 border-l border-dark-green relative mt-7">
+        }, index) => (
+          <div key={index} className="flex flex-col gap-4 border-l border-dark-green relative mt-7">
             <div
               className={`absolute -left-4 tablet:-left-5 top-0 w-8 h-8 tablet:w-10 tablet:h-10 flex justify-center rounded`}
             >
