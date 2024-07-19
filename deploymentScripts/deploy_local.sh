@@ -19,7 +19,7 @@ PRE_MINTED_TOKENS=100000000000
 echo $RECIEVER
 
 
-dfx canister create --all
+# dfx canister create --all
 
 dfx deploy icrc1_ledger_canister --argument "(variant {Init = 
 record {
