@@ -91,7 +91,7 @@ const EditProfile = () => {
   });
 
   const handleSaveChangesClick = async () => {
-    setIsModalOpen(true);
+  
     setLoading(true)
     const profilePayload = {
       username: profileData.name,
@@ -119,6 +119,7 @@ const EditProfile = () => {
         toast.error(`${response.Err}`);
       } else {
         toast.success("Profile created successfully");
+        setIsModalOpen(true);
       }
     } catch (error) {
       console.error("Error creating profile:", error);
