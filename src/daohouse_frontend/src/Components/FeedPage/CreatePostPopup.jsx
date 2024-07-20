@@ -10,12 +10,15 @@ import { constant } from "../utils/constants";
 import { toast } from "react-toastify";
 import { useUserProfile } from "../../context/UserProfileContext";
 import MyProfileImage from "../../../assets/MyProfile-img.png";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const CreatePostPopup = ({ onClose , handleGetResponse}) => {
   const [showDescription, setShowDescription] = useState(false);
   const [description, setDescription] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { userProfile, fetchUserProfile } = useUserProfile();
+  const [loading, setLoading] = useState(false)
+
   const [imageData, setImageData] = useState({
     base64: "",
     image_content: [],
@@ -45,6 +48,7 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
     };
 
     try {
+      setLoading(true)
       const ans = await backendActor.create_new_post(canisterId, postPayload);
       toast.success(ans.Ok);
       handleGetResponse(ans);
@@ -55,6 +59,9 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
         enableBtn(button);
       }, 1000);
       console.error("Error creating post:", error);
+    }
+    finally{
+      setLoading(false)
     }
   }
 
@@ -160,7 +167,9 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
                         nzbdchsvvksckshcbkjscb kc
                       </p>
                     </span>
-
+                    {
+                    loading ? <CircularProgress /> 
+                    : 
                     <button
                       className="flex items-center justify-center md:w-24 w-18 md:gap-4 gap-2 mt-2 bg-[#0E3746] text-white md:text-[16px] text-[14px] md:px-4 px-3 py-2 font-semibold rounded-[10px]"
                       style={{ boxShadow: "0px 3px 6px 0px #00000026" }}
@@ -181,6 +190,7 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
                         <FaArrowRightLong />
                       </span>
                     </button>
+                    }
                   </div>
 
                   <textarea
