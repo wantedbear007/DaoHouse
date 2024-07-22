@@ -3,9 +3,9 @@ set -e
 
 # dfx build
 
-dfx identity new minter --disable-encryption || true
-dfx identity new reciever --disable-encryption || true
-dfx identity new testing --disable-encryption || true
+dfx identity new minter --storage-mode=plaintext  || true
+dfx identity new reciever --storage-mode=plaintext  || true
+dfx identity new testing --storage-mode=plaintext  || true
 
 dfx identity use default
 

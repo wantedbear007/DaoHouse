@@ -37,6 +37,7 @@ type PostInfo = record {
   comment_list : vec Comment;
   post_created_at : nat64;
   user_image_id : text;
+  is_liked: nat32;
 
 };
 
