@@ -9,7 +9,6 @@ type DaoInput = record {
   purpose : text;
   required_votes : int8;
 
-
   // image
   image_content : blob;
   image_title : text;
