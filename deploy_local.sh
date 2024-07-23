@@ -3,11 +3,18 @@ set -e
 
 # dfx build
 
-dfx identity new minter --disable-encryption || true
-dfx identity new reciever --disable-encryption || true
-dfx identity new testing --disable-encryption || true
+# add delete canister for icrc1_ledger_canister
+
+dfx identity new minter --storage-mode=plaintext  || true
+dfx identity new reciever --storage-mode=plaintext  || true
+dfx identity new testing --storage-mode=plaintext  || true
 
 dfx identity use default
+
+# to generate wasm
+# cargo build --target wasm32-unknown-unknown -p dao_canister
+dfx canister create dao_canister
+dfx build dao_canister
 
 MINTER=$(dfx --identity default identity get-principal)
 DEFAULT=$(dfx --identity default identity get-principal)
@@ -37,6 +44,7 @@ record {
      feature_flags = opt record {icrc2 = true;};
  }
 })"
+
 
 
 dfx deploy dao_canister --argument '(record{
