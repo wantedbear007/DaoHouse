@@ -62,6 +62,7 @@ dfx deploy dao_canister --argument '(record{
         "https://discord.gg/sampledao";
     };
     required_votes=100;
+    image_id="1";
 
 
 })' 
