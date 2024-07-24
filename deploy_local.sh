@@ -10,7 +10,7 @@ dfx identity new reciever --storage-mode=plaintext  || true
 dfx identity new testing --storage-mode=plaintext  || true
 
 # dfx identity use default
-dfx identity use Bhanu
+# dfx identity use Bhanu
 
 # to generate wasm
 # cargo build --target wasm32-unknown-unknown -p dao_canister
