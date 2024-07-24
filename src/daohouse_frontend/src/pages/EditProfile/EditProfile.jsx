@@ -347,7 +347,7 @@ const EditProfile = () => {
                   name="description"
                   value={profileData.description}
                   onChange={handleInputChange}
-                  className="w-full h-32 border border-gray-300 rounded-md"
+                  className="w-full h-32 border border-gray-300 px-3 py-2 rounded-md"
                   placeholder="Describe yourself here..."
                 />
               </div>
