@@ -1,14 +1,23 @@
 {
+  "__Candid_UI": {
+    "local": "bd3sg-teaaa-aaaaa-qaaba-cai"
+  },
   "dao_canister": {
-    "ic": "377nl-zyaaa-aaaag-aldya-cai"
+    "local": "bkyz2-fmaaa-aaaaa-qaaaq-cai"
   },
   "daohouse_backend": {
-    "ic": "3y6l7-uaaaa-aaaag-aldyq-cai"
-  },
-  "ic_asset_handler": {
-    "ic": "zccdd-kqaaa-aaaag-aldxq-cai"
+    "local": "be2us-64aaa-aaaaa-qaabq-cai"
   },
   "daohouse_frontend": {
-    "ic": "qcvph-nqaaa-aaaak-aksra-cai"
+    "local": "b77ix-eeaaa-aaaaa-qaada-cai"
+  },
+  "ic_asset_handler": {
+    "local": "br5f7-7uaaa-aaaaa-qaaca-cai"
+  },
+  "icrc1_ledger_canister": {
+    "local": "mxzaz-hqaaa-aaaar-qaada-cai"
+  },
+  "internet_identity": {
+    "local": "bw4dl-smaaa-aaaaa-qaacq-cai"
   }
 }
