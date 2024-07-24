@@ -21,6 +21,7 @@ const FeedPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const className = "FeedPage";
   const [loading, setLoading] = useState(false)
+  console.log("--posts", posts)
 
   const setAllActive = () => {
     setActive({ all: true, latest: false });
@@ -143,7 +144,7 @@ const FeedPage = () => {
         }>
         {
           loading ?
-          <MuiSkeleton/>
+            <MuiSkeleton />
             :
             (
               posts.length === 0 ?
@@ -152,7 +153,7 @@ const FeedPage = () => {
                   <p className="text-center text-gray-700 text-2xl">
                     There are no post availabel yet!
                   </p>
-                </Container> 
+                </Container>
                 :
                 <Container classes={'w-full'}>
                   {posts?.reverse().map((posts, i) => <PostCard handleGetLikePost={handleGetLikePost} posts={posts} key={i} />)}
