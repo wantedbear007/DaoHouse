@@ -46,16 +46,9 @@ const Dao = () => {
       let response = await backendActor.get_all_dao(pagination);
       console.log(response,'response')
           response.map(async (data) => {
-            console.log(data.dao_canister_id, "canister id")
-
             const daoCanister = createDaoActor(data.dao_canister_id)
-            console.log(daoCanister, "dao hao ye")
             const dao_details = await  daoCanister.get_dao_detail()
-
             console.log(dao_details, "details aa gye bhaiii")
-
-            
-
         })
       } catch (error) {
       console.error('Error fetching DAOs:', error);
