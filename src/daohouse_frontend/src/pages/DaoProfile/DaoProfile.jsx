@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./DaoProfile.scss";
 import { useNavigate } from "react-router-dom";
 import Lottie from "react-lottie";
@@ -18,10 +18,12 @@ import FollowersContent from "../../Components/DaoProfile/FollowersContent";
 import FundsContent from "../../Components/DaoProfile/FundsContent";
 import DaoSettings from "../../Components/DaoSettings/DaoSettings";
 import Container from "../../Components/Container/Container";
+import { useAuth, useAuthClient } from "../../Components/utils/useAuthClient";
 
 const DaoProfile = () => {
   const className = "DaoProfile";
   const [activeLink, setActiveLink] = useState("proposals");
+  const { backendActor, frontendCanisterId, identity } = useAuth();
   const navigate = useNavigate();
 
   const handleClick = (linkName) => {
@@ -61,6 +63,28 @@ const DaoProfile = () => {
       id: "lottie-mediumCircle",
     },
   };
+
+  const [Data, setData] = useState({})
+  const followers = Data?.followers_count ? Number(Data.followers_count) : 0;
+  const post = Data?.post_count ? Number(Data.post_count) : 0;
+  const following = Data?.followings_count ? Number(Data.followings_count) : 0;
+  const email = Data?.email_id;
+  const name = Data?.username;
+  console.log("name", name);
+  console.log("email", email);
+  const getData = async () => {
+    try {
+      const response = await backendActor.get_user_profile();
+      setData(response.Ok || {})
+    } catch (error) {
+      console.error("Error :", error);
+    }
+  }
+
+  useEffect(() => {
+    getData();
+
+  }, [backendActor]);
 
   return (
     <div className={className + " bg-zinc-200 w-full relative"}>
@@ -143,20 +167,20 @@ const DaoProfile = () => {
             ></div>
             <div className="lg:ml-10 ml-4">
               <h2 className="lg:text-[40px] md:text-[24px] text-[16px] tablet:font-normal font-medium text-left text-[#05212C]">
-                Username.user
+                {name}
               </h2>
               <p className="text-[12px] tablet:text-[16px] font-normal text-left text-[#646464]">
-                gmail@gmail.xyz
+                {email}
               </p>
               <div className="md:flex justify-between mt-2 hidden">
                 <span className="tablet:mr-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
-                  6 <span className=" md:text-[16px] mx-1">Posts</span>
+                  {post} <span className=" md:text-[16px] mx-1">Posts</span>
                 </span>
                 <span className="md:mx-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
-                  3<span className=" md:text-[16px] mx-1">Followers</span>
+                  {followers}<span className=" md:text-[16px] mx-1">Followers</span>
                 </span>
                 <span className="md:mx-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
-                  3<span className=" md:text-[16px] mx-1">Following</span>
+                  {following}<span className=" md:text-[16px] mx-1">Following</span>
                 </span>
               </div>
             </div>
@@ -164,15 +188,15 @@ const DaoProfile = () => {
 
           <div className="flex justify-between mt-[-20px] md:hidden">
             <span className="flex flex-col items-center justify-center font-normal">
-              <span className="text-[22px] text-[#05212C]">6</span>
+              <span className="text-[22px] text-[#05212C]">{post}</span>
               <span className=" text-[14px] mx-1">Posts</span>
             </span>
             <span className="flex flex-col items-center justify-center font-normal ml-8">
-              <span className="text-[22px] text-[#05212C]">3</span>
+              <span className="text-[22px] text-[#05212C]">{followers}</span>
               <span className=" text-[14px] mx-1">Followers</span>
             </span>
             <span className="flex flex-col items-center justify-center font-normal ml-8">
-              <span className="text-[22px] text-[#05212C]">3</span>
+              <span className="text-[22px] text-[#05212C]">{following}</span>
               <span className=" text-[14px] mx-1">Following</span>
             </span>
           </div>
