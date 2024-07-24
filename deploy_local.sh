@@ -9,7 +9,8 @@ dfx identity new minter --storage-mode=plaintext  || true
 dfx identity new reciever --storage-mode=plaintext  || true
 dfx identity new testing --storage-mode=plaintext  || true
 
-dfx identity use default
+# dfx identity use default
+dfx identity use Bhanu
 
 # to generate wasm
 # cargo build --target wasm32-unknown-unknown -p dao_canister
@@ -24,6 +25,8 @@ TOKEN_NAME="DAOTOKEN"
 TRANSFER_FEE=1000
 PRE_MINTED_TOKENS=100000000000
 echo $RECIEVER
+
+
 
 
 # dfx canister create --all
