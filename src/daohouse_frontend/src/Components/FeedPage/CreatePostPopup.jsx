@@ -18,6 +18,9 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { userProfile, fetchUserProfile } = useUserProfile();
   const [loading, setLoading] = useState(false)
+  const isnetwork  = process.env.DFX_NETWORK
+  
+  console.log('isNetwork ',isnetwork);
 
   const [imageData, setImageData] = useState({
     base64: "",
@@ -27,7 +30,7 @@ const CreatePostPopup = ({ onClose , handleGetResponse}) => {
     post_image : ''
   });
   const [userImage, setUserImage] = useState( userProfile?.profile_img
-    ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
+    ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${process.env.DFX_NETWORK == "ic" ? "raw.icp0.io" : "localhost:4943"}/f/${userProfile.profile_img}`
     : avtarProfileIcon)
 
   const { handleFileUpload } = constant();

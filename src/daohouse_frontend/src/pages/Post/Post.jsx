@@ -171,12 +171,14 @@ const Post = () => {
                   </section>
                 </section>
 
-                <section className="w-1/2">
-                  <img
-                    src={`http://${canisterId}.localhost:4943/f/${selectedPost.post_img}`}
-                    alt="selectedPost"
-                    className="w-full h-100 object-cover"
-                  />
+                
+
+                <section className="h-64 w-2/4 relative">
+                    <img
+                      src={`http://${canisterId}.localhost:4943/f/${selectedPost.post_img}`}
+                      alt="selectedPost"
+                      className="postImage w-full h-full rounded-md object-cover"
+                    />
                 </section>
               </div>
 

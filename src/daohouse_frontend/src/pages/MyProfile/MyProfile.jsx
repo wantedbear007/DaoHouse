@@ -26,7 +26,7 @@ const MyProfile = ({ childComponent }) => {
   const { userProfile, fetchUserProfile } = useUserProfile();
   const [imageSrc, setImageSrc] = useState(
     userProfile?.profile_img
-      ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
+      ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${process.env.DFX_NETWORK == "ic" ? "raw.icp0.io" : "localhost:4943"}/f/${userProfile.profile_img}`
       : MyProfileImage
   );
   const [activeTab, setActiveTab] = useState(0);
@@ -35,7 +35,7 @@ const MyProfile = ({ childComponent }) => {
   const tabButtonsStyle =
     "my-1 big_phone:text-base mobile:text-md text-sm flex flex-row items-center gap-2 hover:text-white";
 
-  // Animation options for the big circle
+  // Animation optioJuly 24ns for the big circle
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -91,7 +91,7 @@ const MyProfile = ({ childComponent }) => {
 
   useEffect(() => {
     setImageSrc(userProfile?.profile_img
-      ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
+      ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${process.env.DFX_NETWORK == "ic" ? "raw.icp0.io" : "localhost:4943"}/f/${userProfile.profile_img}`
       : MyProfileImage)
   }, [userProfile?.profile_img])
   // Main return statement
