@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { FiUpload } from "react-icons/fi";
 import defaultImage from "../../../assets/defaultImage.png";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Step6 = ({ data, setData, setActiveStep ,handleDaoClick }) => {
   const [file, setFile] = useState(null);
   const [fileURL, setFileURL] = useState(defaultImage);
   const [shouldCreateDAO, setShouldCreateDAO] = useState(false);
+  const [loading, setLoading] = useState(false)
   const className = "DAO__Step6";
 
   const handleFileInput = async (event) => {
@@ -32,6 +34,7 @@ const Step6 = ({ data, setData, setActiveStep ,handleDaoClick }) => {
           image_content: new Uint8Array(fileContent),
           image_content_type: file.type,
           image_title: file.name,
+          image_id : '12',
         },
       }));
     } else {
@@ -42,6 +45,7 @@ const Step6 = ({ data, setData, setActiveStep ,handleDaoClick }) => {
           image_content: undefined,
           image_content_type: undefined,
           image_title: undefined,
+          image_id:'12',
         },
       }));
     }
