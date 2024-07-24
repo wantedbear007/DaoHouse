@@ -140,16 +140,14 @@ const Post = () => {
                           alt="ProfileImage"
                           className="w-10 h-10 rounded-full"
                         />
-
                         <p className="font-semibold text-lg">
                           {selectedPost.username}
                         </p>
                       </div>
-
-                      <p className="text-slate-500">{selectedPost?.post_created_at }</p>
+                      <p className="text-slate-500">{selectedPost?.post_created_at}</p>
                     </section>
 
-                    <section className="content w-full">
+                    <section className="content w-full break-words">
                       {selectedPost.post_description}
                     </section>
                   </div>
@@ -171,27 +169,20 @@ const Post = () => {
                   </section>
                 </section>
 
-                
-
-                <section className="h-64 w-2/4 relative">
-                    <img
-                      src={`http://${canisterId}.localhost:4943/f/${selectedPost.post_img}`}
-                      alt="selectedPost"
-                      className="postImage w-full h-full rounded-md object-cover"
-                    />
+                <section className="w-1/2 relative">
+                  <img
+                    src={`http://${canisterId}.localhost:4943/f/${selectedPost.post_img}`}
+                    alt="selectedPost"
+                    className="w-full h-full rounded-md object-cover"
+                  />
                 </section>
               </div>
 
               <hr />
 
               <div className={className + "__comments"}>
-                <h1 className="text-dark-green font-semibold text-2xl">
-                  Comments
-                </h1>
-                {
-                 selectedPost?.comment_list.length >0 &&
-                 <Comments />
-                }
+                <h1 className="text-dark-green font-semibold text-2xl">Comments</h1>
+                {selectedPost?.comment_list.length > 0 && <Comments />}
               </div>
             </React.Fragment>
           ) : (
