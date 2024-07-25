@@ -65,7 +65,7 @@ const PostCard = ({ posts,handleGetLikePost }) => {
         "w-full parent-row flex big_phone:flex-row flex-col items-start big_phone:gap-12 gap-4 bg-white big_phone:p-8 p-6 rounded-lg justify-between mobile:mt-0 mt-4 my-9"
       }
     >
-      <section className={className + "__rightSide h-full tablet:w-3/5 big_phone:w-1/2 flex flex-col gap-y-4 justify-between"}>
+      <section className={className + "__rightSide h-full w-[100%] md:w-[45%] lg:w-[50%]  flex flex-col gap-y-4 justify-between"}>
         <div className="flex flex-row items-center justify-between">
           <section className={className + "__userData flex flex-row items-center gap-2"}>
             <img
@@ -82,7 +82,7 @@ const PostCard = ({ posts,handleGetLikePost }) => {
 
         </div>
         <div>
-          <p className="h-full mobile:text-base text-sm">{posts.post_description}</p>
+          <p className="h-full mobile:text-base text-sm w-full break-words">{posts.post_description}</p>
         </div>
 
         <div className={className + "__buttons mobile:flex hidden flex-row items-center tablet:justify-between tablet:gap-x-4 gap-x-2 big_phone:mt-8 mt-4 desktop-button"}>
@@ -112,13 +112,16 @@ const PostCard = ({ posts,handleGetLikePost }) => {
         </div>
       </section>
 
-      <section className={className + "__leftSide tablet:w-2/5 big_phone:w-1/2 w-full h-full flex justify-end item-end image-section"}>
+      <section className={className + "__leftSide w-[100%] md:w-[50%] h-full flex justify-end item-end image-section"}>
         {posts.post_img && (
+          <section className="relative w-full h-64 ">
           <img
-            src={ImageUrl}
-            alt="POST Media"
-            className="sm:max-w-[500px] image-w sm:max-h-[200px] object-cover rounded-lg"
+            src={`http://${canisterId}.localhost:4943/f/${posts.post_img}`}
+            alt="PostMedia"
+            className="w-full h-full object-cover rounded-md"
           />
+        
+      </section>
         )}
       </section>
 

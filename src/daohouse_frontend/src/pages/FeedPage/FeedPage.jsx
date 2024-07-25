@@ -10,6 +10,7 @@ import NoPostProfile from "../../Components/Dao/NoPostProfile";
 import nodata from "../../../assets/nodata.png";
 import MuiSkeleton from "../../Components/Skeleton/MuiSkeleton";
 
+
 const FeedPage = () => {
   const [active, setActive] = useState({ all: true, latest: false });
   const [showPopup, setShowPopup] = useState(false);
@@ -23,6 +24,7 @@ const FeedPage = () => {
   const [loading, setLoading] = useState(false)
   console.log("--posts", posts)
 
+  
   const setAllActive = () => {
     setActive({ all: true, latest: false });
   };

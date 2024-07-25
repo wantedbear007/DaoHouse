@@ -11,6 +11,7 @@ import BigCircle from "../../../assets/BigCircle.png";
 import MediumCircle from "../../../assets/MediumCircle.png";
 import SmallestCircle from "../../../assets/SmallestCircle.png";
 import MyProfileRectangle from "../../../assets/MyProfileRectangle.png";
+import MyProfileImage from "../../../assets/MyProfile-img.png";
 import ProposalsContent from "../../Components/DaoProfile/ProposalsContent";
 import FeedsContent from "../../Components/DaoProfile/FeedsContent";
 import Members from "../../Components/DaoProfile/Members";
@@ -19,11 +20,20 @@ import FundsContent from "../../Components/DaoProfile/FundsContent";
 import DaoSettings from "../../Components/DaoSettings/DaoSettings";
 import Container from "../../Components/Container/Container";
 import { useAuth, useAuthClient } from "../../Components/utils/useAuthClient";
+import { useUserProfile } from "../../context/UserProfileContext";
 
 const DaoProfile = () => {
   const className = "DaoProfile";
   const [activeLink, setActiveLink] = useState("proposals");
   const { backendActor, frontendCanisterId, identity } = useAuth();
+  const { userProfile, fetchUserProfile } = useUserProfile();
+  const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
+  const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
+  const [imageSrc, setImageSrc] = useState(
+    userProfile?.profile_img
+    ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
+    : MyProfileImage
+  );
   const navigate = useNavigate();
 
   const handleClick = (linkName) => {
@@ -85,6 +95,12 @@ const DaoProfile = () => {
     getData();
 
   }, [backendActor]);
+
+  useEffect(() => {
+    setImageSrc(userProfile?.profile_img
+      ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
+      : MyProfileImage)
+  }, [userProfile?.profile_img])
 
   return (
     <div className={className + " bg-zinc-200 w-full relative"}>
@@ -158,13 +174,20 @@ const DaoProfile = () => {
         <Container classes={`${className} __mainComponent lg:py-8 lg:pb-20 py-6 big_phone:px-8 px-6 tablet:flex-row gap-2 flex-col w-full`}>
         <div className="flex md:justify-between w-full md:gap-2 gap-10 z-50 relative flex-wrap">
           <div className="flex items-center">
-            <div
-              className="w-[85px] h-[49px] lg:w-[207px] lg:h-[120px] bg-[#C2C2C2] md:w-[145px] md:h-[84px] rounded"
-              style={{
-                boxShadow:
-                  "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
-              }}
-            ></div>
+          <div
+            className="w-[85px] h-[49px] lg:w-[207px] lg:h-[120px] bg-[#C2C2C2] md:w-[145px] md:h-[84px] rounded overflow-hidden"
+            style={{
+              boxShadow:
+                "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
+            }}
+          >
+            <img
+              className="w-full h-full object-cover"
+              src={imageSrc}
+              alt="profile-pic"
+            />
+          </div>
+
             <div className="lg:ml-10 ml-4">
               <h2 className="lg:text-[40px] md:text-[24px] text-[16px] tablet:font-normal font-medium text-left text-[#05212C]">
                 {name}
@@ -323,3 +346,6 @@ const DaoProfile = () => {
 };
 
 export default DaoProfile;
+
+
+
