@@ -9,23 +9,15 @@ const Step2 = ({ setData, setActiveStep }) => {
   const className = "DAO__Step2";
 
   function handleSaveAndNext() {
-    setLoadingNext(true);
-    setTimeout(() => {
-      setData((prev) => ({
-        ...prev,
-        step2: { ...inputData },
-      }));
-      setLoadingNext(false);
-      setActiveStep(2);
-    }, 1000);
+    setData((prev) => ({
+      ...prev,
+      step2: { ...inputData },
+    }));
+    setActiveStep(2);
   }
 
   function handleBack() {
-    setLoadingBack(true);
-    setTimeout(() => {
-      setLoadingBack(false);
-      setActiveStep(0);
-    }, 1000); // Simulating network request with timeout
+    setActiveStep(0);
   }
 
   function changePeriod(value) {

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
-import CircularProgress from '@mui/material/CircularProgress';
+import { toast } from "react-toastify";
+
 
 const Step1 = ({ setData, setActiveStep }) => {
   const [loading, setLoading] = useState(false);
@@ -22,11 +23,9 @@ const Step1 = ({ setData, setActiveStep }) => {
       inputData.tokenName === "" ||
       inputData.tokenSymbol === ""
     ) {
-      alert("Empty fields are not allowed");
+      toast.error("Empty fields are not allowed");
       return;
     }
-
-    setLoading(true);
 
     try {
       setData((prevData) => ({
@@ -40,8 +39,6 @@ const Step1 = ({ setData, setActiveStep }) => {
       setActiveStep(1);
     } catch (error) {
       console.error("Error saving data:", error);
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -185,9 +182,7 @@ const Step1 = ({ setData, setActiveStep }) => {
           "__submitButton w-full flex flex-row items-center justify-end"
         }
       >
-        {
-          loading ? <CircularProgress /> 
-          : 
+        
           <button
             type="submit"
             onClick={handleSaveAndNext}
@@ -195,7 +190,7 @@ const Step1 = ({ setData, setActiveStep }) => {
           >
             Save & Next <FaArrowRightLong />
           </button>
-        }
+        
       </div>
     </React.Fragment>
   );

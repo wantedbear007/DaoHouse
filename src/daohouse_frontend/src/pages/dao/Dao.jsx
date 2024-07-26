@@ -34,6 +34,10 @@ const Dao = () => {
     try {
       setLoading(true);
       let response = await backendActor.get_all_dao(pagination);
+
+ 
+// =======
+// >>>>>>> main
       console.log(response, 'response');
       let allDaoDetails = [];
       await Promise.all(response.map(async (data) => {
@@ -52,6 +56,18 @@ const Dao = () => {
       setDao(combinedDaoDetails)
     } catch (error) {
 
+      // =======
+      //       console.log(response,'response')
+      //           response.map(async (data) => {
+      //             const daoCanister = createDaoActor(data.dao_canister_id)
+      //             const dao_details = await  daoCanister.get_dao_detail()
+      //             console.log(dao_details, "details aa gye bhaiii")
+      //         })
+      //       } catch (error) {
+      // >>>>>>> main
+// =======
+
+// >>>>>>> main
       console.error('Error fetching DAOs:', error);
     }
     finally {
@@ -90,60 +106,59 @@ const Dao = () => {
           </Link>
           <style>
             {`
-            .placeholder-custom::placeholder {
-              color: black;
-              font-weight: bold;
-              borderText:black;
-            }`}
+          .placeholder-custom::placeholder {
+            color: black;
+            font-weight: bold;
+            borderText:black;
+          }`}
           </style>
         </Container>
       </div>
       {showAll ? (
         loading ? (
-          <MuiSkeleton />
-        ) : (
+          <div className="flex justify-center items-center h-full">
+            <MuiSkeleton />
+          </div>
+        ) : dao && dao.length > 0 ? (
           <div className={"bg-[#c8ced3]"}>
             <Container classes={`__cards tablet:px-10 px-4 pb-10 grid grid-cols-1 big_phone:grid-cols-2 tablet:gap-6 gap-4 ${className}`}>
-              {dao &&
+              {
                 dao.map((daos, index) => (
                   <DaoCard
                     key={index}
                     name={daos.dao_name || 'No Name'}
                     funds={daos.funds ? daos.funds.toString() : '0'}
-                    members={daos.members_count
-                      ? Number(BigInt(daos.members_count))
-                      : '0'}
-                    groups={daos.groups_count
-                      ? Number(BigInt(daos.groups_count))
-                      : 'No Groups'}
+                    members={daos.members_count ? Number(BigInt(daos.members_count)) : '0'}
+                    groups={daos.groups_count ? Number(BigInt(daos.groups_count)) : 'No Groups'}
                     proposals={Array.isArray(daos.proposals) ? daos.proposals.join(', ') : '0'}
                     image_id={daos.image_id || 'No Image'}
                   />
-                ))
-              }
+                ))}
             </Container>
           </div>
+        ) : (
+          <NoDataComponent />
         )
-      ) : joinedDAO ? (
+      ) : joinedDAO && joinedDAO.length > 0 ? (
         <div className={"bg-[#c8ced3]"}>
           <Container classes={`__cards tablet:px-10 px-4 pb-10 grid grid-cols-1 big_phone:grid-cols-2 tablet:gap-6 gap-4 ${className}`}>
-            {joinedDAOs &&
-              joinedDAOs.map((a, index) => (
-                <DaoCard
-                  key={index}
-                  name={a.name}
-                  funds={a.funds}
-                  members={a.members}
-                  groups={a.groups}
-                  proposals={a.proposals}
-                />
-              ))}
+            {joinedDAO.map((a, index) => (
+              <DaoCard
+                key={index}
+                name={a.name}
+                funds={a.funds}
+                members={a.members}
+                groups={a.groups}
+                proposals={a.proposals}
+              />
+            ))}
           </Container>
         </div>
       ) : (
-        <NoDataComponent setJoinedDAO={setJoinedDAO} />
+        <NoDataComponent />
       )}
     </div>
+
   );
 };
 

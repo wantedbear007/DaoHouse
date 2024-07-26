@@ -5,7 +5,7 @@ import { LuAlertCircle } from "react-icons/lu";
 import { IoPersonOutline } from "react-icons/io5";
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
-import CircularProgress from '@mui/material/CircularProgress';
+
 
 const Step5 = ({ setData, setActiveStep }) => {
   const [loadingNext, setLoadingNext] = useState(false);
@@ -26,18 +26,11 @@ const Step5 = ({ setData, setActiveStep }) => {
   };
 
   function handleSaveAndNext() {
-    setLoadingNext(true);
-    setTimeout(() => {
-      setData((prevData) => ({
-        ...prevData,
-        step5: quorum,
-      }));
-      setLoadingNext(false);
-      setActiveStep(5);
-    }, 2000);
-  
-
-  
+    setData((prevData) => ({
+      ...prevData,
+      step5: quorum,
+    }));
+    setActiveStep(5);
   }
 
   return (
@@ -138,13 +131,13 @@ const Step5 = ({ setData, setActiveStep }) => {
           {loadingNext ? (
             <CircularProgress className="m-4 my-4" />
           ) : (
-          <button
-            type="submit"
-            onClick={handleSaveAndNext}
-            className="flex mobile:m-4 my-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white mobile:text-base text-sm"
-          >
-            Save & Next <FaArrowRightLong />
-          </button>
+            <button
+              type="submit"
+              onClick={handleSaveAndNext}
+              className="flex mobile:m-4 my-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white mobile:text-base text-sm"
+            >
+              Save & Next <FaArrowRightLong />
+            </button>
           )}
         </div>
       </div>
