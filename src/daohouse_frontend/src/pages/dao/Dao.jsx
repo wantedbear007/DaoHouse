@@ -34,7 +34,6 @@ const Dao = () => {
     try {
       setLoading(true);
       let response = await backendActor.get_all_dao(pagination);
-// <<<<<<< prabhjot
       console.log(response, 'response');
       let allDaoDetails = [];
       await Promise.all(response.map(async (data) => {
@@ -52,15 +51,7 @@ const Dao = () => {
       console.log("--combinedDaoDetails", combinedDaoDetails);
       setDao(combinedDaoDetails)
     } catch (error) {
-// =======
-//       console.log(response,'response')
-//           response.map(async (data) => {
-//             const daoCanister = createDaoActor(data.dao_canister_id)
-//             const dao_details = await  daoCanister.get_dao_detail()
-//             console.log(dao_details, "details aa gye bhaiii")
-//         })
-//       } catch (error) {
-// >>>>>>> main
+
       console.error('Error fetching DAOs:', error);
     }
     finally {
