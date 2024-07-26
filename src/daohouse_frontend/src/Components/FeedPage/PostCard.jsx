@@ -27,29 +27,31 @@ const convertTimestampToDateString = (timestamp) => {
 };
 import { toast } from "react-toastify";
 
-const PostCard = ({ posts,handleGetLikePost }) => {
+const PostCard = ({ posts, handleGetLikePost }) => {
   const [formattedDate, setFormattedDate] = useState('');
   const className = "postCard";
   const { backendActor } = useAuth();
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
-  const ImageUrl = `http://${canisterId}.localhost:4943/f/${posts?.post_img}`  
-  const userImage = `http://${canisterId}.localhost:4943/f/${posts?.user_image_id}`  
+
+  const ImageUrl = 'https://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${process.env.DFX_NETWORK == "ic" ? "raw.icp0.io" : "localhost:4943"}/f/${posts?.post_img}`';
+
+  const userImage = `https://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${process.env.DFX_NETWORK == "ic" ? "raw.icp0.io" : "localhost:4943"}/f/${posts?.user_image_id}`;
 
   const getlike = async () => {
     try {
       const response = await backendActor.like_post(posts.post_id);
       handleGetLikePost(response);
       console.log(response)
-      if(response?.Ok){
+      if (response?.Ok) {
         toast.success("post like successfully")
-      }else if(response?.Err){
+      } else if (response?.Err) {
         toast.warning('you already like this post')
       }
     } catch (error) {
       console.error("Error fetching like:", error);
     }
   };
-  
+
   useEffect(() => {
     if (posts && posts.post_created_at) {
       const formatted = convertTimestampToDateString(BigInt(posts.post_created_at));
@@ -69,7 +71,7 @@ const PostCard = ({ posts,handleGetLikePost }) => {
         <div className="flex flex-row items-center justify-between">
           <section className={className + "__userData flex flex-row items-center gap-2"}>
             <img
-              src={userImage}            
+              src={userImage}
               alt="userImage"
               className="rounded-[50%] w-10 h-10"
             />
@@ -88,11 +90,11 @@ const PostCard = ({ posts,handleGetLikePost }) => {
         <div className={className + "__buttons mobile:flex hidden flex-row items-center tablet:justify-between tablet:gap-x-4 gap-x-2 big_phone:mt-8 mt-4 desktop-button"}>
           <button
             className="flex flex-row tablet:gap-2 gap-1 items-center bg-[#0E3746] text-white tablet:text-base text-sm tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]">
-              {
+            {
               posts?.is_liked == 1 ?
                 <FavoriteIcon onClick={getlike} className="w-5 h-5" />
                 :
-              <FaRegHeart onClick={getlike} className="w-5 h-5" />
+                <FaRegHeart onClick={getlike} className="w-5 h-5" />
             }
             {posts.like_count}
           </button>
@@ -129,33 +131,33 @@ const PostCard = ({ posts,handleGetLikePost }) => {
         <div className="flex flex-row items-center justify-between gap-x-4">
           <button>
             <div className="flex gap-2">
-            {
-              posts?.is_liked == 1 ?
-                <FavoriteIcon onClick={getlike} className="w-5 h-5" />
-                :
-              <FaRegHeart onClick={getlike} className="text-[#0E3746] text-lg mt-1"/>
+              {
+                posts?.is_liked == 1 ?
+                  <FavoriteIcon onClick={getlike} className="w-5 h-5" />
+                  :
+                  <FaRegHeart onClick={getlike} className="text-[#0E3746] text-lg mt-1" />
               }
-            <div className="text-lg">
-            {posts.like_count}
+              <div className="text-lg">
+                {posts.like_count}
+              </div>
             </div>
-            </div>
-          </button> 
+          </button>
           <button>
             <div className="flex gap-2">
-            <MdOutlineInsertComment className="text-[#0E3746] text-lg mt-1"/>
-            <div className="text-lg">
-            {posts.comment_count}
-            </div>
+              <MdOutlineInsertComment className="text-[#0E3746] text-lg mt-1" />
+              <div className="text-lg">
+                {posts.comment_count}
+              </div>
             </div>
           </button>
           <button>
-          <div className="flex gap-2">
-            <PiTelegramLogoBold className="text-[#0E3746] text-lg mt-1"/>
+            <div className="flex gap-2">
+              <PiTelegramLogoBold className="text-[#0E3746] text-lg mt-1" />
             </div>
           </button>
-        <button className="m-0">
-          <IoLink className="text-lg" />
-        </button>
+          <button className="m-0">
+            <IoLink className="text-lg" />
+          </button>
         </div>
       </section>
     </div>

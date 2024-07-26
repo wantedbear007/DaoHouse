@@ -8,7 +8,7 @@ const Step6 = ({ data, setData, setActiveStep ,handleDaoClick }) => {
   const [file, setFile] = useState(null);
   const [fileURL, setFileURL] = useState(defaultImage);
   const [shouldCreateDAO, setShouldCreateDAO] = useState(false);
-  const [loading, setLoading] = useState(false)
+  const [loadingNext, setLoadingNext] = useState(false);
   const className = "DAO__Step6";
 
   const handleFileInput = async (event) => {
@@ -25,6 +25,8 @@ const Step6 = ({ data, setData, setActiveStep ,handleDaoClick }) => {
   };
 
   const createDAO = async () => {
+    setLoadingNext(true);
+  setTimeout(async() => {
     if (file) {
       const fileContent = await readFileContent(file);
       setData((prevData) => ({
@@ -49,7 +51,11 @@ const Step6 = ({ data, setData, setActiveStep ,handleDaoClick }) => {
         },
       }));
     }
+    setLoadingNext(false);
     setShouldCreateDAO(true);
+  }, 2000);
+ 
+  
   };
 
   const readFileContent = (file) => {
@@ -108,12 +114,19 @@ const Step6 = ({ data, setData, setActiveStep ,handleDaoClick }) => {
           "__submitButton w-full flex flex-row items-center mobile:justify-end justify-between"
         }
       >
+
+      
         <button
           onClick={() => setActiveStep(4)}
           className="flex mobile:m-4 my-4 flex-row items-center gap-2 border border-[#0E3746] hover:bg-[#0E3746] text-[#0E3746] hover:text-white mobile:text-base text-sm transition px-4 py-2 rounded-[2rem]"
         >
           <FaArrowLeftLong /> Back
         </button>
+
+
+        {loadingNext ? (
+          <CircularProgress className="m-4 my-4" />
+        ) : (
         <button
           type="submit"
           onClick={createDAO}
@@ -121,6 +134,7 @@ const Step6 = ({ data, setData, setActiveStep ,handleDaoClick }) => {
         >
           Create DAO
         </button>
+        )}
       </div>
     </React.Fragment>
   );
