@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import "./Step4.scss";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Step4 = ({ data, setData, setActiveStep }) => {
   const [activeStage, setActiveStage] = useState(0);
+  const [loadingNext, setLoadingNext] = useState(false);
+  const [loadingBack, setLoadingBack] = useState(false);
   const groups = data.step3.map((grp) => grp.name);
   const [inputData, setInputData] = useState({
     proposal: theList(),
@@ -52,12 +55,23 @@ const Step4 = ({ data, setData, setActiveStep }) => {
   ];
 
   function handleSaveAndNext() {
-    setData((prev) => ({
-      ...prev,
-      step4: inputData,
-    }));
+    setLoadingNext(true);
+    setTimeout(() => {
+      setData((prev) => ({
+        ...prev,
+        step4: inputData,
+      }));
+      setLoadingNext(false);
+      setActiveStep(4);
+    }, 2000);
+  }
 
-    setActiveStep(4);
+  function handleBack() {
+    setLoadingBack(true);
+    setTimeout(() => {
+      setLoadingBack(false);
+      setActiveStep(2);
+    }, 1000); // Simulating network request with timeout
   }
 
   function toggleCheckbox(step, groupName, permissionName) {
@@ -260,12 +274,22 @@ const Step4 = ({ data, setData, setActiveStep }) => {
           "__submitButton w-full flex flex-row items-center mobile:justify-end justify-between"
         }
       >
+
+      {loadingNext ? (
+        <CircularProgress className="m-4 my-4" />
+      ) : (
         <button
-          onClick={() => setActiveStep(2)}
+          // onClick={() => setActiveStep(2)}
+          onChangeCapture={handleBack}
           className="flex mobile:m-4 my-4 flex-row items-center gap-2 border border-[#0E3746] hover:bg-[#0E3746] text-[#0E3746] hover:text-white mobile:text-base text-sm transition px-4 py-2 rounded-[2rem]"
         >
           <FaArrowLeftLong /> Back
         </button>
+      )}
+
+        {loadingNext ? (
+          <CircularProgress className="m-4 my-4" />
+        ) : (
         <button
           type="submit"
           onClick={handleSaveAndNext}
@@ -276,6 +300,7 @@ const Step4 = ({ data, setData, setActiveStep }) => {
         >
           Save & Next <FaArrowRightLong />
         </button>
+          )}
       </div>
     </React.Fragment>
   );
