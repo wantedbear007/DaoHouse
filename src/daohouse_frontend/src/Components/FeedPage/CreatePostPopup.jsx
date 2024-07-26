@@ -28,7 +28,7 @@ const CreatePostPopup = ({ onClose, handleGetResponse }) => {
     image_title: "",
     image_content_type: "",
     post_image: ''
-//   });
+  });
 // <<<<<<< prabhjot
 //   const [userImage, setUserImage] = useState(userProfile?.profile_img
 //     ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`

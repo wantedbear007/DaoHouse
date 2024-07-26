@@ -23,16 +23,12 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
 
   const className = "DAO__Step3";
   function handleSaveAndNext() {
-    setLoadingNext(true);
-    setTimeout(() => {
-      setData((prev) => ({
-        ...prev,
-        step3: [...list],
-      }));
-      setLoadingNext(false);
+    setData((prev) => ({
+      ...prev,
+      step3: [...list],
+    }));
+    setActiveStep(3);
 
-      setActiveStep(3);
-    }, 2000);
 
 
 
@@ -47,12 +43,10 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
     // setLoadingNext(false);
   }
 
+
+
   function handleBack() {
-    setLoadingBack(true);
-    setTimeout(() => {
-      setLoadingBack(false);
-      setActiveStep(1);
-    }, 1000); // Simulating network request with timeout
+    setActiveStep(1);
   }
   // function handleBack() {
   //   setActiveStep(1);
@@ -76,7 +70,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
     setCount(count + 1);
     setList(updateGroups);
   };
- const deleteGroup = (index) => {
+  const deleteGroup = (index) => {
     const updatedGroups = list.filter((item) => {
       return item.index !== index;
     });
@@ -111,7 +105,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
         Alert.alert("Error", "Council group not found in the list");
       }
     }
-};
+  };
   const openMemberNames = (index) => {
     setAddMemberIndex(index);
   };
@@ -415,28 +409,21 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
           "__submitButton w-full flex flex-row items-center mobile:justify-end justify-between"
         }
       >
-        {loadingBack ? (
-          <CircularProgress className="m-4 my-4" />
-        ) : (
-          <button
-            onClick={handleBack}
-            className="flex mobile:m-4 my-4 flex-row items-center gap-2 border border-[#0E3746] hover:bg-[#0E3746] text-[#0E3746] hover:text-white mobile:text-base text-sm transition px-4 py-2 rounded-[2rem]"
-          >
-            <FaArrowLeftLong /> Back
-          </button>
-        )}
-        {loadingNext ? (
-          <CircularProgress className="m-4 my-4" />
-        ) : (
+        <button
+          onClick={handleBack}
+          className="flex mobile:m-4 my-4 flex-row items-center gap-2 border border-[#0E3746] hover:bg-[#0E3746] text-[#0E3746] hover:text-white mobile:text-base text-sm transition px-4 py-2 rounded-[2rem]"
+        >
+          <FaArrowLeftLong /> Back
+        </button>
 
-          <button
-            type="submit"
-            onClick={handleSaveAndNext}
-            className="flex mobile:m-4 my-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white mobile:text-base text-sm"
-          >
-            Save & Next <FaArrowRightLong />
-          </button>
-        )}
+        <button
+          type="submit"
+          onClick={handleSaveAndNext}
+          className="flex mobile:m-4 my-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white mobile:text-base text-sm"
+        >
+          Save & Next <FaArrowRightLong />
+        </button>
+
       </div>
 
 
