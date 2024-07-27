@@ -44,8 +44,10 @@ async fn init(dao_input: DaoInput) {
         members: dao_input.members.clone(),
         image_id: dao_input.image_id,
         members_count: dao_input.members.len() as u32,
-        followers: dao_input.followers,
+        followers: dao_input.followers.clone(),
         members_permissions: dao_input.members_permissions,
+        followers_count: dao_input.followers.len() as u32,
+        proposals_count: 0
     };
 
     let permission = Votingandpermissions {

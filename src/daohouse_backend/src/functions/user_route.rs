@@ -185,74 +185,116 @@ async fn delete_profile() -> Result<(), String> {
 }
 
 #[update(guard = prevent_anonymous)]
-async fn follow_user(userid: Principal) -> Result<(), String> {
-    let principal_id = api::caller();
+fn follow_user(user_id: Principal) -> Result<String, String> {
+    let my_principal_id = api::caller();
 
-    if !with_state(|state| state.user_profile.contains_key(&principal_id)) {
-        return Err("User not registered".to_string());
-    }
+    with_state(|state| {
+        let my_profile_response = match &mut state.user_profile.get(&api::caller()) {
+            Some(profile) => {
+                if !profile.followings_list.contains(&user_id) {
+                    profile.followings_list.push(user_id);
+                    profile.followings_count += 1;
+                    state
+                        .user_profile
+                        .insert(my_principal_id, profile.to_owned());
 
-    let getuser = with_state(|state| state.user_profile.get(&principal_id).unwrap().clone());
+                    Ok(())
+                } else {
+                    Err(String::from("You are already following the user"))
+                }
+            }
+            None => Err(String::from("user does not exist")),
+        };
 
-    if getuser.followers_list.contains(&principal_id) {
-        return Err("You have already followed this user".to_string());
-    }
+        let other_person_response = match &mut state.user_profile.get(&user_id) {
+            Some(profile) => {
+                profile.followers_list.push(my_principal_id);
+                profile.followers_count += 1;
+                state.user_profile.insert(user_id, profile.to_owned());
 
-    let updated_followers_count = getuser.followers_count + 1;
-    let mut updated_list = getuser.followers_list.clone();
-    updated_list.push(principal_id);
+                Ok(())
+            }
+            None => Err(String::from("Operation failed")),
+        };
 
-    let update_user = UserProfile {
-        user_id: getuser.user_id,
-        email_id: getuser.email_id,
-        profile_img: getuser.profile_img,
-        username: getuser.username,
-        dao_ids: getuser.dao_ids,
-        post_count: getuser.post_count,
-        post_id: getuser.post_id,
-        followers_count: updated_followers_count,
-        followers_list: updated_list,
-        followings_count: getuser.followings_count,
-        followings_list: getuser.followings_list,
-        description: getuser.description,
-        tag_defines: getuser.tag_defines,
-        contact_number: getuser.contact_number,
-        twitter_id: getuser.twitter_id,
-        telegram: getuser.telegram,
-        website: getuser.website,
-    };
+        match (my_profile_response, other_person_response) {
+            (Ok(()), Ok(())) => Ok(String::from("Successfully followed")),
+            (Err(e), _) | (_, Err(e)) => Err(e),
+        }
+    })
 
-    let getuser2 = with_state(|state| state.user_profile.get(&userid).unwrap().clone());
-
-    let updated_following_count = getuser2.followings_count + 1;
-    let mut updated_list2 = getuser2.followings_list.clone();
-    updated_list2.push(principal_id);
-
-    let updateuser2 = UserProfile {
-        user_id: getuser2.user_id,
-        email_id: getuser2.email_id,
-        profile_img: getuser2.profile_img,
-        username: getuser2.username,
-        dao_ids: getuser2.dao_ids,
-        post_count: getuser2.post_count,
-        post_id: getuser2.post_id,
-        followers_count: getuser2.followers_count,
-        followers_list: getuser2.followings_list,
-        followings_count: updated_following_count,
-        followings_list: updated_list2,
-        description: getuser2.description,
-        tag_defines: getuser2.tag_defines,
-        contact_number: getuser2.contact_number,
-        twitter_id: getuser2.twitter_id,
-        telegram: getuser2.telegram,
-        website: getuser2.website,
-    };
-
-    with_state(|state| state.user_profile.insert(principal_id, update_user));
-    with_state(|state| state.user_profile.insert(userid, updateuser2));
-
-    Ok(())
+    // Ok("()".to_string())
 }
+
+// #[update(guard = prevent_anonymous)]
+// async fn follow_user(userid: Principal) -> Result<(), String> {
+//     let principal_id = api::caller();
+
+//     if !with_state(|state| state.user_profile.contains_key(&principal_id)) {
+//         return Err("User not registered".to_string());
+//     }
+
+//     let getuser = with_state(|state| state.user_profile.get(&principal_id).unwrap().clone());
+
+//     if getuser.followers_list.contains(&principal_id) {
+//         return Err("You have already followed this user".to_string());
+//     }
+
+//     let updated_followers_count = getuser.followers_count + 1;
+//     let mut updated_list = getuser.followers_list.clone();
+//     updated_list.push(principal_id);
+
+//     let update_user = UserProfile {
+//         user_id: getuser.user_id,
+//         email_id: getuser.email_id,
+//         profile_img: getuser.profile_img,
+//         username: getuser.username,
+//         dao_ids: getuser.dao_ids,
+//         post_count: getuser.post_count,
+//         post_id: getuser.post_id,
+//         followers_count: updated_followers_count,
+//         followers_list: updated_list,
+//         followings_count: getuser.followings_count,
+//         followings_list: getuser.followings_list,
+//         description: getuser.description,
+//         tag_defines: getuser.tag_defines,
+//         contact_number: getuser.contact_number,
+//         twitter_id: getuser.twitter_id,
+//         telegram: getuser.telegram,
+//         website: getuser.website,
+//     };
+
+//     let getuser2 = with_state(|state| state.user_profile.get(&userid).unwrap().clone());
+
+//     let updated_following_count = getuser2.followings_count + 1;
+//     let mut updated_list2 = getuser2.followings_list.clone();
+//     updated_list2.push(principal_id);
+
+//     let updateuser2 = UserProfile {
+//         user_id: getuser2.user_id,
+//         email_id: getuser2.email_id,
+//         profile_img: getuser2.profile_img,
+//         username: getuser2.username,
+//         dao_ids: getuser2.dao_ids,
+//         post_count: getuser2.post_count,
+//         post_id: getuser2.post_id,
+//         followers_count: getuser2.followers_count,
+//         followers_list: getuser2.followings_list,
+//         followings_count: updated_following_count,
+//         followings_list: updated_list2,
+//         description: getuser2.description,
+//         tag_defines: getuser2.tag_defines,
+//         contact_number: getuser2.contact_number,
+//         twitter_id: getuser2.twitter_id,
+//         telegram: getuser2.telegram,
+//         website: getuser2.website,
+//     };
+
+//     with_state(|state| state.user_profile.insert(principal_id, update_user));
+//     with_state(|state| state.user_profile.insert(userid, updateuser2));
+
+//     Ok(())
+// }
 
 #[update(guard = prevent_anonymous)]
 pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<String, String> {
@@ -536,4 +578,25 @@ pub async fn get_dao_details(dao_canister_id: String) -> String {
             "Call failed".to_string()
         }
     }
+}
+
+#[update(guard = prevent_anonymous)]
+fn is_user_registered(id: Principal) -> bool {
+    with_state(|state| state.user_profile.contains_key(&id))
+}
+
+#[update(guard = prevent_anonymous)]
+fn unfollow_user(user_principal: Principal) -> Result<String, String> {
+    let principal_id = api::caller();
+
+    with_state(|state| match &mut state.user_profile.get(&api::caller()) {
+        Some(user) => {
+            user.followers_list.retain(|s| s != &user_principal);
+            user.followings_count -= 1;
+
+            state.user_profile.insert(principal_id, user.to_owned());
+            Ok(String::from("Successfully unfollowed."))
+        }
+        None => Err(String::from("User does not exist")),
+    })
 }

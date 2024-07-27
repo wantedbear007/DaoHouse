@@ -1,6 +1,7 @@
 type Dao = record {
   members : vec principal;
   dao_id : principal;
+  proposals_count : nat32;
   linksandsocials : vec text;
   daotype : text;
   dao_name : text;
@@ -10,6 +11,7 @@ type Dao = record {
   link_of_document : text;
   members_count : nat32;
   followers : vec principal;
+  followers_count : nat32;
   tokenissuer : text;
   group_name : vec text;
   cool_down_period : text;
