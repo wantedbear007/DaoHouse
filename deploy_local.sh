@@ -18,8 +18,8 @@ dfx canister create dao_canister
 dfx build dao_canister
 
 # create .did files
-chmod 777 ./generate_did.sh
-./generate_did.sh
+# chmod 777 ./generate_did.sh
+# ./generate_did.sh
 
 
 MINTER=$(dfx --identity default identity get-principal)
