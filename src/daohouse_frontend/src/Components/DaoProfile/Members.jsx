@@ -39,7 +39,7 @@ const Members = () => {
     <div className={className + " mt-6"}>
       <div className="flex items-center justify-between">
         <h1 className="mobile:text-2xl text-lg font-bold py-1">
-          Members and Policy
+          Members
         </h1>
         <button
           onClick={() => {

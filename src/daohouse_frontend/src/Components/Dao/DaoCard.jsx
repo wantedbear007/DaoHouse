@@ -19,7 +19,7 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id }) => {
             className="w-full h-full object-cover rounded"
           />
         </div>
-        <h2 className="mobile:text-2xl text-lg font-semibold">{name}</h2>
+        <h2 className="mobile:text-2xl text-lg font-semibold truncate ... w-47">{name}</h2>
       </div>
 
       <div className="big_phone:grid hidden grid-cols-4 text-center mb-4 bg-white tablet:p-4 pb-4 p-2 rounded-lg">
@@ -37,14 +37,14 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id }) => {
         </div>
         <div>
           <p className="font-bold text-dark-green">{proposals}</p>
-          <p className="text-sm text-dark-green">Active Proposals</p>
+          <p className="text-sm text-dark-green">Proposals</p>
         </div>
       </div>
 
       <div className="big_phone:hidden grid grid-cols-2 text-center my-4 small_phone:gap-4 gap-2">
         <div className="bg-white rounded-lg py-4">
           <p className="font-bold text-dark-green">{funds}</p>
-          <p className="text-sm text-dark-green">DAO Funds</p>
+          <p className="text-sm text-dark-green">Followers</p>
         </div>
         <div className="bg-white rounded-lg py-4">
           <p className="font-bold text-dark-green">{members}</p>

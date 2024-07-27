@@ -21,7 +21,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
     { name: "Council", members: [] },
     // { name: "All", index: 0 },
   ]);
-  console.log("delete council", list); 
+  console.log("delete council", list);
   const className = "DAO__Step3";
   function handleSaveAndNext() {
     setData((prev) => ({
@@ -129,20 +129,28 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
   };
 
 
-   // Function to add a new member to the Council group
-   const handleCouncilMemberName = (name, event) => {
+  // Function to add a new member to the Council group
+  const handleCouncilMemberName = (name, event) => {
     if (event.key === "Enter" && name.trim()) {
-      setList(prevList => 
-        prevList.map(group => 
-          group.name === "Council"
-            ? { ...group, members: [...group.members, name.trim()] }
-            : group
-        )
+      setList(prevList =>
+        prevList.map(group => {
+          if (group.name === "Council") {
+            // Check if the name already exists in the members array
+            if (!group.members.includes(name.trim())) {
+              return { ...group, members: [...group.members, name.trim()] };
+            }
+            else {
+              toast.error("Principal Id already exist")
+            }
+          }
+          return group;
+        })
       );
       setShowCouncilNameInput(false);
       event.target.value = '';
     }
   };
+
 
   const handleRemoveMember = (objIndex, memberName) => {
     const updatedList = list.map((item) => {
@@ -223,21 +231,21 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
   //     return updatedMembers;
   //   });
   // };
-   // Function to delete a member from the Council group
-   const handleDeleteMember = (indexToDelete) => {
-    setList(prevList => 
-      prevList.map(group => 
+  // Function to delete a member from the Council group
+  const handleDeleteMember = (indexToDelete) => {
+    setList(prevList =>
+      prevList.map(group =>
         group.name === "Council"
-          ? { 
-              ...group, 
-              members: group.members.filter((_, index) => index !== indexToDelete) 
-            }
+          ? {
+            ...group,
+            members: group.members.filter((_, index) => index !== indexToDelete)
+          }
           : group
       )
     );
   };
-  
-  
+
+
   const councilMembers = list.find(group => group.name === "Council")?.members || [];
 
   useEffect(() => {
