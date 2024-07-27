@@ -36,7 +36,14 @@ type ProposalInput = record {
   proposal_description : text;
   required_votes : nat32;
 };
-type ProposalState = variant { Open; Executing; Rejected; Succeeded; Accepted };
+type ProposalState = variant {
+  Open;
+  Executing;
+  Rejected;
+  Succeeded;
+  Accepted;
+  Expired;
+};
 type Proposals = record {
   share_count : nat64;
   proposal_expired_at : nat64;
@@ -57,6 +64,7 @@ type Proposals = record {
 type Result = variant { Ok : text; Err : text };
 type Result_1 = variant { Ok : GroupList; Err : text };
 type Result_2 = variant { Ok : vec Proposals; Err : text };
+type Result_3 = variant { Ok; Err : text };
 type UpdateDaoSettings = record {
   members : vec principal;
   linksandsocials : vec text;
@@ -78,9 +86,10 @@ service : (DaoInput) -> {
   get_dao_followers : () -> (vec principal) query;
   get_dao_members : () -> (vec principal) query;
   get_members_of_group : (text) -> (Result_1) query;
-  get_my_proposal : () -> (Result_2) query;
+  get_my_proposal : () -> (Result_2);
   get_proposal_by_id : (text) -> (Proposals) query;
   join_dao : () -> (Result);
+  refresh_proposals : () -> (Result_3);
   remove_member_from_group : (text, principal) -> (text);
   update_dao_settings : (UpdateDaoSettings) -> (Result);
   vote : (text, VoteParam) -> (Result);
