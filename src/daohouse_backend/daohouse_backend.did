@@ -123,9 +123,11 @@ service : (PaymentRecipientAccount) -> {
   get_my_post : (Pagination) -> (Result_4) query;
   get_post_byid : (text) -> (Result_5) query;
   get_user_profile : () -> (Result_6) query;
+  is_user_registered : (principal) -> (bool);
   like_post : (text) -> (Result);
   make_payment : (nat64, principal) -> (text);
   reply_comment : (ReplyCommentData) -> (Result);
+  unfollow_user : (principal) -> (Result);
   update_profile : (text, Profileinput) -> (Result_1);
   update_proposal_count : () -> (text);
   upload_image : (text, ImageData) -> (Result);

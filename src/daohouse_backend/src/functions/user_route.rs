@@ -537,3 +537,24 @@ pub async fn get_dao_details(dao_canister_id: String) -> String {
         }
     }
 }
+
+#[update(guard = prevent_anonymous)]
+fn is_user_registered(id: Principal) -> bool {
+    with_state(|state| state.user_profile.contains_key(&id))
+}
+
+#[update(guard = prevent_anonymous)]
+fn unfollow_user(user_principal: Principal) -> Result<String, String> {
+    let principal_id = api::caller();
+
+    with_state(|state| match &mut state.user_profile.get(&api::caller()) {
+        Some(user) => {
+            user.followers_list.retain(|s| s != &user_principal);
+            user.followings_count -= 1;
+
+            state.user_profile.insert(principal_id, user.to_owned());
+            Ok(String::from("Successfully unfollowed."))
+        }
+        None => Err(String::from("User does not exist")),
+    })
+}
