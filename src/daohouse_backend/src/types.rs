@@ -509,7 +509,7 @@ pub struct DaoInput {
     pub image_content: ByteBuf,
     pub image_title: String,
     pub image_content_type: String,
-    pub members_permissions: Vec<String>
+    pub members_permissions: Vec<String>,
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
@@ -525,7 +525,7 @@ pub struct DaoCanisterInput {
     pub required_votes: i8,
     pub followers: Vec<Principal>,
     pub image_id: String,
-    pub members_permissions: Vec<String>
+    pub members_permissions: Vec<String>,
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
@@ -666,10 +666,12 @@ impl Storable for PostInfo {
         Decode!(bytes.as_ref(), Self).unwrap()
     }
 
-    const BOUND: Bound = Bound::Bounded {
-        max_size: MAX_VALUE_SIZE,
-        is_fixed_size: false,
-    };
+    const BOUND: Bound = Bound::Unbounded;
+
+    // const BOUND: Bound = Bound::Bounded {
+    //     max_size: MAX_VALUE_SIZE,
+    //     is_fixed_size: false,
+    // };
 }
 
 impl Storable for DaoDetails {
@@ -681,10 +683,12 @@ impl Storable for DaoDetails {
         Decode!(bytes.as_ref(), Self).unwrap()
     }
 
-    const BOUND: Bound = Bound::Bounded {
-        max_size: MAX_VALUE_SIZE_DAO,
-        is_fixed_size: false,
-    };
+    const BOUND: Bound = Bound::Unbounded;
+
+    // const BOUND: Bound = Bound::Bounded {
+    //     max_size: MAX_VALUE_SIZE_DAO,
+    //     is_fixed_size: false,
+    // };
 }
 
 impl Storable for Analytics {
