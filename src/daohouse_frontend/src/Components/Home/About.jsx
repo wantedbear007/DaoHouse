@@ -7,8 +7,10 @@ import bigellipse from "../../../assets/bigEllipse.png";
 import SmallCircleAnimation from "../../Components/Ellipse-Animation/SmallCircle/SmallCircleAnimation.json";
 import Lottie from "react-lottie";
 import Container from "../Container/Container";
+import { useNavigate } from "react-router-dom";
 
 const About = () => {
+  const navigate = useNavigate();
   // const defaultOptions1 = {
   //   loop: true,
   //   autoplay: true,
@@ -27,6 +29,11 @@ const About = () => {
       id: "lottie-smallCircle",
     },
   };
+
+  const handleJoinDaoClick = () => {
+    navigate("/dao")
+  }
+
   return (
     <div className="bg-[#05212C] ">
       <Container classes={'relative flex justify-center items-center py-8'}>
@@ -93,7 +100,9 @@ const About = () => {
         </p>
 
         <div className="px-8 md:my-0 my-8 md:text-left text-center z-50 relative">
-          <button className="px-8 py-3 bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
+          <button
+            onClick={handleJoinDaoClick}
+            className="px-8 py-3 bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
             Join DAO
           </button>
         </div>

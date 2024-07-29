@@ -2,9 +2,15 @@ import React from "react";
 import "./Decentralization.scss";
 import decentralize from "../../../assets/gif/cropped.gif";
 import Container from "../Container/Container";
+import { useNavigate } from "react-router-dom";
 
 const Decentralization = () => {
   const className = "Decentralization";
+  const navigate = useNavigate()
+
+  const handleJoinDaoClick = () => {
+    navigate("/dao")
+  }
 
   return (
     <div className={className + " w-full bg-image-background pb-28"}>
@@ -27,7 +33,9 @@ const Decentralization = () => {
               organizations.
             </p>
 
-            <button className="mobile:px-8 px-6 mobile:py-3 py-2 mobile:text-base text-sm bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
+            <button 
+              onClick={handleJoinDaoClick}
+              className="mobile:px-8 px-6 mobile:py-3 py-2 mobile:text-base text-sm bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
 
               Join DAO
             </button>
