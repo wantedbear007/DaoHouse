@@ -93,6 +93,7 @@ service : (DaoInput) -> {
   join_dao : () -> (Result);
   refresh_proposals : () -> (Result_3);
   remove_member_from_group : (text, principal) -> (text);
+  unfollow_dao : () -> (Result);
   update_dao_settings : (UpdateDaoSettings) -> (Result);
   vote : (text, VoteParam) -> (Result);
 }
