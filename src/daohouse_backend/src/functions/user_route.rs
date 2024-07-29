@@ -531,3 +531,11 @@ fn unfollow_user(user_principal: Principal) -> Result<String, String> {
         None => Err(String::from("User does not exist")),
     })
 }
+
+#[update(guard = prevent_anonymous)]
+fn get_profile_by_id(id: Principal) -> Result<UserProfile, String> {
+    with_state(|state| match state.user_profile.get(&id) {
+        Some(profile) => Ok(profile),
+        None => Err(String::from("User does not exist")),
+    })
+}

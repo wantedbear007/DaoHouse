@@ -1,4 +1,5 @@
 use std::borrow::{Borrow, BorrowMut};
+use std::iter;
 
 use crate::guards::*;
 use crate::proposal_route::check_proposal_state;
@@ -97,7 +98,6 @@ fn comment_on_proposal(comment: String, proposal_id: String) -> Result<String, S
 }
 
 fn refresh_proposals(id: &String) {
-    ic_cdk::println!("refresh function ke aandar hain mai");
     with_state(|state| match &mut state.proposals.get(&id) {
         Some(proposal) => {
             if check_proposal_state(&proposal.proposal_expired_at) {
@@ -157,16 +157,17 @@ fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String> {
     })
 }
 
-// pub fn execute_proposal() -> Result<String, String> {
+#[query(guard=prevent_anonymous)]
+fn search_proposal(proposal_id: String) -> Vec<Proposals> {
+    let mut propo: Vec<Proposals> = Vec::new();
 
-//     with_state(|state| {
-//         let proposals = state.proposals.;
+    with_state(|state| {
+        for y in state.proposals.iter() {
+            if y.1.proposal_id == proposal_id {
+                propo.push(y.1)
+            }
+        }
 
-//         for (x, v) in proposals.iter() {
-
-//         }
-
-//     });
-
-//     Ok("".to_string())
-// }
+        propo
+    })
+}
