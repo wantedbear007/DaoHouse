@@ -25,21 +25,62 @@ import { useUserProfile } from "../../context/UserProfileContext";
 const DaoProfile = () => {
   const className = "DaoProfile";
   const [activeLink, setActiveLink] = useState("proposals");
-  const { backendActor, frontendCanisterId, identity } = useAuth();
-  const { userProfile, fetchUserProfile } = useUserProfile();
+  const { backendActor, createDaoActor } = useAuth();
+  const [dao, setDao] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
-  const [imageSrc, setImageSrc] = useState(
-    userProfile?.profile_img
-    ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
-    : MyProfileImage
-  );
   const navigate = useNavigate();
+  
 
   const handleClick = (linkName) => {
     setActiveLink(linkName);
     navigate(`/dao/profile/${linkName}`);
   };
+
+  const getDaos = async () => {
+    const pagination = {
+      start: 0,
+      end: 10,
+    };
+
+    try {
+      setLoading(true);
+      const response = await backendActor.get_all_dao(pagination);
+      let allDaoDetails = [];
+      await Promise.all(response.map(async (data) => {
+        const daoCanister = createDaoActor(data.dao_canister_id);
+        const daoDetails = await daoCanister.get_dao_detail();
+        daoDetails.daoCanister = daoCanister;
+        allDaoDetails.push(daoDetails);
+      }));
+      const combinedDaoDetails = allDaoDetails.flat();
+      setDao(combinedDaoDetails);
+    } catch (error) {
+      console.error('Error fetching DAOs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getImageUrl = (imageId) => {
+    return `http://${canisterId}.${domain}/f/${imageId}`;
+  };
+
+  useEffect(() => {
+    getDaos();
+  }, [backendActor]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!dao) {
+    return <div>No DAO details available</div>;
+  }
+
+  const currentDao = dao[0];
 
   // Animation options for the big circle
   const defaultOptions = {
@@ -74,34 +115,7 @@ const DaoProfile = () => {
     },
   };
 
-  const [Data, setData] = useState({})
-  const followers = Data?.followers_count ? Number(Data.followers_count) : 0;
-  const post = Data?.post_count ? Number(Data.post_count) : 0;
-  const following = Data?.followings_count ? Number(Data.followings_count) : 0;
-  const email = Data?.email_id;
-  const name = Data?.username;
-  console.log("name", name);
-  console.log("email", email);
-  const getData = async () => {
-    try {
-      const response = await backendActor.get_user_profile();
-      setData(response.Ok || {})
-    } catch (error) {
-      console.error("Error :", error);
-    }
-  }
-
-  useEffect(() => {
-    getData();
-
-  }, [backendActor]);
-
-  useEffect(() => {
-    setImageSrc(userProfile?.profile_img
-      ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
-      : MyProfileImage)
-  }, [userProfile?.profile_img])
-
+  
   return (
     <div className={className + " bg-zinc-200 w-full relative"}>
       <div
@@ -183,44 +197,38 @@ const DaoProfile = () => {
           >
             <img
               className="w-full h-full object-cover"
-              src={imageSrc}
+              src={getImageUrl(currentDao.image_id)}
               alt="profile-pic"
             />
           </div>
 
             <div className="lg:ml-10 ml-4">
               <h2 className="lg:text-[40px] md:text-[24px] text-[16px] tablet:font-normal font-medium text-left text-[#05212C]">
-                {name}
+              {currentDao.dao_name || 'Dao Name'}
               </h2>
               <p className="text-[12px] tablet:text-[16px] font-normal text-left text-[#646464]">
-                {email}
+              {currentDao.purpose || 'Dao Purpose'}
               </p>
               <div className="md:flex justify-between mt-2 hidden">
                 <span className="tablet:mr-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
-                  {post} <span className=" md:text-[16px] mx-1">Posts</span>
+                {currentDao.posts || 0} <span className=" md:text-[16px] mx-1">Posts</span>
                 </span>
                 <span className="md:mx-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
-                  {followers}<span className=" md:text-[16px] mx-1">Followers</span>
+                {currentDao.followers.length}<span className=" md:text-[16px] mx-1">Followers</span>
                 </span>
-                <span className="md:mx-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
-                  {following}<span className=" md:text-[16px] mx-1">Following</span>
-                </span>
+                
               </div>
             </div>
           </div>
 
           <div className="flex justify-between mt-[-20px] md:hidden">
             <span className="flex flex-col items-center justify-center font-normal">
-              <span className="text-[22px] text-[#05212C]">{post}</span>
+              <span className="text-[22px] text-[#05212C]">{currentDao.posts || 0}</span>
               <span className=" text-[14px] mx-1">Posts</span>
             </span>
             <span className="flex flex-col items-center justify-center font-normal ml-8">
-              <span className="text-[22px] text-[#05212C]">{followers}</span>
+              <span className="text-[22px] text-[#05212C]">{currentDao.followers.length}</span>
               <span className=" text-[14px] mx-1">Followers</span>
-            </span>
-            <span className="flex flex-col items-center justify-center font-normal ml-8">
-              <span className="text-[22px] text-[#05212C]">{following}</span>
-              <span className=" text-[14px] mx-1">Following</span>
             </span>
           </div>
 
@@ -346,6 +354,4 @@ const DaoProfile = () => {
 };
 
 export default DaoProfile;
-
-
 

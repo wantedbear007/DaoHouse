@@ -56,18 +56,6 @@ const Dao = () => {
       setDao(combinedDaoDetails)
     } catch (error) {
 
-      // =======
-      //       console.log(response,'response')
-      //           response.map(async (data) => {
-      //             const daoCanister = createDaoActor(data.dao_canister_id)
-      //             const dao_details = await  daoCanister.get_dao_detail()
-      //             console.log(dao_details, "details aa gye bhaiii")
-      //         })
-      //       } catch (error) {
-      // >>>>>>> main
-// =======
-
-// >>>>>>> main
       console.error('Error fetching DAOs:', error);
     }
     finally {
@@ -150,6 +138,7 @@ const Dao = () => {
                 members={a.members}
                 groups={a.groups}
                 proposals={a.proposals}
+                daoCanister={daos.daoCanister}
               />
             ))}
           </Container>
@@ -163,6 +152,3 @@ const Dao = () => {
 };
 
 export default Dao;
-
-
-

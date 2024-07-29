@@ -1,13 +1,75 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../utils/useAuthClient";
 
-const DaoCard = ({ name, funds, members, followers,groups, proposals, image_id }) => {
+const DaoCard = ({  name, funds, members, groups, proposals, image_id, daoCanister }) => {
   const navigate = useNavigate();
+  const { identity } = useAuth();
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
   const ImageUrl = `http://${canisterId}.localhost:4943/f/${image_id}`;
+  
+  
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followersCount, setFollowersCount] = useState(0);
+
+  useEffect(() => {
+    const fetchFollowers = async () => {
+      try {
+        if (!daoCanister || !daoCanister.get_dao_followers) {
+          console.error('daoCanister or get_dao_followers method is undefined');
+          return;
+        }
+        const followers = await daoCanister.get_dao_followers();
+        const currentUserId = identity.getPrincipal().toString(); // Get the current user ID
+        setIsFollowing(followers.includes(currentUserId));
+        setFollowersCount(followers.length); // Update followers count
+      } catch (error) {
+        console.error('Error fetching followers:', error);
+      }
+    };
+    fetchFollowers();
+  }, [daoCanister, identity]);
+
   const goToDaoProfile = () => {
     navigate("/dao/profile");
   };
+
+  const toggleFollow = async () => {
+  try {
+    if (!daoCanister) {
+      console.error('daoCanister is undefined');
+      return;
+    }
+
+    const currentUserId = identity.getPrincipal().toString(); // Get the current user ID
+
+    if (isFollowing) {
+      // Unfollow
+      // await daoCanister.unfollow_dao(); // Call unfollow method
+      console.log("Unfollowed");
+    } else {
+      // Follow
+      await daoCanister.follow_dao(); // Call follow method
+      console.log("Followed");
+    }
+
+    // Fetch updated followers list after the follow/unfollow action
+    const updatedFollowers = await daoCanister.get_dao_followers();
+    setIsFollowing(!isFollowing); // Toggle following state
+    setFollowersCount(updatedFollowers.length); // Update followers count
+
+    console.log({
+      daoCanister,
+      currentUserId,
+      isFollowing: !isFollowing,
+      followersCount: updatedFollowers.length,
+    });
+  } catch (error) {
+    console.error('Error following/unfollowing DAO:', error);
+  }
+};
+
+
 
   return (
     <div className="bg-[#F4F2EC] rounded-lg shadow-lg tablet:p-6 big_phone:p-3 small_phone:p-5 p-3 rounded-lg">
@@ -19,13 +81,21 @@ const DaoCard = ({ name, funds, members, followers,groups, proposals, image_id }
             className="w-full h-full object-cover rounded"
           />
         </div>
-        <h2 className="mobile:text-2xl text-lg font-semibold truncate ... w-47">{name}</h2>
+        <div>
+        <h2 className="mobile:text-2xl text-lg font-semibold">{name}</h2>
+        <button
+          onClick={toggleFollow}
+          className={`flex-1 mt-2 text-blue-400 p-1 sm:text-sm md:text-lg`}
+        >
+          {isFollowing ? 'Unfollow' : '+ Follow'}
+      </button>
+        </div>
       </div>
 
       <div className="big_phone:grid hidden grid-cols-4 text-center mb-4 bg-white tablet:p-4 pb-4 p-2 rounded-lg">
         <div>
-          <p className="font-bold text-dark-green">{followers}</p>
-          <p className="text-sm text-dark-green">Followers</p>
+          <p className="font-bold text-dark-green">{funds}</p>
+          <p className="text-sm text-dark-green">DAO Funds</p>
         </div>
         <div>
           <p className="font-bold text-dark-green">{members}</p>
@@ -37,14 +107,14 @@ const DaoCard = ({ name, funds, members, followers,groups, proposals, image_id }
         </div>
         <div>
           <p className="font-bold text-dark-green">{proposals}</p>
-          <p className="text-sm text-dark-green">Proposals</p>
+          <p className="text-sm text-dark-green">Active Proposals</p>
         </div>
       </div>
 
       <div className="big_phone:hidden grid grid-cols-2 text-center my-4 small_phone:gap-4 gap-2">
         <div className="bg-white rounded-lg py-4">
           <p className="font-bold text-dark-green">{funds}</p>
-          <p className="text-sm text-dark-green">Followers</p>
+          <p className="text-sm text-dark-green">DAO Funds</p>
         </div>
         <div className="bg-white rounded-lg py-4">
           <p className="font-bold text-dark-green">{members}</p>
