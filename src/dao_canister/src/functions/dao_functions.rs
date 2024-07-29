@@ -96,6 +96,7 @@ async fn ask_to_join_dao(daohouse_backend_id: String) -> Result<String, String> 
         proposal_description: String::from("Request to join DAO as a member"),
         proposal_title: String::from("Add member to DAO"),
         required_votes: 7,
+        proposal_type: crate::ProposalType::AddMemberProposal
     };
 
     let res = create_proposal(daohouse_backend_id, proposal).await;

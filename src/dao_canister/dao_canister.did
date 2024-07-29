@@ -36,6 +36,7 @@ type GroupList = record { users : vec principal };
 type ProposalInput = record {
   proposal_title : text;
   proposal_description : text;
+  proposal_type : ProposalType;
   required_votes : nat32;
 };
 type ProposalState = variant {
@@ -45,6 +46,11 @@ type ProposalState = variant {
   Succeeded;
   Accepted;
   Expired;
+};
+type ProposalType = variant {
+  AddMemberProposal;
+  VotingProposal;
+  RemoveMemberPrposal;
 };
 type Proposals = record {
   share_count : nat64;
@@ -61,12 +67,12 @@ type Proposals = record {
   approved_votes_list : vec principal;
   comments : nat64;
   comments_list : vec text;
+  proposal_type : ProposalType;
   required_votes : nat32;
 };
 type Result = variant { Ok : text; Err : text };
 type Result_1 = variant { Ok : GroupList; Err : text };
 type Result_2 = variant { Ok : vec Proposals; Err : text };
-type Result_3 = variant { Ok; Err : text };
 type UpdateDaoSettings = record {
   members : vec principal;
   linksandsocials : vec text;
@@ -91,7 +97,7 @@ service : (DaoInput) -> {
   get_members_of_group : (text) -> (Result_1) query;
   get_my_proposal : () -> (Result_2);
   get_proposal_by_id : (text) -> (Proposals) query;
-  refresh_proposals : () -> (Result_3);
+  refresh_proposals : (text) -> (Result);
   remove_member_from_group : (text, principal) -> (text);
   unfollow_dao : () -> (Result);
   update_dao_settings : (UpdateDaoSettings) -> (Result);

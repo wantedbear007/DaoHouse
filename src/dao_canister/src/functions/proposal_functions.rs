@@ -1,3 +1,5 @@
+use std::borrow::{Borrow, BorrowMut};
+
 use crate::guards::*;
 use crate::proposal_route::check_proposal_state;
 use crate::types::{Dao, ProposalInput, Proposals};
@@ -82,27 +84,24 @@ fn change_proposal_state(
 }
 
 #[update]
-fn refresh_proposals() -> Result<(), String> {
-    with_state(|state| {
-        let mut to_update = Vec::new();
-        for (key, proposal) in state.proposals.iter() {
+fn refresh_proposals(id: String) -> Result<String, String>{
+    with_state(|state| match &mut state.proposals.get(&id) {
+        Some(proposal) => {
             if check_proposal_state(&proposal.proposal_expired_at) {
-                to_update.push(key.clone());
-            }
-        }
-
-        // Update the proposals
-        for key in to_update {
-            if let Some(mut proposal) = state.proposals.get(&key) {
+                ic_cdk::println!("expire ho gya bro ");
                 proposal.proposal_status = ProposalState::Expired;
+                state.proposals.insert(id.clone(), proposal.to_owned());
+
+                Ok(format!("Updated {:?}", proposal))
+            } else {
+                Err(String::from("not expired"))
             }
         }
-    });
-
-    Ok(())
+        None => Err(String::from("Not found ")),
+    })
 }
 
-#[update]
+#[update(guard = prevent_anonymous)]
 fn comment_on_proposal(comment: String, proposal_id: String) -> Result<String, String> {
     with_state(|state| match &mut state.proposals.get(&proposal_id) {
         Some(pro) => {
@@ -115,7 +114,33 @@ fn comment_on_proposal(comment: String, proposal_id: String) -> Result<String, S
     })
 }
 
-// add guards
+// #[update]
+// fn update_proposal_state() -> Result<(), String> {
+//     ic_cdk::println!("bahar hi aa gya errrrrrrrr");
+//     with_state(|state| {
+
+//         let proposals = state.proposals.borrow_mut();
+
+//         for (x, y) in  &mut proposals.iter() {
+//             ic_cdk::println!("loop ke aandar aaya error");
+
+//             if check_proposal_state(&y.proposal_expired_at) {
+//                 let mut pro = y;
+//                 pro.proposal_status = ProposalState::Expired;
+//                 move proposals.insert(x, pro);
+//                 // y.proposal_status = ProposalState::Expired;
+//                 // state.proposals.borrow_mut().insert(x, y);
+
+//                 // state.proposals.insert(x, y);
+//             }
+
+//             // refresh_proposals(&x)
+//         }
+//     });
+
+//     Ok(())
+// }
+
 #[update(guard = prevent_anonymous)]
 fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String> {
     check_voting_right(&proposal_id)?;
@@ -140,3 +165,17 @@ fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String> {
         None => Err(String::from("Proposal ID is invalid !")),
     })
 }
+
+// pub fn execute_proposal() -> Result<String, String> {
+
+//     with_state(|state| {
+//         let proposals = state.proposals.;
+
+//         for (x, v) in proposals.iter() {
+
+//         }
+
+//     });
+
+//     Ok("".to_string())
+// }
