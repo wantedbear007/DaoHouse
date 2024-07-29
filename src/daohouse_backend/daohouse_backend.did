@@ -110,7 +110,7 @@ service : (PaymentRecipientAccount) -> {
   create_new_post : (text, PostInput) -> (Result);
   create_profile : () -> (Result_1);
   delete_profile : () -> (Result_1);
-  follow_user : (principal) -> (Result_1);
+  follow_user : (principal) -> (Result);
   get_all_dao : (Pagination) -> (vec DaoDetails) query;
   get_all_posts : (Pagination) -> (GetAllPostsResponse) query;
   get_analytics : () -> (Result_2) query;
@@ -123,9 +123,11 @@ service : (PaymentRecipientAccount) -> {
   get_my_post : (Pagination) -> (Result_4) query;
   get_post_byid : (text) -> (Result_5) query;
   get_user_profile : () -> (Result_6) query;
+  is_user_registered : (principal) -> (bool);
   like_post : (text) -> (Result);
   make_payment : (nat64, principal) -> (text);
   reply_comment : (ReplyCommentData) -> (Result);
+  unfollow_user : (principal) -> (Result);
   update_profile : (text, Profileinput) -> (Result_1);
   update_proposal_count : () -> (text);
   upload_image : (text, ImageData) -> (Result);

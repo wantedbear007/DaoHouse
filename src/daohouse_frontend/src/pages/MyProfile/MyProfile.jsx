@@ -75,8 +75,6 @@ const MyProfile = ({ childComponent }) => {
   const following = data?.followings_count ? Number(data.followings_count) : 0;
   const email = data?.email_id;
   const name = data?.username;
-  console.log("name", name);
-  console.log("email", email);
   const getdata = async () => {
     try {
       const response = await backendActor.get_user_profile();

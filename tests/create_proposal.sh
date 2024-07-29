@@ -1,6 +1,6 @@
 DAOHOUSE_CANISTER_ID=$(dfx canister id daohouse_backend)
 
-test10=$(dfx canister call dao_canister create_proposal '(
+test10=$(dfx canister call by6od-j4aaa-aaaaa-qaadq-cai create_proposal '(
    "'$DAOHOUSE_CANISTER_ID'",
   record {
     proposal_title = "New Community Park";

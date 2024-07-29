@@ -115,16 +115,7 @@ const DaoProfile = () => {
     },
   };
 
-  // const [Data, setData] = useState({})
-  // console.log("name", name);
-  // console.log("purpose", purpose);
-
-  // useEffect(() => {
-  //   getDaos();
-  // }, [backendActor]);
-
   
-
   return (
     <div className={className + " bg-zinc-200 w-full relative"}>
       <div
