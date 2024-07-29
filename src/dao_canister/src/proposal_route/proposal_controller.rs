@@ -30,11 +30,13 @@ pub fn create_new_proposal(
         comments: 0,
         comments_list: Vec::new(),
         share_count: 0,
-        proposal_type: proposal.proposal_type
+        proposal_type: proposal.proposal_type,
     };
     let mut updated_dao = state.dao.clone();
     updated_dao.proposals_count += 1;
+    updated_dao.proposal_ids.push(proposal_id.clone());
     state.dao = updated_dao;
+
     state.proposals.insert(proposal_id, new_proposal);
 
     return String::from("proposal added successfully");

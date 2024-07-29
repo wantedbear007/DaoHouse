@@ -5,6 +5,7 @@ type Dao = record {
   linksandsocials : vec text;
   daotype : text;
   dao_name : text;
+  proposal_ids : vec text;
   image_id : text;
   groups_count : nat64;
   members_permissions : vec text;
@@ -97,7 +98,7 @@ service : (DaoInput) -> {
   get_members_of_group : (text) -> (Result_1) query;
   get_my_proposal : () -> (Result_2);
   get_proposal_by_id : (text) -> (Proposals) query;
-  refresh_proposals : (text) -> (Result);
+  proposal_refresh : () -> (Result);
   remove_member_from_group : (text, principal) -> (text);
   unfollow_dao : () -> (Result);
   update_dao_settings : (UpdateDaoSettings) -> (Result);

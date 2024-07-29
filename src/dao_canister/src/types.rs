@@ -75,7 +75,8 @@ pub struct Dao {
     pub followers: Vec<Principal>,
     pub members_permissions: Vec<String>,
     pub followers_count: u32,
-    pub proposals_count: u32
+    pub proposals_count: u32,
+    pub proposal_ids: Vec<String>
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]

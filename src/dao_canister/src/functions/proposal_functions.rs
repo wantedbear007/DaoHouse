@@ -83,24 +83,6 @@ fn change_proposal_state(
     })
 }
 
-#[update]
-fn refresh_proposals(id: String) -> Result<String, String>{
-    with_state(|state| match &mut state.proposals.get(&id) {
-        Some(proposal) => {
-            if check_proposal_state(&proposal.proposal_expired_at) {
-                ic_cdk::println!("expire ho gya bro ");
-                proposal.proposal_status = ProposalState::Expired;
-                state.proposals.insert(id.clone(), proposal.to_owned());
-
-                Ok(format!("Updated {:?}", proposal))
-            } else {
-                Err(String::from("not expired"))
-            }
-        }
-        None => Err(String::from("Not found ")),
-    })
-}
-
 #[update(guard = prevent_anonymous)]
 fn comment_on_proposal(comment: String, proposal_id: String) -> Result<String, String> {
     with_state(|state| match &mut state.proposals.get(&proposal_id) {
@@ -114,32 +96,41 @@ fn comment_on_proposal(comment: String, proposal_id: String) -> Result<String, S
     })
 }
 
-// #[update]
-// fn update_proposal_state() -> Result<(), String> {
-//     ic_cdk::println!("bahar hi aa gya errrrrrrrr");
-//     with_state(|state| {
+fn refresh_proposals(id: &String) {
+    ic_cdk::println!("refresh function ke aandar hain mai");
+    with_state(|state| match &mut state.proposals.get(&id) {
+        Some(proposal) => {
+            if check_proposal_state(&proposal.proposal_expired_at) {
+                ic_cdk::println!("expire ho gya bro ");
+                proposal.proposal_status = ProposalState::Expired;
+                state.proposals.insert(id.clone(), proposal.to_owned());
 
-//         let proposals = state.proposals.borrow_mut();
+                // Ok(format!("Updated {:?}", proposal))
+            }
+        }
+        None => (),
+    })
+}
 
-//         for (x, y) in  &mut proposals.iter() {
-//             ic_cdk::println!("loop ke aandar aaya error");
+#[update]
+fn proposal_refresh() -> Result<String, String> {
+    ic_cdk::println!("inside proposal refresh");
 
-//             if check_proposal_state(&y.proposal_expired_at) {
-//                 let mut pro = y;
-//                 pro.proposal_status = ProposalState::Expired;
-//                 move proposals.insert(x, pro);
-//                 // y.proposal_status = ProposalState::Expired;
-//                 // state.proposals.borrow_mut().insert(x, y);
+    let mut ids: Vec<String> = Vec::new();
 
-//                 // state.proposals.insert(x, y);
-//             }
+    with_state(|state| {
+        // ic_cdk::println!("loop ke aandar");
 
-//             // refresh_proposals(&x)
-//         }
-//     });
+        //    let abc: Vec<String> = state.dao.proposal_ids.iter().collect();
+        ids = state.dao.proposal_ids.clone();
+    });
 
-//     Ok(())
-// }
+    for id in ids.iter() {
+        refresh_proposals(id);
+    }
+
+    Ok("Refresh completed".to_string())
+}
 
 #[update(guard = prevent_anonymous)]
 fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String> {
