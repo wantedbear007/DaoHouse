@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const DaoCard = ({ name, funds, members, groups, proposals, image_id }) => {
+const DaoCard = ({ name, funds, members, followers,groups, proposals, image_id }) => {
   const navigate = useNavigate();
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
   const ImageUrl = `http://${canisterId}.localhost:4943/f/${image_id}`;
@@ -24,8 +24,8 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id }) => {
 
       <div className="big_phone:grid hidden grid-cols-4 text-center mb-4 bg-white tablet:p-4 pb-4 p-2 rounded-lg">
         <div>
-          <p className="font-bold text-dark-green">{funds}</p>
-          <p className="text-sm text-dark-green">DAO Funds</p>
+          <p className="font-bold text-dark-green">{followers}</p>
+          <p className="text-sm text-dark-green">Followers</p>
         </div>
         <div>
           <p className="font-bold text-dark-green">{members}</p>

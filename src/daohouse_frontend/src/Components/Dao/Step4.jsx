@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import "./Step4.scss";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
-const Step4 = ({ data, setData, setActiveStep }) => {
+const Step4 = ({ data, setData, setActiveStep  }) => {
+
   const [activeStage, setActiveStage] = useState(0);
   // const groups = data.step3.map((grp) => grp.name);
+
   
   const groups = data.step3.map((grp) => grp.name).filter(name => name !== "all"); 
   const [inputData, setInputData] = useState({
@@ -93,26 +95,27 @@ const Step4 = ({ data, setData, setActiveStep }) => {
     setInputData(updatedInputData);
   }
 
-  function getTruePermissions(data) {
-    const filterPermissions = (permissions) => 
-      Object.fromEntries(
-        Object.entries(permissions).filter(([key, value]) => value === true)
-      );
+  // function getTruePermissions(data) {
+  //   const filterPermissions = (permissions) => 
+  //     Object.fromEntries(
+  //       Object.entries(permissions).filter(([key, value]) => value === true)
+  //     );
 
-    return {
-      proposal: Object.keys(data.proposal).reduce((acc, groupName) => {
-        acc[groupName] = filterPermissions(data.proposal[groupName]);
-        return acc;
-      }, {}),
-      voting: Object.keys(data.voting).reduce((acc, groupName) => {
-        acc[groupName] = filterPermissions(data.voting[groupName]);
-        return acc;
-      }, {}),
-    };
-  }
+  //   return {
+  //     proposal: Object.keys(data.proposal).reduce((acc, groupName) => {
+  //       acc[groupName] = filterPermissions(data.proposal[groupName]);
+  //       return acc;
+  //     }, {}),
+  //     voting: Object.keys(data.voting).reduce((acc, groupName) => {
+  //       acc[groupName] = filterPermissions(data.voting[groupName]);
+  //       return acc;
+  //     }, {}),
+  //   };
+  // }
 
-  const truePermissions = getTruePermissions(inputData);
-  console.log("-tp",truePermissions)
+
+  // const truePermissions = getTruePermissions(inputData);
+  // console.log("-tp",truePermissions)
 
 
   return (
@@ -183,6 +186,8 @@ const Step4 = ({ data, setData, setActiveStep }) => {
                     ))}
                   </tr>
                 ))}
+
+            
               </tbody>
             </table>
             <section className="flex w-full justify-end items-center">
@@ -276,3 +281,23 @@ const Step4 = ({ data, setData, setActiveStep }) => {
 };
 
 export default Step4;
+// utils/permissionsUtils.js
+
+export function getTruePermissions(data) {
+  const filterPermissions = (permissions) =>
+    Object.fromEntries(
+      Object.entries(permissions).filter(([key, value]) => value === true)
+    );
+
+  return {
+    proposal: Object.keys(data.proposal).reduce((acc, groupName) => {
+      acc[groupName] = filterPermissions(data.proposal[groupName]);
+      return acc;
+    }, {}),
+    voting: Object.keys(data.voting).reduce((acc, groupName) => {
+      acc[groupName] = filterPermissions(data.voting[groupName]);
+      return acc;
+    }, {}),
+  };
+}
+
