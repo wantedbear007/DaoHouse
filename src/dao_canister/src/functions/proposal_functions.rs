@@ -10,7 +10,7 @@ use ic_cdk::{query, update};
 use sha2::{Digest, Sha256};
 
 #[update(guard=check_members)]
-async fn create_proposal(daohouse_backend_id: String, proposal: ProposalInput) -> String {
+pub async fn create_proposal(daohouse_backend_id: String, proposal: ProposalInput) -> String {
     let uuids = raw_rand().await.unwrap().0;
     let proposal_id = format!("{:x}", Sha256::digest(&uuids));
     let response = with_state(|state| {

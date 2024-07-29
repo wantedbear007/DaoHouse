@@ -79,6 +79,7 @@ type UpdateDaoSettings = record {
 type VoteParam = variant { No; Yes };
 service : (DaoInput) -> {
   add_member_to_group : (text, principal) -> (text);
+  ask_to_join_dao : (text) -> (Result);
   change_proposal_state : (text, ProposalState) -> (Result);
   comment_on_proposal : (text, text) -> (Result);
   create_proposal : (text, ProposalInput) -> (text);
@@ -90,7 +91,6 @@ service : (DaoInput) -> {
   get_members_of_group : (text) -> (Result_1) query;
   get_my_proposal : () -> (Result_2);
   get_proposal_by_id : (text) -> (Proposals) query;
-  join_dao : () -> (Result);
   refresh_proposals : () -> (Result_3);
   remove_member_from_group : (text, principal) -> (text);
   unfollow_dao : () -> (Result);

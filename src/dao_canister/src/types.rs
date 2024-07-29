@@ -37,6 +37,7 @@ pub struct Proposals {
     pub share_count: u64,
 }
 
+
 #[derive(Clone, CandidType, Serialize, Deserialize)]
 pub struct ProposalInput {
     pub proposal_title: String,

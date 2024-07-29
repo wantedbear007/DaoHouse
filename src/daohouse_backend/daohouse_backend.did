@@ -11,9 +11,8 @@ type Comment = record {
   comment_id : opt text;
 };
 type DaoDetails = record {
-  dao_id : principal;
+  dao_desc : text;
   dao_name : text;
-  image_id : text;
   dao_canister_id : text;
 };
 type DaoInput = record {
