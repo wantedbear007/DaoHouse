@@ -116,7 +116,7 @@ fn comment_on_proposal(comment: String, proposal_id: String) -> Result<String, S
 }
 
 // add guards
-#[update]
+#[update(guard = prevent_anonymous)]
 fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String> {
     check_voting_right(&proposal_id)?;
     let principal_id = api::caller();

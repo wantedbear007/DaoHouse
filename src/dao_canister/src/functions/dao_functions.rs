@@ -107,11 +107,12 @@ fn follow_dao() -> Result<String, String> {
     let principal_id = api::caller();
 
     with_state(|state| {
-        let followers = &mut state.dao.followers;
-        if followers.contains(&principal_id) {
+        let dao = &mut state.dao;
+        if dao.followers.contains(&principal_id) {
             return Err(String::from("You are already following the user"));
         }
-        followers.push(principal_id);
+        dao.followers.push(principal_id);
+        dao.followers_count += 1;
         return Ok(String::from("Successfully followed !"));
     })
 }
@@ -134,3 +135,17 @@ fn update_dao_settings(update_dao_details: UpdateDaoSettings) -> Result<String, 
 }
 
 // #[update(guard=)]
+#[update(guard = prevent_anonymous)]
+fn unfollow_dao() -> Result<String, String> {
+    with_state(|state| {
+        let dao = &mut state.dao;
+        if dao.followers.contains(&api::caller()) {
+            dao.followers.retain(|s| s != &api::caller());
+            state.dao.followers_count -= 1;
+
+            Ok(String::from("Success"))
+        } else {
+            Err(String::from("You don't follow this dao."))
+        }
+    })
+}
