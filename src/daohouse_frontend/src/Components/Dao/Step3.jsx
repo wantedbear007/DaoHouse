@@ -5,6 +5,7 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { Principal } from "@dfinity/principal";
 import CircularProgress from '@mui/material/CircularProgress';
+import { toast } from "react-toastify";
 
 const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
 
@@ -18,9 +19,9 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
 
   const [list, setList] = useState([
     { name: "Council", members: [] },
-    { name: "All", index: 0 },
+    // { name: "All", index: 0 },
   ]);
-
+  console.log("delete council", list);
   const className = "DAO__Step3";
   function handleSaveAndNext() {
     setData((prev) => ({
@@ -102,7 +103,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
         setList(updatedList);
         setShowCouncilNameInput(false);
       } else {
-        Alert.alert("Error", "Council group not found in the list");
+        toast.alert("Error", "Council group not found in the list");
       }
     }
   };
@@ -128,28 +129,28 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
   };
 
 
+  // Function to add a new member to the Council group
   const handleCouncilMemberName = (name, event) => {
-    if (event.key === "Enter") {
-      const updatedList = [...list]; // Create a copy of the list
-      console.log("--u--", updatedList)
-      const councilIndex = updatedList.findIndex(
-        (item) => item.name === "Council"
+    if (event.key === "Enter" && name.trim()) {
+      setList(prevList =>
+        prevList.map(group => {
+          if (group.name === "Council") {
+            // Check if the name already exists in the members array
+            if (!group.members.includes(name.trim())) {
+              return { ...group, members: [...group.members, name.trim()] };
+            }
+            else {
+              toast.error("Principal Id already exist")
+            }
+          }
+          return group;
+        })
       );
-      console.log("--index--", councilIndex)
-      if (councilIndex !== -1) {
-        // If "Council" object exists in the list
-        updatedList[councilIndex].members = [
-          ...updatedList[councilIndex].members,
-          name,
-        ];
-        setList(updatedList);
-        setShowCouncilNameInput(false);
-      } else {
-        Alert.alert("Error", "Council group not found in the list");
-      }
+      setShowCouncilNameInput(false);
+      event.target.value = '';
     }
-
   };
+
 
   const handleRemoveMember = (objIndex, memberName) => {
     const updatedList = list.map((item) => {
@@ -165,33 +166,33 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
     setList(updatedList);
   };
 
-  const handleShowGroupNameInput = (index) => {
-    setGropuNameInputIndex(index);
+  // const handleShowGroupNameInput = (index) => {
+  //   setGropuNameInputIndex(index);
 
-  };
+  // };
 
-  const handleGroupNameInput = (groupName, event) => {
-    if (event.key === "Enter") {
-      const updatedList = list.map((item) => {
-        if (item.index === groupNameInputIndex) {
-          return {
-            ...item,
-            name: groupName,
-          };
-        }
-        // Return the item
-        return item;
-      });
+  // const handleGroupNameInput = (groupName, event) => {
+  //   if (event.key === "Enter") {
+  //     const updatedList = list.map((item) => {
+  //       if (item.index === groupNameInputIndex) {
+  //         return {
+  //           ...item,
+  //           name: groupName,
+  //         };
+  //       }
+  //       // Return the item
+  //       return item;
+  //     });
 
-      setList(updatedList);
-      setGropuNameInputIndex(null);
-    }
+  //     setList(updatedList);
+  //     setGropuNameInputIndex(null);
+  //   }
 
-  };
+  // };
 
 
   const [showCouncilNameInput, setShowCouncilNameInput] = useState(false);
-  const [memberName, setMemberName] = useState('');
+  // const [memberName, setMemberName] = useState('');
 
   // const handleCouncilMemAdding = () => {
   //   setShowCouncilNameInput(true);
@@ -207,18 +208,49 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
 
   // const councilMembers = list.find(item => item.name === "Council")?.members || [];
 
-  const [councilMembers, setCouncilMembers] = useState([]);
 
-  useEffect(() => {
-    const members = list.find(item => item.name === "Council")?.members || [];
-    setCouncilMembers(members);
-  }, [list]);
+  // const [councilMembers, setCouncilMembers] = useState([]);
 
-  const handleDeleteMember = (index) => {
-    setCouncilMembers(councilMembers.filter((_, i) => i !== index));
-    console.log("--h", councilMembers)
+  // useEffect(() => {
+  //   const members = list.find(item => item.name === "Council")?.members || [];
+
+  //   try {
+  //     // Convert members to Principal objects
+  //     const principalsArray = members.map(member => Principal.fromText(member));
+  //     setCouncilMembers(principalsArray);
+  //     console.log("for backend array", principalsArray);
+  //   } catch (error) {
+  //     console.error("Error converting to Principal:", error);
+  //   }
+  // }, [list]);
+
+  // const handleDeleteMember = (index) => {
+  //   setCouncilMembers((prevMembers) => {
+  //     const updatedMembers = prevMembers.filter((_, i) => i !== index);
+  //     console.log("delete council", updatedMembers); 
+  //     return updatedMembers;
+  //   });
+  // };
+  // Function to delete a member from the Council group
+  const handleDeleteMember = (indexToDelete) => {
+    setList(prevList =>
+      prevList.map(group =>
+        group.name === "Council"
+          ? {
+            ...group,
+            members: group.members.filter((_, index) => index !== indexToDelete)
+          }
+          : group
+      )
+    );
   };
 
+
+  const councilMembers = list.find(group => group.name === "Council")?.members || [];
+
+  useEffect(() => {
+    console.log("current council members:", councilMembers);
+  }, [councilMembers]);
 
   return (
     <React.Fragment>
@@ -280,17 +312,15 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
                 ) : null}
               </section>
               {councilMembers.map((name, userIndex) => (
-                <section className="w-full py-2 p-2 pl-4 flex flex-col items-center justify-between bg-white mb-4">
-
-                  <div key={userIndex} className="w-full flex flex-row items-center justify-between mb-2">
+                <section key={userIndex} className="w-full py-2 p-2 pl-4 flex flex-col items-center justify-between bg-white mb-4">
+                  <div className="w-full flex flex-row items-center justify-between mb-2">
                     <p className="font-semibold mobile:text-base text-sm pl-4 bg-white border-black">{name}</p>
                     <div className="flex flex-row small_phone:gap-4 gap-2">
-                      <button onClick={() => handleDeleteMember(userIndex, name)}>
-                        <MdOutlineDeleteOutline className="text-red-500 mobile:text-2xl text-lg " />
+                      <button onClick={() => handleDeleteMember(userIndex)}>
+                        <MdOutlineDeleteOutline className="text-red-500 mobile:text-2xl text-lg" />
                       </button>
                     </div>
                   </div>
-
                 </section>
               ))}
 

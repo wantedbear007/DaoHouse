@@ -28,32 +28,45 @@ const CreateDao = () => {
   });
 
   const handleDaoClick = async () => {
-    const { step1,step2,step3, step6} = data;
+    const { step1, step2, step3, step4 ,step6 } = data;
+   const y= step4.voting.Council;
+    console.log("Voting Council:",y);
+
     const x = step3[0]["members"];
 
     x.forEach(function (element) {
       console.log(element)
       Principal.fromText(element);
     });
-   // let val = step3.members.map(member => Principal.fromText(member))
-    console.log("val is ", x)
+    let val = step3[0].members;
+    console.log("sdfs", val)
+    let principalMembers = [];
+
+    // Iterate over the val array and convert each member to a Principal
+    for (let i = 0; i < val.length; i++) {
+      principalMembers.push(Principal.fromText(val[i]));
+    }
+    console.log("Principal members", principalMembers)
+   console.log("val is ", x)
     const daoPayload = {
       dao_name: step1.DAOIdentifier || '',
       purpose: step1.Purpose || '',
       daotype: step1.DAOType || '',
       link_of_document: '',
       cool_down_period: step2.setUpPeriod || '',
-      members: [Principal.fromText("qnrhg-uveun-uk5ve-46qq6-eeqio-rnh2l-f6mvk-hbhan-vccrc-wdmbn-fqe")],
-      members_permissions: step3.members_permissions || [],
+      members: principalMembers,
+     // members: [Principal.fromText("qnrhg-uveun-uk5ve-46qq6-eeqio-rnh2l-f6mvk-hbhan-vccrc-wdmbn-fqe")],
+      // members: val.map((text) => Principal.fromText(text)),
+      members_permissions :["abcd"],
       tokenissuer: step1.initialTokenSupply || '',
       linksandsocials: [],
       required_votes: 10,
       image_content: step6.image_content || '',
       image_title: step6.image_title || '',
       image_content_type: step6.image_content_type || '',
-      image_id:'12',
+      image_id: '12',
     };
-    console.log("integration",daoPayload);
+    console.log("integration", daoPayload);
     const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
     try {
       console.log("canister id of asset ", canisterId);

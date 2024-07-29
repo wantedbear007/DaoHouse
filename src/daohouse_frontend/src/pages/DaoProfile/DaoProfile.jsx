@@ -275,7 +275,7 @@ const DaoProfile = () => {
           >
             Proposals
           </button>
-          <button
+      {/** <button
             onClick={(e) => {
               e.preventDefault();
               handleClick("feeds");
@@ -287,7 +287,7 @@ const DaoProfile = () => {
             }`}
           >
             Feeds
-          </button>
+          </button> 
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -300,7 +300,7 @@ const DaoProfile = () => {
             }`}
           >
             Funds
-          </button>
+          </button>*/}
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -312,7 +312,7 @@ const DaoProfile = () => {
                 : "text-[#0E37464D]"
             }`}
           >
-            Member & Policy
+            Members
           </button>
           <button
             onClick={(e) => {

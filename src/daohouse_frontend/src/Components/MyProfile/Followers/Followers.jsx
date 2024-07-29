@@ -2,7 +2,9 @@ import React, { useState ,useEffect} from "react";
 import { RxArrowTopRight } from "react-icons/rx";
 import follower from "../../../../assets/followerImage.png";
 import { useAuth } from "../../utils/useAuthClient";
+
 import MuiSkeleton from "../../Skeleton/MuiSkeleton";
+
 
 const Followers = () => {
   const { backendActor, frontendCanisterId, identity } = useAuth();
@@ -14,8 +16,10 @@ const Followers = () => {
  const getdata = async () => {
   try {
     setLoading(true);
-    const response = await backendActor.get_user_profile();
+    const response = await backendActor.get_my_follower();
+    console.log("followers api:",response)
     setdata(response.Ok || {})
+    
   } catch (error) {
     console.error("Error :", error);
   }
@@ -35,6 +39,7 @@ useEffect(() => {
       <h3 className="text-[#05212C] tablet:text-[24px] text-[18px] tablet:font-bold font-semibold mb-4">
         Followers
       </h3>
+     
       {loading ? (
         <MuiSkeleton />
       ) : (

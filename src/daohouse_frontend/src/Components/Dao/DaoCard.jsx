@@ -81,21 +81,13 @@ const DaoCard = ({  name, funds, members, groups, proposals, image_id, daoCanist
             className="w-full h-full object-cover rounded"
           />
         </div>
-        <div>
         <h2 className="mobile:text-2xl text-lg font-semibold">{name}</h2>
-        <button
-          onClick={toggleFollow}
-          className={`flex-1 mt-2 text-blue-400 p-1 sm:text-sm md:text-lg`}
-        >
-          {isFollowing ? 'Unfollow' : '+ Follow'}
-      </button>
-        </div>
       </div>
 
       <div className="big_phone:grid hidden grid-cols-4 text-center mb-4 bg-white tablet:p-4 pb-4 p-2 rounded-lg">
         <div>
-          <p className="font-bold text-dark-green">{funds}</p>
-          <p className="text-sm text-dark-green">DAO Funds</p>
+          <p className="font-bold text-dark-green">{followers}</p>
+          <p className="text-sm text-dark-green">Followers</p>
         </div>
         <div>
           <p className="font-bold text-dark-green">{members}</p>
@@ -107,14 +99,14 @@ const DaoCard = ({  name, funds, members, groups, proposals, image_id, daoCanist
         </div>
         <div>
           <p className="font-bold text-dark-green">{proposals}</p>
-          <p className="text-sm text-dark-green">Active Proposals</p>
+          <p className="text-sm text-dark-green">Proposals</p>
         </div>
       </div>
 
       <div className="big_phone:hidden grid grid-cols-2 text-center my-4 small_phone:gap-4 gap-2">
         <div className="bg-white rounded-lg py-4">
           <p className="font-bold text-dark-green">{funds}</p>
-          <p className="text-sm text-dark-green">DAO Funds</p>
+          <p className="text-sm text-dark-green">Followers</p>
         </div>
         <div className="bg-white rounded-lg py-4">
           <p className="font-bold text-dark-green">{members}</p>

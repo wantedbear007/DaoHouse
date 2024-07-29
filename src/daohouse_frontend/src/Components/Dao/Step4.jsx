@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import "./Step4.scss";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
-const Step4 = ({ data, setData, setActiveStep }) => {
+const Step4 = ({ data, setData, setActiveStep  }) => {
+
   const [activeStage, setActiveStage] = useState(0);
-  const groups = data.step3.map((grp) => grp.name);
+  // const groups = data.step3.map((grp) => grp.name);
+
+  
+  const groups = data.step3.map((grp) => grp.name).filter(name => name !== "all"); 
   const [inputData, setInputData] = useState({
     proposal: theList(),
     voting: theList(),
@@ -16,24 +20,40 @@ const Step4 = ({ data, setData, setActiveStep }) => {
       const flag = group === "Council";
 
       acc[group] = {
-        ChangeDAOConfig: flag,
-        ChangeDAOPolicy: flag,
-        Bounty: flag,
-        BountyDone: flag,
-        Transfer: flag,
-        Polls: flag,
-        AddMembers: flag,
-        FunctionCalls: flag,
-        UpgradeSelf: flag,
-        UpgradeRemote: flag,
-        setVoteToken: flag,
+        ChangeDAOConfig: false,
+        ChangeDAOPolicy: false,
+        Bounty: false,
+        BountyDone: false,
+        Transfer: false,
+        Polls: false,
+        AddMembers: false,
+        FunctionCalls: false,
+        UpgradeSelf: false,
+        UpgradeRemote: false,
+        setVoteToken: false,
       };
       return acc;
     }, {});
 
     return list;
   }
+  function toggleCheckbox(step, groupName, permissionName) {
+    const updatedInputData = {
+      ...inputData,
+      [step]: {
+        ...inputData[step],
+        [groupName]: {
+          ...inputData[step][groupName],
+          [permissionName]: !inputData[step][groupName][permissionName],
+        },
+      },
+    };
+  
+    setInputData(updatedInputData);
+  }
+  
 
+  
   const permissionList = [
     "ChangeDAOConfig",
     "ChangeDAOPolicy",
@@ -74,6 +94,29 @@ const Step4 = ({ data, setData, setActiveStep }) => {
 
     setInputData(updatedInputData);
   }
+
+  // function getTruePermissions(data) {
+  //   const filterPermissions = (permissions) => 
+  //     Object.fromEntries(
+  //       Object.entries(permissions).filter(([key, value]) => value === true)
+  //     );
+
+  //   return {
+  //     proposal: Object.keys(data.proposal).reduce((acc, groupName) => {
+  //       acc[groupName] = filterPermissions(data.proposal[groupName]);
+  //       return acc;
+  //     }, {}),
+  //     voting: Object.keys(data.voting).reduce((acc, groupName) => {
+  //       acc[groupName] = filterPermissions(data.voting[groupName]);
+  //       return acc;
+  //     }, {}),
+  //   };
+  // }
+
+
+  // const truePermissions = getTruePermissions(inputData);
+  // console.log("-tp",truePermissions)
+
 
   return (
     <React.Fragment>
@@ -133,7 +176,7 @@ const Step4 = ({ data, setData, setActiveStep }) => {
                           <input
                             type="checkbox"
                             className="cursor-pointer"
-                            checked={inputData["proposal"][groupName][permissionName]}
+                            checked={inputData.proposal[groupName][permissionName] || false}
                             onChange={() =>
                               toggleCheckbox("proposal", groupName, permissionName)
                             }
@@ -143,6 +186,8 @@ const Step4 = ({ data, setData, setActiveStep }) => {
                     ))}
                   </tr>
                 ))}
+
+            
               </tbody>
             </table>
             <section className="flex w-full justify-end items-center">
@@ -190,7 +235,7 @@ const Step4 = ({ data, setData, setActiveStep }) => {
                           <input
                             type="checkbox"
                             className="cursor-pointer"
-                            checked={inputData["voting"][groupName][permissionName]}
+                            checked={inputData.voting[groupName][permissionName] || false}
                             onChange={() =>
                               toggleCheckbox("voting", groupName, permissionName)
                             }
@@ -212,7 +257,7 @@ const Step4 = ({ data, setData, setActiveStep }) => {
               </button>
             </section>
           </React.Fragment>
-        )}
+              )}
       </div>
       <div className={`${className}__submitButton w-full flex flex-row items-center mobile:justify-end justify-between`}>
         <button
@@ -236,3 +281,23 @@ const Step4 = ({ data, setData, setActiveStep }) => {
 };
 
 export default Step4;
+// utils/permissionsUtils.js
+
+export function getTruePermissions(data) {
+  const filterPermissions = (permissions) =>
+    Object.fromEntries(
+      Object.entries(permissions).filter(([key, value]) => value === true)
+    );
+
+  return {
+    proposal: Object.keys(data.proposal).reduce((acc, groupName) => {
+      acc[groupName] = filterPermissions(data.proposal[groupName]);
+      return acc;
+    }, {}),
+    voting: Object.keys(data.voting).reduce((acc, groupName) => {
+      acc[groupName] = filterPermissions(data.voting[groupName]);
+      return acc;
+    }, {}),
+  };
+}
+

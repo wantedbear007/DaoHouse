@@ -106,23 +106,38 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
             onChange={handleFileInput}
           />
         </div>
+
+      </div>
+      
+      
+      <div className={
+        className +
+        "__submitButton w-full flex flex-col md:flex-row items-start mt-3"
+      }
+    >
+      <div className="w-full md:w-[60%] flex-none">
+        <div className="h-auto max-w-full m-4 rounded-lg  border border-black">
+          <div className="p-4 md:p-12">
+            <p className="text-lg flex items-center space-x-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11 3v10h2V3h-2zM11 16v2h2v-2h-2z" fill="currentColor"/>
+              </svg>
+              <span>Create a new DAO costs 6 ICP</span>
+            </p>
+            <p className="mt-4 text-lg">
+              The 6 ICP will be used to pay for the contract deployment and storage.
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div
-        className={
-          className +
-          "__submitButton w-full flex flex-row items-center mobile:justify-end justify-between"
-        }
-      >
-
-
+      <div className="w-full md:w-[40%] flex flex-col md:flex-row items-center md:items-end justify-center md:justify-end">
         <button
           onClick={() => setActiveStep(4)}
           className="flex mobile:m-4 my-4 flex-row items-center gap-2 border border-[#0E3746] hover:bg-[#0E3746] text-[#0E3746] hover:text-white mobile:text-base text-sm transition px-4 py-2 rounded-[2rem]"
         >
           <FaArrowLeftLong /> Back
         </button>
-
 
         {loadingNext ? (
           <CircularProgress className="m-4 my-4" />
@@ -136,6 +151,10 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
           </button>
         )}
       </div>
+    </div>
+
+    
+    
     </React.Fragment>
   );
 };
