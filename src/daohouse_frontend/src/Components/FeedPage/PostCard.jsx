@@ -75,7 +75,16 @@ const PostCard = ({ posts, handleGetLikePost }) => {
               alt="userImage"
               className="rounded-[50%] w-10 h-10"
             />
-            <p className="font-semibold">{posts.username}</p>
+            <div>
+            <p className="font-semibold ml-2">{posts.username}</p>
+            <button
+              // onClick={toggleFollow}
+              className={`flex-1 mt-0 text-blue-400 p-1 sm:text-sm md:text-lg`}
+            >
+              {/* {isFollowing ? 'Unfollow' : '+ Follow'} */}
+              +Follow
+            </button>
+            </div>
           </section>
 
           <section className={className + "__time text-slate-500 mobile:text-base text-sm"}>
@@ -87,7 +96,7 @@ const PostCard = ({ posts, handleGetLikePost }) => {
           <p className="h-full mobile:text-base text-sm w-full break-words">{posts.post_description}</p>
         </div>
 
-        <div className={className + "__buttons mobile:flex hidden flex-row items-center tablet:justify-between tablet:gap-x-4 gap-x-2 big_phone:mt-8 mt-4 desktop-button"}>
+        <div className={className + "__buttons mobile:flex hidden flex-row items-center tablet:justify-between tablet:gap-x-4 gap-x-2 big_phone:mt-24 mt-24  desktop-button"}>
           <button
             className="flex flex-row tablet:gap-2 gap-1 items-center bg-[#0E3746] text-white tablet:text-base text-sm tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]">
             {
@@ -114,7 +123,7 @@ const PostCard = ({ posts, handleGetLikePost }) => {
         </div>
       </section>
 
-      <section className={className + "__leftSide w-[100%] md:w-[50%] h-full flex justify-end item-end image-section"}>
+      <section className={className + "__leftSide w-[100%] md:w-[45%] h-full flex justify-end item-end image-section"}>
         {posts.post_img && (
           <section className="relative w-full h-64 ">
           <img
@@ -128,7 +137,7 @@ const PostCard = ({ posts, handleGetLikePost }) => {
       </section>
 
       <section className={className + "__buttons w-full flex flex-row items-center justify-between mobile-buttons"}>
-        <div className="flex flex-row items-center justify-between gap-x-4">
+        <div className="flex flex-row items-center justify-between gap-x-4 ">
           <button>
             <div className="flex gap-2">
               {

@@ -44,7 +44,7 @@ const CreateDao = () => {
       link_of_document: '',
       cool_down_period: step2.setUpPeriod || '',
       members: [Principal.fromText("qnrhg-uveun-uk5ve-46qq6-eeqio-rnh2l-f6mvk-hbhan-vccrc-wdmbn-fqe")],
-
+      members_permissions: step3.members_permissions || [],
       tokenissuer: step1.initialTokenSupply || '',
       linksandsocials: [],
       required_votes: 10,
@@ -59,12 +59,14 @@ const CreateDao = () => {
       console.log("canister id of asset ", canisterId);
       const response = await backendActor.create_dao(canisterId, daoPayload);
       console.log({ response });
-      window.location.href = '/dao';
 
       if (response.Err) {
         toast.error(`${response.Err}`);
       } else {
         toast.success("Dao created successfully");
+        setTimeout(() => {
+          window.location.href = '/dao';
+        }, 500);
       }
     } catch (error) {
       console.error("Error creating Dao:", error);
