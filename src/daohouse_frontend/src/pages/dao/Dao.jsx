@@ -127,10 +127,10 @@ const Dao = () => {
                   <DaoCard
                     key={index}
                     name={daos.dao_name || 'No Name'}
-                    funds={daos.funds ? daos.funds.toString() : '0'}
+                    followers={daos.followers_count || '0'}
                     members={daos.members_count ? Number(BigInt(daos.members_count)) : '0'}
                     groups={daos.groups_count ? Number(BigInt(daos.groups_count)) : 'No Groups'}
-                    proposals={Array.isArray(daos.proposals) ? daos.proposals.join(', ') : '0'}
+                    proposals={daos.proposals_count || '0'}
                     image_id={daos.image_id || 'No Image'}
                   />
                 ))}

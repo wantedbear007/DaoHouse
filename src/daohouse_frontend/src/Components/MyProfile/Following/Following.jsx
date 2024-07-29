@@ -13,7 +13,8 @@ const Following = () => {
   const getdata = async () => {
     try {
       setLoading(true);
-      const response = await backendActor.get_user_profile();
+      const response = await backendActor.get_my_following();
+      console.log("following API",response)
       setdata(response.Ok || {})
     } catch (error) {
       console.error("Error :", error);
