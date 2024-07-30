@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./DaoProfile.scss";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Lottie from "react-lottie";
 import BigCircleComponent from "../../Components/Ellipse-Animation/BigCircle/BigCircleComponent";
 import SmallCircleComponent from "../../Components/Ellipse-Animation/SmallCircle/SmallCircleComponent";
@@ -19,10 +19,13 @@ import FollowersContent from "../../Components/DaoProfile/FollowersContent";
 import FundsContent from "../../Components/DaoProfile/FundsContent";
 import DaoSettings from "../../Components/DaoSettings/DaoSettings";
 import Container from "../../Components/Container/Container";
+import { Principal } from '@dfinity/principal';
 import { useAuth, useAuthClient } from "../../Components/utils/useAuthClient";
 import { useUserProfile } from "../../context/UserProfileContext";
+import { toast } from "react-toastify";
 
 const DaoProfile = () => {
+  
   const className = "DaoProfile";
   const [activeLink, setActiveLink] = useState("proposals");
   const { backendActor, createDaoActor } = useAuth();
@@ -31,46 +34,86 @@ const DaoProfile = () => {
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
+  const { daoCanisterId } = useParams(); 
   const navigate = useNavigate();
   
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followersCount, setFollowersCount] = useState(0);
+  const [userProfile, setUserProfile] = useState(null);
+
+  useEffect(() => {
+    const fetchDaoDetails = async () => {
+      if (daoCanisterId) {
+        setLoading(true);
+        try {
+          const daoActor = createDaoActor(daoCanisterId);
+          const daoDetails = await daoActor.get_dao_detail();
+          setDao(daoDetails);
+  
+          const profileResponse = await backendActor.get_user_profile();
+          if (profileResponse.Ok) {
+            setUserProfile(profileResponse.Ok);
+            const currentUserId = Principal.fromText(profileResponse.Ok.user_id.toString());
+  
+            const daoFollowers = await daoActor.get_dao_followers();
+            setFollowersCount(daoFollowers.length);
+  
+            // Check follow status from local storage
+            const storedIsFollowing = localStorage.getItem(`dao-${daoCanisterId}-isFollowing`);
+            setIsFollowing(storedIsFollowing === null ? daoFollowers.some(follower => follower.toString() === currentUserId.toString()) : JSON.parse(storedIsFollowing));
+          }
+        } catch (error) {
+          console.error('Error fetching DAO details:', error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+  
+    fetchDaoDetails();
+  }, [daoCanisterId, backendActor, createDaoActor]);
+  
+
+  const toggleFollow = async () => {
+    if (!userProfile) return;
+  
+    try {
+      const daoActor = createDaoActor(daoCanisterId);
+      const response = isFollowing
+        ? await daoActor.unfollow_dao()
+        : await daoActor.follow_dao();
+  
+      if (response?.Ok) {
+        // Update state immediately
+        setIsFollowing(!isFollowing);
+  
+        // Update followers count immediately
+        const updatedFollowers = await daoActor.get_dao_followers();
+        setFollowersCount(updatedFollowers.length);
+  
+        // Store the follow status in local storage
+        localStorage.setItem(`dao-${daoCanisterId}-isFollowing`, !isFollowing);
+  
+        toast.success(isFollowing ? "Successfully unfollowed" : "Successfully followed");
+      } else if (response?.Err) {
+        toast.error(response.Err);
+      }
+    } catch (error) {
+      console.error('Error following/unfollowing DAO:', error);
+      toast.error("An error occurred");
+    }
+  };
+  
+  
+  const getImageUrl = (imageId) => {
+    return `${protocol}://${canisterId}.${domain}/f/${imageId}`;
+  };
 
   const handleClick = (linkName) => {
     setActiveLink(linkName);
-    navigate(`/dao/profile/${linkName}`);
+    // navigate(`/dao/profile/${daoCanisterId}/${linkName}`);
   };
 
-  const getDaos = async () => {
-    const pagination = {
-      start: 0,
-      end: 10,
-    };
-
-    try {
-      setLoading(true);
-      const response = await backendActor.get_all_dao(pagination);
-      let allDaoDetails = [];
-      await Promise.all(response.map(async (data) => {
-        const daoCanister = createDaoActor(data.dao_canister_id);
-        const daoDetails = await daoCanister.get_dao_detail();
-        daoDetails.daoCanister = daoCanister;
-        allDaoDetails.push(daoDetails);
-      }));
-      const combinedDaoDetails = allDaoDetails.flat();
-      setDao(combinedDaoDetails);
-    } catch (error) {
-      console.error('Error fetching DAOs:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getImageUrl = (imageId) => {
-    return `http://${canisterId}.${domain}/f/${imageId}`;
-  };
-
-  useEffect(() => {
-    getDaos();
-  }, [backendActor]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -80,7 +123,7 @@ const DaoProfile = () => {
     return <div>No DAO details available</div>;
   }
 
-  const currentDao = dao[0];
+  
 
   // Animation options for the big circle
   const defaultOptions = {
@@ -197,24 +240,24 @@ const DaoProfile = () => {
           >
             <img
               className="w-full h-full object-cover"
-              src={getImageUrl(currentDao.image_id)}
+              src={getImageUrl(dao.image_id)}
               alt="profile-pic"
             />
           </div>
 
             <div className="lg:ml-10 ml-4">
               <h2 className="lg:text-[40px] md:text-[24px] text-[16px] tablet:font-normal font-medium text-left text-[#05212C]">
-              {currentDao.dao_name || 'Dao Name'}
+              {dao.dao_name || 'Dao Name'}
               </h2>
               <p className="text-[12px] tablet:text-[16px] font-normal text-left text-[#646464]">
-              {currentDao.purpose || 'Dao Purpose'}
+              {dao.purpose || 'Dao Purpose'}
               </p>
               <div className="md:flex justify-between mt-2 hidden">
                 <span className="tablet:mr-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
-                {currentDao.posts || 0} <span className=" md:text-[16px] mx-1">Posts</span>
+                {dao.posts || 0} <span className=" md:text-[16px] mx-1">Posts</span>
                 </span>
                 <span className="md:mx-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
-                {currentDao.followers.length}<span className=" md:text-[16px] mx-1">Followers</span>
+                {dao.followers.length}<span className=" md:text-[16px] mx-1">Followers</span>
                 </span>
                 
               </div>
@@ -223,25 +266,25 @@ const DaoProfile = () => {
 
           <div className="flex justify-between mt-[-20px] md:hidden">
             <span className="flex flex-col items-center justify-center font-normal">
-              <span className="text-[22px] text-[#05212C]">{currentDao.posts || 0}</span>
+              <span className="text-[22px] text-[#05212C]">{dao.posts || 0}</span>
               <span className=" text-[14px] mx-1">Posts</span>
             </span>
             <span className="flex flex-col items-center justify-center font-normal ml-8">
-              <span className="text-[22px] text-[#05212C]">{currentDao.followers.length}</span>
+              <span className="text-[22px] text-[#05212C]">{dao.followers.length}</span>
               <span className=" text-[14px] mx-1">Followers</span>
             </span>
           </div>
 
           <div className="flex md:justify-end gap-4 md:mt-4 tablet:mr-4">
             <button
-              onClick={() => navigate("/follow")}
+              onClick={toggleFollow}
               className="bg-[#0E3746] text-[16px] text-white shadow-xl lg:py-4 lg:px-3 rounded-[27px] lg:w-[131px] lg:h-[40px] md:w-[112px] md:h-[38px] w-[98px] h-[35px] lg:flex items-center justify-center rounded-2xl"
               style={{
                 boxShadow:
                   "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
               }}
             >
-              Follow
+              {isFollowing ? "Unfollow" : "Follow"}
             </button>
 
             <button
@@ -354,3 +397,4 @@ const DaoProfile = () => {
 };
 
 export default DaoProfile;
+

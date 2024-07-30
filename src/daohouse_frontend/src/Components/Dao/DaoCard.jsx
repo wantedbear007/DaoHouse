@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Principal } from "@dfinity/principal";
 import { useAuth } from "../utils/useAuthClient";
-import toast from 'react-toastify';
+import {toast} from 'react-toastify';
 
-const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCanister }) => {
+const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCanister, daoCanisterId }) => {
   const navigate = useNavigate();
   const { backendActor } = useAuth();
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
@@ -14,6 +14,7 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCaniste
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
   const imageUrl = `${protocol}://${canisterId}.${domain}/f/${image_id}`;
+  console.log(daoCanisterId);
 
   useEffect(() => {
     const fetchFollowers = async () => {
@@ -56,7 +57,7 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCaniste
   };
 
   const goToDaoProfile = () => {
-    navigate("/dao/profile");
+    navigate(`/dao/profile/${daoCanisterId}`);
   };
 
   return (
