@@ -1,94 +1,82 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Principal } from "@dfinity/principal";
 import { useAuth } from "../utils/useAuthClient";
+import {toast} from 'react-toastify';
 
-const DaoCard = ({  name, funds, members, groups, proposals, image_id, daoCanister }) => {
+const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCanister, daoId }) => {
   const navigate = useNavigate();
-  const { identity } = useAuth();
+  const { backendActor } = useAuth();
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
-  const ImageUrl = `http://${canisterId}.localhost:4943/f/${image_id}`;
-  
-  
   const [isFollowing, setIsFollowing] = useState(false);
   const [followersCount, setFollowersCount] = useState(0);
-
+  const [userProfile, setUserProfile] = useState(null);
+  const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
+  const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
+  const imageUrl = `${protocol}://${canisterId}.${domain}/f/${image_id}`;
+  console.log(daoId);
   useEffect(() => {
     const fetchFollowers = async () => {
       try {
-        if (!daoCanister || !daoCanister.get_dao_followers) {
-          console.error('daoCanister or get_dao_followers method is undefined');
-          return;
+        const profileResponse = await backendActor.get_user_profile();
+        if (profileResponse.Ok) {
+          setUserProfile(profileResponse.Ok);
+          const currentUserId = Principal.fromText(profileResponse.Ok.user_id.toString());
+          const daoFollowers = await daoCanister.get_dao_followers();
+          setFollowersCount(daoFollowers.length);
+          setIsFollowing(daoFollowers.some(follower => follower.toString() === currentUserId.toString()));
         }
-        const followers = await daoCanister.get_dao_followers();
-        const currentUserId = identity.getPrincipal().toString(); // Get the current user ID
-        setIsFollowing(followers.includes(currentUserId));
-        setFollowersCount(followers.length); // Update followers count
       } catch (error) {
-        console.error('Error fetching followers:', error);
+        console.error('Error fetching profile and followers:', error);
       }
     };
     fetchFollowers();
-  }, [daoCanister, identity]);
-
-  const goToDaoProfile = () => {
-    navigate("/dao/profile");
-  };
+  }, [daoCanister, backendActor]);
 
   const toggleFollow = async () => {
-  try {
-    if (!daoCanister) {
-      console.error('daoCanister is undefined');
-      return;
+    try {
+      if (!userProfile) return;
+
+      const response = isFollowing
+        ? await daoCanister.unfollow_dao()
+        : await daoCanister.follow_dao();
+
+      if (response?.Ok) {
+        const updatedFollowers = await daoCanister.get_dao_followers();
+        setFollowersCount(updatedFollowers.length);
+        setIsFollowing(!isFollowing);
+        toast.success(isFollowing ? "Successfully unfollowed" : "Successfully followed");
+      } else if (response?.Err) {
+        toast.error(response.Err);
+      }
+    } catch (error) {
+      console.error('Error following/unfollowing DAO:', error);
+      toast.error("An error occurred");
     }
+  };
 
-    const currentUserId = identity.getPrincipal().toString(); // Get the current user ID
-
-    if (isFollowing) {
-      // Unfollow
-      // await daoCanister.unfollow_dao(); // Call unfollow method
-      console.log("Unfollowed");
-    } else {
-      // Follow
-      await daoCanister.follow_dao(); // Call follow method
-      console.log("Followed");
-    }
-
-    // Fetch updated followers list after the follow/unfollow action
-    const updatedFollowers = await daoCanister.get_dao_followers();
-    setIsFollowing(!isFollowing); // Toggle following state
-    setFollowersCount(updatedFollowers.length); // Update followers count
-
-    console.log({
-      daoCanister,
-      currentUserId,
-      isFollowing: !isFollowing,
-      followersCount: updatedFollowers.length,
-    });
-  } catch (error) {
-    console.error('Error following/unfollowing DAO:', error);
-  }
-};
-
-
+  const goToDaoProfile = () => {
+    navigate(`/dao/profile/${daoId}`);
+  };
 
   return (
     <div className="bg-[#F4F2EC] rounded-lg shadow-lg tablet:p-6 big_phone:p-3 small_phone:p-5 p-3 rounded-lg">
       <div className="flex justify-start items-start mb-4 gap-4">
         <div className="mobile:w-[207px] mobile:h-[120px] w-[150px] h-[70px] border border-black rounded">
           <img
-            src={ImageUrl}
+            src={imageUrl}
             alt="DAO Image"
             className="w-full h-full object-cover rounded"
           />
         </div>
         <div>
-        <h2 className="mobile:text-2xl text-lg font-semibold">{name}</h2>
-        <button
-          onClick={toggleFollow}
-          className={`flex-1 mt-2 text-blue-400 p-1 sm:text-sm md:text-lg`}
-        >
-          {isFollowing ? 'Unfollow' : '+ Follow'}
-      </button>
+          <h2 className="mobile:text-2xl text-lg font-semibold">{name}</h2>
+          <button
+            onClick={toggleFollow}
+            className={`flex-1 mt-2 text-blue-400 p-1 sm:text-sm md:text-lg`}
+          >
+            {isFollowing ? 'Unfollow' : '+ Follow'}
+          </button>
         </div>
       </div>
 
