@@ -6,6 +6,7 @@ import { PiTelegramLogoBold } from "react-icons/pi";
 import { MdOutlineInsertComment } from "react-icons/md";
 import { Principal } from "@dfinity/principal";
 import { useAuth } from "../../Components/utils/useAuthClient";
+import Post1 from "../../../assets/post1.png"
 const convertTimestampToDateString = (timestamp) => {
   // Convert the BigInt timestamp to milliseconds
   const milliseconds = Number(timestamp / BigInt(1e6));
@@ -35,9 +36,15 @@ const PostCard = ({ posts, handleGetLikePost }) => {
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
   const [isFollowing, setIsFollowing] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
+  const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
+  const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
+  const ImageUrl = posts?.post_img
+    ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${posts.post_img}`
+    : Post1;
 
-  const ImageUrl = `https://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${process.env.DFX_NETWORK == "ic" ? "raw.icp0.io" : "localhost:4943"}/f/${posts?.post_img}`;
-  const userImage = `https://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${process.env.DFX_NETWORK == "ic" ? "raw.icp0.io" : "localhost:4943"}/f/${posts?.user_image_id}`;
+  const userImage = posts?.user_image_id
+    ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${posts.user_image_id}`
+    : '';
 
   const getlike = async () => {
     try {
@@ -178,7 +185,7 @@ const PostCard = ({ posts, handleGetLikePost }) => {
         {posts.post_img && (
           <section className="relative w-full h-64 ">
           <img
-            src={`http://${canisterId}.localhost:4943/f/${posts.post_img}`}
+            src={ImageUrl}
             alt="PostMedia"
             className="w-full h-full object-cover rounded-md"
           />
