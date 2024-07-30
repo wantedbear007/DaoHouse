@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./Step4.scss";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { getTruePermissions } from "./Getpermission";
+import Container from "../Container/Container";
+
 
 const Step4 = ({ data, setData, setActiveStep }) => {
   const [activeStage, setActiveStage] = useState(0);
@@ -107,6 +109,7 @@ const Step4 = ({ data, setData, setActiveStep }) => {
 
   return (
     <React.Fragment>
+    <Container>
       <div
         className={`${className}__form w-full bg-[#F4F2EC] big_phone:p-10 small_phone:p-4 p-2 big_phone:mx-4 mx-0 rounded-lg flex flex-col gap-4`}
       >
@@ -260,6 +263,7 @@ const Step4 = ({ data, setData, setActiveStep }) => {
           Save & Next <FaArrowRightLong />
         </button>
       </div>
+      </Container>
     </React.Fragment>
   );
 };

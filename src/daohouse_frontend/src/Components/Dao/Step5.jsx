@@ -5,6 +5,8 @@ import { LuAlertCircle } from "react-icons/lu";
 import { IoPersonOutline } from "react-icons/io5";
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
+import Container from "../Container/Container";
+
 
 
 const Step5 = ({ setData, setActiveStep }) => {
@@ -35,6 +37,7 @@ const Step5 = ({ setData, setActiveStep }) => {
 
   return (
     <React.Fragment>
+    <Container>
       <div
         className={
           className +
@@ -141,6 +144,7 @@ const Step5 = ({ setData, setActiveStep }) => {
           )}
         </div>
       </div>
+      </Container>
     </React.Fragment>
   );
 };

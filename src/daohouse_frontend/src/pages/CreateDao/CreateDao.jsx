@@ -11,6 +11,7 @@ import TopComponent from "../../Components/Dao/TopComponent";
 import { useAuth } from "../../Components/utils/useAuthClient";
 import { Principal } from "@dfinity/principal";
 import { toast } from "react-toastify";
+import Container from "../../Components/Container/Container";
 
 const CreateDao = () => {
   const className = "CreateDAO";
@@ -107,8 +108,11 @@ const CreateDao = () => {
 
   return (
     <Fragment>
+ 
       <TopComponent showButtons={false} />
+   
       <div className={className + " bg-[#c8ced3] mobile:py-8 py-4 mobile:px-10 px-5"}>
+      <Container>
         <div className={className + "__label py-2 mobile:px-4 px-2 w-full"}>
           <div className="phone:text-4xl text-2xl flex flex-row items-center gap-4">
             Create DAO
@@ -118,7 +122,8 @@ const CreateDao = () => {
             </div>
           </div>
         </div>
-
+        </Container>
+        <Container>
         <div className={className + "__steps overflow-x-scroll mobile:py-4 py-2 mobile:gap-20 gap-6 flex flex-row w-full mobile:items-center justify-between"}>
           {steps.map(({ step, name }, index) => (
             <div key={index} ref={index >= 3 ? Step4Ref : Step1Ref} className={"flex mobile:flex-row flex-col py-4 items-center gap-2 " + `${activeStep >= index ? "opacity-100" : "opacity-50"}`}>
@@ -133,9 +138,11 @@ const CreateDao = () => {
             </div>
           ))}
         </div>
-
+        </Container>
         {Form()}
       </div>
+
+    
     </Fragment>
   );
 };
