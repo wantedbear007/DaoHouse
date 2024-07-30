@@ -333,7 +333,7 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         dao_name: dao_detail.dao_name,
         dao_desc: dao_detail.purpose,
         // image_id: id,
-        // dao_id: canister_id_principal.clone(),
+        dao_id: canister_id_principal.clone(),
     };
 
     with_state(|state| {

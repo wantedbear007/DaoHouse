@@ -11,6 +11,7 @@ type Comment = record {
   comment_id : opt text;
 };
 type DaoDetails = record {
+  dao_id : principal;
   dao_desc : text;
   dao_name : text;
   dao_canister_id : text;
@@ -121,6 +122,7 @@ service : (PaymentRecipientAccount) -> {
   get_my_following : () -> (Result_3) query;
   get_my_post : (Pagination) -> (Result_4) query;
   get_post_byid : (text) -> (Result_5) query;
+  get_profile_by_id : (principal) -> (Result_6);
   get_user_profile : () -> (Result_6) query;
   is_user_registered : (principal) -> (bool);
   like_post : (text) -> (Result);
