@@ -586,17 +586,53 @@ fn is_user_registered(id: Principal) -> bool {
 }
 
 #[update(guard = prevent_anonymous)]
+// fn unfollow_user(user_principal: Principal) -> Result<String, String> {
+//     let principal_id = api::caller();
+
+//     with_state(|state| match &mut state.user_profile.get(&api::caller()) {
+//         Some(user) => {
+//             user.followers_list.retain(|s| s != &user_principal);
+//             user.followings_count -= 1;
+
+//             state.user_profile.insert(principal_id, user.to_owned());
+//             Ok(String::from("Successfully unfollowed."))
+//         }
+//         None => Err(String::from("User does not exist")),
+//     })
+// }
+
 fn unfollow_user(user_principal: Principal) -> Result<String, String> {
     let principal_id = api::caller();
 
-    with_state(|state| match &mut state.user_profile.get(&api::caller()) {
-        Some(user) => {
-            user.followers_list.retain(|s| s != &user_principal);
-            user.followings_count -= 1;
+    with_state(|state| {
+        // Retrieve the caller's profile
+        let mut my_profile = match state.user_profile.get(&principal_id) {
+            Some(profile) => profile.clone(),
+            None => return Err(String::from("User does not exist")),
+        };
 
-            state.user_profile.insert(principal_id, user.to_owned());
-            Ok(String::from("Successfully unfollowed."))
+        if my_profile.followings_list.contains(&user_principal) {
+            my_profile.followings_list.retain(|s| s != &user_principal);
+            my_profile.followings_count -= 1;
+        } else {
+            return Err(String::from("You are not following this user"));
         }
-        None => Err(String::from("User does not exist")),
+
+        // Update the caller's profile in the state
+        state.user_profile.insert(principal_id, my_profile);
+
+        // Retrieve the profile of the user being unfollowed
+        let mut other_profile = match state.user_profile.get(&user_principal) {
+            Some(profile) => profile.clone(),
+            None => return Err(String::from("Other user does not exist")),
+        };
+
+        other_profile.followers_list.retain(|s| s != &principal_id);
+        other_profile.followers_count -= 1;
+
+        // Update the profile of the user being unfollowed in the state
+        state.user_profile.insert(user_principal, other_profile);
+
+        Ok(String::from("Successfully unfollowed"))
     })
 }
