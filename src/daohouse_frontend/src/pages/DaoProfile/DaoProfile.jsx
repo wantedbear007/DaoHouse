@@ -354,4 +354,3 @@ const DaoProfile = () => {
 };
 
 export default DaoProfile;
-
