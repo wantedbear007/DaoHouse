@@ -10,6 +10,11 @@ const HeroSection = () => {
   const handlemov = () => {
     navigate("/dao/create-dao");
   }
+
+  const handleJoinDaoClick = () => {
+    navigate("/dao")
+  }
+
   return (
     <Container>
       <div className="relative flex flex-col md:flex-row justify-center items-center">
@@ -29,7 +34,9 @@ const HeroSection = () => {
               className="mobile:px-8 px-4 mobile:py-3 py-2 mobile:text-base text-sm bg-[#0E3746] text-white font-semibold rounded-[27.5px] shadow-md hover:bg-blue-800 hover:text-white"
             >Create DAO
             </button>
-            <button className="mobile:px-8 px-4 mobile:py-3 py-2 mobile:text-base text-sm bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
+            <button
+              onClick={handleJoinDaoClick}
+              className="mobile:px-8 px-4 mobile:py-3 py-2 mobile:text-base text-sm bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
 
               Join DAO
             </button>
