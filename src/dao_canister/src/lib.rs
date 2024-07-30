@@ -47,7 +47,8 @@ async fn init(dao_input: DaoInput) {
         followers: dao_input.followers.clone(),
         members_permissions: dao_input.members_permissions,
         followers_count: dao_input.followers.len() as u32,
-        proposals_count: 0
+        proposals_count: 0,
+        proposal_ids: Vec::new()
     };
 
     let permission = Votingandpermissions {

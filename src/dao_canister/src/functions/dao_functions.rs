@@ -1,8 +1,10 @@
-use crate::{guards::*, UpdateDaoSettings};
+use crate::{guards::*, ProposalInput, UpdateDaoSettings};
 use crate::{proposal_route, with_state, GroupList};
 use candid::Principal;
 use ic_cdk::api;
 use ic_cdk::{query, update};
+
+use super::create_proposal;
 
 #[query]
 async fn get_members_of_group(group: String) -> Result<GroupList, String> {
@@ -70,26 +72,36 @@ async fn remove_member_from_group(group: String, principal: Principal) -> String
     result
 }
 
-#[update]
-fn join_dao() -> Result<String, String> {
-    let principal_id = api::caller();
+// #[update(guard = prevent_anonymous)]
+// fn join_dao() -> Result<String, String> {
+//     let principal_id = api::caller();
 
-    if principal_id == Principal::anonymous() {
-        return Err("Anonymous principal not allowed, try logging in".to_string());
-    }
+//     with_state(|state| -> Result<String, String> {
+//         if state.dao.members.contains(&principal_id) {
+//             return Err("You are already member of this Dao".to_string());
+//         }
 
-    with_state(|state| -> Result<String, String> {
-        if state.dao.members.contains(&principal_id) {
-            return Err("You are already member of this Dao".to_string());
-        }
+//         let mut members = state.dao.members.clone();
 
-        let mut members = state.dao.members.clone();
+//         members.push(principal_id.clone());
 
-        members.push(principal_id.clone());
+//         state.dao.members = members;
+//         Ok("Successfully joined DAO".to_string())
+//     })
+// }
 
-        state.dao.members = members;
-        Ok("Successfully joined DAO".to_string())
-    })
+#[update (guard = prevent_anonymous)]
+async fn ask_to_join_dao(daohouse_backend_id: String) -> Result<String, String> {
+    let proposal = ProposalInput {
+        proposal_description: String::from("Request to join DAO as a member"),
+        proposal_title: String::from("Add member to DAO"),
+        required_votes: 7,
+        proposal_type: crate::ProposalType::AddMemberProposal
+    };
+
+    let res = create_proposal(daohouse_backend_id, proposal).await;
+
+    Ok(res)
 }
 
 #[query]
