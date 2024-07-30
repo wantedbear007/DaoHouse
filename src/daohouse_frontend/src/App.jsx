@@ -43,7 +43,7 @@ const App = () => {
           <Route path="/create-proposal" element={<CreateProposal />} />
           <Route path="/dao" element={<Dao />} />
           <Route path="/dao/create-dao" element={<CreateDao />} />
-          <Route path="/dao/profile/:tab?" element={<DaoProfile />} />
+          <Route path="/dao/profile/:daoCanisterId" element={<DaoProfile />} />
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/post/:postID" element={<Post />} />
           <Route

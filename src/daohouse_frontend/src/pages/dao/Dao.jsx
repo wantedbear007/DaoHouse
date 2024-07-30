@@ -32,10 +32,12 @@ const Dao = () => {
         const daoCanister = createDaoActor(data.dao_canister_id);
         const dao_details = await daoCanister.get_dao_detail();
         console.log(dao_details);
-        allDaoDetails.push({ ...dao_details, daoCanister });
+        allDaoDetails.push({ ...dao_details, daoCanister, dao_canister_id: data.dao_canister_id });
+        console.log("allDaoDetails ", allDaoDetails);
       }));
       const combinedDaoDetails = allDaoDetails.flat();
       setDao(combinedDaoDetails);
+      console.log("Dao", combinedDaoDetails);
     } catch (error) {
       console.error('Error fetching DAOs:', error);
     } finally {
@@ -94,7 +96,7 @@ const Dao = () => {
             {
                 dao.map((daos, index) => {
                   // Convert _Principal to a string
-                  const daoId = daos.dao_id ? daos.dao_id.toString() : 'No ID';
+                  const daoCanisterId = daos.dao_canister_id ? daos.dao_canister_id : 'No ID';
 
                   return (
                     <DaoCard
@@ -107,7 +109,7 @@ const Dao = () => {
                       image_id={daos.image_id || 'No Image'}
                       daoCanister={daos.daoCanister} 
                       handleFollow={() => handleFollowUser(daos.daoCanister, userId)} 
-                      daoId={daoId} // Pass the converted daoId
+                      daoCanisterId={daoCanisterId} // Pass the converted daoId
                     />
                   );
                 })
@@ -122,7 +124,7 @@ const Dao = () => {
           <Container classes={`__cards tablet:px-10 px-4 pb-10 grid grid-cols-1 big_phone:grid-cols-2 tablet:gap-6 gap-4 ${className}`}>
           {joinedDAO.map((a, index) => {
               // Convert _Principal to a string
-              const daoId = a.dao_id ? a.dao_id.toString() : 'No ID';
+              const daoCanisterId = a.dao_canister_id ? a.dao_canister_id : 'No ID';
 
               return (
                 <DaoCard
@@ -133,7 +135,7 @@ const Dao = () => {
                   groups={a.groups}
                   proposals={a.proposals}
                   daoCanister={a.daoCanister}
-                  daoId={daoId} // Pass the converted daoId
+                  daoCanisterId={daoCanisterId} // Pass the converted daoId
                 />
               );
             })}
