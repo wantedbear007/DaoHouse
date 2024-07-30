@@ -28,12 +28,12 @@ const CreateDao = () => {
   });
 
   const handleDaoClick = async () => {
-    const { step1, step2, step3, step4 ,step6 } = data;
-   const y= step4.voting.Council;
-    console.log("Voting Council:",y);
-
+    const { step1, step2, step3, step4, step6 } = data;
+    const council = step4.voting.Council;
+    const councilArray = Object.entries(council)
+      .filter(([permission, hasPermission]) => hasPermission)
+      .map(([permission]) => permission);
     const x = step3[0]["members"];
-
     x.forEach(function (element) {
       console.log(element)
       Principal.fromText(element);
@@ -47,7 +47,7 @@ const CreateDao = () => {
       principalMembers.push(Principal.fromText(val[i]));
     }
     console.log("Principal members", principalMembers)
-   console.log("val is ", x)
+    console.log("val is ", x)
     const daoPayload = {
       dao_name: step1.DAOIdentifier || '',
       purpose: step1.Purpose || '',
@@ -55,9 +55,9 @@ const CreateDao = () => {
       link_of_document: '',
       cool_down_period: step2.setUpPeriod || '',
       members: principalMembers,
-     // members: [Principal.fromText("qnrhg-uveun-uk5ve-46qq6-eeqio-rnh2l-f6mvk-hbhan-vccrc-wdmbn-fqe")],
+      // members: [Principal.fromText("qnrhg-uveun-uk5ve-46qq6-eeqio-rnh2l-f6mvk-hbhan-vccrc-wdmbn-fqe")],
       // members: val.map((text) => Principal.fromText(text)),
-      members_permissions :["abcd"],
+      members_permissions: councilArray,
       tokenissuer: step1.initialTokenSupply || '',
       linksandsocials: [],
       required_votes: 10,
