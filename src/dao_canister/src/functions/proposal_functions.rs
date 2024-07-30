@@ -1,3 +1,6 @@
+use std::borrow::{Borrow, BorrowMut};
+use std::iter;
+
 use crate::guards::*;
 use crate::proposal_route::check_proposal_state;
 use crate::types::{Dao, ProposalInput, Proposals};
@@ -10,7 +13,7 @@ use ic_cdk::{query, update};
 use sha2::{Digest, Sha256};
 
 #[update(guard=check_members)]
-async fn create_proposal(daohouse_backend_id: String, proposal: ProposalInput) -> String {
+pub async fn create_proposal(daohouse_backend_id: String, proposal: ProposalInput) -> String {
     let uuids = raw_rand().await.unwrap().0;
     let proposal_id = format!("{:x}", Sha256::digest(&uuids));
     let response = with_state(|state| {
@@ -81,28 +84,7 @@ fn change_proposal_state(
     })
 }
 
-#[update]
-fn refresh_proposals() -> Result<(), String> {
-    with_state(|state| {
-        let mut to_update = Vec::new();
-        for (key, proposal) in state.proposals.iter() {
-            if check_proposal_state(&proposal.proposal_expired_at) {
-                to_update.push(key.clone());
-            }
-        }
-
-        // Update the proposals
-        for key in to_update {
-            if let Some(mut proposal) = state.proposals.get(&key) {
-                proposal.proposal_status = ProposalState::Expired;
-            }
-        }
-    });
-
-    Ok(())
-}
-
-#[update]
+#[update(guard = prevent_anonymous)]
 fn comment_on_proposal(comment: String, proposal_id: String) -> Result<String, String> {
     with_state(|state| match &mut state.proposals.get(&proposal_id) {
         Some(pro) => {
@@ -115,7 +97,41 @@ fn comment_on_proposal(comment: String, proposal_id: String) -> Result<String, S
     })
 }
 
-// add guards
+fn refresh_proposals(id: &String) {
+    with_state(|state| match &mut state.proposals.get(&id) {
+        Some(proposal) => {
+            if check_proposal_state(&proposal.proposal_expired_at) {
+                ic_cdk::println!("expire ho gya bro ");
+                proposal.proposal_status = ProposalState::Expired;
+                state.proposals.insert(id.clone(), proposal.to_owned());
+
+                // Ok(format!("Updated {:?}", proposal))
+            }
+        }
+        None => (),
+    })
+}
+
+#[update]
+fn proposal_refresh() -> Result<String, String> {
+    ic_cdk::println!("inside proposal refresh");
+
+    let mut ids: Vec<String> = Vec::new();
+
+    with_state(|state| {
+        // ic_cdk::println!("loop ke aandar");
+
+        //    let abc: Vec<String> = state.dao.proposal_ids.iter().collect();
+        ids = state.dao.proposal_ids.clone();
+    });
+
+    for id in ids.iter() {
+        refresh_proposals(id);
+    }
+
+    Ok("Refresh completed".to_string())
+}
+
 #[update(guard = prevent_anonymous)]
 fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String> {
     check_voting_right(&proposal_id)?;
@@ -138,5 +154,20 @@ fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String> {
             }
         }
         None => Err(String::from("Proposal ID is invalid !")),
+    })
+}
+
+#[query(guard=prevent_anonymous)]
+fn search_proposal(proposal_id: String) -> Vec<Proposals> {
+    let mut propo: Vec<Proposals> = Vec::new();
+
+    with_state(|state| {
+        for y in state.proposals.iter() {
+            if y.1.proposal_id == proposal_id {
+                propo.push(y.1)
+            }
+        }
+
+        propo
     })
 }

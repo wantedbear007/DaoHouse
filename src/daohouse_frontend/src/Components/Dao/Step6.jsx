@@ -115,26 +115,27 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
         "__submitButton w-full flex flex-col md:flex-row items-start mt-3"
       }
     >
-      <div className="w-full md:w-[60%] flex-none">
+      <div className="w-full md:w-[70%] flex-none">
         <div className="h-auto max-w-full m-4 rounded-lg  border border-black">
-          <div className="p-4 md:p-12">
-            <p className="text-lg flex items-center space-x-2">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div className="p-3 md:p-7">
+            <p className="text-lg flex items-center space-x-2 font-bold">
+              
+              <span>Create a new DAO costs 6 ICP</span>
+              <svg width="50" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg " className= "pl-2">
                 <path d="M11 3v10h2V3h-2zM11 16v2h2v-2h-2z" fill="currentColor"/>
               </svg>
-              <span>Create a new DAO costs 6 ICP</span>
             </p>
-            <p className="mt-4 text-lg">
+            <p className="mt-3 text-lg bg-orange-400 border border-black">
               The 6 ICP will be used to pay for the contract deployment and storage.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="w-full md:w-[40%] flex flex-col md:flex-row items-center md:items-end justify-center md:justify-end">
+      <div className="w-full md:w-[40%] flex flex-col lg:mt-10 md:flex-row items-center md:items-end justify-center md:justify-end">
         <button
           onClick={() => setActiveStep(4)}
-          className="flex mobile:m-4 my-4 flex-row items-center gap-2 border border-[#0E3746] hover:bg-[#0E3746] text-[#0E3746] hover:text-white mobile:text-base text-sm transition px-4 py-2 rounded-[2rem]"
+          className="flex mobile:m-4 my-4 flex-row items-center gap-2 border border-[#0E3746] hover:bg-[#0E3746] text-[#3d6979] hover:text-white mobile:text-base text-sm transition px-4 py-2 rounded-[2rem]"
         >
           <FaArrowLeftLong /> Back
         </button>

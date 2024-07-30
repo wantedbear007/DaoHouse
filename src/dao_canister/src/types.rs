@@ -14,6 +14,13 @@ pub enum ProposalState {
     Expired
 }
 
+#[derive(Debug, Clone, CandidType, Deserialize, Serialize)]
+pub enum ProposalType {
+    AddMemberProposal,
+    RemoveMemberPrposal,
+    VotingProposal
+}
+
 #[derive(Clone, CandidType, Deserialize, Debug)]
 pub struct Proposals {
     pub proposal_id: String,
@@ -33,15 +40,17 @@ pub struct Proposals {
     pub comments: u64,
     // pub comments_list:Vec<Comment>,
     pub comments_list: Vec<String>,
-
+    pub proposal_type: ProposalType,
     pub share_count: u64,
 }
+
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
 pub struct ProposalInput {
     pub proposal_title: String,
     pub proposal_description: String,
     pub required_votes: u32,
+    pub proposal_type: ProposalType
     // pub proposal_amount:String,
     // pub proposal_receiver_id:String,
     // pub created_by: Principal,
@@ -66,7 +75,8 @@ pub struct Dao {
     pub followers: Vec<Principal>,
     pub members_permissions: Vec<String>,
     pub followers_count: u32,
-    pub proposals_count: u32
+    pub proposals_count: u32,
+    pub proposal_ids: Vec<String>
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]

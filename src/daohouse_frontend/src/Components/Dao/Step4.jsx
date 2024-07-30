@@ -1,24 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Step4.scss";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
+import { getTruePermissions } from "./Getpermission";
 
-const Step4 = ({ data, setData, setActiveStep  }) => {
-
+const Step4 = ({ data, setData, setActiveStep }) => {
   const [activeStage, setActiveStage] = useState(0);
-  // const groups = data.step3.map((grp) => grp.name);
+  const groups = data.step3.map((grp) => grp.name).filter((name) => name !== "all");
 
-  
-  const groups = data.step3.map((grp) => grp.name).filter(name => name !== "all"); 
   const [inputData, setInputData] = useState({
     proposal: theList(),
     voting: theList(),
   });
+
   const className = "DAO__Step4";
 
   function theList() {
-    const list = groups.reduce((acc, group) => {
-      const flag = group === "Council";
-
+    return groups.reduce((acc, group) => {
       acc[group] = {
         ChangeDAOConfig: false,
         ChangeDAOPolicy: false,
@@ -34,9 +31,8 @@ const Step4 = ({ data, setData, setActiveStep  }) => {
       };
       return acc;
     }, {});
-
-    return list;
   }
+
   function toggleCheckbox(step, groupName, permissionName) {
     const updatedInputData = {
       ...inputData,
@@ -48,12 +44,17 @@ const Step4 = ({ data, setData, setActiveStep  }) => {
         },
       },
     };
-  
+
+    // Synchronize proposal and voting permissions for Council
+    if (groupName === "Council") {
+      const otherStep = step === "proposal" ? "voting" : "proposal";
+      updatedInputData[otherStep][groupName][permissionName] =
+        updatedInputData[step][groupName][permissionName];
+    }
+
     setInputData(updatedInputData);
   }
-  
 
-  
   const permissionList = [
     "ChangeDAOConfig",
     "ChangeDAOPolicy",
@@ -68,10 +69,28 @@ const Step4 = ({ data, setData, setActiveStep  }) => {
     "setVoteToken",
   ];
 
+  function filterPermissions(data) {
+    const result = { proposal: {}, voting: {} };
+
+    // Iterate over each group in proposal and voting
+    for (const step of ["proposal", "voting"]) {
+      for (const groupName of Object.keys(data[step])) {
+        const filteredPermissions = Object.keys(data[step][groupName]).filter(
+          (key) => data[step][groupName][key]
+        );
+        if (groupName === "Council") {
+          result[step][groupName] = filteredPermissions;
+        }
+      }
+    }
+
+    return result;
+  }
+
   function handleSaveAndNext() {
     setData((prev) => ({
       ...prev,
-      step4: inputData,
+      step4: filterPermissions(inputData),
     }));
     setActiveStep(4);
   }
@@ -80,43 +99,11 @@ const Step4 = ({ data, setData, setActiveStep  }) => {
     setActiveStep(2);
   }
 
-  function toggleCheckbox(step, groupName, permissionName) {
-    const updatedInputData = {
-      ...inputData,
-      [step]: {
-        ...inputData[step],
-        [groupName]: {
-          ...inputData[step][groupName],
-          [permissionName]: !inputData[step][groupName][permissionName],
-        },
-      },
-    };
+  useEffect(() => {
+    console.log("Filtered Permissions:", getTruePermissions(inputData));
+  }, [inputData]);
 
-    setInputData(updatedInputData);
-  }
-
-  // function getTruePermissions(data) {
-  //   const filterPermissions = (permissions) => 
-  //     Object.fromEntries(
-  //       Object.entries(permissions).filter(([key, value]) => value === true)
-  //     );
-
-  //   return {
-  //     proposal: Object.keys(data.proposal).reduce((acc, groupName) => {
-  //       acc[groupName] = filterPermissions(data.proposal[groupName]);
-  //       return acc;
-  //     }, {}),
-  //     voting: Object.keys(data.voting).reduce((acc, groupName) => {
-  //       acc[groupName] = filterPermissions(data.voting[groupName]);
-  //       return acc;
-  //     }, {}),
-  //   };
-  // }
-
-
-  // const truePermissions = getTruePermissions(inputData);
-  // console.log("-tp",truePermissions)
-
+  const truePermissions = getTruePermissions(inputData);
 
   return (
     <React.Fragment>
@@ -151,7 +138,7 @@ const Step4 = ({ data, setData, setActiveStep  }) => {
                   <th className="font-semibold big_phone:w-2/5 big_phone:p-4 p-2 pb-4 flex justify-left mobile:text-base text-sm">
                     Actions
                   </th>
-                  {Object.keys(inputData.proposal).map((groupName, index) => (
+                  {Object.keys(truePermissions.proposal).map((groupName, index) => (
                     <th
                       key={index}
                       className="font-semibold big_phone:p-4 p-2 pb-4 big_phone:text-base text-sm"
@@ -170,7 +157,7 @@ const Step4 = ({ data, setData, setActiveStep  }) => {
                     <td className="big_phone:w-2/5 font-semibold list-disc big_phone:p-4 py-4 p-2 big_phone:text-base text-sm">
                       {permissionName}
                     </td>
-                    {Object.keys(inputData.proposal).map((groupName, groupIndex) => (
+                    {Object.keys(truePermissions.proposal).map((groupName, groupIndex) => (
                       <td key={groupIndex}>
                         <div className="flex justify-center">
                           <input
@@ -186,8 +173,6 @@ const Step4 = ({ data, setData, setActiveStep  }) => {
                     ))}
                   </tr>
                 ))}
-
-            
               </tbody>
             </table>
             <section className="flex w-full justify-end items-center">
@@ -210,7 +195,7 @@ const Step4 = ({ data, setData, setActiveStep  }) => {
                   <th className="font-semibold big_phone:w-2/5 big_phone:p-4 py-4 px-2 flex justify-left mobile:text-base text-sm">
                     Actions
                   </th>
-                  {Object.keys(inputData.voting).map((groupName, index) => (
+                  {Object.keys(truePermissions.voting).map((groupName, index) => (
                     <th
                       key={index}
                       className="font-semibold big_phone:p-4 py-4 px-2 big_phone:text-base text-sm"
@@ -229,7 +214,7 @@ const Step4 = ({ data, setData, setActiveStep  }) => {
                     <td className="big_phone:w-2/5 font-semibold list-disc big_phone:p-4 py-4 p-2 big_phone:text-base text-sm">
                       {permissionName}
                     </td>
-                    {Object.keys(inputData.voting).map((groupName, groupIndex) => (
+                    {Object.keys(truePermissions.voting).map((groupName, groupIndex) => (
                       <td key={groupIndex}>
                         <div className="flex justify-center">
                           <input
@@ -257,7 +242,7 @@ const Step4 = ({ data, setData, setActiveStep  }) => {
               </button>
             </section>
           </React.Fragment>
-              )}
+        )}
       </div>
       <div className={`${className}__submitButton w-full flex flex-row items-center mobile:justify-end justify-between`}>
         <button
@@ -270,8 +255,7 @@ const Step4 = ({ data, setData, setActiveStep  }) => {
           type="submit"
           onClick={handleSaveAndNext}
           disabled={activeStage === 0}
-          className={`flex mobile:m-4 my-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white mobile:text-base text-sm ${activeStage === 0 ? "opacity-50" : "opacity-100"
-            }`}
+          className={`flex mobile:m-4 my-4 flex-row items-center gap-2 ${activeStage === 0 ? "bg-gray-400" : "bg-[#0E3746]"} px-4 py-2 rounded-[2rem] text-white mobile:text-base text-sm`}
         >
           Save & Next <FaArrowRightLong />
         </button>
@@ -281,23 +265,3 @@ const Step4 = ({ data, setData, setActiveStep  }) => {
 };
 
 export default Step4;
-// utils/permissionsUtils.js
-
-export function getTruePermissions(data) {
-  const filterPermissions = (permissions) =>
-    Object.fromEntries(
-      Object.entries(permissions).filter(([key, value]) => value === true)
-    );
-
-  return {
-    proposal: Object.keys(data.proposal).reduce((acc, groupName) => {
-      acc[groupName] = filterPermissions(data.proposal[groupName]);
-      return acc;
-    }, {}),
-    voting: Object.keys(data.voting).reduce((acc, groupName) => {
-      acc[groupName] = filterPermissions(data.voting[groupName]);
-      return acc;
-    }, {}),
-  };
-}
-
