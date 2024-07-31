@@ -30,10 +30,10 @@ const Navbar = () => {
   ];
 
   useEffect(() => {
-    if (backendActor === null || userProfile) return;
-
     const createAndFetchUserProfile = async () => {
       try {
+        // Ensure user profile data is fetched
+        if (backendActor === null || userProfile) return;
         const response = await backendActor.check_user_existance();
 
         if (response["Ok"]) {
@@ -57,12 +57,14 @@ const Navbar = () => {
   }, [backendActor, fetchUserProfile, userProfile]);
 
   useEffect(() => {
-    setImageSrc(
-      userProfile?.profile_img
-        ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
-        : MyProfileImage
-    );
-    setUsername(userProfile?.username || "");
+    if (userProfile) {
+      setImageSrc(
+        userProfile.profile_img
+          ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
+          : MyProfileImage
+      );
+      setUsername(userProfile.username || "");
+    }
   }, [userProfile]);
 
   const handleLogin = async () => {
