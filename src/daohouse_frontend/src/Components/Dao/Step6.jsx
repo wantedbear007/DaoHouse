@@ -87,6 +87,7 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
   console.log("data of all steps: ", data)
   return (
     <React.Fragment>
+    <Container>
       <div
         className={
           className +

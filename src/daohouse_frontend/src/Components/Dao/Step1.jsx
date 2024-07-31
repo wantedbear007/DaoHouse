@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { toast } from "react-toastify";
+import Container from "../Container/Container";
 
 
 const Step1 = ({ setData, setActiveStep }) => {
@@ -60,6 +61,7 @@ const Step1 = ({ setData, setActiveStep }) => {
 
   return (
     <React.Fragment>
+    <Container>
       <div
         className={
           className +
@@ -93,7 +95,7 @@ const Step1 = ({ setData, setActiveStep }) => {
           onChange={handleChange}
         />
 
-        {/** DAO Type */}
+        {/** DAO Type 
         <label htmlFor="type" className="font-semibold mobile:text-base text-sm">
           DAO Type
         </label>
@@ -103,7 +105,7 @@ const Step1 = ({ setData, setActiveStep }) => {
           value={inputData.DAOType}
           name="DAOType"
           className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"
-        />
+        />*/}
 
         {/** DAO Token 
         <div className="flex mobile:flex-row flex-col mobile:gap-4 gap-2 mobile:items-center items-start">
@@ -192,6 +194,7 @@ const Step1 = ({ setData, setActiveStep }) => {
           </button>
         
       </div>
+      </Container>
     </React.Fragment>
   );
 };

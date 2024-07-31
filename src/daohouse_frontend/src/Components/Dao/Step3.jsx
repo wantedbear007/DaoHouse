@@ -6,6 +6,7 @@ import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { Principal } from "@dfinity/principal";
 import CircularProgress from '@mui/material/CircularProgress';
 import { toast } from "react-toastify";
+import Container from "../Container/Container";
 
 const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
 
@@ -254,6 +255,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
 
   return (
     <React.Fragment>
+    <Container>
       <div
         className={
           className +
@@ -456,7 +458,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
 
       </div>
 
-
+      </Container>
     </React.Fragment>
   );
 };
