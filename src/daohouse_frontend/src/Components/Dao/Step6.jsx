@@ -4,6 +4,7 @@ import { FiUpload } from "react-icons/fi";
 import defaultImage from "../../../assets/defaultImage.png";
 import CircularProgress from '@mui/material/CircularProgress';
 import { toast } from 'react-toastify';
+import Container from "../Container/Container";
 
 const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
   const [file, setFile] = useState(null);
