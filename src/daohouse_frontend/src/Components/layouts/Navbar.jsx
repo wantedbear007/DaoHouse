@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useAuth, useAuthClient } from "../utils/useAuthClient";
+import { useAuth } from "../utils/useAuthClient";
 import { LuChevronDown } from "react-icons/lu";
 import LoginModal from "../Auth/LoginModal";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
@@ -11,12 +11,14 @@ import { toast } from "react-toastify";
 import Container from "../Container/Container";
 // import { Principal } from "@dfinity/principal";
 import { Principal } from "@dfinity/candid/lib/cjs/idl";
+
 const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const { userProfile, fetchUserProfile } = useUserProfile();
-  const { login, isAuthenticated, signInPlug, logout, principal, backendActor, getPrincipalId, stringPrincipal} = useAuth();
+  const { login, isAuthenticated, signInPlug, logout, principal, backendActor, getPrincipalId, stringPrincipal } = useAuth();
   const location = useLocation();
   
   const [username, setUsername] = useState("");
@@ -66,13 +68,9 @@ const Navbar = () => {
   }, [userProfile]);
 
   const handleLogin = async () => {
-    setIsLoading(true);
+    setIsConnecting(true);
     await login().then(() => window.location.reload());
   };
-
-
-  const abc = useAuthClient()
-  abc
 
   const handleLogout = async () => {
     setIsLoading(true);
@@ -89,13 +87,20 @@ const Navbar = () => {
   };
 
   const handleLoginPlug = async () => {
-    setIsLoading(true);
+    setIsConnecting(true);
     await signInPlug().then(() => setIsModalOpen(false));
   };
 
   const handleLoginModalOpen = () => {
-    setIsLoading(true);
+    setIsConnecting(false); // Ensure that the button text is "Connect" when the modal opens
     setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    if (!isConnecting) {
+      setIsConnecting(false); // Reset to "Connect" if not connecting
+    }
   };
 
   const dropdownItems = [
@@ -115,6 +120,7 @@ const Navbar = () => {
       icon: <FaSignOutAlt className="mr-2" />,
     },
   ];
+
   return (
     <nav>
       <div className="bg-bg-color shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50">
@@ -144,7 +150,7 @@ const Navbar = () => {
                     onClick={handleLoginModalOpen}
                     className="mobile:px-8 px-4 py-2 rounded-[27.5px] bg-[#FFFFFF] big_phone:text-base small_phone:text-sm text-xs"
                   >
-                    {isLoading ? "Connecting" : "Connect"}
+                    {isConnecting ? "Connecting" : "Connect"}
                   </button>
                 </div>
               ) : (
@@ -181,7 +187,7 @@ const Navbar = () => {
         </Container>
         <LoginModal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={handleModalClose}
           onLogin={handleLogin}
           onLoginPlug={handleLoginPlug}
         />
