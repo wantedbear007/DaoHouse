@@ -24,12 +24,14 @@ import { useAuth, useAuthClient } from "../../Components/utils/useAuthClient";
 import { useUserProfile } from "../../context/UserProfileContext";
 import { toast } from "react-toastify";
 
+
 const DaoProfile = () => {
   
   const className = "DaoProfile";
   const [activeLink, setActiveLink] = useState("proposals");
   const { backendActor, createDaoActor } = useAuth();
   const [dao, setDao] = useState(null);
+  const [proposals, setProposals] = useState([]);
   const [loading, setLoading] = useState(false);
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
@@ -40,6 +42,7 @@ const DaoProfile = () => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [followersCount, setFollowersCount] = useState(0);
   const [userProfile, setUserProfile] = useState(null);
+  console.log("--d",{daoCanisterId})
 
   useEffect(() => {
     const fetchDaoDetails = async () => {
@@ -48,7 +51,11 @@ const DaoProfile = () => {
         try {
           const daoActor = createDaoActor(daoCanisterId);
           const daoDetails = await daoActor.get_dao_detail();
+          const proposals = await daoActor.get_all_proposals()
+          console.log(proposals, " proposals aa rhe")
+          console.log(proposals.map(proposal => proposal.proposal_description), " proposals descriptions");
           setDao(daoDetails);
+          setProposals(proposals)
   
           const profileResponse = await backendActor.get_user_profile();
           if (profileResponse.Ok) {
@@ -251,7 +258,7 @@ const DaoProfile = () => {
               </p>
               <div className="md:flex justify-between mt-2 hidden">
                 <span className="tablet:mr-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
-                {dao.posts || 0} <span className=" md:text-[16px] mx-1">Posts</span>
+                {dao.posts || 0} <span className=" md:text-[16px] mx-1">Proposals</span>
                 </span>
                 <span className="md:mx-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
                 {followersCount}<span className=" md:text-[16px] mx-1">Followers</span>
@@ -381,7 +388,7 @@ const DaoProfile = () => {
             Settings
           </button>
         </div>
-        {activeLink === "proposals" && <ProposalsContent />}
+        {activeLink === "proposals" &&   <ProposalsContent proposals={proposals} />}
         {activeLink === "feeds" && <FeedsContent />}
         {activeLink === "member_policy" && <Members />}
         {activeLink === "followers" && <FollowersContent />}

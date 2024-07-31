@@ -93,7 +93,7 @@ export const proposalsArray = [
 
 
 export const sectionsData = [
-  { title: 'Transfer', input1: "Amount", input2: "Receiver" },
+  // { title: 'Transfer', input1: "Amount", input2: "Receiver" },
   { title: 'Cast Vote', input1: "In Favour", input2: "Against" }
 ];
 
@@ -101,7 +101,8 @@ export const sectionsData = [
 export const gridItems = [
   { label: "Submitted On:", value: "04/04/24", time: "5:32:11 AM" },
   { label: "Expires On:", value: "04/04/24 ", time: "5:32:11 AM" },
-  { label: "Votes Require", value: "15" }
+  { label: "Votes Require", value: "12"
+     }
 ];
 
 export const buttons = [
