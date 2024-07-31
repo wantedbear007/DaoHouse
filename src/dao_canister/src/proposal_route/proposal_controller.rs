@@ -1,8 +1,7 @@
-use crate::{with_state, ProposalState, State};
+use crate::{ProposalState, State};
 
-use crate::guards::*;
 use crate::types::{ProposalInput, Proposals};
-use ic_cdk::{api, update};
+use ic_cdk::api;
 
 pub fn create_new_proposal(
     state: &mut State,
@@ -18,7 +17,9 @@ pub fn create_new_proposal(
         proposal_status: ProposalState::Open,
         // proposal_amount: proposal.proposal_amount,
         proposal_submitted_at: ic_cdk::api::time(),
-        proposal_expired_at: ic_cdk::api::time() + (20 * 86_400 * 1_000_000_000),
+        // proposal_expired_at: ic_cdk::api::time() + (20 * 86_400 * 1_000_000_000),
+        proposal_expired_at: ic_cdk::api::time() + (2 * 60 * 1_000_000_000),
+
         // proposal_receiver_id: proposal.proposal_receiver_id,
         proposal_approved_votes: 0,
         approved_votes_list: Vec::new(),
@@ -29,7 +30,12 @@ pub fn create_new_proposal(
         comments: 0,
         comments_list: Vec::new(),
         share_count: 0,
+        proposal_type: proposal.proposal_type,
     };
+    let mut updated_dao = state.dao.clone();
+    updated_dao.proposals_count += 1;
+    updated_dao.proposal_ids.push(proposal_id.clone());
+    state.dao = updated_dao;
 
     state.proposals.insert(proposal_id, new_proposal);
 

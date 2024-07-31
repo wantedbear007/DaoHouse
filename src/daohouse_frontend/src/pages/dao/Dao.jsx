@@ -6,25 +6,17 @@ import NoDataComponent from "../../Components/Dao/NoDataComponent";
 import TopComponent from "../../Components/Dao/TopComponent";
 import Container from "../../Components/Container/Container";
 import SearchProposals from "../../Components/Proposals/SearchProposals";
-import { DiBlackberry } from "react-icons/di";
 import { useAuth } from "../../Components/utils/useAuthClient";
 import { Actor, HttpAgent } from '@dfinity/agent';
 import MuiSkeleton from "../../Components/Skeleton/MuiSkeleton";
-import { idlFactory as myCanisterIdl, canisterId as myCanisterId } from '../../../../declarations/dao_canister/index';
-const agent = new HttpAgent();
+
 const Dao = () => {
   const [showAll, setShowAll] = useState(true);
   const [joinedDAO, setJoinedDAO] = useState(false);
   const className = "DAO";
-  const { backendActor, createActor, createDaoActor } = useAuth();
+  const { backendActor, createDaoActor } = useAuth();
   const [dao, setDao] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log("--dao--", dao);
-
-  const joinedDAOs = [
-    { name: "DAO 3", funds: "155m USD", members: 40, groups: 4, proposals: 10 },
-    { name: "DAO 3", funds: "160m USD", members: 35, groups: 6, proposals: 18 },
-  ];
 
   const getDaos = async () => {
     const pagination = {
@@ -35,45 +27,24 @@ const Dao = () => {
       setLoading(true);
       let response = await backendActor.get_all_dao(pagination);
 
- 
-// =======
-// >>>>>>> main
-      console.log(response, 'response');
       let allDaoDetails = [];
       await Promise.all(response.map(async (data) => {
-        console.log(data.dao_canister_id, "canister id");
-
         const daoCanister = createDaoActor(data.dao_canister_id);
-        console.log(daoCanister, "dao hao ye");
-
         const dao_details = await daoCanister.get_dao_detail();
-        console.log(dao_details, "details aa gye bhaiii");
-
-        allDaoDetails.push(dao_details);
+        console.log(dao_details);
+        allDaoDetails.push({ ...dao_details, daoCanister, dao_canister_id: data.dao_canister_id });
+        console.log("allDaoDetails ", allDaoDetails);
       }));
       const combinedDaoDetails = allDaoDetails.flat();
-      console.log("--combinedDaoDetails", combinedDaoDetails);
-      setDao(combinedDaoDetails)
+      setDao(combinedDaoDetails);
+      console.log("Dao", combinedDaoDetails);
     } catch (error) {
-
-      // =======
-      //       console.log(response,'response')
-      //           response.map(async (data) => {
-      //             const daoCanister = createDaoActor(data.dao_canister_id)
-      //             const dao_details = await  daoCanister.get_dao_detail()
-      //             console.log(dao_details, "details aa gye bhaiii")
-      //         })
-      //       } catch (error) {
-      // >>>>>>> main
-// =======
-
-// >>>>>>> main
       console.error('Error fetching DAOs:', error);
-    }
-    finally {
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
+
   useEffect(() => {
     getDaos();
   }, [backendActor]);
@@ -122,18 +93,27 @@ const Dao = () => {
         ) : dao && dao.length > 0 ? (
           <div className={"bg-[#c8ced3]"}>
             <Container classes={`__cards tablet:px-10 px-4 pb-10 grid grid-cols-1 big_phone:grid-cols-2 tablet:gap-6 gap-4 ${className}`}>
-              {
-                dao.map((daos, index) => (
-                  <DaoCard
-                    key={index}
-                    name={daos.dao_name || 'No Name'}
-                    followers={daos.followers_count || '0'}
-                    members={daos.members_count ? Number(BigInt(daos.members_count)) : '0'}
-                    groups={daos.groups_count ? Number(BigInt(daos.groups_count)) : 'No Groups'}
-                    proposals={daos.proposals_count || '0'}
-                    image_id={daos.image_id || 'No Image'}
-                  />
-                ))}
+            {
+                dao.map((daos, index) => {
+                  // Convert _Principal to a string
+                  const daoCanisterId = daos.dao_canister_id ? daos.dao_canister_id : 'No ID';
+
+                  return (
+                    <DaoCard
+                      key={index}
+                      name={daos.dao_name || 'No Name'}
+                      followers={daos.followers_count || '0'}
+                      members={daos.members_count ? Number(BigInt(daos.members_count)) : '0'}
+                      groups={daos.groups_count ? Number(BigInt(daos.groups_count)) : 'No Groups'}
+                      proposals={daos.proposals_count || '0'}
+                      image_id={daos.image_id || 'No Image'}
+                      daoCanister={daos.daoCanister} 
+                      handleFollow={() => handleFollowUser(daos.daoCanister, userId)} 
+                      daoCanisterId={daoCanisterId} // Pass the converted daoId
+                    />
+                  );
+                })
+              }
             </Container>
           </div>
         ) : (
@@ -142,27 +122,30 @@ const Dao = () => {
       ) : joinedDAO && joinedDAO.length > 0 ? (
         <div className={"bg-[#c8ced3]"}>
           <Container classes={`__cards tablet:px-10 px-4 pb-10 grid grid-cols-1 big_phone:grid-cols-2 tablet:gap-6 gap-4 ${className}`}>
-            {joinedDAO.map((a, index) => (
-              <DaoCard
-                key={index}
-                name={a.name}
-                funds={a.funds}
-                members={a.members}
-                groups={a.groups}
-                proposals={a.proposals}
-              />
-            ))}
+          {joinedDAO.map((a, index) => {
+              // Convert _Principal to a string
+              const daoCanisterId = a.dao_canister_id ? a.dao_canister_id : 'No ID';
+
+              return (
+                <DaoCard
+                  key={index}
+                  name={a.name}
+                  funds={a.funds}
+                  members={a.members}
+                  groups={a.groups}
+                  proposals={a.proposals}
+                  daoCanister={a.daoCanister}
+                  daoCanisterId={daoCanisterId} // Pass the converted daoId
+                />
+              );
+            })}
           </Container>
         </div>
       ) : (
         <NoDataComponent />
       )}
     </div>
-
   );
 };
 
 export default Dao;
-
-
-

@@ -1,12 +1,63 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Principal } from "@dfinity/principal";
+import { useAuth } from "../utils/useAuthClient";
+import {toast} from 'react-toastify';
 
-const DaoCard = ({ name, funds, members, followers,groups, proposals, image_id }) => {
+const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCanister, daoCanisterId }) => {
   const navigate = useNavigate();
+  const { backendActor } = useAuth();
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
-  const ImageUrl = `http://${canisterId}.localhost:4943/f/${image_id}`;
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followersCount, setFollowersCount] = useState(0);
+  const [userProfile, setUserProfile] = useState(null);
+  const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
+  const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
+  const imageUrl = `${protocol}://${canisterId}.${domain}/f/${image_id}`;
+  console.log(daoCanisterId);
+
+  useEffect(() => {
+    const fetchFollowers = async () => {
+      try {
+        const profileResponse = await backendActor.get_user_profile();
+        if (profileResponse.Ok) {
+          setUserProfile(profileResponse.Ok);
+          const currentUserId = Principal.fromText(profileResponse.Ok.user_id.toString());
+          const daoFollowers = await daoCanister.get_dao_followers();
+          setFollowersCount(daoFollowers.length);
+          setIsFollowing(daoFollowers.some(follower => follower.toString() === currentUserId.toString()));
+        }
+      } catch (error) {
+        console.error('Error fetching profile and followers:', error);
+      }
+    };
+    fetchFollowers();
+  }, [daoCanister, backendActor]);
+
+  const toggleFollow = async () => {
+    try {
+      if (!userProfile) return;
+
+      const response = isFollowing
+        ? await daoCanister.unfollow_dao()
+        : await daoCanister.follow_dao();
+
+      if (response?.Ok) {
+        const updatedFollowers = await daoCanister.get_dao_followers();
+        setFollowersCount(updatedFollowers.length);
+        setIsFollowing(!isFollowing);
+        toast.success(isFollowing ? "Successfully unfollowed" : "Successfully followed");
+      } else if (response?.Err) {
+        toast.error(response.Err);
+      }
+    } catch (error) {
+      console.error('Error following/unfollowing DAO:', error);
+      toast.error("An error occurred");
+    }
+  };
+
   const goToDaoProfile = () => {
-    navigate("/dao/profile");
+    navigate(`/dao/profile/${daoCanisterId}`);
   };
 
   return (
@@ -14,18 +65,26 @@ const DaoCard = ({ name, funds, members, followers,groups, proposals, image_id }
       <div className="flex justify-start items-start mb-4 gap-4">
         <div className="mobile:w-[207px] mobile:h-[120px] w-[150px] h-[70px] border border-black rounded">
           <img
-            src={ImageUrl}
+            src={imageUrl}
             alt="DAO Image"
             className="w-full h-full object-cover rounded"
           />
         </div>
-        <h2 className="mobile:text-2xl text-lg font-semibold truncate ... w-47">{name}</h2>
+        <div>
+          <h2 className="mobile:text-2xl text-lg font-semibold">{name}</h2>
+          <button
+            onClick={toggleFollow}
+            className={`flex-1 mt-2 text-blue-400 p-1 sm:text-sm md:text-lg`}
+          >
+            {isFollowing ? 'Unfollow' : '+ Follow'}
+          </button>
+        </div>
       </div>
 
       <div className="big_phone:grid hidden grid-cols-4 text-center mb-4 bg-white tablet:p-4 pb-4 p-2 rounded-lg">
         <div>
-          <p className="font-bold text-dark-green">{followers}</p>
-          <p className="text-sm text-dark-green">Followers</p>
+          <p className="font-bold text-dark-green">{funds}</p>
+          <p className="text-sm text-dark-green">DAO Funds</p>
         </div>
         <div>
           <p className="font-bold text-dark-green">{members}</p>
@@ -37,14 +96,14 @@ const DaoCard = ({ name, funds, members, followers,groups, proposals, image_id }
         </div>
         <div>
           <p className="font-bold text-dark-green">{proposals}</p>
-          <p className="text-sm text-dark-green">Proposals</p>
+          <p className="text-sm text-dark-green">Active Proposals</p>
         </div>
       </div>
 
       <div className="big_phone:hidden grid grid-cols-2 text-center my-4 small_phone:gap-4 gap-2">
         <div className="bg-white rounded-lg py-4">
           <p className="font-bold text-dark-green">{funds}</p>
-          <p className="text-sm text-dark-green">Followers</p>
+          <p className="text-sm text-dark-green">DAO Funds</p>
         </div>
         <div className="bg-white rounded-lg py-4">
           <p className="font-bold text-dark-green">{members}</p>

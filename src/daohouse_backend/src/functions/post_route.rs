@@ -127,7 +127,10 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
 
 #[query(guard = prevent_anonymous)]
 fn get_all_posts(page_data: Pagination) -> GetAllPostsResponse {
+
+
     let mut all_posts = Vec::new();
+
 
     with_state(|state| {
         for (_k, v) in state.post_detail.iter() {
