@@ -166,6 +166,7 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
         )}
       </div>
     </div>
+    </Container>
     </React.Fragment>
   );
 };
