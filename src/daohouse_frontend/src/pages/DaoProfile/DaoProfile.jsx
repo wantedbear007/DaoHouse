@@ -57,10 +57,8 @@ const DaoProfile = () => {
   
             const daoFollowers = await daoActor.get_dao_followers();
             setFollowersCount(daoFollowers.length);
-  
-            // Check follow status from local storage
-            const storedIsFollowing = localStorage.getItem(`dao-${daoCanisterId}-isFollowing`);
-            setIsFollowing(storedIsFollowing === null ? daoFollowers.some(follower => follower.toString() === currentUserId.toString()) : JSON.parse(storedIsFollowing));
+            setIsFollowing(daoFollowers.some(follower => follower.toString() === currentUserId.toString()));
+          
           }
         } catch (error) {
           console.error('Error fetching DAO details:', error);
@@ -76,6 +74,9 @@ const DaoProfile = () => {
 
   const toggleFollow = async () => {
     if (!userProfile) return;
+    const newIsFollowing = !isFollowing;
+    setIsFollowing(newIsFollowing);
+    setFollowersCount(prevCount => newIsFollowing ? prevCount + 1 : prevCount - 1);
   
     try {
       const daoActor = createDaoActor(daoCanisterId);
@@ -83,23 +84,19 @@ const DaoProfile = () => {
         ? await daoActor.unfollow_dao()
         : await daoActor.follow_dao();
   
-      if (response?.Ok) {
-        // Update state immediately
-        setIsFollowing(!isFollowing);
-  
-        // Update followers count immediately
-        const updatedFollowers = await daoActor.get_dao_followers();
-        setFollowersCount(updatedFollowers.length);
-  
-        // Store the follow status in local storage
-        localStorage.setItem(`dao-${daoCanisterId}-isFollowing`, !isFollowing);
-  
-        toast.success(isFollowing ? "Successfully unfollowed" : "Successfully followed");
-      } else if (response?.Err) {
-        toast.error(response.Err);
-      }
+        if (response?.Ok) {
+          toast.success(newIsFollowing ? "Successfully followed" : "Successfully unfollowed");
+        } else if (response?.Err) {
+          // Revert the state if there's an error
+          setIsFollowing(!newIsFollowing);
+          setFollowersCount(prevCount => newIsFollowing ? prevCount - 1 : prevCount + 1);
+          toast.error(response.Err);
+        }
     } catch (error) {
       console.error('Error following/unfollowing DAO:', error);
+      // Revert the state if there's an error
+      setIsFollowing(!newIsFollowing);
+      setFollowersCount(prevCount => newIsFollowing ? prevCount - 1 : prevCount + 1);
       toast.error("An error occurred");
     }
   };
@@ -257,7 +254,7 @@ const DaoProfile = () => {
                 {dao.posts || 0} <span className=" md:text-[16px] mx-1">Posts</span>
                 </span>
                 <span className="md:mx-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
-                {dao.followers.length}<span className=" md:text-[16px] mx-1">Followers</span>
+                {followersCount}<span className=" md:text-[16px] mx-1">Followers</span>
                 </span>
                 
               </div>

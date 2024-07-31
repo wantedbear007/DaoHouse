@@ -3,6 +3,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { FiUpload } from "react-icons/fi";
 import defaultImage from "../../../assets/defaultImage.png";
 import CircularProgress from '@mui/material/CircularProgress';
+import { toast } from 'react-toastify';
 import Container from "../Container/Container";
 
 const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
@@ -16,6 +17,11 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
     const selectedFile = event.target.files[0];
 
     if (selectedFile) {
+      if (selectedFile.size > 2.5 * 1024 * 1024) {
+        toast.error("File size must be less than 2.5 MB");
+        return;
+      }
+
       setFile(selectedFile);
       const url = URL.createObjectURL(selectedFile);
       setFileURL(url);
@@ -26,6 +32,11 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
   };
 
   const createDAO = async () => {
+    if (!file) {
+      toast.error("Please insert an image");
+      return;
+    }
+
     setLoadingNext(true);
     setTimeout(async () => {
       if (file) {
@@ -54,9 +65,7 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
       }
       setLoadingNext(false);
       setShouldCreateDAO(true);
-    }, 500);
-
-
+    }, 2000);
   };
 
   const readFileContent = (file) => {
@@ -108,9 +117,7 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
             onChange={handleFileInput}
           />
         </div>
-
       </div>
-      
       
       <div className={
         className +
@@ -148,20 +155,19 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
           <button
             type="submit"
             onClick={createDAO}
-            className="flex mobile:m-4 my-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white mobile:text-base text-sm"
+            className="flex mobile:m-4 my-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white mobile:text-base text-sm whitespace-nowrap"
           >
-            Create DAO
+            {loadingNext ? (
+              <CircularProgress size={24} />
+            ) : (
+              "Create DAO"
+            )}
           </button>
         )}
       </div>
     </div>
-
-    
-    </Container>
     </React.Fragment>
   );
 };
 
 export default Step6;
-
-
