@@ -530,7 +530,7 @@ pub struct DaoCanisterInput {
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
 pub struct DaoDetails {
-    // pub dao_id: Principal,
+    pub dao_id: Principal,
     pub dao_name: String,
     // pub image_id: String,
     pub dao_desc: String,

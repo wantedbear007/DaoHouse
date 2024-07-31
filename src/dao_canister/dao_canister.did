@@ -100,6 +100,7 @@ service : (DaoInput) -> {
   get_proposal_by_id : (text) -> (Proposals) query;
   proposal_refresh : () -> (Result);
   remove_member_from_group : (text, principal) -> (text);
+  search_proposal : (text) -> (vec Proposals) query;
   unfollow_dao : () -> (Result);
   update_dao_settings : (UpdateDaoSettings) -> (Result);
   vote : (text, VoteParam) -> (Result);
