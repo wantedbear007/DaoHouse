@@ -107,11 +107,11 @@ const Navbar = () => {
       route: "/my-profile",
       icon: <FaUser className="mr-2" />,
     },
-    {
-      label: "My Proposals",
-      route: "/my-proposals",
-      icon: <FaUser className="mr-2" />,
-    },
+    // {
+    //   label: "My Proposals",
+    //   route: "/my-proposals",
+    //   icon: <FaUser className="mr-2" />,
+    // },
     {
       label: "Logout",
       onClick: handleLogout,

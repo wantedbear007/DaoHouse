@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Principal } from "@dfinity/principal";
 import { useAuth } from "../utils/useAuthClient";
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCanister, daoCanisterId }) => {
   const navigate = useNavigate();
@@ -11,29 +11,49 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCaniste
   const [isFollowing, setIsFollowing] = useState(false);
   const [followersCount, setFollowersCount] = useState(0);
   const [userProfile, setUserProfile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [joinStatus, setJoinStatus] = useState("Join DAO"); // 'Join DAO', 'Requested', 'Joined'
+  const [isMember, setIsMember] = useState(false);
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
   const imageUrl = `${protocol}://${canisterId}.${domain}/f/${image_id}`;
-  console.log(daoCanisterId, "sdffsdfdsfdfsdfdsfdsfs");
-  
+  const daohouseBackendCanisterId = process.env.CANISTER_ID_DAOHOUSE_BACKEND;
 
   useEffect(() => {
-    const fetchFollowers = async () => {
-      try {
-        const profileResponse = await backendActor.get_user_profile();
-        if (profileResponse.Ok) {
-          setUserProfile(profileResponse.Ok);
-          const currentUserId = Principal.fromText(profileResponse.Ok.user_id.toString());
-          const daoFollowers = await daoCanister.get_dao_followers();
-          setFollowersCount(daoFollowers.length);
-          setIsFollowing(daoFollowers.some(follower => follower.toString() === currentUserId.toString()));
+    const fetchDaoDetails = async () => {
+      if (daoCanisterId) {
+        setLoading(true);
+        try {
+          
+          const profileResponse = await backendActor.get_user_profile();
+          if (profileResponse.Ok) {
+            setUserProfile(profileResponse.Ok);
+            const currentUserId = Principal.fromText(profileResponse.Ok.user_id.toString());
+
+            const daoFollowers = await daoCanister.get_dao_followers();
+            setFollowersCount(daoFollowers.length);
+            setIsFollowing(daoFollowers.some(follower => follower.toString() === currentUserId.toString()));
+
+            const daoMembers = await daoCanister.get_dao_members();
+            const isCurrentUserMember = daoMembers.some(member => member.toString() === currentUserId.toString());
+            setIsMember(isCurrentUserMember);
+
+            if (isCurrentUserMember) {
+              setJoinStatus('Joined');
+            } else {
+              setJoinStatus('Join DAO');
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching DAO details:', error);
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        console.error('Error fetching profile and followers:', error);
       }
     };
-    fetchFollowers();
-  }, [daoCanister, backendActor]);
+
+    fetchDaoDetails();
+  }, [daoCanisterId, backendActor]);
 
   const toggleFollow = async () => {
     try {
@@ -54,6 +74,22 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCaniste
     } catch (error) {
       console.error('Error following/unfollowing DAO:', error);
       toast.error("An error occurred");
+    }
+  };
+
+  const handleJoinDao = async () => {
+    try {
+      const response = await daoCanister.ask_to_join_dao(daohouseBackendCanisterId);
+      if (response.Ok) {
+        setJoinStatus("Requested");
+        toast.success("Join request sent successfully");
+      } else {
+        console.error("Failed to send join request:", response.Err || "Unknown error");
+        toast.error(`Failed to send join request: ${response.Err || "Unknown error"}`);
+      }
+    } catch (error) {
+      console.error('Error sending join request:', error);
+      toast.error('Error sending join request');
     }
   };
 
@@ -126,8 +162,11 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCaniste
         >
           View Profile
         </button>
-        <button className="flex-1 bg-dark-green border-2 border-dark-green text-white p-2 rounded-[3rem] small_phone:text-base text-sm">
-          Join DAO
+        <button
+          onClick={handleJoinDao}
+          className="flex-1 bg-dark-green border-2 border-dark-green text-white p-2 rounded-[3rem] small_phone:text-base text-sm"
+        >
+          {joinStatus}
         </button>
       </div>
     </div>

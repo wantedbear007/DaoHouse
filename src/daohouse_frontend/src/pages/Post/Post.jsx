@@ -156,9 +156,9 @@ const Post = () => {
 
         <div className="bg-[#F4F2EC] rounded-2xl p-6 flex flex-col gap-y-6">
 
-  {selectedPost ? (
+        {selectedPost ? (
     <React.Fragment>
-      
+
       {/* Mobile Layout */}
       <div className="block md:hidden">
         {/* Username and Profile Pic */}
@@ -208,8 +208,8 @@ const Post = () => {
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden md:flex">
-        <div className={`${className}__post flex flex-col md:flex-row gap-6`}>
+      <div className="hidden md:flex w-full">
+        <div className={`${className}__post flex flex-col md:flex-row gap-6 w-full`}>
           {/* Details Section */}
           <section className={`${className}__details w-full md:w-[30%] lg:w-[50%] flex flex-col justify-between`}>
             {/* Top: Username and Profile Pic */}
@@ -250,7 +250,7 @@ const Post = () => {
           </section>
 
           {/* Image Section */}
-          <section className="relative w-full md:w-[40%] lg:[50%] h-64">
+          <section className="relative w-full md:w-[70%] lg:w-[50%] h-64">
             <img
               src={`http://${canisterId}.localhost:4943/f/${selectedPost.post_img}`}
               alt="selectedPost"
@@ -259,6 +259,7 @@ const Post = () => {
           </section>
         </div>
       </div>
+
 
       <hr />
 
