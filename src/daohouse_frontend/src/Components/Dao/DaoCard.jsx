@@ -14,7 +14,8 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCaniste
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
   const imageUrl = `${protocol}://${canisterId}.${domain}/f/${image_id}`;
-  console.log(daoCanisterId);
+  console.log(daoCanisterId, "sdffsdfdsfdfsdfdsfdsfs");
+  
 
   useEffect(() => {
     const fetchFollowers = async () => {
