@@ -30,10 +30,10 @@ const Navbar = () => {
   ];
 
   useEffect(() => {
+    if (backendActor === null || userProfile) return;
+
     const createAndFetchUserProfile = async () => {
       try {
-        // Ensure user profile data is fetched
-        if (backendActor === null || userProfile) return;
         const response = await backendActor.check_user_existance();
 
         if (response["Ok"]) {
@@ -57,14 +57,12 @@ const Navbar = () => {
   }, [backendActor, fetchUserProfile, userProfile]);
 
   useEffect(() => {
-    if (userProfile) {
-      setImageSrc(
-        userProfile.profile_img
-          ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
-          : MyProfileImage
-      );
-      setUsername(userProfile.username || "");
-    }
+    setImageSrc(
+      userProfile?.profile_img
+        ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
+        : MyProfileImage
+    );
+    setUsername(userProfile?.username || "");
   }, [userProfile]);
 
   const handleLogin = async () => {
@@ -144,7 +142,6 @@ const Navbar = () => {
               <img src={logo} alt="DAO House" className="mobile:h-10 small_phone:w-30 w-25 h-8 lg:ml-6" />
             </Link>
             <div>
-              {/*   connecting button bug fix */ }
               {!isAuthenticated ? (
                 <div className="flex items-center tablet:space-x-4 space-x-2">
                   <button
