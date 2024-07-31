@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import CircularProgress from '@mui/material/CircularProgress';
+import Container from "../Container/Container";
 
 const Step2 = ({ setData, setActiveStep }) => {
   const [inputData, setInputData] = useState({ setUpPeriod: 0 });
@@ -28,6 +29,7 @@ const Step2 = ({ setData, setActiveStep }) => {
 
   return (
     <React.Fragment>
+    <Container>
       <div
         className={
           className +
@@ -78,6 +80,7 @@ const Step2 = ({ setData, setActiveStep }) => {
           </button>
         )}
       </div>
+      </Container>
     </React.Fragment>
   );
 };

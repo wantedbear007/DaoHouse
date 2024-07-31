@@ -3,6 +3,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { FiUpload } from "react-icons/fi";
 import defaultImage from "../../../assets/defaultImage.png";
 import CircularProgress from '@mui/material/CircularProgress';
+import Container from "../Container/Container";
 
 const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
   const [file, setFile] = useState(null);
@@ -53,7 +54,7 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
       }
       setLoadingNext(false);
       setShouldCreateDAO(true);
-    }, 2000);
+    }, 500);
 
 
   };
@@ -77,6 +78,7 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
   console.log("data of all steps: ", data)
   return (
     <React.Fragment>
+    <Container>
       <div
         className={
           className +
@@ -155,7 +157,7 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
     </div>
 
     
-    
+    </Container>
     </React.Fragment>
   );
 };
