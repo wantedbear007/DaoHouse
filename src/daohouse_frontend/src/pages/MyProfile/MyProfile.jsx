@@ -170,11 +170,11 @@ const MyProfile = ({ childComponent }) => {
           <div
             className={
               className +
-              "__mainComponent__leftSide md:mx-0 mx-5 lg:px-20 flex flex-col tablet:items-start justify-center  md:h-[550px] lg:w-[251px] lg:h-[620px] md:px-14  rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal md:mt-[-65px] mt-[-45px] z-20"
+              "__mainComponent__leftSide md:mx-0 mx-5 lg:px-20 flex flex-col tablet:items-start justify-center  md:h-[550px] lg:w-[251px] lg:h-[654px] md:px-14  rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal md:mt-[-65px] mt-[-45px] z-20"
             }
           >
             {/* Navigation links */}
-            <div className="flex md:flex-col flex-row items-start md:justify-center justify-around gap-y-6 py-6 md:py-0 lg:text-base md:text-sm text-nowrap">
+            <div className="flex md:flex-col flex-row items-start md:justify-center justify-around gap-y-6 py-8 md:py-10 lg:text-base md:text-sm text-nowrap">
               <Link to="/my-profile" onClick={() => setActiveTab(0)}>
                 <p
                   className={`${tabButtonsStyle}  ${activeTab == 0 ? "text-white" : ""
