@@ -21,8 +21,8 @@ const Step4 = ({ data, setData, setActiveStep }) => {
       acc[group] = {
         ChangeDAOConfig: false,
         ChangeDAOPolicy: false,
-        Bounty: false,
-        BountyDone: false,
+     //   Bounty: false,
+       // BountyDone: false,
         Transfer: false,
         Polls: false,
         AddMembers: false,
@@ -60,8 +60,8 @@ const Step4 = ({ data, setData, setActiveStep }) => {
   const permissionList = [
     "ChangeDAOConfig",
     "ChangeDAOPolicy",
-    "Bounty",
-    "BountyDone",
+    // "Bounty",
+    // "BountyDone",
     "Transfer",
     "Polls",
     "AddMembers",

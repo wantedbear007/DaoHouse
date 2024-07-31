@@ -4,8 +4,11 @@ import Card from "../Proposals/Card";
 import SearchProposals from "../Proposals/SearchProposals";
 import { Link } from "react-router-dom";
 
-const ProposalsContent = () => {
+const ProposalsContent = (proposals) => {
   const selectedProposal = proposalsArray[0];
+
+  const allProposals = proposals.proposals;
+
 
   return (
     <div className="mt-6">
@@ -38,7 +41,7 @@ const ProposalsContent = () => {
                 className="border-2 border-[#AAC8D6] w-full max-w-lg"
               />
             </div>
-            <button className="bg-white text-[16px] text-[#05212C] gap-1 px-7 shadow-xl py-4 px-4 rounded-full shadow-md flex items-center space-x-4 rounded-2xl">
+         {/**    <button className="bg-white text-[16px] text-[#05212C] gap-1 px-7 shadow-xl py-4 px-4 rounded-full shadow-md flex items-center space-x-4 rounded-2xl">
               <div>
                 <svg
                   width="27"
@@ -55,16 +58,21 @@ const ProposalsContent = () => {
               </div>
               Filter
             </button>
+            */}
           </span>
         </div>
         <div className="w-full border-t py-6 px-4  border-[#0000004D] rounded-[10px] mb-4">
           <div className="bg-white rounded">
-            {selectedProposal && <Card proposal={selectedProposal} />}
+         
+          
+             {selectedProposal && <Card proposal={selectedProposal} proposals={proposals}/>}
           </div>
         </div>
       </div>
       <div className="bg-white md:hidden rounded-[10px] mt-4 mb-8 ">
-        {selectedProposal && <Card proposal={selectedProposal} />}
+
+      
+        {selectedProposal && <Card resData={allProposals[0]}  proposal={selectedProposal} />}
       </div>
     </div>
   );
