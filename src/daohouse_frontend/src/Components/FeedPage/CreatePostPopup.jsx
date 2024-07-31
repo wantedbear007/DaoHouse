@@ -74,31 +74,46 @@ const CreatePostPopup = ({ onClose, handleGetResponse }) => {
   }
 
   const handleFileUploading = async (event) => {
-    // const files = Array.from(event.target.files);
-    // setSelectedImages(files);
+    // Get the file selected by the user
     const file = event.target.files[0];
+  
+    // Check if the file size exceeds 2MB (2 * 1024 * 1024 bytes)
+    const maxSizeInBytes = 2 * 1024 * 1024;
+    if (file.size > maxSizeInBytes) {
+      // Show an error message if the file is too large
+      toast.error("File size exceeds 2MB. Please choose a smaller file.");
+      return; // Stop further execution
+    }
+  
+    // Convert the file to an ArrayBuffer
     const arrayBuffer = await file.arrayBuffer();
+    // Convert the ArrayBuffer to a Uint8Array
     const content = new Uint8Array(arrayBuffer);
-
+  
     try {
+      // Convert the file to a base64 string
       const { base64 } = await handleFileUpload(event);
-      const file = event.target.files[0];
+      
+      // Update the imageData state with the new file details
       setImageData((prevData) => ({
         ...prevData,
         base64,
         image_content: Array.from(content),
         image_title: file.name,
         image_content_type: file.type,
-        post_image : URL.createObjectURL(file),
+        post_image: URL.createObjectURL(file),
       }));
     } catch (error) {
       if (typeof error === "string") {
+        // Show an error message if the error is a string
         toast.error(error);
       } else {
+        // Log other types of errors
         console.error("Error:", error);
       }
     }
   };
+  
 
   const handleClose = () => {
     if (imageData.base64 !== "") {

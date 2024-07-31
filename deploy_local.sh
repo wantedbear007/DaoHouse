@@ -85,3 +85,4 @@ dfx deploy internet_identity
 dfx deploy daohouse_frontend
 
 # dfx generate
+# password daal de bhai
