@@ -3,6 +3,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { FiUpload } from "react-icons/fi";
 import defaultImage from "../../../assets/defaultImage.png";
 import CircularProgress from '@mui/material/CircularProgress';
+import { toast } from 'react-toastify';
 
 const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
   const [file, setFile] = useState(null);
@@ -15,6 +16,11 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
     const selectedFile = event.target.files[0];
 
     if (selectedFile) {
+      if (selectedFile.size > 2.5 * 1024 * 1024) {
+        toast.error("File size must be less than 2.5 MB");
+        return;
+      }
+
       setFile(selectedFile);
       const url = URL.createObjectURL(selectedFile);
       setFileURL(url);
@@ -25,6 +31,10 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
   };
 
   const createDAO = async () => {
+    if (!file) {
+      toast.error("Please insert an image");
+      return;
+    }
     setLoadingNext(true);
     setTimeout(async () => {
       if (file) {
@@ -54,8 +64,6 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
       setLoadingNext(false);
       setShouldCreateDAO(true);
     }, 2000);
-
-
   };
 
   const readFileContent = (file) => {
@@ -161,5 +169,3 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
 };
 
 export default Step6;
-
-
