@@ -32,6 +32,10 @@ function CreateProposal() {
     const handleProposalTypeChange = (event) => {
         setProposalType(event.target.value);
     };
+    const stripHtmlTags = (html) => {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        return doc.body.textContent || "";
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -42,10 +46,10 @@ function CreateProposal() {
             if (!proposalTitle || !proposalDescription || isNaN(requiredVotes) || !proposalType) {
                 throw new Error("Please fill all the fields and choose a proposal type.");
             }
-
+            const strippedDescription = stripHtmlTags(proposalDescription);
             const proposalData = {
                 proposal_title: proposalTitle,
-                proposal_description: proposalDescription,
+                proposal_description: strippedDescription,
                 required_votes: parseInt(requiredVotes, 10),
                 proposal_type: { [proposalType]: null },
             };
