@@ -17,8 +17,8 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
     const selectedFile = event.target.files[0];
 
     if (selectedFile) {
-      if (selectedFile.size > 2.5 * 1024 * 1024) {
-        toast.error("File size must be less than 2.5 MB");
+      if (selectedFile.size > 2 * 1024 * 1024) {
+        toast.error("File size must be less than 2 MB");
         return;
       }
 
@@ -157,11 +157,12 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
             onClick={createDAO}
             className="flex mobile:m-4 my-4 flex-row items-center gap-2 bg-[#0E3746] px-4 py-2 rounded-[2rem] text-white mobile:text-base text-sm whitespace-nowrap"
           >
-            {loadingNext ? (
+            {/* {loadingNext ? (
               <CircularProgress size={24} />
             ) : (
               "Create DAO"
-            )}
+            )} */}
+            Create Dao
           </button>
         )}
       </div>
