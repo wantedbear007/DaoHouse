@@ -9,8 +9,6 @@ import MyProfileImage from "../../../assets/MyProfile-img.png";
 import { useUserProfile } from "../../context/UserProfileContext";
 import { toast } from "react-toastify";
 import Container from "../Container/Container";
-// import { Principal } from "@dfinity/principal";
-import { Principal } from "@dfinity/candid/lib/cjs/idl";
 
 const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,9 +16,9 @@ const Navbar = () => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const { userProfile, fetchUserProfile } = useUserProfile();
-  const { login, isAuthenticated, signInPlug, logout, principal, backendActor, getPrincipalId, stringPrincipal } = useAuth();
+  const { login, isAuthenticated, signInPlug, logout, backendActor } = useAuth();
   const location = useLocation();
-  
+
   const [username, setUsername] = useState("");
   const [imageSrc, setImageSrc] = useState(MyProfileImage);
 
@@ -56,7 +54,7 @@ const Navbar = () => {
     };
 
     createAndFetchUserProfile();
-  }, [backendActor, principal, fetchUserProfile, userProfile]);
+  }, [backendActor, fetchUserProfile, userProfile]);
 
   useEffect(() => {
     setImageSrc(
@@ -162,7 +160,7 @@ const Navbar = () => {
                     <div className="w-10 h-10 flex items-center rounded-full overflow-hidden my-auto">
                       <img src={imageSrc} alt="User Avatar" className="w-8 h-8 object-cover rounded-full" />
                     </div>
-                    <p className="text-black font-medium truncate ... w-20" >{stringPrincipal}</p>
+                    <p className="text-black font-medium truncate w-20">{username}</p>
                     <LuChevronDown />
                     {dropdownVisible && (
                       <div className="absolute top-full right-0 bg-white rounded-md border border-gray-300 shadow-md py-2 w-40">
