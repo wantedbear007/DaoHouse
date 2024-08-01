@@ -13,43 +13,40 @@ import { Principal } from "@dfinity/principal";
 
 
 export default function Card({ proposal, resData, proposals }) {
-  console.log("8888888888888", proposal)
-  console.log(resData, "all data ")
+  console.log("proposal data ", proposal)
   const a = proposal?.proposal_description;
 
-  console.log("Annn", a)
   const bigIntValue10 = BigInt(proposal?.proposal_approved_votes || 0);
   const approvedProposals = Number(bigIntValue10);
-  console.log("approved proposals", approvedProposals)
 
   const bigIntValue1 = BigInt(proposal?.proposal_rejected_votes || 0);
   const rejectedvoters = Number(bigIntValue1);
-  console.log("///rr?", rejectedvoters)
-
-
   const stsatus = proposal?.proposal_status;
-  console.log("ss", stsatus)
-  // Animation options for the progress
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: ProgressAnimation,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-      id: "lottie-bigCircle",
-    },
-  };
+ 
+  console.log(`Proposal Description: ${a}, Approved Proposals: ${approvedProposals}, Rejected Voters: ${rejectedvoters}, Status: ${status}`);
+
 
   const bigIntValue2 = BigInt(proposal?.share_count || 0);
   const sharecount = Number(bigIntValue2);
-  console.log("share", sharecount)
+ 
   const bigIntValue3 = BigInt(proposal?.required_votes
     || 0);
   const votecount = Number(bigIntValue3);
-  console.log("like", votecount)
+
   const bigIntValue4 = BigInt(proposal?.comments || 0);
   const commentcount = Number(bigIntValue4);
-  console.log("comment", commentcount)
+
+  console.log(`share:${sharecount},comment:${commentcount},vote:${votecount}`)
+    // Animation options for the progress 
+    const defaultOptions = {
+      loop: true,
+      autoplay: true,
+      animationData: ProgressAnimation,
+      rendererSettings: {
+        preserveAspectRatio: "xMidYMid slice",
+        id: "lottie-bigCircle",
+      },
+    };
   const buttons = [
     {
       icon: (
