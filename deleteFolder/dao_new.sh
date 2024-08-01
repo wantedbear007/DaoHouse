@@ -1,4 +1,3 @@
-#!/bin/bash
 
 ASSET_HANDLER_ID=$(dfx canister id ic_asset_handler)
 echo "ASSET_HANDLER_ID: $ASSET_HANDLER_ID"
@@ -6,10 +5,10 @@ echo "ASSET_HANDLER_ID: $ASSET_HANDLER_ID"
 COUNT=1
 
 for ((i = 1; i <= COUNT; i++)); do
-  dao_test=$(dfx canister call daohouse_backend create_dao '(
+  dao_test=$(dfx canister call daohouse_backend dao_create '(
     "'$ASSET_HANDLER_ID'", 
     record {
-      dao_name = " abc dao";
+      dao_name = " 1111111bottle dao";
       purpose = "test krne ke liye ke chota sa sentence";
       daotype = "Non-profit";
       link_of_document = "https://example.com/charter.pdf";

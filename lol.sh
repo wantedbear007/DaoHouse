@@ -31,7 +31,8 @@ echo $RECIEVER
 # chmod 777 ./generate_did.sh
 # ./generate_did.sh
 
-dfx deploy ic_asset_handler --network ic
+# dfx deploy ic_asset_handler --network ic
+dfx deploy daohouse_backend --argument "(record { payment_recipient = principal \"${RECIEVER}\"; })" --network ic
 
 
 dfx deploy dao_canister --argument '(record{
@@ -57,8 +58,7 @@ dfx deploy dao_canister --argument '(record{
 
 })' --network ic
 
-dfx deploy daohouse_backend --argument "(record { payment_recipient = principal \"${RECIEVER}\"; })" --network ic
 # ./assets_upload.sh
-dfx deploy internet_identity --network ic
-dfx deploy daohouse_frontend --network ic
+# dfx deploy internet_identity --network ic
+# dfx deploy daohouse_frontend --network ic
 

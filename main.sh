@@ -1,6 +1,6 @@
-#!/bin/bash
+# dfx canister call mph44-maaaa-aaaag-alh3a-cai get_dao_detail --network ic
 
-ASSET_HANDLER_ID=$(dfx canister id ic_asset_handler)
+ASSET_HANDLER_ID=$(dfx canister id ic_asset_handler --network ic)
 echo "ASSET_HANDLER_ID: $ASSET_HANDLER_ID"
 
 COUNT=1
@@ -9,7 +9,7 @@ for ((i = 1; i <= COUNT; i++)); do
   dao_test=$(dfx canister call daohouse_backend create_dao '(
     "'$ASSET_HANDLER_ID'", 
     record {
-      dao_name = " abc dao";
+      dao_name = " ttrdrtrdt bhanu dao";
       purpose = "test krne ke liye ke chota sa sentence";
       daotype = "Non-profit";
       link_of_document = "https://example.com/charter.pdf";
@@ -31,7 +31,7 @@ for ((i = 1; i <= COUNT; i++)); do
     };
       
     }
-  )')
+  )' --network ic)
 
   echo "$dao_test"
 done

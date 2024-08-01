@@ -35,22 +35,22 @@ echo $RECIEVER
 
 # dfx canister create --all
 
-dfx deploy icrc1_ledger_canister --argument "(variant {Init = 
-record {
-     token_symbol = \"${TOKEN_SYMBOL}\";
-     token_name = \"${TOKEN_NAME}\";
-     minting_account = record { owner = principal \"${MINTER}\" };
-     transfer_fee = ${TRANSFER_FEE};
-     metadata = vec {};
-     initial_balances = vec { record { record { owner = principal \"${DEFAULT}\"; }; ${PRE_MINTED_TOKENS}; }; };
-     archive_options = record {
-         num_blocks_to_archive = 100;
-         trigger_threshold = 100;
-         controller_id = principal \"${DEFAULT}\";
-     };
-     feature_flags = opt record {icrc2 = true;};
- }
-})"
+# dfx deploy icrc1_ledger_canister --argument "(variant {Init = 
+# record {
+#      token_symbol = \"${TOKEN_SYMBOL}\";
+#      token_name = \"${TOKEN_NAME}\";
+#      minting_account = record { owner = principal \"${MINTER}\" };
+#      transfer_fee = ${TRANSFER_FEE};
+#      metadata = vec {};
+#      initial_balances = vec { record { record { owner = principal \"${DEFAULT}\"; }; ${PRE_MINTED_TOKENS}; }; };
+#      archive_options = record {
+#          num_blocks_to_archive = 100;
+#          trigger_threshold = 100;
+#          controller_id = principal \"${DEFAULT}\";
+#      };
+#      feature_flags = opt record {icrc2 = true;};
+#  }
+# })"
 
 dfx deploy dao_canister --argument '(record{
     dao_name="Sample DAO";
@@ -69,18 +69,20 @@ dfx deploy dao_canister --argument '(record{
     required_votes=100;
     image_id="1";
     followers=vec{
+        principal "aaaaa-aa";
     };
     members_permissions=vec{
+        "mai hi permission hai";
     };
 
 })'
 
 dfx deploy daohouse_backend --argument "(record { payment_recipient = principal \"${RECIEVER}\"; })"
 dfx deploy ic_asset_handler
-# to upload first image
-./assets_upload.sh
-dfx deploy internet_identity
-dfx deploy daohouse_frontend
+# # to upload first image
+# ./assets_upload.sh
+# dfx deploy internet_identity
+# dfx deploy daohouse_frontend
 
 # dfx generate
 # password daal de bhai
