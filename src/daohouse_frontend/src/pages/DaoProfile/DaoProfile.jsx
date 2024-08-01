@@ -279,7 +279,7 @@ const DaoProfile = () => {
                 />
               </div>
 
-// <<<<<<< prabhjot
+{/* // 
 //               <div className="lg:ml-10 ml-4">
 //                 <h2 className="lg:text-[40px] md:text-[24px] text-[16px] tablet:font-normal font-medium text-left text-[#05212C]">
 //                   {dao.dao_name || 'Dao Name'}
@@ -295,8 +295,8 @@ const DaoProfile = () => {
 //                     {dao.followers.length}<span className=" md:text-[16px] mx-1">Followers</span>
 //                   </span>
 
-//                 </div>
-// =======
+//                 </div> */}
+
             <div className="lg:ml-10 ml-4">
               <h2 className="lg:text-[40px] md:text-[24px] text-[16px] tablet:font-normal font-medium text-left text-[#05212C]">
               {dao.dao_name || 'Dao Name'}
@@ -438,6 +438,7 @@ const DaoProfile = () => {
           {activeLink === "followers" && <FollowersContent />}
           {activeLink === "funds" && <FundsContent />}
           {activeLink === "settings" && <DaoSettings />}
+          </div>
         </Container>
       </div>
     </div>

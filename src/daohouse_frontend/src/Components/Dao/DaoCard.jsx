@@ -166,7 +166,7 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCaniste
           onClick={handleJoinDao}
           className="flex-1 bg-dark-green border-2 border-dark-green text-white p-2 rounded-[3rem] small_phone:text-base text-sm"
         >
-          {joinStatus}
+          {joinStatus === "Requested" ? "Requested": "Join Dao"}
         </button>
       </div>
     </div>
