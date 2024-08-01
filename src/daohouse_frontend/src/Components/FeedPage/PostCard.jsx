@@ -36,6 +36,7 @@ const PostCard = ({ posts, handleGetLikePost }) => {
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
   const [isFollowing, setIsFollowing] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
+  
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
   const ImageUrl = posts?.post_img
@@ -45,6 +46,9 @@ const PostCard = ({ posts, handleGetLikePost }) => {
   const userImage = posts?.user_image_id
     ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${posts.user_image_id}`
     : '';
+
+    console.log("user_image_id", posts.user_image_id);
+
 
   const getlike = async () => {
     try {
@@ -133,7 +137,7 @@ const PostCard = ({ posts, handleGetLikePost }) => {
               className="rounded-[50%] w-10 h-10"
             />
             <div>
-            <p className="font-semibold ml-2">{posts.username}</p>
+            <p className="font-semibold ml-2 truncate ... w-36"> {posts.username || posts.principal_id.toString()}</p>
             {userProfile && userProfile.user_id.toString() !== posts.principal_id.toString() && (
                 <button
                   onClick={toggleFollow}
