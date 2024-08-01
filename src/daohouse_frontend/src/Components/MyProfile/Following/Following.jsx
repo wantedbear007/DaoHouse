@@ -61,17 +61,17 @@ const Following = () => {
   
                     <section className="flex flex-col items-start">
                       <p className="tablet:text-lg text-sm">
-                        {principal.toString().slice(0, 17) + "..."}
+                        {principal.toString().slice(0, 37) + "..."}
                       </p>
                       <p className="text-slate-500 tablet:text-sm text-xs">
-                        {principal.toString().slice(0, 27) + "..."}
+                        {principal.toString().slice(0, 47) + "..."}
                       </p>
                   </section>
                   </div>
   
-                  <button className="border border-cyan-500 tablet:px-4 px-2 py-1 tablet:text-sm text-xs rounded-2xl text-cyan-500">
+                  {/* <button className="border border-cyan-500 tablet:px-4 px-2 py-1 tablet:text-sm text-xs rounded-2xl text-cyan-500">
                     Remove
-                  </button>
+                  </button> */}
                 </div>
               ))}
             </div>

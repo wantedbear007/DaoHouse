@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth, useAuthClient } from "../utils/useAuthClient";
 import { LuChevronDown } from "react-icons/lu";
 import LoginModal from "../Auth/LoginModal";
-import { FaUser, FaSignOutAlt } from "react-icons/fa";
+import { FaUser, FaSignOutAlt, FaProjectDiagram, FaSitemap, FaComments, FaNewspaper } from "react-icons/fa";
 import logo from "../../../assets/ColorLogo.png";
 import MyProfileImage from "../../../assets/MyProfile-img.png";
 import { useUserProfile } from "../../context/UserProfileContext";
@@ -17,11 +17,17 @@ const Navbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const { userProfile, fetchUserProfile } = useUserProfile();
+  const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
+  const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
   const { login, isAuthenticated, signInPlug, logout, principal, backendActor, getPrincipalId, stringPrincipal} = useAuth();
   const location = useLocation();
   
   const [username, setUsername] = useState("");
-  const [imageSrc, setImageSrc] = useState(MyProfileImage);
+  const [imageSrc, setImageSrc] = useState(
+    userProfile?.profile_img
+    ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
+    : MyProfileImage
+  );
 
   const menuItems = [
     { label: "Home", route: "/" },
@@ -60,8 +66,8 @@ const Navbar = () => {
   useEffect(() => {
     setImageSrc(
       userProfile?.profile_img
-        ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
-        : MyProfileImage
+      ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
+      : MyProfileImage
     );
     setUsername(userProfile?.username || "");
   }, [userProfile]);
@@ -89,6 +95,8 @@ const Navbar = () => {
     }
   };
 
+  
+
   const handleLoginPlug = async () => {
     setIsLoading(true);
     await signInPlug().then(() => setIsModalOpen(false));
@@ -108,12 +116,12 @@ const Navbar = () => {
     {
       label: "Dao",
       route: "/dao",
-      icon: <FaUser className="mr-2" />,
+      icon: <FaSitemap className="mr-2" />,
     },
     {
       label: "Social Feed",
       route: "/social-feed",
-      icon: <FaUser className="mr-2" />,
+      icon: <FaComments className="mr-2" />,
     },
     // {
     //   label: "My Proposals",
@@ -160,7 +168,7 @@ const Navbar = () => {
                     onClick={handleLoginModalOpen}
                     className="mobile:px-8 px-4 py-2 rounded-[27.5px] bg-[#FFFFFF] big_phone:text-base small_phone:text-sm text-xs"
                   >
-                    {isLoading ? "Connecting" : "Connect"}
+                    {isModalOpen && isLoading ? "Connecting" : "Connect"}
                   </button>
                 </div>
               ) : (
