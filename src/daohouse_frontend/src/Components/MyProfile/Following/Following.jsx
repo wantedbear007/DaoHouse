@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { RxArrowTopRight } from "react-icons/rx";
 import MuiSkeleton from "../../Skeleton/MuiSkeleton";
 import { useAuth } from "../../utils/useAuthClient";
@@ -7,8 +7,8 @@ import avatar from "../../../../assets/avatar.png"
 const Following = () => {
   const className = "Following";
   const { backendActor, frontendCanisterId, identity } = useAuth();
-  const[data,setdata] = useState([])
-  const[loading,setLoading] = useState(false);
+  const [data, setdata] = useState([])
+  const [loading, setLoading] = useState(false);
 
   const getdata = async () => {
     try {
@@ -27,55 +27,59 @@ const Following = () => {
       setLoading(false);
     }
   }
-  
+
   useEffect(() => {
     getdata();
-  
+
   }, [backendActor]);
 
   return (
     <div className={className + " " + "w-full"}>
-    <div className="lg:ml-10 tablet:mt-12 mt-5 md:px-0 px-3">
-      <h3 className="text-[#05212C] tablet:text-[24px] text-[18px] tablet:font-bold font-semibold mb-4">
-        Following
-      </h3>
-      {loading ? (
-        <MuiSkeleton />
-      ) : (
-        <>
-          <div className="flex gap-5 md:w-[50%]">
-            <div className="flex flex-1 flex-col gap-4 bg-[#F4F2EC] p-4 rounded-[10px] overflow-y-auto max-h-[300px]">
-              {data.map((principal, index) => (
-                <div
-                  key={index}
-                  className="w-full flex flex-row items-center justify-between"
-                >
-                  <div className="flex flex-row tablet:gap-4 gap-2 items-center">
-                    <section className="border border-cyan-200 rounded-[50%]">
-                      <img
-                        src={avatar}
-                        alt="Following"
-                        className="tablet:min-w-12 min-w-8 h-full object-contain border-4 border-white rounded-[50%]"
-                      />
-                    </section>
-  
-                    <section className="flex flex-col items-start">
-                      <p className="tablet:text-lg text-sm">
-                        {principal.toString().slice(0, 37) + "..."}
-                      </p>
-                      <p className="text-slate-500 tablet:text-sm text-xs">
-                        {principal.toString().slice(0, 47) + "..."}
-                      </p>
-                  </section>
-                  </div>
-  
-                  {/* <button className="border border-cyan-500 tablet:px-4 px-2 py-1 tablet:text-sm text-xs rounded-2xl text-cyan-500">
+      <div className="lg:ml-10 tablet:mt-12 mt-5 md:px-0 px-3">
+        <h3 className="text-[#05212C] tablet:text-[24px] text-[18px] tablet:font-bold font-semibold mb-4">
+          Following
+        </h3>
+        {loading ? (
+          <MuiSkeleton />
+        ) :
+          data.length === 0 ? (
+            <p className=" text-black mt-10 ">No following</p>
+          ) :
+            (
+              <>
+                <div className="flex gap-5 md:w-[50%]">
+                  <div className="flex flex-1 flex-col gap-4 bg-[#F4F2EC] p-4 rounded-[10px] overflow-y-auto max-h-[300px]">
+                    {data.map((principal, index) => (
+                      <div
+                        key={index}
+                        className="w-full flex flex-row items-center justify-between"
+                      >
+                        <div className="flex flex-row tablet:gap-4 gap-2 items-center">
+                          <section className="border border-cyan-200 rounded-[50%]">
+                            <img
+                              src={avatar}
+                              alt="Following"
+                              className="tablet:min-w-12 min-w-8 h-full object-contain border-4 border-white rounded-[50%]"
+                            />
+                          </section>
+
+                          <section className="flex flex-col items-start">
+                            <p className="tablet:text-lg text-sm">
+                              {principal.toString().slice(0, 37) + "..."}
+                            </p>
+                            <p className="text-slate-500 tablet:text-sm text-xs">
+                              {principal.toString().slice(0, 47) + "..."}
+                            </p>
+                          </section>
+                        </div>
+
+                        {/* <button className="border border-cyan-500 tablet:px-4 px-2 py-1 tablet:text-sm text-xs rounded-2xl text-cyan-500">
                     Remove
                   </button> */}
-                </div>
-              ))}
-            </div>
-            {/* <div className="w-[40%] p-3 bg-[#F4F2EC] rounded-[10px] overflow-y-auto max-h-[300px] hidden md:block">
+                      </div>
+                    ))}
+                  </div>
+                  {/* <div className="w-[40%] p-3 bg-[#F4F2EC] rounded-[10px] overflow-y-auto max-h-[300px] hidden md:block">
               <h1 className="text-[#05212C] text-[20px] font-bold">More People</h1>
               <div className="w-full bg-[#0000004D] h-[1px] my-3"></div>
               <div>
@@ -102,8 +106,8 @@ const Following = () => {
                 ))}
               </div>
             </div> */}
-          </div>
-          {/* <div className="mt-4 md:hidden">
+                </div>
+                {/* <div className="mt-4 md:hidden">
             <h1 className="text-[#05212C] text-[16px] font-bold ml-2">More People</h1>
             <div className="w-full bg-[#0000004D] h-[2px] mb-4 mt-2"></div>
             <div className="flex gap-3 overflow-x-auto max-w-full">
@@ -123,11 +127,11 @@ const Following = () => {
               ))}
             </div>
           </div> */}
-        </>
-      )}
+              </>
+            )}
+      </div>
     </div>
-  </div>
-  
+
   );
 };
 
