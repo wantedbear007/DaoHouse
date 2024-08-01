@@ -69,7 +69,6 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCaniste
         toast.success(isFollowing ? "Successfully unfollowed" : "Successfully followed");
       } else if (response?.Err) {
         setIsFollowing(!isFollowing);
-        setIsFollowing(!isFollowing);
         toast.error(response.Err);
       }
     } catch (error) {
