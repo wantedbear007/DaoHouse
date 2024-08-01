@@ -10,22 +10,28 @@ PRE_MINTED_TOKENS=100000000000
 echo $RECIEVER
 
 
-dfx deploy icrc1_ledger_canister --argument "(variant {Init = 
-record {
-     token_symbol = \"${TOKEN_SYMBOL}\";
-     token_name = \"${TOKEN_NAME}\";
-     minting_account = record { owner = principal \"${MINTER}\" };
-     transfer_fee = ${TRANSFER_FEE};
-     metadata = vec {};
-     initial_balances = vec { record { record { owner = principal \"${DEFAULT}\"; }; ${PRE_MINTED_TOKENS}; }; };
-     archive_options = record {
-         num_blocks_to_archive = 100;
-         trigger_threshold = 100;
-         controller_id = principal \"${DEFAULT}\";
-     };
-     feature_flags = opt record {icrc2 = true;};
- }
-})" --network ic
+# dfx deploy icrc1_ledger_canister --argument "(variant {Init = 
+# record {
+#      token_symbol = \"${TOKEN_SYMBOL}\";
+#      token_name = \"${TOKEN_NAME}\";
+#      minting_account = record { owner = principal \"${MINTER}\" };
+#      transfer_fee = ${TRANSFER_FEE};
+#      metadata = vec {};
+#      initial_balances = vec { record { record { owner = principal \"${DEFAULT}\"; }; ${PRE_MINTED_TOKENS}; }; };
+#      archive_options = record {
+#          num_blocks_to_archive = 100;
+#          trigger_threshold = 100;
+#          controller_id = principal \"${DEFAULT}\";
+#      };
+#      feature_flags = opt record {icrc2 = true;};
+#  }
+# })" --network ic
+
+
+# chmod 777 ./generate_did.sh
+# ./generate_did.sh
+
+dfx deploy ic_asset_handler --network ic
 
 
 dfx deploy dao_canister --argument '(record{
@@ -44,13 +50,15 @@ dfx deploy dao_canister --argument '(record{
     };
     required_votes=100;
     image_id="1";
-
+    followers=vec{
+    };
+    members_permissions=vec{
+    };
 
 })' --network ic
 
 dfx deploy daohouse_backend --argument "(record { payment_recipient = principal \"${RECIEVER}\"; })" --network ic
-dfx deploy ic_asset_handler --network ic
-./assets_upload.sh
+# ./assets_upload.sh
 dfx deploy internet_identity --network ic
 dfx deploy daohouse_frontend --network ic
 

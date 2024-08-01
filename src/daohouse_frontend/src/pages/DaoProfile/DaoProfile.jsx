@@ -64,15 +64,15 @@ const DaoProfile = () => {
 
             const daoFollowers = await daoActor.get_dao_followers();
             setFollowersCount(daoFollowers.length);
-// <<<<<<< prabhjot
+            // <<<<<<< prabhjot
 
-//             // Check follow status from local storage
-//             const storedIsFollowing = localStorage.getItem(`dao-${daoCanisterId}-isFollowing`);
-//             setIsFollowing(storedIsFollowing === null ? daoFollowers.some(follower => follower.toString() === currentUserId.toString()) : JSON.parse(storedIsFollowing));
-// =======
+            //             // Check follow status from local storage
+            //             const storedIsFollowing = localStorage.getItem(`dao-${daoCanisterId}-isFollowing`);
+            //             setIsFollowing(storedIsFollowing === null ? daoFollowers.some(follower => follower.toString() === currentUserId.toString()) : JSON.parse(storedIsFollowing));
+            // =======
             setIsFollowing(daoFollowers.some(follower => follower.toString() === currentUserId.toString()));
-          
-// >>>>>>> main
+
+            // >>>>>>> main
           }
         } catch (error) {
           console.error('Error fetching DAO details:', error);
@@ -88,47 +88,47 @@ const DaoProfile = () => {
 
   const toggleFollow = async () => {
     if (!userProfile) return;
-// <<<<<<< prabhjot
+    // <<<<<<< prabhjot
 
-// =======
-//     const newIsFollowing = !isFollowing;
-//     setIsFollowing(newIsFollowing);
-//     setFollowersCount(prevCount => newIsFollowing ? prevCount + 1 : prevCount - 1);
-  
-// >>>>>>> main
+    // =======
+    //     const newIsFollowing = !isFollowing;
+    //     setIsFollowing(newIsFollowing);
+    //     setFollowersCount(prevCount => newIsFollowing ? prevCount + 1 : prevCount - 1);
+
+    // >>>>>>> main
     try {
       const daoActor = createDaoActor(daoCanisterId);
       const response = isFollowing
         ? await daoActor.unfollow_dao()
         : await daoActor.follow_dao();
-// <<<<<<< prabhjot
+      // <<<<<<< prabhjot
 
-//       if (response?.Ok) {
-//         // Update state immediately
-//         setIsFollowing(!isFollowing);
+      //       if (response?.Ok) {
+      //         // Update state immediately
+      //         setIsFollowing(!isFollowing);
 
-//         // Update followers count immediately
-//         const updatedFollowers = await daoActor.get_dao_followers();
-//         setFollowersCount(updatedFollowers.length);
+      //         // Update followers count immediately
+      //         const updatedFollowers = await daoActor.get_dao_followers();
+      //         setFollowersCount(updatedFollowers.length);
 
-//         // Store the follow status in local storage
-//         localStorage.setItem(`dao-${daoCanisterId}-isFollowing`, !isFollowing);
+      //         // Store the follow status in local storage
+      //         localStorage.setItem(`dao-${daoCanisterId}-isFollowing`, !isFollowing);
 
-//         toast.success(isFollowing ? "Successfully unfollowed" : "Successfully followed");
-//       } else if (response?.Err) {
-//         toast.error(response.Err);
-//       }
-// =======
-  
-        if (response?.Ok) {
-          toast.success(newIsFollowing ? "Successfully followed" : "Successfully unfollowed");
-        } else if (response?.Err) {
-          // Revert the state if there's an error
-          setIsFollowing(!newIsFollowing);
-          setFollowersCount(prevCount => newIsFollowing ? prevCount - 1 : prevCount + 1);
-          toast.error(response.Err);
-        }
-// >>>>>>> main
+      //         toast.success(isFollowing ? "Successfully unfollowed" : "Successfully followed");
+      //       } else if (response?.Err) {
+      //         toast.error(response.Err);
+      //       }
+      // =======
+
+      if (response?.Ok) {
+        toast.success(newIsFollowing ? "Successfully followed" : "Successfully unfollowed");
+      } else if (response?.Err) {
+        // Revert the state if there's an error
+        setIsFollowing(!newIsFollowing);
+        setFollowersCount(prevCount => newIsFollowing ? prevCount - 1 : prevCount + 1);
+        toast.error(response.Err);
+      }
+      // >>>>>>> main
     } catch (error) {
       console.error('Error following/unfollowing DAO:', error);
       // Revert the state if there's an error
@@ -279,39 +279,23 @@ const DaoProfile = () => {
                 />
               </div>
 
-// <<<<<<< prabhjot
-//               <div className="lg:ml-10 ml-4">
-//                 <h2 className="lg:text-[40px] md:text-[24px] text-[16px] tablet:font-normal font-medium text-left text-[#05212C]">
-//                   {dao.dao_name || 'Dao Name'}
-//                 </h2>
-//                 <p className="text-[12px] tablet:text-[16px] font-normal text-left text-[#646464]">
-//                   {dao.purpose || 'Dao Purpose'}
-//                 </p>
-//                 <div className="md:flex justify-between mt-2 hidden">
-//                   <span className="tablet:mr-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
-//                     {dao.posts || 0} <span className=" md:text-[16px] mx-1">Proposals</span>
-//                   </span>
-//                   <span className="md:mx-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
-//                     {dao.followers.length}<span className=" md:text-[16px] mx-1">Followers</span>
-//                   </span>
+            </div>
 
-//                 </div>
-// =======
             <div className="lg:ml-10 ml-4">
               <h2 className="lg:text-[40px] md:text-[24px] text-[16px] tablet:font-normal font-medium text-left text-[#05212C]">
-              {dao.dao_name || 'Dao Name'}
+                {dao.dao_name || 'Dao Name'}
               </h2>
               <p className="text-[12px] tablet:text-[16px] font-normal text-left text-[#646464]">
-              {dao.purpose || 'Dao Purpose'}
+                {dao.purpose || 'Dao Purpose'}
               </p>
               <div className="md:flex justify-between mt-2 hidden">
                 <span className="tablet:mr-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
-                {dao.posts || 0} <span className=" md:text-[16px] mx-1">Proposals</span>
+                  {dao.posts || 0} <span className=" md:text-[16px] mx-1">Proposals</span>
                 </span>
                 <span className="md:mx-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
-                {followersCount}<span className=" md:text-[16px] mx-1">Followers</span>
+                  {followersCount}<span className=" md:text-[16px] mx-1">Followers</span>
                 </span>
-                
+
 
               </div>
             </div>
@@ -363,8 +347,8 @@ const DaoProfile = () => {
                 handleClick("proposals");
               }}
               className={`cursor-pointer text-nowrap ${activeLink === "proposals"
-                  ? "underline text-[#0E3746]"
-                  : "text-[#0E37464D]"
+                ? "underline text-[#0E3746]"
+                : "text-[#0E37464D]"
                 }`}
             >
               Proposals
@@ -401,8 +385,8 @@ const DaoProfile = () => {
                 handleClick("member_policy");
               }}
               className={`cursor-pointer text-nowrap ${activeLink === "member_policy"
-                  ? "underline text-[#0E3746]"
-                  : "text-[#0E37464D]"
+                ? "underline text-[#0E3746]"
+                : "text-[#0E37464D]"
                 }`}
             >
               Members
@@ -413,8 +397,8 @@ const DaoProfile = () => {
                 handleClick("followers");
               }}
               className={`cursor-pointer text-nowrap ${activeLink === "followers"
-                  ? "underline text-[#0E3746]"
-                  : "text-[#0E37464D]"
+                ? "underline text-[#0E3746]"
+                : "text-[#0E37464D]"
                 }`}
             >
               Followers
@@ -425,8 +409,8 @@ const DaoProfile = () => {
                 handleClick("settings");
               }}
               className={`cursor-pointer text-nowrap ${activeLink === "settings"
-                  ? "underline text-[#0E3746]"
-                  : "text-[#0E37464D]"
+                ? "underline text-[#0E3746]"
+                : "text-[#0E37464D]"
                 }`}
             >
               Settings
