@@ -50,7 +50,7 @@ async fn init(args: PaymentRecipientAccount) {
 
 
     with_state(|state| {
-        let dao_wasm_module: Vec<u8> = include_bytes!("../../../.dfx/ic/canisters/dao_canister/dao_canister.wasm").to_vec();
+        let dao_wasm_module: Vec<u8> = include_bytes!("../../../.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
 
         // let mut  dao_wasm_module: Vec<u8> = Vec::new();
         // dao_wasm_module.push(10);

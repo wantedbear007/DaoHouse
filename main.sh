@@ -9,7 +9,7 @@ for ((i = 1; i <= COUNT; i++)); do
   dao_test=$(dfx canister call daohouse_backend create_dao '(
     "'$ASSET_HANDLER_ID'", 
     record {
-      dao_name = " ttrdrtrdt bhanu dao";
+      dao_name = " last last bhanu dao";
       purpose = "test krne ke liye ke chota sa sentence";
       daotype = "Non-profit";
       link_of_document = "https://example.com/charter.pdf";

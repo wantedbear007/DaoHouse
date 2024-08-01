@@ -407,7 +407,7 @@ async fn deposit_cycles(arg: CanisterIdRecord, cycles: u128) -> CallResult<()> {
     .await
 }
 
-async fn install_code(arg: InstallCodeArgument) -> CallResult<(String, String)> {
+async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
     // let wasm_base64: &str = "3831fb07143cd43c3c51f770342d2b7d0a594311529f5503587bf1544ccd44be";
     // let wasm_module_sample: Vec<u8> = base64::decode(wasm_base64).expect("Decoding failed");
 

@@ -110,7 +110,6 @@ service : (PaymentRecipientAccount) -> {
   create_dao : (text, DaoInput) -> (Result);
   create_new_post : (text, PostInput) -> (Result);
   create_profile : () -> (Result_1);
-  dao_create : (text, DaoInput) -> (Result);
   delete_profile : () -> (Result_1);
   follow_user : (principal) -> (Result);
   get_all_dao : (Pagination) -> (vec DaoDetails) query;
