@@ -63,9 +63,9 @@ const PostCard = ({ posts, handleGetLikePost }) => {
   const toggleFollow = async () => {
     try {
       if (!userProfile) return;
-
       const principal = Principal.fromText(posts.principal_id.toString());
       const currentlyFollowing = userProfile.followings_list.some(following => following.toString() === principal.toString());
+      setIsFollowing(!currentlyFollowing);
 
       const response = currentlyFollowing
         ? await backendActor.unfollow_user(principal)
@@ -81,9 +81,9 @@ const PostCard = ({ posts, handleGetLikePost }) => {
           updatedProfile.followings_count++;
         }
         setUserProfile(updatedProfile);
-        setIsFollowing(!currentlyFollowing);
         toast.success(currentlyFollowing ? "Successfully unfollowed" : "Successfully followed");
       } else if (response?.Err) {
+        setIsFollowing(!currentlyFollowing);
         toast.error(response.Err);
       }
     } catch (error) {
