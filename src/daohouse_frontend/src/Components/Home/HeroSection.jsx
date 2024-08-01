@@ -7,45 +7,47 @@ import Container from "../Container/Container";
 
 const HeroSection = () => {
   const navigate = useNavigate();
+
   const handlemov = () => {
     navigate("/dao/create-dao");
-  }
+  };
 
   const handleJoinDaoClick = () => {
-    navigate("/dao")
-  }
+    navigate("/dao");
+  };
 
   return (
     <Container>
       <div className="relative flex flex-col md:flex-row justify-center items-center">
         {/* Left Side */}
-        <div className="md:w-1/2 pl-20 w-full px-10 z-10 md:text-left text-center small_phone:mt-0 mt-8 flex flex-col mobile:gap-8 gap-4">
-          <p className="text-[#0E3746] font-mulish font-semibold laptop:text-6xl small_phone:text-5xl text-4xl mt-10 sm:mt-8 lg:mt-0">
+        <div className="md:w-1/2 w-full px-10 py-8 flex flex-col items-center text-center md:text-left gap-4 md:gap-6 z-10">
+          <p className="text-[#0E3746] font-mulish font-semibold text-4xl sm:text-5xl md:text-6xl mt-8">
             Building Better Future, Together
           </p>
-          <div className="text-black font-inter text-sm">
+          <div className="text-black font-inter text-sm md:text-base">
             Efficiently Manage Resources and Proposals with Our DAO Tools
           </div>
-
-          <div className="flex flex-row big_phone:justify-start justify-center space-x-4">
-
+          <div className="flex flex-col md:flex-row gap-4 md:gap-6">
             <button
               onClick={handlemov}
-              className="mobile:px-8 px-4 mobile:py-3 py-2 mobile:text-base text-sm bg-[#0E3746] text-white font-semibold rounded-[27.5px] shadow-md hover:bg-blue-800 hover:text-white"
-            >Create DAO
+              className="px-6 py-3 text-base bg-[#0E3746] text-white font-semibold rounded-full shadow-md hover:bg-blue-800 hover:text-white"
+            >
+              Create DAO
             </button>
             <button
               onClick={handleJoinDaoClick}
-              className="mobile:px-8 px-4 mobile:py-3 py-2 mobile:text-base text-sm bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
-
+              className="px-6 py-3 text-base bg-white text-black font-normal rounded-full shadow-md hover:bg-gray-200 hover:text-blue-900"
+            >
               Join DAO
             </button>
           </div>
         </div>
+
+        {/* Gradient and Bottom Left Image */}
         <img
           src={herosectiongradient}
           alt="hero section gradient"
-          className="absolute pointer-events-none select-none bottom-0 left-0 mb-24 md:ml-4 animate-gradient "
+          className="absolute pointer-events-none select-none bottom-0 left-0 mb-24 md:mb-0 md:left-0 md:ml-4 animate-gradient"
         />
         <img
           src={herosectionleftbottomimg}
@@ -54,12 +56,12 @@ const HeroSection = () => {
         />
 
         {/* Right Side */}
-        <div className="md:w-1/2 flex items-center justify-center py-10">
-          <div className="relative xl:w-[65%] lg:w-[80%] w-[75%]">
+        <div className="md:w-1/2 w-full flex items-center justify-center py-10">
+          <div className="relative w-[75%] md:w-[85%] lg:w-[90%] xl:w-[92%] 2xl:w-full h-auto">
             <img
               src={circle}
               alt="Placeholder"
-              className="w-full h-full md:mt-0 mt-8  md:w-[85%] pointer-events-none select-none lg:w-[90%] xl:w-[92%] 2xl:w-full h-full object-cover animate-spin-slow"
+              className="w-full h-full object-cover animate-spin-slow"
             />
           </div>
         </div>

@@ -20,24 +20,16 @@ import Lottie from "react-lottie";
 import { AssetManager } from "@dfinity/assets";
 import { HttpAgent } from "@dfinity/agent";
 import { toast } from "react-toastify";
- import data from "../../../../../canister_ids.json"
+import data from "../../../../../canister_ids.json"
 import { useNavigate } from "react-router-dom";
 import Container from "../../Components/Container/Container";
 import CircularProgress from '@mui/material/CircularProgress';
 
 const EditProfile = () => {
   const { userProfile, fetchUserProfile } = useUserProfile();
-  console.log(userProfile, 'userProfile')
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { backendActor, frontendCanisterId, identity, principal } = useAuth();
   const [loading, setLoading] = useState(false)
-
-  console.log({ principal })
-  // const principalIdArray = Array.from(principal?._arr || []);
-  // const princi = Buffer.from(principalIdArray).toString("base64");
-  // console.log("principal value is ", princi)
-
-  // const principal0 = await window.ic.plug.agent.getPrincipal(); 
 
   const [imageSrc, setImageSrc] = useState(
     userProfile?.profile_img
@@ -48,7 +40,7 @@ const EditProfile = () => {
   const handleDiscardClick = () => {
     navigate("/my-profile");
   }
-  // Create Agent
+
   const isLocal = !window.location.host.endsWith('ic0.app');
   const agent = new HttpAgent({
     host: isLocal ? `http://127.0.0.1:${window.location.port}` : 'https://ic0.app', identity,
@@ -57,7 +49,6 @@ const EditProfile = () => {
     agent.fetchRootKey();
   }
 
-  // Initiate AssetManager
   const assetManager = new AssetManager({
     canisterId: frontendCanisterId,
     agent: agent,
@@ -91,8 +82,7 @@ const EditProfile = () => {
   });
 
   const handleSaveChangesClick = async () => {
-  
-    setLoading(true)
+    setLoading(true);
     const profilePayload = {
       username: profileData.name,
       email_id: profileData.email_id,
@@ -110,11 +100,9 @@ const EditProfile = () => {
     };
 
     const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
-    // const canisterId = data["ic-asset-handler"]["ic"]
 
     try {
       const response = await backendActor.update_profile(canisterId, profilePayload);
-      console.log({ response })
       if (response.Err) {
         toast.error(`${response.Err}`);
       } else {
@@ -123,10 +111,9 @@ const EditProfile = () => {
       }
     } catch (error) {
       console.error("Error creating profile:", error);
-    }
-    finally {
+    } finally {
       fetchUserProfile();
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -141,13 +128,19 @@ const EditProfile = () => {
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
+    const maxSizeInBytes = 2 * 1024 * 1024; // 2MB
+
     if (file) {
-      setImageSrc(URL.createObjectURL(file));
+      if (file.size > maxSizeInBytes) {
+        toast.error("File size exceeds 2MB. Please upload a smaller image.");
+        return; // Prevent further processing if the file is too large
+      }
+
+      setImageSrc(URL.createObjectURL(file)); // Set the image preview source
       const arrayBuffer = await file.arrayBuffer();
       const content = new Uint8Array(arrayBuffer);
       setProfileData((prevData) => ({
         ...prevData,
-        // profile_img: "abc",
         image_content: Array.from(content),
         image_title: file.name,
         image_content_type: file.type,
@@ -162,7 +155,6 @@ const EditProfile = () => {
     }));
   };
 
-  // Animation options for the big circle
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -173,7 +165,6 @@ const EditProfile = () => {
     },
   };
 
-  // Animation options for the small circle
   const defaultOptions2 = {
     loop: true,
     autoplay: true,
@@ -183,7 +174,7 @@ const EditProfile = () => {
       id: "lottie-smallCircle",
     },
   };
-  // Animation options for the medium circle
+
   const defaultOptions3 = {
     loop: true,
     autoplay: true,
@@ -199,7 +190,6 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
-    console.log('calling useefect')
     setProfileData({
       name: userProfile?.username || "",
       email_id: userProfile?.email_id || "",
@@ -213,11 +203,11 @@ const EditProfile = () => {
       image_content: [10],
       image_title: "na",
       image_content_type: "image/jpg",
-    })
+    });
     setImageSrc(userProfile?.profile_img
       ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
-      : MyProfileImage)
-  }, [userProfile?.profile_img])
+      : MyProfileImage);
+  }, [userProfile?.profile_img]);
 
   return (
     <div className="bg-zinc-200 w-full pb-20 relative">
@@ -232,13 +222,11 @@ const EditProfile = () => {
         <Container classes="w-full lg:h-[25vh] h-[18vh] md:p-20 pt-6 pl-2 flex flex-col items-start md:justify-center relative hero-container">
 
           <div className="absolute z-22 top-0 left-0 w-full h-full overflow-x-hidden">
-            {/* Big circle image */}
             <div className="absolute md:right-[3.7%] -right-[3.7%] top-1/2 -translate-y-1/2">
               <div className="relative tablet:w-[96px] tablet:h-[96px] md:w-[88.19px] md:h-[88.19px] w-[65px] h-[65px]">
                 <BigCircleComponent imgSrc={BigCircle} />
               </div>
 
-              {/* Big circle animation */}
               <div className="absolute inset-0 flex items-center justify-center z-20">
                 <div className="tablet:w-[112px] tablet:h-[112px] md:w-[104px] md:h-[104px] w-[75px] h-[75px]">
                   <Lottie
@@ -251,12 +239,9 @@ const EditProfile = () => {
 
             <div className="absolute right-[25%] -translate-y-full top-[30%]">
               <div className="relative tablet:w-[43px] tablet:h-[43px] md:w-[33.3px] md:h-[33.3px] w-[21.19px] h-[21.19px]">
-                {/* Smallest circle image */}
-
                 <SmallCircleComponent imgSrc={SmallestCircle} />
               </div>
 
-              {/* Small circle animation */}
               <div className="absolute inset-0 flex items-center justify-center z-20">
                 <div className="tablet:w-[47px] tablet:h-[47px] md:w-[37.3px] md:h-[37.3px] w-[23.19px] h-[23.19px]">
                   <Lottie
@@ -267,13 +252,11 @@ const EditProfile = () => {
               </div>
             </div>
 
-            {/* Medium circle image */}
             <div className="absolute right-[45%] -translate-y-full top-[95%]">
               <div className="relative tablet:w-[52px] tablet:h-[52px] md:w-[43.25px] md:h-[43.25px] w-[29.28px] h-[29.28px] ">
                 <MediumCircleComponent imgSrc={MediumCircle} />
               </div>
 
-              {/* Medium circle animation */}
               <div className="absolute inset-0 flex items-center justify-center z-20">
                 <div className="tablet:w-[60px] tablet:h-[60px] md:w-[47.25px] md:h-[47.25px] w-[33.28px] h-[33.28px]">
                   <Lottie
