@@ -48,7 +48,7 @@ useEffect(() => {
       {loading ? (
         <MuiSkeleton />
       ) : (
-        <div className="flex gap-5 w-[50%]">
+        <div className="flex gap-5 md:w-[50%]">
           <div className="flex flex-1 flex-col gap-4 bg-[#F4F2EC] p-4 rounded-[10px] overflow-y-auto max-h-[300px]">
             {data.map((principal, index) => (
               <div
@@ -66,10 +66,10 @@ useEffect(() => {
   
                   <section className="flex flex-col items-start">
                     <p className="tablet:text-lg text-sm">
-                      {principal.toString().slice(0, 27) + "..."}
+                      {principal.toString().slice(0, 17) + "..."}
                     </p>
                     <p className="text-slate-500 tablet:text-sm text-xs">
-                      {principal.toString().slice(0, 37) + "..."}
+                      {principal.toString().slice(0, 27) + "..."}
                     </p>
                   </section>
 
@@ -110,7 +110,7 @@ useEffect(() => {
           </div> */}
         </div>
       )}
-      <div className="mt-4 md:hidden">
+      {/* <div className="mt-4 md:hidden">
         <h1 className="text-[#05212C] text-[16px] font-bold ml-2">More People</h1>
         <div className="w-full bg-[#0000004D] h-[2px] mb-4 mt-2"></div>
         <div className="flex gap-3 overflow-x-auto max-w-full">
@@ -129,7 +129,7 @@ useEffect(() => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   </div>
   
@@ -137,59 +137,3 @@ useEffect(() => {
 };
 
 export default Followers;
-
-const followersList = [
-  {
-    key: 1,
-    userName: "Username.user",
-    image: follower,
-  },
-  {
-    key: 2,
-    userName: "Username.user",
-    image: follower,
-  },
-  {
-    key: 3,
-    userName: "Username.user",
-    image: follower,
-  },
-  {
-    key: 4,
-    userName: "Username.user",
-    image: follower,
-  },
-];
-
-const morePeopleList = [
-  {
-    key: 1,
-    image: follower,
-    userName: "Kai Parker",
-    gmail: "Gmail@gmail.com",
-  },
-  {
-    key: 2,
-    image: follower,
-    userName: "Kai Parker",
-    gmail: "Gmail@gmail.com",
-  },
-  {
-    key: 3,
-    image: follower,
-    userName: "Kai Parker",
-    gmail: "Gmail@gmail.com",
-  },
-  {
-    key: 4,
-    image: follower,
-    userName: "Kai Parker",
-    gmail: "Gmail@gmail.com",
-  },
-  {
-    key: 5,
-    image: follower,
-    userName: "Kai Parker",
-    gmail: "Gmail@gmail.com",
-  },
-];

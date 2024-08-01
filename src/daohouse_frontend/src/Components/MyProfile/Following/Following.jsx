@@ -43,7 +43,7 @@ const Following = () => {
         <MuiSkeleton />
       ) : (
         <>
-          <div className="flex gap-5 w-[50%]">
+          <div className="flex gap-5 md:w-[50%]">
             <div className="flex flex-1 flex-col gap-4 bg-[#F4F2EC] p-4 rounded-[10px] overflow-y-auto max-h-[300px]">
               {data.map((principal, index) => (
                 <div
@@ -61,10 +61,10 @@ const Following = () => {
   
                     <section className="flex flex-col items-start">
                       <p className="tablet:text-lg text-sm">
-                        {principal.toString().slice(0, 27) + "..."}
+                        {principal.toString().slice(0, 17) + "..."}
                       </p>
                       <p className="text-slate-500 tablet:text-sm text-xs">
-                        {principal.toString().slice(0, 37) + "..."}
+                        {principal.toString().slice(0, 27) + "..."}
                       </p>
                   </section>
                   </div>
