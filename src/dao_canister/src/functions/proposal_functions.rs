@@ -101,7 +101,6 @@ fn refresh_proposals(id: &String) {
     with_state(|state| match &mut state.proposals.get(&id) {
         Some(proposal) => {
             if check_proposal_state(&proposal.proposal_expired_at) {
-                ic_cdk::println!("expire ho gya bro ");
                 proposal.proposal_status = ProposalState::Expired;
                 state.proposals.insert(id.clone(), proposal.to_owned());
 
@@ -114,7 +113,6 @@ fn refresh_proposals(id: &String) {
 
 #[update]
 fn proposal_refresh() -> Result<String, String> {
-    ic_cdk::println!("inside proposal refresh");
 
     let mut ids: Vec<String> = Vec::new();
 

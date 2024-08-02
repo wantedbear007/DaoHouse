@@ -130,6 +130,7 @@ service : (PaymentRecipientAccount) -> {
   like_post : (text) -> (Result);
   make_payment : (nat64, principal) -> (text);
   reply_comment : (ReplyCommentData) -> (Result);
+  search_dao : (text) -> (vec DaoDetails) query;
   unfollow_user : (principal) -> (Result);
   update_profile : (text, Profileinput) -> (Result_1);
   update_proposal_count : () -> (text);

@@ -1,15 +1,14 @@
 mod types;
 use ic_cdk::{api, export_candid, init};
 use std::{borrow::BorrowMut, cell::RefCell};
-pub mod routes;
 pub mod functions;
 pub mod guards;
+pub mod routes;
 mod state_handler;
 use state_handler::State;
 mod memory;
-use memory::Memory; 
 use candid::Principal;
-
+use memory::Memory;
 
 // mod user_route;
 // mod post_route;
@@ -32,13 +31,12 @@ async fn init(args: PaymentRecipientAccount) {
 
     let analytics = Analytics::default();
 
-
     with_state(|state| {
+        // state.borrow_mut().set_payment_recipient(Principal::from_text("aewmz-wl3z4-dzfeh-7j2ub-ah46w-iltzd-xt77x-v7got-zrvqk-ybk22-xae").expect("")); // adding payment recipient id
 
-
-        // state.borrow_mut().set_payment_recipient(Principal::from_text("aewmz-wl3z4-dzfeh-7j2ub-ah46w-iltzd-xt77x-v7got-zrvqk-ybk22-xae").expect("")); // adding payment recipient id 
-
-        state.borrow_mut().set_payment_recipient(args.payment_recipient); // adding payment recipient id 
+        state
+            .borrow_mut()
+            .set_payment_recipient(args.payment_recipient); // adding payment recipient id
         if let Some(_) = state.analytics_content.get(&0) {
             ic_cdk::println!("Analytics already available.");
         } else {
@@ -47,29 +45,27 @@ async fn init(args: PaymentRecipientAccount) {
         ()
     });
 
-
-
     with_state(|state| {
-        let dao_wasm_module: Vec<u8> = include_bytes!("../../../.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
+        let dao_wasm_module: Vec<u8> =
+            include_bytes!("../../../.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
 
         // let mut  dao_wasm_module: Vec<u8> = Vec::new();
         // dao_wasm_module.push(10);
         // dao_wasm_module.push(20);
 
-        state.borrow_mut().wasm_module.insert(0, WasmArgs { wasm: dao_wasm_module });
+        state.borrow_mut().wasm_module.insert(
+            0,
+            WasmArgs {
+                wasm: dao_wasm_module,
+            },
+        );
 
-        match  state.wasm_module.get(&0) {
-            Some(val) => ic_cdk::println!("mila bro"),
-            None => ic_cdk::println!("nhi hua")
+        match state.wasm_module.get(&0) {
+            Some(val) => ic_cdk::println!("available"),
+            None => ic_cdk::println!("not ava"),
         }
-
     })
-
 }
-
-
-
-
 
 // #[pre_upgrade]
 // fn pre_upgrade() {

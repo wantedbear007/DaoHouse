@@ -10,5 +10,8 @@
   },
   "ic_asset_handler": {
     "ic": "oj7or-fqaaa-aaaag-alhwa-cai"
+  },
+  "icrc1_ledger_canister": {
+    "ic": "3zjxh-fiaaa-aaaag-alijq-cai"
   }
 }

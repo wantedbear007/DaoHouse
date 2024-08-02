@@ -23,7 +23,6 @@ cargo install candid-extractor
 chmod 777 ./generate_did.sh
 ./generate_did.sh
 
-
 MINTER=$(dfx --identity default identity get-principal)
 DEFAULT=$(dfx --identity default identity get-principal)
 RECIEVER=$(dfx --identity reciever identity get-principal)
