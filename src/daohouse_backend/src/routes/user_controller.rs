@@ -51,34 +51,7 @@ pub fn create_new_profile(state: &mut State, profile: Profileinput) -> Result<()
 }
 
 
-// pub fn get_user_profile(state: &State) -> UserProfile {
-//     let principal_id = api::caller();
-//     if principal_id == Principal::anonymous() {
-//         return "Anonymous principal not allowed to make calls.".to_string();
-//     }
-//     if !state.user_profile.contains_key(&principal_id) {
-//         return UserProfile {
-//             user_id: principal_id,
-//             email_id: String::new(),
-//             profile_img: Vec::new(),
-//             username: String::new(),
-//             dao_ids: Vec::new(),
-//             post_count: 0,
-//             post_id: Vec::new(),
-//             followers_count: 0,
-//             followers_list: Vec::new(),
-//             followings_count: 0,
-//             followings_list: Vec::new(),
-//             description: String::new(),
-//             tag_defines: Vec::new(),
-//             contact_number: String::new(),
-//             twitter_id: String::new(),
-//             telegram: String::new(),
-//             website: String::new(),
-//         };
-//     }
-//     state.user_profile.get(&principal_id).unwrap().clone()
-// }
+
 
 
 pub fn get_user_profile(state: &State) -> Result<UserProfile, String> {

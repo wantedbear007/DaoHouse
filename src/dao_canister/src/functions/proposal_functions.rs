@@ -1,9 +1,8 @@
 use std::borrow::{Borrow, BorrowMut};
-use std::iter;
 
-use crate::guards::*;
 use crate::proposal_route::check_proposal_state;
 use crate::types::{Dao, ProposalInput, Proposals};
+use crate::{guards::*, Pagination};
 use crate::{proposal_route, with_state, ProposalState, VoteParam};
 use candid::Principal;
 use ic_cdk::api;
@@ -32,13 +31,29 @@ pub async fn create_proposal(daohouse_backend_id: String, proposal: ProposalInpu
 
 // get all proposals
 #[query]
-fn get_all_proposals() -> Vec<Proposals> {
+fn get_all_proposals(page_data: Pagination) -> Vec<Proposals> {
+    // let mut proposals: Vec<Proposals> = Vec::new();
+
     with_state(|state| {
         let mut proposals: Vec<Proposals> = Vec::with_capacity(state.proposals.len() as usize);
         for (_, v) in state.proposals.iter() {
             proposals.push(v.clone());
         }
-        proposals
+
+        let ending = proposals.len();
+
+        if ending == 0 {
+            return proposals;
+        }
+
+        let start = page_data.start as usize;
+        let end = page_data.end as usize;
+
+        if start < ending {
+            let end = end.min(ending);
+            return proposals[start..end].to_vec();
+        }
+        Vec::new()
     })
 }
 

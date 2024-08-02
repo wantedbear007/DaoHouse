@@ -49,10 +49,6 @@ async fn init(args: PaymentRecipientAccount) {
         let dao_wasm_module: Vec<u8> =
             include_bytes!("../../../.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
 
-        // let mut  dao_wasm_module: Vec<u8> = Vec::new();
-        // dao_wasm_module.push(10);
-        // dao_wasm_module.push(20);
-
         state.borrow_mut().wasm_module.insert(
             0,
             WasmArgs {
@@ -60,10 +56,10 @@ async fn init(args: PaymentRecipientAccount) {
             },
         );
 
-        match state.wasm_module.get(&0) {
-            Some(val) => ic_cdk::println!("available"),
-            None => ic_cdk::println!("not ava"),
-        }
+        // match state.wasm_module.get(&0) {
+        //     Some(val) => ic_cdk::println!("available"),
+        //     None => ic_cdk::println!("not ava"),
+        // }
     })
 }
 

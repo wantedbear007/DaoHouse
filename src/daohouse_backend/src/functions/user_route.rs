@@ -359,7 +359,7 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         arg: dao_detail_bytes,
     };
     let _installcode = install_code(arg1).await.unwrap();
-    ic_cdk::println!("errrrrr in installing {:?}", _installcode);
+    // ic_cdk::println!("errrrrr in installing {:?}", _installcode);
     println!("Canister ID: {:?}", canister_id);
     Ok("DAO created successfully".to_string())
 }

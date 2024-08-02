@@ -56,6 +56,11 @@ pub struct ProposalInput {
     // pub created_by: Principal,
 }
 
+#[derive(CandidType, Serialize, Deserialize)]
+pub struct Pagination {
+    pub start: u32,
+    pub end: u32,
+}
 #[derive(Clone, CandidType, Serialize, Deserialize)]
 pub struct Dao {
     pub dao_id: Principal,
