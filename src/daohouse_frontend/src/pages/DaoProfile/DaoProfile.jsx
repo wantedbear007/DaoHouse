@@ -23,6 +23,7 @@ import { Principal } from '@dfinity/principal';
 import { useAuth, useAuthClient } from "../../Components/utils/useAuthClient";
 import { useUserProfile } from "../../context/UserProfileContext";
 import { toast } from "react-toastify";
+import Loader from "../../Components/utils/Loader"
 
 
 const DaoProfile = () => {
@@ -42,7 +43,7 @@ const DaoProfile = () => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [followersCount, setFollowersCount] = useState(0);
   const [userProfile, setUserProfile] = useState(null);
-  console.log("--d", { daoCanisterId })
+  // console.log("proposals", dao.proposals_count)
 
   useEffect(() => {
     const fetchDaoDetails = async () => {
@@ -64,15 +65,20 @@ const DaoProfile = () => {
 
             const daoFollowers = await daoActor.get_dao_followers();
             setFollowersCount(daoFollowers.length);
-            // <<<<<<< prabhjot
+// <<<<<<< pratap
+//             // <<<<<<< prabhjot
 
-            //             // Check follow status from local storage
-            //             const storedIsFollowing = localStorage.getItem(`dao-${daoCanisterId}-isFollowing`);
-            //             setIsFollowing(storedIsFollowing === null ? daoFollowers.some(follower => follower.toString() === currentUserId.toString()) : JSON.parse(storedIsFollowing));
-            // =======
+//             //             // Check follow status from local storage
+//             //             const storedIsFollowing = localStorage.getItem(`dao-${daoCanisterId}-isFollowing`);
+//             //             setIsFollowing(storedIsFollowing === null ? daoFollowers.some(follower => follower.toString() === currentUserId.toString()) : JSON.parse(storedIsFollowing));
+//             // =======
+//             setIsFollowing(daoFollowers.some(follower => follower.toString() === currentUserId.toString()));
+
+//             // >>>>>>> main
+// =======
+
             setIsFollowing(daoFollowers.some(follower => follower.toString() === currentUserId.toString()));
-
-            // >>>>>>> main
+// >>>>>>> main
           }
         } catch (error) {
           console.error('Error fetching DAO details:', error);
@@ -88,6 +94,7 @@ const DaoProfile = () => {
 
   const toggleFollow = async () => {
     if (!userProfile) return;
+// <<<<<<< pratap
     // <<<<<<< prabhjot
 
     // =======
@@ -96,39 +103,59 @@ const DaoProfile = () => {
     //     setFollowersCount(prevCount => newIsFollowing ? prevCount + 1 : prevCount - 1);
 
     // >>>>>>> main
+// =======
+
+    const newIsFollowing = !isFollowing;
+    setIsFollowing(newIsFollowing);
+    setFollowersCount(prevCount => newIsFollowing ? prevCount + 1 : prevCount - 1);
+
+// >>>>>>> main
     try {
       const daoActor = createDaoActor(daoCanisterId);
       const response = isFollowing
         ? await daoActor.unfollow_dao()
         : await daoActor.follow_dao();
-      // <<<<<<< prabhjot
+// <<<<<<< pratap
+//       // <<<<<<< prabhjot
 
-      //       if (response?.Ok) {
-      //         // Update state immediately
-      //         setIsFollowing(!isFollowing);
+//       //       if (response?.Ok) {
+//       //         // Update state immediately
+//       //         setIsFollowing(!isFollowing);
 
-      //         // Update followers count immediately
-      //         const updatedFollowers = await daoActor.get_dao_followers();
-      //         setFollowersCount(updatedFollowers.length);
+//       //         // Update followers count immediately
+//       //         const updatedFollowers = await daoActor.get_dao_followers();
+//       //         setFollowersCount(updatedFollowers.length);
 
-      //         // Store the follow status in local storage
-      //         localStorage.setItem(`dao-${daoCanisterId}-isFollowing`, !isFollowing);
+//       //         // Store the follow status in local storage
+//       //         localStorage.setItem(`dao-${daoCanisterId}-isFollowing`, !isFollowing);
 
-      //         toast.success(isFollowing ? "Successfully unfollowed" : "Successfully followed");
-      //       } else if (response?.Err) {
-      //         toast.error(response.Err);
-      //       }
-      // =======
+//       //         toast.success(isFollowing ? "Successfully unfollowed" : "Successfully followed");
+//       //       } else if (response?.Err) {
+//       //         toast.error(response.Err);
+//       //       }
+//       // =======
 
-      if (response?.Ok) {
-        toast.success(newIsFollowing ? "Successfully followed" : "Successfully unfollowed");
-      } else if (response?.Err) {
-        // Revert the state if there's an error
-        setIsFollowing(!newIsFollowing);
-        setFollowersCount(prevCount => newIsFollowing ? prevCount - 1 : prevCount + 1);
-        toast.error(response.Err);
-      }
-      // >>>>>>> main
+//       if (response?.Ok) {
+//         toast.success(newIsFollowing ? "Successfully followed" : "Successfully unfollowed");
+//       } else if (response?.Err) {
+//         // Revert the state if there's an error
+//         setIsFollowing(!newIsFollowing);
+//         setFollowersCount(prevCount => newIsFollowing ? prevCount - 1 : prevCount + 1);
+//         toast.error(response.Err);
+//       }
+//       // >>>>>>> main
+// =======
+
+  
+        if (response?.Ok) {
+          toast.success(newIsFollowing ? "Successfully followed" : "Successfully unfollowed");
+        } else if (response?.Err) {
+          // Revert the state if there's an error
+          setIsFollowing(!newIsFollowing);
+          setFollowersCount(prevCount => newIsFollowing ? prevCount - 1 : prevCount + 1);
+          toast.error(response.Err);
+        }
+// >>>>>>> main
     } catch (error) {
       console.error('Error following/unfollowing DAO:', error);
       // Revert the state if there's an error
@@ -150,7 +177,7 @@ const DaoProfile = () => {
 
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   if (!dao) {
@@ -213,7 +240,6 @@ const DaoProfile = () => {
             <div className="relative tablet:w-[96px] tablet:h-[96px] md:w-[88.19px] md:h-[88.19px] w-[65px] h-[65px]">
               <BigCircleComponent imgSrc={BigCircle} />
             </div>
-
             {/* Big circle animation */}
             <div className="absolute inset-0 flex items-center justify-center z-20">
               <div className="tablet:w-[112px] tablet:h-[112px] md:w-[104px] md:h-[104px] w-[75px] h-[75px]">
@@ -224,14 +250,11 @@ const DaoProfile = () => {
               </div>
             </div>
           </div>
-
           <div className="absolute right-[25%] -translate-y-full top-[30%]">
             <div className="relative tablet:w-[43px] tablet:h-[43px] md:w-[33.3px] md:h-[33.3px] w-[21.19px] h-[21.19px]">
               {/* Smallest circle image */}
-
               <SmallCircleComponent imgSrc={SmallestCircle} />
             </div>
-
             {/* Small circle animation */}
             <div className="absolute inset-0 flex items-center justify-center z-20">
               <div className="tablet:w-[47px] tablet:h-[47px] md:w-[37.3px] md:h-[37.3px] w-[23.19px] h-[23.19px]">
@@ -242,13 +265,11 @@ const DaoProfile = () => {
               </div>
             </div>
           </div>
-
           {/* Medium circle image */}
           <div className="absolute right-[45%] -translate-y-full top-[95%]">
             <div className="relative tablet:w-[52px] tablet:h-[52px] md:w-[43.25px] md:h-[43.25px] w-[29.28px] h-[29.28px] ">
               <MediumCircleComponent imgSrc={MediumCircle} />
             </div>
-
             {/* Medium circle animation */}
             <div className="absolute inset-0 flex items-center justify-center z-20">
               <div className="tablet:w-[60px] tablet:h-[60px] md:w-[47.25px] md:h-[47.25px] w-[33.28px] h-[33.28px]">
@@ -263,24 +284,42 @@ const DaoProfile = () => {
       </div>
       <div className={"bg-[#c8ced3]"}>
         <Container classes={`${className} __mainComponent lg:py-8 lg:pb-20 py-6 big_phone:px-8 px-6 tablet:flex-row gap-2 flex-col w-full`}>
-          <div className="flex md:justify-between w-full md:gap-2 gap-10 z-50 relative flex-wrap">
-            <div className="flex items-center">
-              <div
-                className="w-[85px] h-[49px] lg:w-[207px] lg:h-[120px] bg-[#C2C2C2] md:w-[145px] md:h-[84px] rounded overflow-hidden"
-                style={{
-                  boxShadow:
-                    "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
-                }}
-              >
-                <img
-                  className="w-full h-full object-cover"
-                  src={getImageUrl(dao.image_id)}
-                  alt="profile-pic"
-                />
-              </div>
+// <<<<<<< pratap
+//           <div className="flex md:justify-between w-full md:gap-2 gap-10 z-50 relative flex-wrap">
+//             <div className="flex items-center">
+//               <div
+//                 className="w-[85px] h-[49px] lg:w-[207px] lg:h-[120px] bg-[#C2C2C2] md:w-[145px] md:h-[84px] rounded overflow-hidden"
+//                 style={{
+//                   boxShadow:
+//                     "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
+//                 }}
+//               >
+//                 <img
+//                   className="w-full h-full object-cover"
+//                   src={getImageUrl(dao.image_id)}
+//                   alt="profile-pic"
+//                 />
+//               </div>
 
-            </div>
+//             </div>
 
+// =======
+        <div className="flex md:justify-between w-full md:gap-2 gap-10 z-50 relative flex-wrap">
+          <div className="flex items-center">
+          <div
+            className="w-[85px] h-[49px] lg:w-[207px] lg:h-[120px] bg-[#C2C2C2] md:w-[145px] md:h-[84px] rounded overflow-hidden"
+            style={{
+              boxShadow:
+                "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
+            }}
+          >
+            <img
+              className="w-full h-full object-cover"
+              src={getImageUrl(dao.image_id)}
+              alt="profile-pic"
+            />
+          </div>
+// >>>>>>> main
             <div className="lg:ml-10 ml-4">
               <h2 className="lg:text-[40px] md:text-[24px] text-[16px] tablet:font-normal font-medium text-left text-[#05212C]">
                 {dao.dao_name || 'Dao Name'}
@@ -290,7 +329,11 @@ const DaoProfile = () => {
               </p>
               <div className="md:flex justify-between mt-2 hidden">
                 <span className="tablet:mr-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
-                  {dao.posts || 0} <span className=" md:text-[16px] mx-1">Proposals</span>
+// <<<<<<< pratap
+//                   {dao.posts || 0} <span className=" md:text-[16px] mx-1">Proposals</span>
+// =======
+                {dao.proposals_count || 0} <span className=" md:text-[16px] mx-1">Proposals</span>
+// >>>>>>> main
                 </span>
                 <span className="md:mx-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
                   {followersCount}<span className=" md:text-[16px] mx-1">Followers</span>
@@ -299,61 +342,67 @@ const DaoProfile = () => {
 
               </div>
             </div>
-
-            <div className="flex justify-between mt-[-20px] md:hidden">
-              <span className="flex flex-col items-center justify-center font-normal">
-                <span className="text-[22px] text-[#05212C]">{dao.posts || 0}</span>
-                <span className=" text-[14px] mx-1">Posts</span>
-              </span>
-              <span className="flex flex-col items-center justify-center font-normal ml-8">
-                <span className="text-[22px] text-[#05212C]">{dao.followers.length}</span>
-                <span className=" text-[14px] mx-1">Followers</span>
-              </span>
-            </div>
-
-            <div className="flex md:justify-end gap-4 md:mt-4 tablet:mr-4">
-              <button
-                onClick={toggleFollow}
-                className="bg-[#0E3746] text-[16px] text-white shadow-xl lg:py-4 lg:px-3 rounded-[27px] lg:w-[131px] lg:h-[40px] md:w-[112px] md:h-[38px] w-[98px] h-[35px] lg:flex items-center justify-center rounded-2xl"
-                style={{
-                  boxShadow:
-                    "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
-                }}
-              >
-                {isFollowing ? "Unfollow" : "Follow"}
-              </button>
-
-              <button
-                onClick={() => navigate("/join-dao")}
-                className="bg-white text-[16px] text-[#05212C] shadow-xl lg:py-4 lg:px-3 rounded-[27px] lg:w-[131px] lg:h-[40px] md:w-[112px] md:h-[38px] w-[98px] h-[35px] lg:flex items-center justify-center rounded-2xl"
-                style={{
-                  boxShadow:
-                    "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
-                }}
-              >
-                Join DAO
-              </button>
-            </div>
           </div>
-          <div
-            className={
-              className +
-              "__navs w-full overflow-auto flex flex-row justify-between mt-8 md:w-[90%] lg:w-[70%] xl:w-[60%] gap-12 lg:text-[16px] text-[14px] pb-2"
-            }
-          >
+          <div className="flex justify-between mt-[-20px] md:hidden">
+            <span className="flex flex-col items-center justify-center font-normal">
+              <span className="text-[22px] text-[#05212C]">{dao.proposals_count || 0}</span>
+              <span className=" text-[14px] mx-1">Proposals</span>
+            </span>
+            <span className="flex flex-col items-center justify-center font-normal ml-8">
+              <span className="text-[22px] text-[#05212C]">{dao.followers.length}</span>
+              <span className=" text-[14px] mx-1">Followers</span>
+            </span>
+          </div>
+          <div className="flex md:justify-end gap-4 md:mt-4 tablet:mr-4">
             <button
-              onClick={(e) => {
-                e.preventDefault();
-                handleClick("proposals");
+              onClick={toggleFollow}
+              className="bg-[#0E3746] text-[16px] text-white shadow-xl lg:py-4 lg:px-3 rounded-[27px] lg:w-[131px] lg:h-[40px] md:w-[112px] md:h-[38px] w-[98px] h-[35px] lg:flex items-center justify-center rounded-2xl"
+              style={{
+                boxShadow:
+                  "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
               }}
-              className={`cursor-pointer text-nowrap ${activeLink === "proposals"
+// <<<<<<< pratap
+//               className={`cursor-pointer text-nowrap ${activeLink === "proposals"
+//                 ? "underline text-[#0E3746]"
+//                 : "text-[#0E37464D]"
+//                 }`}
+// =======
+// >>>>>>> main
+            >
+              {isFollowing ? "Unfollow" : "Follow"}
+            </button>
+            <button
+              onClick={() => navigate("/join-dao")}
+              className="bg-white text-[16px] text-[#05212C] shadow-xl lg:py-4 lg:px-3 rounded-[27px] lg:w-[131px] lg:h-[40px] md:w-[112px] md:h-[38px] w-[98px] h-[35px] lg:flex items-center justify-center rounded-2xl"
+              style={{
+                boxShadow:
+                  "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
+              }}
+            >
+              Join DAO
+            </button>
+          </div>
+        </div>
+        <div
+          className={
+            className +
+            "__navs w-full overflow-auto flex flex-row justify-between mt-8 md:w-[90%] lg:w-[70%] xl:w-[60%] gap-12 lg:text-[16px] text-[14px] pb-2"
+          }
+        >
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleClick("proposals");
+            }}
+            className={`cursor-pointer text-nowrap ${
+              activeLink === "proposals"
                 ? "underline text-[#0E3746]"
                 : "text-[#0E37464D]"
-                }`}
-            >
-              Proposals
-            </button>
-            {/** <button
+            }`}
+          >
+            Proposals
+          </button>
+      {/** <button
             onClick={(e) => {
               e.preventDefault();
               handleClick("feeds");
@@ -379,49 +428,98 @@ const DaoProfile = () => {
           >
             Funds
           </button>*/}
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                handleClick("member_policy");
-              }}
-              className={`cursor-pointer text-nowrap ${activeLink === "member_policy"
+// <<<<<<< pratap
+//             <button
+//               onClick={(e) => {
+//                 e.preventDefault();
+//                 handleClick("member_policy");
+//               }}
+//               className={`cursor-pointer text-nowrap ${activeLink === "member_policy"
+//                 ? "underline text-[#0E3746]"
+//                 : "text-[#0E37464D]"
+//                 }`}
+//             >
+//               Members
+//             </button>
+//             <button
+//               onClick={(e) => {
+//                 e.preventDefault();
+//                 handleClick("followers");
+//               }}
+//               className={`cursor-pointer text-nowrap ${activeLink === "followers"
+//                 ? "underline text-[#0E3746]"
+//                 : "text-[#0E37464D]"
+//                 }`}
+//             >
+//               Followers
+//             </button>
+//             <button
+//               onClick={(e) => {
+//                 e.preventDefault();
+//                 handleClick("settings");
+//               }}
+//               className={`cursor-pointer text-nowrap ${activeLink === "settings"
+//                 ? "underline text-[#0E3746]"
+//                 : "text-[#0E37464D]"
+//                 }`}
+//             >
+//               Settings
+//             </button>
+//           </div>
+//           {activeLink === "proposals" && <ProposalsContent proposals={proposals} />}
+//           {activeLink === "feeds" && <FeedsContent />}
+//           {activeLink === "member_policy" && <Members />}
+//           {activeLink === "followers" && <FollowersContent />}
+//           {activeLink === "funds" && <FundsContent />}
+//           {activeLink === "settings" && <DaoSettings />}
+// =======
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleClick("member_policy");
+            }}
+            className={`cursor-pointer text-nowrap ${
+              activeLink === "member_policy"
                 ? "underline text-[#0E3746]"
                 : "text-[#0E37464D]"
-                }`}
-            >
-              Members
-            </button>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                handleClick("followers");
-              }}
-              className={`cursor-pointer text-nowrap ${activeLink === "followers"
+            }`}
+          >
+            Members
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleClick("followers");
+            }}
+            className={`cursor-pointer text-nowrap ${
+              activeLink === "followers"
                 ? "underline text-[#0E3746]"
                 : "text-[#0E37464D]"
-                }`}
-            >
-              Followers
-            </button>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                handleClick("settings");
-              }}
-              className={`cursor-pointer text-nowrap ${activeLink === "settings"
+            }`}
+          >
+            Followers
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleClick("settings");
+            }}
+            className={`cursor-pointer text-nowrap ${
+              activeLink === "settings"
                 ? "underline text-[#0E3746]"
                 : "text-[#0E37464D]"
-                }`}
-            >
-              Settings
-            </button>
-          </div>
-          {activeLink === "proposals" && <ProposalsContent proposals={proposals} />}
-          {activeLink === "feeds" && <FeedsContent />}
-          {activeLink === "member_policy" && <Members />}
-          {activeLink === "followers" && <FollowersContent />}
-          {activeLink === "funds" && <FundsContent />}
-          {activeLink === "settings" && <DaoSettings />}
+            }`}
+          >
+            Settings
+          </button>
+        </div>
+        {activeLink === "proposals" && <ProposalsContent proposals={proposals} />}
+        {activeLink === "feeds" && <FeedsContent />}
+        {activeLink === "member_policy" && <Members />}
+        {activeLink === "followers" && <FollowersContent />}
+        {activeLink === "funds" && <FundsContent />}
+        {activeLink === "settings" && <DaoSettings />}
+// >>>>>>> main
         </Container>
       </div>
     </div>
