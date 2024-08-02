@@ -1,1 +1,0 @@
-dfx canister call nmlv2-yyaaa-aaaag-alh5q-cai get_dao_detail --network ic

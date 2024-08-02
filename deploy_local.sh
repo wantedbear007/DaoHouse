@@ -23,7 +23,6 @@ cargo install candid-extractor
 chmod 777 ./generate_did.sh
 ./generate_did.sh
 
-
 MINTER=$(dfx --identity default identity get-principal)
 DEFAULT=$(dfx --identity default identity get-principal)
 RECIEVER=$(dfx --identity reciever identity get-principal)
@@ -81,8 +80,8 @@ dfx deploy daohouse_backend --argument "(record { payment_recipient = principal 
 dfx deploy ic_asset_handler
 # # to upload first image
 # ./assets_upload.sh
-dfx deploy internet_identity
-dfx deploy daohouse_frontend
+# dfx deploy internet_identity
+# dfx deploy daohouse_frontend
 
 # dfx generate
 # password daal de bhai

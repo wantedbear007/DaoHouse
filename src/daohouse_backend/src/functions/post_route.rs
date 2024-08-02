@@ -597,6 +597,21 @@ fn get_wasm() -> Result<Vec<u8>, String> {
     })
 }
 
+#[query]
+fn search_dao(dao_name: String) -> Vec<DaoDetails> {
+    let mut daos: Vec<DaoDetails> = Vec::new();
+
+    with_state(|state| {
+        for y in state.dao_details.iter() {
+            if y.1.dao_name.contains(&dao_name) {
+                daos.push(y.1.clone())
+            }
+        }
+
+        daos
+    })
+}
+
 // #[update]
 // async fn dao_create(canister_id: String, dao_detail: DaoInput) -> Result<String, String> {
 //     let principal_id = api::caller();
@@ -656,7 +671,7 @@ fn get_wasm() -> Result<Vec<u8>, String> {
 //             return Err(format!("Failed to serialize DaoInput: {}", e));
 //         }
 //     };
-    // 100_000_000_000
+// 100_000_000_000
 
 //     let record = create_canister(
 //         CreateCanisterArgument {

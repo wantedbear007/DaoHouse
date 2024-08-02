@@ -34,6 +34,7 @@ type DaoInput = record {
   required_votes : int8;
 };
 type GroupList = record { users : vec principal };
+type Pagination = record { end : nat32; start : nat32 };
 type ProposalInput = record {
   proposal_title : text;
   proposal_description : text;
@@ -91,7 +92,7 @@ service : (DaoInput) -> {
   comment_on_proposal : (text, text) -> (Result);
   create_proposal : (text, ProposalInput) -> (text);
   follow_dao : () -> (Result);
-  get_all_proposals : () -> (vec Proposals) query;
+  get_all_proposals : (Pagination) -> (vec Proposals) query;
   get_dao_detail : () -> (Dao) query;
   get_dao_followers : () -> (vec principal) query;
   get_dao_members : () -> (vec principal) query;

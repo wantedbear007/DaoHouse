@@ -1,11 +1,11 @@
 DAOHOUSE_CANISTER_ID=$(dfx canister id daohouse_backend)
 
-test10=$(dfx canister call by6od-j4aaa-aaaaa-qaadq-cai create_proposal '(
+test10=$(dfx canister call bw4dl-smaaa-aaaaa-qaacq-cai create_proposal '(
    "'$DAOHOUSE_CANISTER_ID'",
   record {
     proposal_title = "New  Park";
     proposal_description = "Proposal for the construction of a new community park in the downtown area.";
-    required_votes = 200;
+    required_votes = 0;
     proposal_type = variant {AddMemberProposal};
   }
 )')
@@ -14,7 +14,7 @@ test10=$(dfx canister call by6od-j4aaa-aaaaa-qaadq-cai create_proposal '(
 
 # ./refresh_proposals.sh
 
-dfx canister call by6od-j4aaa-aaaaa-qaadq-cai get_all_proposals
+dfx canister call bw4dl-smaaa-aaaaa-qaacq-cai get_all_proposals
 
 # b5d01f898f6a7d75397763d901b5a54597b3bd3f1276d0b5f3cc0299ab28fc48
 

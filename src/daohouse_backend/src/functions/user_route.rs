@@ -8,7 +8,6 @@ use crate::types::{
     InstallCodeArgument, InstallCodeArgumentExtended,
 };
 
-
 use crate::types::{DaoInput, Profileinput, UserProfile};
 use crate::{guards::*, CanisterSettings, DaoCanisterInput};
 use crate::{routes, with_state, DaoDetails, DaoResponse, ImageData};
@@ -233,16 +232,6 @@ fn follow_user(user_id: Principal) -> Result<String, String> {
 pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<String, String> {
     ic_cdk::println!("value is {:?}", dao_detail);
     let principal_id = api::caller();
-    // if principal_id == Principal::anonymous() {
-    //     // trap("Anonymous principal not allowed to make calls.")
-    //     return Err("Anonymo
-    //     us principal not allowed to make calls."
-    //         .to_string());
-    // }
-
-    // add cycles from user
-
-    // let result: Result<(), String> = call_with_payment(api::id(), "deposit_cycles", (), 10_000_000_000, ).await;
 
     let mut updated_members = dao_detail.members.clone();
     updated_members.push(principal_id.clone());
@@ -276,7 +265,6 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         return Err("Image upload failed".to_string());
     }
 
-   
     let update_dau_detail = DaoCanisterInput {
         dao_name: dao_detail.dao_name.clone(),
         purpose: dao_detail.purpose.clone(),
@@ -305,21 +293,19 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         Some(data) => data,
         None => panic!("User profile doesn't exist !"),
     };
-    
-    
 
-    let mut veccc:Vec<Principal> = Vec::new();
+    let mut veccc: Vec<Principal> = Vec::new();
     veccc.push(api::caller());
     veccc.push(ic_cdk::api::id());
 
     let conttt = CanisterSettings {
         controllers: Some(veccc),
         ..Default::default()
-
     };
-  
 
-    let arg = CreateCanisterArgument { settings: Some(conttt)  };
+    let arg = CreateCanisterArgument {
+        settings: Some(conttt),
+    };
     let (canister_id,) = match create_canister(arg).await {
         Ok(id) => id,
         Err((_, err_string)) => {
@@ -329,7 +315,6 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
     // let (id,)=canister_id;
     let _addcycles = deposit_cycles(canister_id, 100_000_000_000).await.unwrap();
     ic_cdk::println!("errrrrr in deposit {:?}", _addcycles);
-
 
     let canister_id_principal = canister_id.canister_id;
 
@@ -353,7 +338,6 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         .dao_ids
         .push(canister_id_principal.to_string());
 
- 
     with_state(|state| {
         let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
         analytics.dao_counts += 1;
@@ -362,9 +346,9 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
     });
 
     let wasm_dao: Vec<u8> = Vec::new();
-    with_state(|state| match  state.wasm_module.get(&0) {
+    with_state(|state| match state.wasm_module.get(&0) {
         Some(val) => val.wasm,
-        None => panic!("nhi mila")
+        None => panic!("nhi mila"),
     });
 
     let arg1 = InstallCodeArgument {
@@ -375,7 +359,7 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         arg: dao_detail_bytes,
     };
     let _installcode = install_code(arg1).await.unwrap();
-    ic_cdk::println!("errrrrr in installing {:?}", _installcode);
+    // ic_cdk::println!("errrrrr in installing {:?}", _installcode);
     println!("Canister ID: {:?}", canister_id);
     Ok("DAO created successfully".to_string())
 }
@@ -421,12 +405,9 @@ async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
     with_state(|state| match state.wasm_module.get(&0) {
         Some(val) => {
             wasm_module_sample = val.wasm;
-            ic_cdk::println!("WASM le liya bro")
         }
-        None => panic!("WASM me error ho gya bro"),
+        None => panic!("WASM error"),
     });
-
-    ic_cdk::println!("wasm aa rha {:?} ", wasm_module_sample);
 
     let cycles: u128 = 100_000_000_000;
 
@@ -464,7 +445,6 @@ async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
 
 //     "sdfs".to_string()
 // }
-
 
 // check user existance
 #[query(guard = prevent_anonymous)]
