@@ -284,8 +284,8 @@ const DaoProfile = () => {
       </div>
       <div className={"bg-[#c8ced3]"}>
         <Container classes={`${className} __mainComponent lg:py-8 lg:pb-20 py-6 big_phone:px-8 px-6 tablet:flex-row gap-2 flex-col w-full`}>
-// <<<<<<< pratap
-//           <div className="flex md:justify-between w-full md:gap-2 gap-10 z-50 relative flex-wrap">
+
+  {/**           <div className="flex md:justify-between w-full md:gap-2 gap-10 z-50 relative flex-wrap">
 //             <div className="flex items-center">
 //               <div
 //                 className="w-[85px] h-[49px] lg:w-[207px] lg:h-[120px] bg-[#C2C2C2] md:w-[145px] md:h-[84px] rounded overflow-hidden"
@@ -303,7 +303,7 @@ const DaoProfile = () => {
 
 //             </div>
 
-// =======
+// =======  */}
         <div className="flex md:justify-between w-full md:gap-2 gap-10 z-50 relative flex-wrap">
           <div className="flex items-center">
           <div
@@ -319,7 +319,7 @@ const DaoProfile = () => {
               alt="profile-pic"
             />
           </div>
-// >>>>>>> main
+
             <div className="lg:ml-10 ml-4">
               <h2 className="lg:text-[40px] md:text-[24px] text-[16px] tablet:font-normal font-medium text-left text-[#05212C]">
                 {dao.dao_name || 'Dao Name'}
@@ -329,11 +329,10 @@ const DaoProfile = () => {
               </p>
               <div className="md:flex justify-between mt-2 hidden">
                 <span className="tablet:mr-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
-// <<<<<<< pratap
-//                   {dao.posts || 0} <span className=" md:text-[16px] mx-1">Proposals</span>
-// =======
+
+
                 {dao.proposals_count || 0} <span className=" md:text-[16px] mx-1">Proposals</span>
-// >>>>>>> main
+
                 </span>
                 <span className="md:mx-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
                   {followersCount}<span className=" md:text-[16px] mx-1">Followers</span>
@@ -427,7 +426,7 @@ const DaoProfile = () => {
             }`}
           >
             Funds
-          </button>*/}
+          </button>
 // <<<<<<< pratap
 //             <button
 //               onClick={(e) => {
@@ -472,7 +471,7 @@ const DaoProfile = () => {
 //           {activeLink === "followers" && <FollowersContent />}
 //           {activeLink === "funds" && <FundsContent />}
 //           {activeLink === "settings" && <DaoSettings />}
-// =======
+// ======= */}
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -519,7 +518,7 @@ const DaoProfile = () => {
         {activeLink === "followers" && <FollowersContent />}
         {activeLink === "funds" && <FundsContent />}
         {activeLink === "settings" && <DaoSettings />}
-// >>>>>>> main
+
         </Container>
       </div>
     </div>

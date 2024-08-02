@@ -15,20 +15,20 @@ import { Principal } from "@dfinity/principal";
 export default function Card({ proposal, resData, proposals }) {
   console.log("8888888888888", proposal)
   console.log(resData, "all data ")
-  const a = proposal?.proposal_description;
 
-  console.log("Annn", a)
+
+
   const bigIntValue10 = BigInt(proposal?.proposal_approved_votes || 0);
   const approvedProposals = Number(bigIntValue10);
-  console.log("approved proposals", approvedProposals)
+
 
   const bigIntValue1 = BigInt(proposal?.proposal_rejected_votes || 0);
   const rejectedvoters = Number(bigIntValue1);
-  console.log("///rr?", rejectedvoters)
+
 
 
   const stsatus = proposal?.proposal_status;
-  console.log("ss", stsatus)
+
   // Animation options for the progress
   const defaultOptions = {
     loop: true,
@@ -127,10 +127,6 @@ export default function Card({ proposal, resData, proposals }) {
 
 
 
-  const lol = Principal.fromHex(proposal.created_by)
-  console.log(lol, " lol")
-  console.log("o")
-
 
   const principalString = proposal?.created_by
     ? Principal.fromUint8Array(new Uint8Array(proposal.created_by)).toText()
@@ -190,23 +186,23 @@ export default function Card({ proposal, resData, proposals }) {
 
           <div
             className={`w-fit  ${proposal?.status === "Rejected"
-                ? "bg-[#D85032]"
-                : proposal.status === "Approved"
-                  ? "bg-[#4FB565]"
-                  : proposal.status === "In Progress"
-                    ? "bg-[#4993B0]"
-                    : ""
+              ? "bg-[#D85032]"
+              : proposal.status === "Approved"
+                ? "bg-[#4FB565]"
+                : proposal.status === "In Progress"
+                  ? "bg-[#4993B0]"
+                  : ""
               } ml-auto text-white text-xs font-semibold rounded-full my-4 mx-4 pr-3 pl-7 py-1 inline-block md:hidden relative`}
           >
             {" "}
             <span
               className={`absolute  ${proposal.status === "Rejected"
-                  ? "  w-[35%] h-[35%] -left-[0%] -top-[10%]"
-                  : proposal.status === "Approved"
-                    ? " w-[60%] h-[60%] -left-[14%] -top-[65%]"
-                    : proposal.status === "In Progress"
-                      ? " w-[100%] h-[100%] -left-[33%] -top-[150%]"
-                      : ""
+                ? "  w-[35%] h-[35%] -left-[0%] -top-[10%]"
+                : proposal.status === "Approved"
+                  ? " w-[60%] h-[60%] -left-[14%] -top-[65%]"
+                  : proposal.status === "In Progress"
+                    ? " w-[100%] h-[100%] -left-[33%] -top-[150%]"
+                    : ""
                 } `}
             >
               <div
@@ -261,24 +257,24 @@ export default function Card({ proposal, resData, proposals }) {
           ))}
           <div
             className={`w-fit  ${proposal.status === "Rejected"
-                ? "bg-[#D85032]"
-                : proposal.status === "Approved"
-                  ? "bg-[#4FB565]"
-                  : proposal.status === "In Progress"
-                    ? "bg-[#4993B0]"
-                    : ""
+              ? "bg-[#D85032]"
+              : proposal.status === "Approved"
+                ? "bg-[#4FB565]"
+                : proposal.status === "In Progress"
+                  ? "bg-[#4993B0]"
+                  : ""
               } ml-auto text-white text-xs font-semibold rounded-full my-4 mx-4 px-4 py-2 inline-block relative`}
           >
             {" "}
             <span className="text-[#34342a] text-[16px] ml-4">
               <span
                 className={`absolute  ${proposal.status === "Rejected"
-                    ? "  w-[35%] h-[35%] -left-[0%] top-[2%]"
-                    : proposal.status === "Approved"
-                      ? " w-[60%] h-[60%] -left-[14%] -top-[40%]"
-                      : proposal.status === "In Progress"
-                        ? " w-[100%] h-[100%] -left-[35%] -top-[105%]"
-                        : ""
+                  ? "  w-[35%] h-[35%] -left-[0%] top-[2%]"
+                  : proposal.status === "Approved"
+                    ? " w-[60%] h-[60%] -left-[14%] -top-[40%]"
+                    : proposal.status === "In Progress"
+                      ? " w-[100%] h-[100%] -left-[35%] -top-[105%]"
+                      : ""
                   } `}
               >
                 <div
@@ -312,15 +308,15 @@ export default function Card({ proposal, resData, proposals }) {
 
         <div className="p-4">
           <div className="flex flex-col right-card flex-1 relative">
-          <div className="flex items-center justify-start">
-            <div className="font-bold text-xl text-[#229ED9] mb-2 p-2 hidden md:block">
-              Transfer
+            <div className="flex items-center justify-start">
+              <div className="font-bold text-xl text-[#229ED9] mb-2 p-2 hidden md:block">
+                Transfer
+              </div>
+              <span className="border-r-2 h-6 border-[#229ED9] mx-2 hidden md:block" />
+              <div className="font-semibold md:text-[16px] text-[14px] text-[#229ED9] mb-2 p-2 truncate ... w-60 md:w-150 lg:w-full">
+                Proposal ID: #{proposal?.proposal_id}
+              </div>
             </div>
-            <span className="border-r-2 h-6 border-[#229ED9] mx-2 hidden md:block" />
-            <div className="font-semibold md:text-[16px] text-[14px] text-[#229ED9] mb-2 p-2 truncate ... w-60 md:w-150 lg:w-full">
-              Proposal ID: #{proposal?.proposal_id}
-            </div>
-          </div>
 
 
             {proposal?.proposal_description && (
