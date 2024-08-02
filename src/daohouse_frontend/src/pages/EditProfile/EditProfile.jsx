@@ -20,7 +20,6 @@ import Lottie from "react-lottie";
 import { AssetManager } from "@dfinity/assets";
 import { HttpAgent } from "@dfinity/agent";
 import { toast } from "react-toastify";
-import data from "../../../../../canister_ids.json"
 import { useNavigate } from "react-router-dom";
 import Container from "../../Components/Container/Container";
 import CircularProgress from '@mui/material/CircularProgress';

@@ -58,7 +58,10 @@ dfx deploy dao_canister --argument '(record{
     };
     required_votes=100;
     image_id="1";
-
+    followers=vec{
+    };
+    members_permissions=vec{
+    };
 
 })' --network ic
 

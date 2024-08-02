@@ -28,14 +28,8 @@ pub fn with_state<R>(f: impl FnOnce(&mut State) -> R) -> R {
 
 #[init]
 async fn init(args: PaymentRecipientAccount) {
-    // async fn init() {
     ic_cdk::println!("values are {:?}", args.payment_recipient.to_string());
-    // let analytics = Analytics {
-    //     dao_counts: 0,
-    //     members_count: 0,
-    //     post_count: 0,
-    //     proposals_count: 0,
-    // };
+
     let analytics = Analytics::default();
 
 
@@ -54,7 +48,26 @@ async fn init(args: PaymentRecipientAccount) {
     });
 
 
+
+    with_state(|state| {
+        let dao_wasm_module: Vec<u8> = include_bytes!("../../../.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
+
+        // let mut  dao_wasm_module: Vec<u8> = Vec::new();
+        // dao_wasm_module.push(10);
+        // dao_wasm_module.push(20);
+
+        state.borrow_mut().wasm_module.insert(0, WasmArgs { wasm: dao_wasm_module });
+
+        match  state.wasm_module.get(&0) {
+            Some(val) => ic_cdk::println!("mila bro"),
+            None => ic_cdk::println!("nhi hua")
+        }
+
+    })
+
 }
+
+
 
 
 

@@ -127,6 +127,11 @@ export default function Card({ proposal, resData, proposals }) {
 
 
 
+  const lol = Principal.fromHex(proposal.created_by)
+  console.log(lol, " lol")
+  console.log("o")
+
+
   const principalString = proposal?.created_by
     ? Principal.fromUint8Array(new Uint8Array(proposal.created_by)).toText()
     : "Unknown";

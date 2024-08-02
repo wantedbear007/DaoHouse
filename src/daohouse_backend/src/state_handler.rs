@@ -1,6 +1,6 @@
 // use std::collections::HashMap;
 use ic_stable_structures::StableBTreeMap;
-use crate::{Analytics, DaoDetails, Memory};
+use crate::{memory, Analytics, DaoDetails, Memory, WasmArgs};
 use candid::Principal;
 use crate::types::{UserProfile,PostInfo};
 // use std::collections::BTreeMap;
@@ -17,6 +17,8 @@ pub struct State {
     
     pub analytics_content: StableBTreeMap<u64, Analytics, Memory>,
     
+    pub wasm_module: StableBTreeMap<u64, WasmArgs, Memory>,
+
     payment_recipient: Option<Principal>,
 }
 
@@ -29,7 +31,9 @@ impl State {
             post_detail:post_file_contents(),
             dao_details: dao_file_contents(),
             analytics_content: analytics_content(),
-            payment_recipient: None
+            wasm_module: init_wasm_module(),
+            payment_recipient: None,
+
 
         }
     }
@@ -62,6 +66,10 @@ fn dao_file_contents() -> StableBTreeMap<String, DaoDetails, Memory> {
 }
 fn analytics_content() -> StableBTreeMap<u64, Analytics, Memory> {
     StableBTreeMap::init(crate::memory::get_analytics_memory())
+}
+
+fn init_wasm_module() -> StableBTreeMap<u64, WasmArgs, Memory> {
+    StableBTreeMap::init(crate::memory::get_wasm_memory())
 }
 
 

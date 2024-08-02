@@ -1,17 +1,14 @@
 {
   "dao_canister": {
-    "ic": "rtuyi-caaaa-aaaag-alf7a-cai"
+    "ic": "oo6if-iiaaa-aaaag-alhwq-cai"
   },
   "daohouse_backend": {
-    "ic": "goz5v-uqaaa-aaaag-algaa-cai"
+    "ic": "y34ky-vyaaa-aaaag-alicq-cai"
   },
   "daohouse_frontend": {
-    "ic": "gh2wj-cyaaa-aaaag-algbq-cai"
+    "ic": "oa4fn-tyaaa-aaaag-alhxq-cai"
   },
   "ic_asset_handler": {
-    "ic": "ga3q5-paaaa-aaaag-algba-cai"
-  },
-  "icrc1_ledger_canister": {
-    "ic": "ruv64-pyaaa-aaaag-alf7q-cai"
+    "ic": "oj7or-fqaaa-aaaag-alhwa-cai"
   }
 }
