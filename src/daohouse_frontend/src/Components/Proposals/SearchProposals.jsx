@@ -9,7 +9,7 @@ const SearchProposals = ({ width, bgColor, placeholder, className, ...inputProps
                 </svg>
             </div>
 
-            <input type="text" placeholder={placeholder} className="pl-4 pr-10 py-2 w-full bg-transparent focus:outline-none placeholder-zinc-400 text-zinc-700 placeholder-custom" {...inputProps} />
+            <input onChange={(vak) => {console.log(vak.target.value)}} type="text" placeholder={placeholder} className="pl-4 pr-10 py-2 w-full bg-transparent focus:outline-none placeholder-zinc-400 text-zinc-700 placeholder-custom" {...inputProps} />
         </div>
     );
 }

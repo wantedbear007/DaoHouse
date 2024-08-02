@@ -30,6 +30,64 @@ pub struct CreateCanisterArgument {
     pub settings: Option<CanisterSettings>,
 }
 
+
+pub mod core {
+    use std::cmp::Ordering;
+
+    /// Represents a unique identifier or key.
+    ///
+    /// This type, `Key`, is an alias for `String`, used to represent unique identifiers or keys within the context
+    /// of various data structures and operations.
+    ///
+    /// `Key` is commonly employed as a unique identifier or key in Rust code.
+    pub type Key = String;
+
+    /// Represents binary data as a vector of bytes.
+    ///
+    /// This type, `Blob`, is an alias for `Vec<u8>`, providing a convenient way to represent binary data
+    /// as a collection of bytes.
+    pub type Blob = Vec<u8>;
+
+    /// Represents the domain name used in various configurations across the satellite.
+    ///
+    /// This type alias simplifies the reuse of `String` for domain names, providing a clear and
+    /// specific semantic meaning when used in structs and function signatures. It is used to
+    /// identify domains for authentication, custom domains, and potentially more areas where
+    /// domain names are needed.
+    ///
+    /// # Examples
+    ///
+    /// Basic usage:
+    ///
+    /// ```
+    /// let main_domain: DomainName = "example.com".to_string();
+    /// ```
+    pub type DomainName = String;
+
+    pub trait Compare {
+        fn cmp_updated_at(&self, other: &Self) -> Ordering;
+        fn cmp_created_at(&self, other: &Self) -> Ordering;
+    }
+
+    /// Sha256 Digest: 32 bytes
+    pub type Hash = [u8; 32];
+
+    pub trait Hashable {
+        fn hash(&self) -> Hash;
+    }
+}
+
+
+pub mod ic {
+    use crate::types::core::Blob;
+
+    pub struct WasmArg {
+        pub wasm: Blob,
+        pub install_arg: Vec<u8>,
+    }
+}
+
+
 #[derive(
     CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Default,
 )]
@@ -629,10 +687,14 @@ pub struct Pagination {
     pub end: u32,
 }
 
+#[derive(CandidType, Serialize, Deserialize)]
+pub struct WasmArgs {
+    pub wasm: Vec<u8>,
+}
+
 #[derive(CandidType, Deserialize, Debug)]
 pub struct PaymentRecipientAccount {
     pub payment_recipient: Principal, // payment recipient principal address
-                                      // pub payment_recipient: String // payment recipient principal address
 }
 
 const MAX_VALUE_SIZE: u32 = 800;
@@ -704,4 +766,15 @@ impl Storable for Analytics {
         max_size: MAX_VALUE_SIZE_ANALYTICS,
         is_fixed_size: false,
     };
+}
+
+impl Storable for WasmArgs {
+    fn to_bytes(&self) -> Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    const BOUND: Bound = Bound::Unbounded;
 }

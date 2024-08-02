@@ -30,6 +30,7 @@ pub struct CreateFileInput {
     pub name: String,
     pub content_type: String,
     pub size: Option<Nat>, // if provided, can be used to detect the file is fully filled
+    // pub content: Option<ByteBuf>, // should <= 1024 * 1024 * 2 - 1024
     pub content: ByteBuf, // should <= 1024 * 1024 * 2 - 1024
     pub status: Option<i8>, // when set to 1, the file must be fully filled, and hash must be provided
     pub hash: Option<ByteBuf>, // recommend sha3 256

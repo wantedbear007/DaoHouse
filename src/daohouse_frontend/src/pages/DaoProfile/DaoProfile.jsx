@@ -65,8 +65,20 @@ const DaoProfile = () => {
 
             const daoFollowers = await daoActor.get_dao_followers();
             setFollowersCount(daoFollowers.length);
+// <<<<<<< pratap
+//             // <<<<<<< prabhjot
+
+//             //             // Check follow status from local storage
+//             //             const storedIsFollowing = localStorage.getItem(`dao-${daoCanisterId}-isFollowing`);
+//             //             setIsFollowing(storedIsFollowing === null ? daoFollowers.some(follower => follower.toString() === currentUserId.toString()) : JSON.parse(storedIsFollowing));
+//             // =======
+//             setIsFollowing(daoFollowers.some(follower => follower.toString() === currentUserId.toString()));
+
+//             // >>>>>>> main
+// =======
 
             setIsFollowing(daoFollowers.some(follower => follower.toString() === currentUserId.toString()));
+// >>>>>>> main
           }
         } catch (error) {
           console.error('Error fetching DAO details:', error);
@@ -82,16 +94,57 @@ const DaoProfile = () => {
 
   const toggleFollow = async () => {
     if (!userProfile) return;
+// <<<<<<< pratap
+    // <<<<<<< prabhjot
+
+    // =======
+    //     const newIsFollowing = !isFollowing;
+    //     setIsFollowing(newIsFollowing);
+    //     setFollowersCount(prevCount => newIsFollowing ? prevCount + 1 : prevCount - 1);
+
+    // >>>>>>> main
+// =======
 
     const newIsFollowing = !isFollowing;
     setIsFollowing(newIsFollowing);
     setFollowersCount(prevCount => newIsFollowing ? prevCount + 1 : prevCount - 1);
 
+// >>>>>>> main
     try {
       const daoActor = createDaoActor(daoCanisterId);
       const response = isFollowing
         ? await daoActor.unfollow_dao()
         : await daoActor.follow_dao();
+// <<<<<<< pratap
+//       // <<<<<<< prabhjot
+
+//       //       if (response?.Ok) {
+//       //         // Update state immediately
+//       //         setIsFollowing(!isFollowing);
+
+//       //         // Update followers count immediately
+//       //         const updatedFollowers = await daoActor.get_dao_followers();
+//       //         setFollowersCount(updatedFollowers.length);
+
+//       //         // Store the follow status in local storage
+//       //         localStorage.setItem(`dao-${daoCanisterId}-isFollowing`, !isFollowing);
+
+//       //         toast.success(isFollowing ? "Successfully unfollowed" : "Successfully followed");
+//       //       } else if (response?.Err) {
+//       //         toast.error(response.Err);
+//       //       }
+//       // =======
+
+//       if (response?.Ok) {
+//         toast.success(newIsFollowing ? "Successfully followed" : "Successfully unfollowed");
+//       } else if (response?.Err) {
+//         // Revert the state if there's an error
+//         setIsFollowing(!newIsFollowing);
+//         setFollowersCount(prevCount => newIsFollowing ? prevCount - 1 : prevCount + 1);
+//         toast.error(response.Err);
+//       }
+//       // >>>>>>> main
+// =======
 
   
         if (response?.Ok) {
@@ -102,6 +155,7 @@ const DaoProfile = () => {
           setFollowersCount(prevCount => newIsFollowing ? prevCount - 1 : prevCount + 1);
           toast.error(response.Err);
         }
+// >>>>>>> main
     } catch (error) {
       console.error('Error following/unfollowing DAO:', error);
       // Revert the state if there's an error
@@ -230,6 +284,26 @@ const DaoProfile = () => {
       </div>
       <div className={"bg-[#c8ced3]"}>
         <Container classes={`${className} __mainComponent lg:py-8 lg:pb-20 py-6 big_phone:px-8 px-6 tablet:flex-row gap-2 flex-col w-full`}>
+
+  {/**           <div className="flex md:justify-between w-full md:gap-2 gap-10 z-50 relative flex-wrap">
+//             <div className="flex items-center">
+//               <div
+//                 className="w-[85px] h-[49px] lg:w-[207px] lg:h-[120px] bg-[#C2C2C2] md:w-[145px] md:h-[84px] rounded overflow-hidden"
+//                 style={{
+//                   boxShadow:
+//                     "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
+//                 }}
+//               >
+//                 <img
+//                   className="w-full h-full object-cover"
+//                   src={getImageUrl(dao.image_id)}
+//                   alt="profile-pic"
+//                 />
+//               </div>
+
+//             </div>
+
+// =======  */}
         <div className="flex md:justify-between w-full md:gap-2 gap-10 z-50 relative flex-wrap">
           <div className="flex items-center">
           <div
@@ -245,20 +319,25 @@ const DaoProfile = () => {
               alt="profile-pic"
             />
           </div>
+
             <div className="lg:ml-10 ml-4">
               <h2 className="lg:text-[40px] md:text-[24px] text-[16px] tablet:font-normal font-medium text-left text-[#05212C]">
-              {dao.dao_name || 'Dao Name'}
+                {dao.dao_name || 'Dao Name'}
               </h2>
               <p className="text-[12px] tablet:text-[16px] font-normal text-left text-[#646464]">
-              {dao.purpose || 'Dao Purpose'}
+                {dao.purpose || 'Dao Purpose'}
               </p>
               <div className="md:flex justify-between mt-2 hidden">
                 <span className="tablet:mr-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
+
+
                 {dao.proposals_count || 0} <span className=" md:text-[16px] mx-1">Proposals</span>
+
                 </span>
                 <span className="md:mx-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
-                {followersCount}<span className=" md:text-[16px] mx-1">Followers</span>
+                  {followersCount}<span className=" md:text-[16px] mx-1">Followers</span>
                 </span>
+
 
               </div>
             </div>
@@ -281,6 +360,13 @@ const DaoProfile = () => {
                 boxShadow:
                   "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
               }}
+// <<<<<<< pratap
+//               className={`cursor-pointer text-nowrap ${activeLink === "proposals"
+//                 ? "underline text-[#0E3746]"
+//                 : "text-[#0E37464D]"
+//                 }`}
+// =======
+// >>>>>>> main
             >
               {isFollowing ? "Unfollow" : "Follow"}
             </button>
@@ -340,7 +426,52 @@ const DaoProfile = () => {
             }`}
           >
             Funds
-          </button>*/}
+          </button>
+// <<<<<<< pratap
+//             <button
+//               onClick={(e) => {
+//                 e.preventDefault();
+//                 handleClick("member_policy");
+//               }}
+//               className={`cursor-pointer text-nowrap ${activeLink === "member_policy"
+//                 ? "underline text-[#0E3746]"
+//                 : "text-[#0E37464D]"
+//                 }`}
+//             >
+//               Members
+//             </button>
+//             <button
+//               onClick={(e) => {
+//                 e.preventDefault();
+//                 handleClick("followers");
+//               }}
+//               className={`cursor-pointer text-nowrap ${activeLink === "followers"
+//                 ? "underline text-[#0E3746]"
+//                 : "text-[#0E37464D]"
+//                 }`}
+//             >
+//               Followers
+//             </button>
+//             <button
+//               onClick={(e) => {
+//                 e.preventDefault();
+//                 handleClick("settings");
+//               }}
+//               className={`cursor-pointer text-nowrap ${activeLink === "settings"
+//                 ? "underline text-[#0E3746]"
+//                 : "text-[#0E37464D]"
+//                 }`}
+//             >
+//               Settings
+//             </button>
+//           </div>
+//           {activeLink === "proposals" && <ProposalsContent proposals={proposals} />}
+//           {activeLink === "feeds" && <FeedsContent />}
+//           {activeLink === "member_policy" && <Members />}
+//           {activeLink === "followers" && <FollowersContent />}
+//           {activeLink === "funds" && <FundsContent />}
+//           {activeLink === "settings" && <DaoSettings />}
+// ======= */}
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -387,6 +518,7 @@ const DaoProfile = () => {
         {activeLink === "followers" && <FollowersContent />}
         {activeLink === "funds" && <FundsContent />}
         {activeLink === "settings" && <DaoSettings />}
+
         </Container>
       </div>
     </div>

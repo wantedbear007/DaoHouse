@@ -2,15 +2,37 @@
 
 use std::borrow::{Borrow, BorrowMut};
 
+use crate::ic::WasmArg;
 use crate::routes::upload_image;
-// <<<<<<< pratap
 use crate::types::{Comment, PostInfo, PostInput};
 use crate::{
-    with_state, Analytics, DaoDetails, GetAllPostsResponse, ImageData, Pagination, ReplyCommentData,
+    with_state, Analytics, DaoCanisterInput, DaoDetails, DaoInput, GetAllPostsResponse, ImageData,
+    Pagination, ReplyCommentData,
 };
-use candid::Principal;
+use candid::{Nat, Principal};
 use ic_cdk::api;
-use ic_cdk::api::management_canister::main::raw_rand;
+use ic_cdk::api::call::CallResult;
+// use ic_cdk::api::management_canister::main::{install_code, raw_rand, CanisterInstallMode, CanisterSettings};
+// use ic_cdk::{
+//     api::{
+//         call::call_with_payment128,
+//         management_canister::{
+//             self,
+//             main::{
+//                 create_canister, deposit_cycles, CanisterIdRecord, CreateCanisterArgument,
+//                 InstallCodeArgument,
+//             },
+//         },
+//     },
+//     query, update,
+// };
+use ic_cdk::api::management_canister::main::{
+    canister_status as ic_canister_status, create_canister, delete_canister,
+    deposit_cycles as ic_deposit_cycles, install_code as ic_install_code, raw_rand, stop_canister,
+    update_settings, CanisterId, CanisterIdRecord, CanisterInstallMode, CanisterSettings,
+    CreateCanisterArgument, InstallCodeArgument, UpdateSettingsArgument,
+};
+use ic_cdk::api::{canister_balance128, time};
 use ic_cdk::{query, update};
 use icrc_ledger_types::icrc1::account::Account;
 use icrc_ledger_types::icrc1::transfer::BlockIndex;
@@ -127,10 +149,7 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
 
 #[query(guard = prevent_anonymous)]
 fn get_all_posts(page_data: Pagination) -> GetAllPostsResponse {
-
-
     let mut all_posts = Vec::new();
-
 
     with_state(|state| {
         for (_k, v) in state.post_detail.iter() {
@@ -569,3 +588,185 @@ fn update_proposal_count() -> String {
     });
     "success".to_string()
 }
+
+#[query]
+fn get_wasm() -> Result<Vec<u8>, String> {
+    with_state(|state| match state.wasm_module.get(&0) {
+        Some(v) => Ok(v.wasm),
+        None => Err(String::from("nhi aa rha bro")),
+    })
+}
+
+// #[update]
+// async fn dao_create(canister_id: String, dao_detail: DaoInput) -> Result<String, String> {
+//     let principal_id = api::caller();
+
+//     let mut updated_members = dao_detail.members.clone();
+//     updated_members.push(principal_id.clone());
+
+//     // image upload
+
+//     let image_id: Result<String, String> = upload_image(
+//         canister_id,
+//         ImageData {
+//             content: dao_detail.image_content,
+//             name: dao_detail.image_title,
+//             content_type: dao_detail.image_content_type,
+//         },
+//     )
+//     .await;
+
+//     let mut id = String::new();
+//     let image_create_res: bool = (match image_id {
+//         Ok(value) => {
+//             id = value;
+//             Ok(())
+//         }
+//         Err(er) => {
+//             ic_cdk::println!("error {}", er.to_string());
+//             Err(())
+//         }
+//     })
+//     .is_err();
+
+//     if image_create_res {
+//         return Err("Image upload failed".to_string());
+//     }
+
+//     let update_dau_detail = DaoCanisterInput {
+//         dao_name: dao_detail.dao_name.clone(),
+//         purpose: dao_detail.purpose.clone(),
+//         daotype: dao_detail.daotype,
+//         link_of_document: dao_detail.link_of_document,
+//         cool_down_period: dao_detail.cool_down_period,
+//         members: updated_members,
+//         tokenissuer: dao_detail.tokenissuer,
+//         linksandsocials: dao_detail.linksandsocials,
+//         required_votes: dao_detail.required_votes,
+//         followers: vec![api::caller()],
+//         image_id: id.clone(),
+//         members_permissions: dao_detail.members_permissions,
+//     };
+
+//     let canister_args = CreateCanisterArgument { settings: None };
+
+//     let dao_detail_bytes: Vec<u8> = match candid::encode_one(&update_dau_detail) {
+//         Ok(bytes) => bytes,
+//         Err(e) => {
+//             return Err(format!("Failed to serialize DaoInput: {}", e));
+//         }
+//     };
+    // 100_000_000_000
+
+//     let record = create_canister(
+//         CreateCanisterArgument {
+//             settings: Some(CanisterSettings {
+//                 controllers: Some(vec![]),
+//                 compute_allocation: None,
+//                 memory_allocation: None,
+//                 freezing_threshold: None,
+//                 reserved_cycles_limit: None,
+//                 wasm_memory_limit: Some(Nat::from(1_073_741_824)),
+//             }),
+//         },
+//         100_000_000_000u128 + 2000000,
+//     )
+//     .await;
+
+//     let mut wasm_mod: Vec<u8> = Vec::new();
+
+//     with_state(|state| match state.wasm_module.get(&0) {
+//         Some(val) => wasm_mod = val.wasm,
+//         None => panic!("wasm load nhi hua bro"),
+//     });
+
+//     match record {
+//         Err((_, message)) => Err(["Failed to create canister.", &message].join(" - ")),
+//         Ok(record) => {
+//             let canister_id = record.0.canister_id;
+
+//             let install = install_code(
+//                 canister_id,
+//                 &WasmArg {
+//                     wasm: wasm_mod,
+//                     install_arg: wasm_mod,
+//                 },
+//                 CanisterInstallMode::Install,
+//             )
+//             .await;
+
+//             match install {
+//                 Err(_) => Err("Failed to install code in canister.".to_string()),
+//                 Ok(_) => Ok(canister_id.to_string()),
+//             }
+//         }
+//     }
+
+//     // let result = match create_canister(canister_args, 120_000_000_000).await {
+//     //     Ok((canister_id,)) => (canister_id,),
+//     //     Err(err) => {
+//     //         ic_cdk::println!("Canister creation Error: {:?}", err.1);
+//     //         return Err(err.1);
+//     //     }
+//     // };
+
+//     // call_with_payment128(result.0.canister_id.clone(), "deposit_cycles", Vec::new(), 100000000).await;
+
+//     // ic_cdk::println!("Created canister: {:?}", result.0.canister_id.to_text());
+
+//     // let mut wasm_mod: Vec<u8> = Vec::new();
+
+//     // with_state(|state| match state.wasm_module.get(&0) {
+//     //     Some(val) => wasm_mod = val.wasm,
+//     //     None => panic!("wasm load nhi hua bro"),
+//     // });
+
+//     // let install_code_argument = InstallCodeArgument {
+//     //     mode: CanisterInstallMode::Install,
+//     //     canister_id: result.0.canister_id,
+//     //     wasm_module: wasm_mod,
+//     //     // arg: dao_detail_bytes,
+//     //     arg: vec![],
+//     // };
+
+//     // let installed_result =
+//     //     ic_cdk::api::management_canister::main::install_code(install_code_argument).await;
+
+//     // match installed_result {
+//     //     Ok(_) => {
+//     //         let dao_details: DaoDetails = DaoDetails {
+//     //             dao_canister_id: result.0.canister_id.to_string().clone(),
+//     //             dao_name: dao_detail.dao_name,
+//     //             dao_desc: dao_detail.purpose,
+//     //             // image_id: id,
+//     //             dao_id: result.0.canister_id.clone(),
+//     //         };
+
+//     //         with_state(|state| {
+//     //             state
+//     //                 .dao_details
+//     //                 .insert(result.0.canister_id.to_string().clone(), dao_details)
+//     //         });
+
+//     //         Ok(result.0.canister_id.to_string())
+//     //     }
+//     //     Err(err) => Err(err.1),
+//     // }
+
+//     // Ok(result.0.canister_id.to_string())
+// }
+
+// async fn install_code(
+//     canister_id: Principal,
+//     WasmArg { wasm, install_arg }: &WasmArg,
+//     mode: CanisterInstallMode,
+// ) -> CallResult<()> {
+//     let arg = InstallCodeArgument {
+//         mode,
+//         canister_id,
+//         wasm_module: wasm.clone(),
+//         arg: install_arg.clone(),
+//     };
+
+//     ic_install_code(arg).await
+// }
