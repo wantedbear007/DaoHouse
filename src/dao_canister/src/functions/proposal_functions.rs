@@ -113,7 +113,6 @@ fn refresh_proposals(id: &String) {
 
 #[update]
 fn proposal_refresh() -> Result<String, String> {
-
     let mut ids: Vec<String> = Vec::new();
 
     with_state(|state| {
@@ -124,6 +123,7 @@ fn proposal_refresh() -> Result<String, String> {
     });
 
     for id in ids.iter() {
+        execute_add_proposals(id);
         refresh_proposals(id);
     }
 
@@ -154,7 +154,6 @@ fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String> {
         None => Err(String::from("Proposal ID is invalid !")),
     })
 }
-
 #[query(guard=prevent_anonymous)]
 fn search_proposal(proposal_id: String) -> Vec<Proposals> {
     let mut propo: Vec<Proposals> = Vec::new();
@@ -168,4 +167,49 @@ fn search_proposal(proposal_id: String) -> Vec<Proposals> {
 
         propo
     })
+}
+
+// #[query]
+fn execute_add_proposals(id: &String) {
+    with_state(|state| match state.proposals.get(&id) {
+        Some(val) => {
+            let is_completed = val.proposal_approved_votes + val.proposal_rejected_votes
+                >= val.required_votes as u64;
+
+            let is_success = val.proposal_approved_votes >= 5;
+            if is_completed && is_success {
+                let mut updated_proposal = val.clone();
+
+                let mut updated_dao = state.dao.clone();
+                updated_dao.members.push(val.created_by);
+                updated_dao.members_count += 1;
+
+                state.dao = updated_dao;
+                updated_proposal.proposal_status = ProposalState::Accepted;
+                state.proposals.insert(id.to_owned(), updated_proposal);
+            } else {
+                let mut updated_proposal = val.clone();
+
+                updated_proposal.proposal_status = ProposalState::Rejected;
+                state.proposals.insert(id.to_owned(), updated_proposal);
+            }
+        }
+        None => (),
+    })
+
+    // with_state(|state| match &mut state.proposals.get(&id) {
+    //     Some(proposal) => {
+
+    //         let is_completed = proposal.proposal_approved_votes+ proposal.proposal_rejected_votes >= proposal.required_votes as u64;
+
+    //         if is_completed {
+    //             state.dao.members.push(proposal.created_by);
+    //             proposal.proposal_status = ProposalState::Expired;
+    //             state.proposals.insert(id.clone(), proposal.to_owned());
+
+    //             // Ok(format!("Updated {:?}", proposal))
+    //         }
+    //     }
+    //     None => (),
+    // })
 }

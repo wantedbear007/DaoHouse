@@ -17,8 +17,8 @@ pub fn create_new_proposal(
         proposal_status: ProposalState::Open,
         // proposal_amount: proposal.proposal_amount,
         proposal_submitted_at: ic_cdk::api::time(),
-        // proposal_expired_at: ic_cdk::api::time() + (20 * 86_400 * 1_000_000_000),
-        proposal_expired_at: ic_cdk::api::time() + (2 * 60 * 1_000_000_000),
+        proposal_expired_at: ic_cdk::api::time() + (20 * 86_400 * 1_000_000_000),
+        // proposal_expired_at: ic_cdk::api::time() + (2 * 60 * 1_000_000_000),
 
         // proposal_receiver_id: proposal.proposal_receiver_id,
         proposal_approved_votes: 0,

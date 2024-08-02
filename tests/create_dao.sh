@@ -9,7 +9,7 @@ for ((i = 1; i <= COUNT; i++)); do
   dao_test=$(dfx canister call daohouse_backend create_dao '(
     "'$ASSET_HANDLER_ID'", 
     record {
-      dao_name = " dao dao";
+      dao_name = "first dao";
       purpose = "test krne ke liye ke chota sa sentence";
       daotype = "Non-profit";
       link_of_document = "https://example.com/charter.pdf";
@@ -27,7 +27,7 @@ for ((i = 1; i <= COUNT; i++)); do
       image_title = "sample.jpg";
       image_content_type = "image/jpg";
         members_permissions=vec{
-        "mai hi permission hai";
+        "permission";
     };
       
     }
