@@ -64,13 +64,13 @@ const Navbar = () => {
   }, [backendActor, principal, fetchUserProfile, userProfile]);
 
   useEffect(() => {
-    setImageSrc(
-      userProfile?.profile_img
+    setImageSrc(userProfile?.profile_img
       ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
-      : MyProfileImage
-    );
-    setUsername(userProfile?.username || "");
-  }, [userProfile]);
+      : MyProfileImage)
+
+    setUsername(userProfile?.username || "")
+  }, [userProfile?.profile_img])
+
 
   const handleLogin = async () => {
     setIsLoading(true);
