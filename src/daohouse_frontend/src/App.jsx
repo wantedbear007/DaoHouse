@@ -1,6 +1,6 @@
 import React, { Children } from "react";
 // import Login from './Components/Auth/Login';
-
+import './global.scss'
 import PostProvider from "./PostProvider";
 import Dao from "./pages/dao/Dao";
 import Dashboard from "../src/pages/Home/Dashboard";
