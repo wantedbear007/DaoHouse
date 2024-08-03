@@ -31,6 +31,15 @@ module.exports = {
         laptop: "1280px",
         desktop: "1440px",
       },
+      // Add the blur utility here
+      blur: {
+        xs: '2px',
+        sm: '4px',
+        md: '6px',
+        lg: '8px',
+        xl: '12px',
+        '2xl': '16px',
+      },
     },
   },
   plugins: [],

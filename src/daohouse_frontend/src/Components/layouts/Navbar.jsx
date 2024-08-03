@@ -1,33 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useAuth, useAuthClient } from "../utils/useAuthClient";
+import { useAuth } from "../utils/useAuthClient";
 import { LuChevronDown } from "react-icons/lu";
 import LoginModal from "../Auth/LoginModal";
-import { FaUser, FaSignOutAlt, FaProjectDiagram, FaSitemap, FaComments, FaNewspaper } from "react-icons/fa";
+import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import logo from "../../../assets/ColorLogo.png";
 import MyProfileImage from "../../../assets/MyProfile-img.png";
 import { useUserProfile } from "../../context/UserProfileContext";
 import { toast } from "react-toastify";
 import Container from "../Container/Container";
-// import { Principal } from "@dfinity/principal";
-import { Principal } from "@dfinity/candid/lib/cjs/idl";
 
 const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const { userProfile, fetchUserProfile } = useUserProfile();
-  const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
-  const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
-  const { login, isAuthenticated, signInPlug, logout, principal, backendActor, getPrincipalId, stringPrincipal} = useAuth();
+  const { login, isAuthenticated, signInPlug, logout, backendActor } = useAuth();
   const location = useLocation();
-  
+
   const [username, setUsername] = useState("");
-  const [imageSrc, setImageSrc] = useState(
-    userProfile?.profile_img
-    ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
-    : MyProfileImage
-  );
+  const [imageSrc, setImageSrc] = useState(MyProfileImage);
 
   const menuItems = [
     { label: "Home", route: "/" },
@@ -61,25 +54,21 @@ const Navbar = () => {
     };
 
     createAndFetchUserProfile();
-  }, [backendActor, principal, fetchUserProfile, userProfile]);
+  }, [backendActor, fetchUserProfile, userProfile]);
 
   useEffect(() => {
     setImageSrc(
       userProfile?.profile_img
-      ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
-      : MyProfileImage
+        ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
+        : MyProfileImage
     );
     setUsername(userProfile?.username || "");
   }, [userProfile]);
 
   const handleLogin = async () => {
-    setIsLoading(true);
+    setIsConnecting(true);
     await login().then(() => window.location.reload());
   };
-
-
-  const abc = useAuthClient()
-  abc
 
   const handleLogout = async () => {
     setIsLoading(true);
@@ -95,16 +84,21 @@ const Navbar = () => {
     }
   };
 
-  
-
   const handleLoginPlug = async () => {
-    setIsLoading(true);
+    setIsConnecting(true);
     await signInPlug().then(() => setIsModalOpen(false));
   };
 
   const handleLoginModalOpen = () => {
-    setIsLoading(true);
+    setIsConnecting(false); // Ensure that the button text is "Connect" when the modal opens
     setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    if (!isConnecting) {
+      setIsConnecting(false); // Reset to "Connect" if not connecting
+    }
   };
 
   const dropdownItems = [
@@ -114,30 +108,16 @@ const Navbar = () => {
       icon: <FaUser className="mr-2" />,
     },
     {
-      label: "Dao",
-      route: "/dao",
-      icon: <FaSitemap className="mr-2" />,
+      label: "My Proposals",
+      route: "/my-proposals",
+      icon: <FaUser className="mr-2" />,
     },
-    {
-      label: "Social Feed",
-      route: "/social-feed",
-      icon: <FaComments className="mr-2" />,
-    },
-    // {
-    //   label: "My Proposals",
-    //   route: "/my-proposals",
-    //   icon: <FaUser className="mr-2" />,
-    // },
     {
       label: "Logout",
       onClick: handleLogout,
       icon: <FaSignOutAlt className="mr-2" />,
     },
   ];
-
-  const filteredDropdownItems = window.innerWidth < 769
-    ? dropdownItems
-    : dropdownItems.filter(item => item.label === "Profile" || item.label === "Logout");
 
   return (
     <nav>
@@ -168,7 +148,7 @@ const Navbar = () => {
                     onClick={handleLoginModalOpen}
                     className="mobile:px-8 px-4 py-2 rounded-[27.5px] bg-[#FFFFFF] big_phone:text-base small_phone:text-sm text-xs"
                   >
-                    {isModalOpen && isLoading ? "Connecting" : "Connect"}
+                    {isConnecting ? "Connecting" : "Connect"}
                   </button>
                 </div>
               ) : (
@@ -180,11 +160,11 @@ const Navbar = () => {
                     <div className="w-10 h-10 flex items-center rounded-full overflow-hidden my-auto">
                       <img src={imageSrc} alt="User Avatar" className="w-8 h-8 object-cover rounded-full" />
                     </div>
-                    <p className="text-black font-medium truncate ... w-20" >{stringPrincipal}</p>
+                    <p className="text-black font-medium truncate w-20">{username}</p>
                     <LuChevronDown />
                     {dropdownVisible && (
                       <div className="absolute top-full right-0 bg-white rounded-md border border-gray-300 shadow-md py-2 w-40">
-                        {filteredDropdownItems.map((item, index) => (
+                        {dropdownItems.map((item, index) => (
                           <Link
                             key={index}
                             to={item.route || "#"}
@@ -205,7 +185,7 @@ const Navbar = () => {
         </Container>
         <LoginModal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={handleModalClose}
           onLogin={handleLogin}
           onLoginPlug={handleLoginPlug}
         />
