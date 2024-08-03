@@ -80,8 +80,10 @@ dfx deploy daohouse_backend --argument "(record { payment_recipient = principal 
 dfx deploy ic_asset_handler
 # # to upload first image
 # ./assets_upload.sh
+
  dfx deploy internet_identity
  dfx deploy daohouse_frontend
 
+
 # dfx generate
-# password daal de bhai
+

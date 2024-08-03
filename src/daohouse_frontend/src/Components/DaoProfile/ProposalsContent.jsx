@@ -79,17 +79,25 @@ const ProposalsContent = ({ proposals }) => {
         </div>
         <div className="w-full border-t py-6 px-4 border-[#0000004D] rounded-[10px] mb-4">
           <div className="bg-transparent rounded flex flex-col gap-8">
-            {displayedProposals.map((proposal, index) => (
-              <Card key={index} proposal={proposal} />
-            ))}
+            {displayedProposals.length === 0 ? (
+              <p className="text-center font-black">No proposal found</p>
+            ) : (
+              displayedProposals.map((proposal, index) => (
+                <Card key={index} proposal={proposal} />
+              ))
+            )}
           </div>
         </div>
       </div>
 
       <div className="bg-white md:hidden rounded-[10px] mt-4 mb-8 flex flex-col gap-8">
-        {displayedProposals.map((proposal, index) => (
-          <Card key={index} proposal={proposal} />
-        ))}
+        {displayedProposals.length === 0 ? (
+          <p className="text-center font-black">No proposal found</p>
+        ) : (
+          displayedProposals.map((proposal, index) => (
+            <Card key={index} proposal={proposal} />
+          ))
+        )}
       </div>
     </div>
   );
@@ -128,7 +136,7 @@ export const SearchProposals = ({
       </div>
 
       <input
-        onChange={onChange} // Use onChange to handle input changes
+        onChange={onChange} 
         type="text"
         placeholder={placeholder}
         className="pl-4 pr-10 py-2 w-full bg-transparent focus:outline-none placeholder-zinc-400 text-zinc-700 placeholder-custom"
