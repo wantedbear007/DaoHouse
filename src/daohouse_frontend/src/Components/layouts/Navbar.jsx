@@ -62,7 +62,7 @@ const Navbar = () => {
 
     createAndFetchUserProfile();
   }, [backendActor, principal, fetchUserProfile, userProfile]);
-
+/*  now fixed user profile img issue  */
   useEffect(() => {
     setImageSrc(userProfile?.profile_img
       ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
