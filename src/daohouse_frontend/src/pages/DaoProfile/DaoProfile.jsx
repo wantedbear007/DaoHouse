@@ -23,7 +23,7 @@ import { Principal } from '@dfinity/principal';
 import { useAuth, useAuthClient } from "../../Components/utils/useAuthClient";
 import { useUserProfile } from "../../context/UserProfileContext";
 import { toast } from "react-toastify";
-import Loader from "../../Components/utils/Loader"
+import MuiSkeleton from "../../Components/Skeleton/MuiSkeleton";
 
 
 const DaoProfile = () => {
@@ -43,16 +43,24 @@ const DaoProfile = () => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [followersCount, setFollowersCount] = useState(0);
   const [userProfile, setUserProfile] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   // console.log("proposals", dao.proposals_count)
-
+ 
   useEffect(() => {
     const fetchDaoDetails = async () => {
       if (daoCanisterId) {
         setLoading(true);
         try {
+          const itemsPerPage = 4;
+          const start = (currentPage - 1) * itemsPerPage;
+          const end = start + itemsPerPage;
+          const paginationPayload = {
+            start,
+            end,
+          }
           const daoActor = createDaoActor(daoCanisterId);
           const daoDetails = await daoActor.get_dao_detail();
-          const proposals = await daoActor.get_all_proposals()
+          const proposals = await daoActor.get_all_proposals(paginationPayload)
           console.log(proposals, " proposals aa rhe")
           console.log(proposals.map(proposal => proposal.proposal_description), " proposals descriptions");
           setDao(daoDetails);
@@ -176,10 +184,19 @@ const DaoProfile = () => {
   };
 
 
-  if (loading) {
-    return <Loader />;
-  }
+  // if (loading) {
+  //   // return <Loader />;
+  //   // return <MuiSkeleton/>
+  
+  // }
 
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <MuiSkeleton variant="rectangular" width={210} height={118} />
+      </div>
+    );
+  }
   if (!dao) {
     return <div>No DAO details available</div>;
   }
@@ -526,4 +543,3 @@ const DaoProfile = () => {
 };
 
 export default DaoProfile;
-
