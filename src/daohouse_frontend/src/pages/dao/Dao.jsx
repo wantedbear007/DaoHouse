@@ -17,6 +17,16 @@ const Dao = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [fetchedDAOs, setFetchedDAOs] = useState([]); 
 
+  const fetchDaoDetails = async (daoList) => {
+    let allDaoDetails = [];
+    await Promise.all(daoList.map(async (data) => {
+      const daoCanister = createDaoActor(data.dao_canister_id);
+      const dao_details = await daoCanister.get_dao_detail();
+      allDaoDetails.push({ ...dao_details, daoCanister, dao_canister_id: data.dao_canister_id });
+    }));
+    return allDaoDetails;
+  };
+
   const getDaos = async () => {
     const pagination = {
       start: 0,
@@ -25,18 +35,8 @@ const Dao = () => {
     try {
       setLoading(true);
       let response = await backendActor.get_all_dao(pagination);
-
-      let allDaoDetails = [];
-      await Promise.all(response.map(async (data) => {
-        const daoCanister = createDaoActor(data.dao_canister_id);
-        const dao_details = await daoCanister.get_dao_detail();
-        console.log(dao_details);
-        allDaoDetails.push({ ...dao_details, daoCanister, dao_canister_id: data.dao_canister_id });
-        console.log("allDaoDetails ", allDaoDetails);
-      }));
-      const combinedDaoDetails = allDaoDetails.flat();
+      const combinedDaoDetails = await fetchDaoDetails(response);
       setDao(combinedDaoDetails);
-      console.log("Dao", combinedDaoDetails);
     } catch (error) {
       console.error('Error fetching DAOs:', error);
     } finally {
@@ -52,8 +52,8 @@ const Dao = () => {
       }
 
       const response = await backendActor.search_dao(searchTerm);
-      console.log("Search Response:", response);
-      setFetchedDAOs(response);
+      const combinedSearchDaoDetails = await fetchDaoDetails(response);
+      setFetchedDAOs(combinedSearchDaoDetails);
     } catch (error) {
       console.error("Error fetching DAOs:", error);
     }
@@ -66,7 +66,7 @@ const Dao = () => {
   useEffect(() => {
     getsearchdao(); // Fetch DAOs based on search term
   }, [searchTerm]);
-
+  
   const noDaoFound = searchTerm && fetchedDAOs.length === 0;
 
   return (
