@@ -57,9 +57,11 @@ const Navbar = () => {
   }, [backendActor, fetchUserProfile, userProfile]);
 
   useEffect(() => {
+    const protocol = window.location.protocol;
+    const domain = window.location.hostname;
     setImageSrc(
       userProfile?.profile_img
-        ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
+        ? `${protocol}//${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
         : MyProfileImage
     );
     setUsername(userProfile?.username || "");
