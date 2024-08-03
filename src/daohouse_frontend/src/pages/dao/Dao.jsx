@@ -5,11 +5,8 @@ import DaoCard from "../../Components/Dao/DaoCard";
 import NoDataComponent from "../../Components/Dao/NoDataComponent";
 import TopComponent from "../../Components/Dao/TopComponent";
 import Container from "../../Components/Container/Container";
-import SearchProposals from "../../Components/Proposals/SearchProposals";
 import { useAuth } from "../../Components/utils/useAuthClient";
-import { Actor, HttpAgent } from '@dfinity/agent';
 import MuiSkeleton from "../../Components/Skeleton/MuiSkeleton";
-
 const Dao = () => {
   const [showAll, setShowAll] = useState(true);
   const [joinedDAO, setJoinedDAO] = useState(false);
@@ -17,6 +14,8 @@ const Dao = () => {
   const { backendActor, createDaoActor } = useAuth();
   const [dao, setDao] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [fetchedDAOs, setFetchedDAOs] = useState([]); 
 
   const getDaos = async () => {
     const pagination = {
@@ -45,9 +44,30 @@ const Dao = () => {
     }
   };
 
+  const getsearchdao = async () => {
+    try {
+      if (searchTerm.trim() === "") {
+        setFetchedDAOs([]);
+        return;
+      }
+
+      const response = await backendActor.search_dao(searchTerm);
+      console.log("Search Response:", response);
+      setFetchedDAOs(response);
+    } catch (error) {
+      console.error("Error fetching DAOs:", error);
+    }
+  };
+
   useEffect(() => {
     getDaos();
   }, [backendActor]);
+
+  useEffect(() => {
+    getsearchdao(); // Fetch DAOs based on search term
+  }, [searchTerm]);
+
+  const noDaoFound = searchTerm && fetchedDAOs.length === 0;
 
   return (
     <div className="bg-zinc-200">
@@ -67,6 +87,7 @@ const Dao = () => {
               bgColor="transparent"
               placeholder="Search here"
               className="border-2 border-[#AAC8D6] w-full max-w-lg"
+              onChange={(e) => setSearchTerm(e.target.value)} // Handle input changes
             />
           </div>
           <Link to="/dao/create-dao">
@@ -90,12 +111,15 @@ const Dao = () => {
           <div className="flex justify-center items-center h-full">
             <MuiSkeleton />
           </div>
-        ) : dao && dao.length > 0 ? (
+        ) : noDaoFound ? (
+          <div className="flex justify-center items-center h-full">
+            <p className="text-lg font-bold">No DAO found</p>
+          </div>
+        ) : (searchTerm && fetchedDAOs.length > 0 ? (
           <div className={"bg-[#c8ced3]"}>
             <Container classes={`__cards tablet:px-10 px-4 pb-10 grid grid-cols-1 big_phone:grid-cols-2 tablet:gap-6 gap-4 ${className}`}>
             {
-                dao.map((daos, index) => {
-                  // Convert _Principal to a string
+                fetchedDAOs.map((daos, index) => {
                   const daoCanisterId = daos.dao_canister_id ? daos.dao_canister_id : 'No ID';
 
                   return (
@@ -109,7 +133,32 @@ const Dao = () => {
                       image_id={daos.image_id || 'No Image'}
                       daoCanister={daos.daoCanister} 
                       handleFollow={() => handleFollowUser(daos.daoCanister, userId)} 
-                      daoCanisterId={daoCanisterId} // Pass the converted daoId
+                      daoCanisterId={daoCanisterId}
+                    />
+                  );
+                })
+              }
+            </Container>
+          </div>
+        ) : dao && dao.length > 0 ? (
+          <div className={"bg-[#c8ced3]"}>
+            <Container classes={`__cards tablet:px-10 px-4 pb-10 grid grid-cols-1 big_phone:grid-cols-2 tablet:gap-6 gap-4 ${className}`}>
+            {
+                dao.map((daos, index) => {
+                  const daoCanisterId = daos.dao_canister_id ? daos.dao_canister_id : 'No ID';
+
+                  return (
+                    <DaoCard
+                      key={index}
+                      name={daos.dao_name || 'No Name'}
+                      followers={daos.followers_count || '0'}
+                      members={daos.members_count ? Number(BigInt(daos.members_count)) : '0'}
+                      groups={daos.groups_count ? Number(BigInt(daos.groups_count)) : 'No Groups'}
+                      proposals={daos.proposals_count || '0'}
+                      image_id={daos.image_id || 'No Image'}
+                      daoCanister={daos.daoCanister} 
+                      handleFollow={() => handleFollowUser(daos.daoCanister, userId)} 
+                      daoCanisterId={daoCanisterId}
                     />
                   );
                 })
@@ -118,12 +167,11 @@ const Dao = () => {
           </div>
         ) : (
           <NoDataComponent />
-        )
+        ))
       ) : joinedDAO && joinedDAO.length > 0 ? (
         <div className={"bg-[#c8ced3]"}>
           <Container classes={`__cards tablet:px-10 px-4 pb-10 grid grid-cols-1 big_phone:grid-cols-2 tablet:gap-6 gap-4 ${className}`}>
           {joinedDAO.map((a, index) => {
-              // Convert _Principal to a string
               const daoCanisterId = a.dao_canister_id ? a.dao_canister_id : 'No ID';
 
               return (
@@ -135,7 +183,7 @@ const Dao = () => {
                   groups={a.groups}
                   proposals={a.proposals}
                   daoCanister={a.daoCanister}
-                  daoCanisterId={daoCanisterId} // Pass the converted daoId
+                  daoCanisterId={daoCanisterId}
                 />
               );
             })}
@@ -149,3 +197,49 @@ const Dao = () => {
 };
 
 export default Dao;
+
+
+
+
+export const SearchProposals = ({
+  width,
+  bgColor,
+  placeholder,
+  className,
+  onChange,
+  ...inputProps
+}) => {
+  return (
+    <div
+      className={`${className} flex items-center p-2 bg-${bgColor} rounded-full max-w-md mx-auto`}
+      style={{ minWidth: width }}
+    >
+      <div className="mx-3">
+        <svg
+          width="26"
+          height="26"
+          viewBox="0 0 26 26"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M25 25L19.2094 19.2094M19.2094 19.2094C20.1999 18.218"
+            stroke="black"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
+    
+
+
+      <input
+        onChange={onChange} // Use onChange to handle input changes
+        type="text"
+        placeholder={placeholder}
+        className="pl-4 pr-10 py-2 w-full bg-transparent focus:outline-none placeholder-zinc-400 text-zinc-700 placeholder-custom"
+        {...inputProps}
+      />
+    </div>
+  );
+};
