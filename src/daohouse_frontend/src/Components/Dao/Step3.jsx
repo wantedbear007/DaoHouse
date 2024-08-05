@@ -20,10 +20,13 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
   const [addMemberIndex, setAddMemberIndex] = useState(null);
   const [loadingBack, setLoadingBack] = useState(false);
 
+
   const [list, setList] = useState([
     { name: "Council", members: [] },
     // { name: "All", index: 0 },
   ]);
+
+
   console.log("delete council", list);
   const className = "DAO__Step3";
   function handleSaveAndNext() {
@@ -93,6 +96,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
     setCount(count + 1);
     setList(updateGroups);
     if (event.key === "Enter") {
+      
       const updatedList = [...list]; // Create a copy of the list
       console.log("--upp--", updatedList)
       const councilIndex = updatedList.findIndex(
@@ -120,6 +124,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
 
   const handleNameEnter = async (name, event) => {
     if ((event.key === "Enter") && (name.trim() !== "")) {
+      console.log("sdfjksdhfkjsdhf")
       try {
         const principal = Principal.fromText(name.trim()); 
         console.log("qqqq",principal)
@@ -128,6 +133,8 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
         console.log("Profile Response:", response); // Log the response
         
         const updatedList = list.map((item) => {
+          console.log("inside map member")
+          
           if (item.index === addMemberIndex) {
             const principalId = principal.toText(); // Get the string representation of the Principal
   
@@ -158,40 +165,47 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
 
 
   // Function to add a new member to the Council group
-  const handleCouncilMemberName =async (name, event) => {
+  
+  
+  const handleCouncilMemberName = async (name, event) => {
     if (event.key === "Enter" && name.trim()) {
       try {
         const principal = Principal.fromText(name.trim());
-        console.log("dsjfkdsfhskd",principal)
+        console.log("principal object", principal);
         const response = await backendActor.get_profile_by_id(principal);
-        console.log("response",response);
-        if (response.Err === "User does not exist") {
-          toast.error("User does not exist");
-          return;
-        }
+        console.log("response", response);
   
-        const updatedList = list.map((item) => {
-          if (item.index === addMemberIndex) {
-            const principalId = principal.toText();
-            if (!item.members.includes(principalId)) {
-              return { ...item, members: [...item.members, principalId] };
-            } else {
-              toast.error("Principal ID already exists");
-            }
-          }
-          return item;
-        });
-
-        setList(updatedList);
-        setShowMemberNameInput(false);
-        event.target.value = '';
+        // Check if the user does not exist based on the response structure
+        if (response.Err && response.Err === 'User does not exist') {
+          toast.error("No user found");
+        } else if (response.Ok) {
+          toast.success("user exist")
+          setList(prevList =>
+            prevList.map(group => {
+              if (group.name === "Council") {
+                // Check if the name already exists in the members array
+                if (!group.members.includes(name.trim())) {
+                  return { ...group, members: [...group.members, name.trim()] };
+                } else {
+                  toast.error("Principal Id already exists");
+                }
+              }
+              return group;
+            })
+          );
+          setShowCouncilNameInput(false);
+          event.target.value = '';
+        } else {
+          toast.error("Unexpected API response");
+        }
       } catch (error) {
-        toast.error("Invalid Principal ID or error fetching profile");
+        console.error("Error fetching profile:", error);
+        toast.error("Failed to fetch profile");
       }
-
     }
   };
-
+  
+  
 
   const handleRemoveMember = (objIndex, memberName) => {
     const updatedList = list.map((item) => {
@@ -289,13 +303,8 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
   };
 
 
-    // const councilMembers = list.find(group => group.name === "Council")?.members || [];
-    // const councilObjects = councilMembers.map(id => ({
-    //   principalId: id,
-     
-    // }));
-    // console.log("council objects",councilObjects)
-    // const councilObject1 = councilObjects.length ? councilObjects : null;
+  
+
     // console.log("council object",councilObject1)
    
   //   const councilMembers = list.find(group => group.name === "Council")?.members || [];
@@ -304,35 +313,17 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
   //     Principal.fromText(element);
   //   });
        
-  // useEffect(() => {
-  //   console.log("current council members:", councilMembers);
-  // }, [councilMembers]);
+
   const councilMembers = list.find(group => group.name === "Council")?.members || [];
- 
-  councilMembers.forEach((element) => {
-    console.log("Original ID:", element);
-    const principals = Principal.fromText(element);
-    console.log("Principal Object:", principals);
-  });
+    
 
   useEffect(() => {
   console.log("Current council members:", councilMembers);
   }, [councilMembers]);
 
-  const a = async(principalId)=>{
-    console.log("ppppppppppppppp",principalId)
-    try {
-       const response = await backendActor.get_profile_by_id(principal)
-       console.log("dhsfjkhdkjfhskjdfh",response)
-    } catch (error) {
-      console.log("errorjdsfksdkjf")
-    }
-   }
- useEffect(() => {
- a();
  
-  
- }, [backendActor]);
+ 
+
 
   return (
     <React.Fragment>
