@@ -292,8 +292,8 @@ const Navbar = () => {
     setIsLoading(true);
     try {
       await logout();
-      localStorage.removeItem("username");
-      localStorage.removeItem("userImageId");
+      //localStorage.removeItem("username");
+      //localStorage.removeItem("userImageId");
       window.location.href = "/";
     } catch (error) {
       toast.error("Error during logout");
@@ -360,7 +360,7 @@ const Navbar = () => {
                 </div>
               ) : (
                 <div className="relative">
-                  {/* Updated flex container to align profile image and username */}
+                  {/* Updated flex container to align profile image and username , reduce size space-x-0.9 */}
                   <div
                     className="flex items-center space-x-0.9 bg-white rounded-full px-4 py-2 cursor-pointer shadow-lg"
                     onClick={() => setDropdownVisible(!dropdownVisible)}
