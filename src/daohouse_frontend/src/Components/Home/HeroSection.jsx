@@ -18,55 +18,54 @@ const HeroSection = () => {
 
   return (
     <Container>
-      <div className="relative flex flex-col md:flex-row justify-center items-center">
-        {/* Left Side */}
-        <div className="md:w-1/2 w-full px-10 py-8 flex flex-col items-center text-center md:text-left gap-4 md:gap-6 z-10">
-          <p className="text-[#0E3746] font-mulish font-semibold text-4xl sm:text-5xl md:text-6xl mt-8">
-            Building Better Future, Together
-          </p>
-          <div className="text-black font-inter text-sm md:text-base">
-            Efficiently Manage Resources and Proposals with Our DAO Tools
-          </div>
-          <div className="flex flex-col md:flex-row gap-4 md:gap-6">
-            <button
-              onClick={handlemov}
-              className="px-6 py-3 text-base bg-[#0E3746] text-white font-semibold rounded-full shadow-md hover:bg-blue-800 hover:text-white"
-            >
-              Create DAO
-            </button>
-            <button
-              onClick={handleJoinDaoClick}
-              className="px-6 py-3 text-base bg-white text-black font-normal rounded-full shadow-md hover:bg-gray-200 hover:text-blue-900"
-            >
-              Join DAO
-            </button>
-          </div>
-        </div>
-
-        {/* Gradient and Bottom Left Image */}
-        <img
-          src={herosectiongradient}
-          alt="hero section gradient"
-          className="absolute pointer-events-none select-none bottom-0 left-0 mb-24 md:mb-0 md:left-0 md:ml-4 animate-gradient"
-        />
-        <img
-          src={herosectionleftbottomimg}
-          alt="Bottom Left Image"
-          className="absolute pointer-events-none select-none bottom-0 left-0"
-        />
-
-        {/* Right Side */}
-        <div className="md:w-1/2 w-full flex items-center justify-center py-10">
-          <div className="relative w-[75%] md:w-[85%] lg:w-[90%] xl:w-[92%] 2xl:w-full h-auto">
-            <img
-              src={circle}
-              alt="Placeholder"
-              className="w-full h-full object-cover animate-spin-slow"
-            />
-          </div>
-        </div>
+  <div className="relative flex flex-col md:flex-row justify-center items-center overflow-hidden">
+    <div className="md:w-1/2 w-full px-10 py-8 flex flex-col items-center text-center md:text-left gap-4 md:gap-6 z-10">
+      <p className="text-[#0E3746] font-mulish font-semibold text-4xl sm:text-5xl md:text-6xl mt-8">
+        Building Better Future, Together
+      </p>
+      <div className="text-black font-inter text-sm md:text-base">
+        Efficiently Manage Resources and Proposals with Our DAO Tools
       </div>
-    </Container>
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+        <button
+          onClick={handlemov}
+          className="px-6 py-3 text-base bg-[#0E3746] text-white font-semibold rounded-full shadow-md hover:bg-blue-800 hover:text-white"
+        >
+          Create DAO
+        </button>
+        <button
+          onClick={handleJoinDaoClick}
+          className="px-6 py-3 text-base bg-white text-black font-normal rounded-full shadow-md hover:bg-gray-200 hover:text-blue-900"
+        >
+          Join DAO
+        </button>
+      </div>
+    </div>
+    {/* Gradient and Bottom Left Image */}
+    <img
+      src={herosectiongradient}
+      alt="hero section gradient"
+      className="absolute pointer-events-none select-none bottom-0 left-0 mb-24 md:mb-0 md:left-0 md:ml-4 animate-gradient"
+    />
+    <img
+      src={herosectionleftbottomimg}
+      alt="Bottom Left Image"
+      className="absolute pointer-events-none select-none bottom-0 left-0"
+    />
+
+    {/* Right Side */}
+    <div className="md:w-1/2 w-full flex items-center justify-center py-10">
+      <div className="relative w-[75%] md:w-[85%] lg:w-[90%] xl:w-[92%] 2xl:w-full h-auto">
+        <img
+          src={circle}
+          alt="Placeholder"
+          className="w-full h-full object-cover animate-spin-slow"
+        />
+      </div>
+    </div>
+  </div>
+</Container>
+
   );
 };
 

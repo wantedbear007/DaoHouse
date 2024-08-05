@@ -148,12 +148,18 @@ const EditProfile = () => {
   };
 
   const handleRemoveImage = () => {
+    setImageSrc(MyProfileImage); // Set to default image
     setProfileData((prevData) => ({
       ...prevData,
-      profile_img: MyProfileImage,
+      profile_img: "", // Clear the profile image path
+      image_content: [], // Optionally clear image content if needed
+      image_title: "na",
+      image_content_type: "image/jpg",
     }));
+  
+    toast.success("Photo removed successfully"); // Show success notification
   };
-
+  
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -299,9 +305,9 @@ const EditProfile = () => {
                 />
               </label>
               <button
-                onClick={handleRemoveImage}
-                className="text-[12px] md:text-[14px] lg:text-[16px] text-[#9F9F9F] shadow-xl md:h-[50px] h-[40px] md:px-6 px-4 rounded-[27px] border-solid border border-[#9F9F9F] flex items-center "
-              >
+  onClick={handleRemoveImage}
+  className="text-[12px] md:text-[14px] lg:text-[16px] text-black shadow-xl md:h-[50px] h-[40px] md:px-6 px-4 rounded-[27px] bg-white-500 border-solid border border-red-100 hover:bg-red-300 flex items-center transition duration-200 ease-in-out"
+>
                 Remove<span className="hidden sm:inline-block ml-1">Photo</span>
               </button>
             </div>

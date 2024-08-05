@@ -98,14 +98,14 @@ const About = () => {
             and drive impactful change.
           </span>
         </p>
+        <div className="px-8 md:my-0 my-8 md:text-left text-center relative z-10">
+  <button
+    onClick={handleJoinDaoClick}
+    className="px-8 py-3 bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
+    Join DAO
+  </button>
+</div>
 
-        <div className="px-8 md:my-0 my-8 md:text-left text-center z-50 relative">
-          <button
-            onClick={handleJoinDaoClick}
-            className="px-8 py-3 bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
-            Join DAO
-          </button>
-        </div>
       </div>
 
       <div className="absolute lg:bottom-0 md:-bottom-5 -bottom-2 md:right-0 -right-6 mr-8 mb-8 pointer-events-none select-none">
