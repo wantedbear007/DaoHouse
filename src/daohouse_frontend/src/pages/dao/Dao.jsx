@@ -53,14 +53,7 @@ const Dao = () => {
       console.log("response",response)
       // setTotalItems(response.totalItems);
       const combinedDaoDetails = await fetchDaoDetails(response);
-
-      // let allDaoDetails = [];
-      // await Promise.all(response.map(async (data) => {
-      //   const daoCanister = createDaoActor(data.dao_canister_id);
-      //   const dao_details = await daoCanister.get_dao_detail();
-      //   allDaoDetails.push({ ...dao_details, daoCanister, dao_canister_id: data.dao_canister_id });
-      // }));
-      // const combinedDaoDetails = allDaoDetails.flat();
+      setHasMore(response.length >= itemsPerPage);
       setDao(combinedDaoDetails);
     } catch (error) {
       console.error('Error fetching DAOs:', error);
@@ -150,7 +143,8 @@ const Dao = () => {
               })}
             </Container>
             <Pagignation currentPage={currentPage}
-            setCurrentPage={setCurrentPage} />
+            setCurrentPage={setCurrentPage} 
+            hasMore={hasMore}/>
           </div>
         ) : dao && dao.length > 0 ? (
           <div className={"bg-[#c8ced3]"}>
@@ -174,7 +168,8 @@ const Dao = () => {
               })}
             </Container>
             <Pagignation currentPage={currentPage}
-            setCurrentPage={setCurrentPage} />
+            setCurrentPage={setCurrentPage}
+            hasMore={hasMore} />
           </div>
         ) : (
           <NoDataComponent />
@@ -251,7 +246,7 @@ export const SearchProposals = ({
   );
 };
 
-export const Pagignation = ({ currentPage, setCurrentPage }) => {
+export const Pagignation = ({ currentPage, setCurrentPage, hasMore }) => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -262,7 +257,8 @@ export const Pagignation = ({ currentPage, setCurrentPage }) => {
       <button className="`text-black hover:text-gray-500 ml-1 text-xl flex items-center" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
       <FaArrowLeft /> Prev
       </button>
-      <button className="`text-black hover:text-gray-500 text-xl flex items-center" onClick={() => handlePageChange(currentPage + 1)}>
+      <button className={" text-black px-3 py-1 transition duration-300 text-xl ease-in-out flex items-center"}
+ onClick={() => handlePageChange(currentPage + 1)} disabled={!hasMore}>
         Next <FaArrowRight/>
       </button>
       </div>
