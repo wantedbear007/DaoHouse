@@ -20,7 +20,13 @@ const Navbar = () => {
   const location = useLocation();
 
   const [username, setUsername] = useState("");
-  const [imageSrc, setImageSrc] = useState(MyProfileImage);
+  const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
+  const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
+  const [imageSrc, setImageSrc] = useState(
+    userProfile?.profile_img
+    ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
+    : MyProfileImage
+  );
 
   const menuItems = [
     { label: "Home", route: "/" },
@@ -57,9 +63,11 @@ const Navbar = () => {
   }, [backendActor, fetchUserProfile, userProfile]);
 
   useEffect(() => {
+    const protocol = window.location.protocol;
+    const domain = window.location.hostname;
     setImageSrc(
       userProfile?.profile_img
-        ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
+        ? `${protocol}//${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
         : MyProfileImage
     );
     setUsername(userProfile?.username || "");
@@ -108,8 +116,13 @@ const Navbar = () => {
       icon: <FaUser className="mr-2" />,
     },
     {
-      label: "My Proposals",
-      route: "/my-proposals",
+      label: "Dao",
+      route: "/dao",
+      icon: <FaUser className="mr-2" />,
+    },
+    {
+      label: "Social Feed",
+      route: "/social-feed",
       icon: <FaUser className="mr-2" />,
     },
     {
@@ -118,6 +131,10 @@ const Navbar = () => {
       icon: <FaSignOutAlt className="mr-2" />,
     },
   ];
+
+  const filteredDropdownItems = window.innerWidth < 769
+    ? dropdownItems
+    : dropdownItems.filter(item => item.label === "Profile" || item.label === "Logout");
 
   return (
     <nav>
@@ -165,8 +182,7 @@ const Navbar = () => {
                     <div className="w-10 h-10 flex items-center rounded-full overflow-hidden">
                       <img src={imageSrc} alt="User Avatar" className="w-8 h-8 object-cover rounded-full" />
                     </div>
-                    {/* Username */}
-                    <p className="text-black font-medium truncate w-24">{username}</p>
+                    <p className="text-black font-medium truncate w-20">{username}</p>
                     <LuChevronDown />
                     {dropdownVisible && (
                       <div className="absolute top-full right-0 bg-white rounded-md border border-gray-300 shadow-md py-2 w-40">
