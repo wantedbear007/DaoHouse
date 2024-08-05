@@ -254,10 +254,10 @@ export const Pagignation = ({ currentPage, setCurrentPage, hasMore }) => {
   return (
     <div className="pagination">
     <div className="flex items-center gap-12 justify-center mt-3 ">
-      <button className="`text-black hover:text-gray-500 ml-1 text-xl flex items-center" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+      <button className="`text-black hover:text-gray-500 ml-1 text-xl flex items-center cursor-pointer" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
       <FaArrowLeft /> Prev
       </button>
-      <button className={" text-black px-3 py-1 transition duration-300 text-xl ease-in-out flex items-center"}
+      <button className={" text-black hover:text-gray-500 px-3 py-1 transition duration-300 text-xl ease-in-out flex items-center cursor-pointer"}
  onClick={() => handlePageChange(currentPage + 1)} disabled={!hasMore}>
         Next <FaArrowRight/>
       </button>
