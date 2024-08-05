@@ -26,6 +26,16 @@ const Dao = () => {
 
   const { backendActor, createDaoActor } = useAuth();
 
+  const fetchDaoDetails = async (daoList) => {
+    let allDaoDetails = [];
+    await Promise.all(daoList.map(async (data) => {
+      const daoCanister = createDaoActor(data.dao_canister_id);
+      const dao_details = await daoCanister.get_dao_detail();
+      allDaoDetails.push({ ...dao_details, daoCanister, dao_canister_id: data.dao_canister_id });
+    }));
+    return allDaoDetails;
+  };
+
   useEffect(() => {
     getDaos(currentPage);
   }, [backendActor, currentPage]);
@@ -42,14 +52,15 @@ const Dao = () => {
       let response = await backendActor.get_all_dao(pagination);
       console.log("response",response)
       // setTotalItems(response.totalItems);
+      const combinedDaoDetails = await fetchDaoDetails(response);
 
-      let allDaoDetails = [];
-      await Promise.all(response.map(async (data) => {
-        const daoCanister = createDaoActor(data.dao_canister_id);
-        const dao_details = await daoCanister.get_dao_detail();
-        allDaoDetails.push({ ...dao_details, daoCanister, dao_canister_id: data.dao_canister_id });
-      }));
-      const combinedDaoDetails = allDaoDetails.flat();
+      // let allDaoDetails = [];
+      // await Promise.all(response.map(async (data) => {
+      //   const daoCanister = createDaoActor(data.dao_canister_id);
+      //   const dao_details = await daoCanister.get_dao_detail();
+      //   allDaoDetails.push({ ...dao_details, daoCanister, dao_canister_id: data.dao_canister_id });
+      // }));
+      // const combinedDaoDetails = allDaoDetails.flat();
       setDao(combinedDaoDetails);
     } catch (error) {
       console.error('Error fetching DAOs:', error);
@@ -66,7 +77,8 @@ const Dao = () => {
       }
 
       const response = await backendActor.search_dao(searchTerm);
-      setFetchedDAOs(response);
+      const combinedSearchDaoDetails = await fetchDaoDetails(response);
+      setFetchedDAOs(combinedSearchDaoDetails);
     } catch (error) {
       console.error("Error fetching DAOs:", error);
     }

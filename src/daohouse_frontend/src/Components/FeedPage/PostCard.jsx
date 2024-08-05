@@ -48,6 +48,9 @@ const PostCard = ({ posts, handleGetLikePost }) => {
     : '';
 
     console.log("user_image_id", posts.user_image_id);
+    console.log();
+
+    
 
 
   const getlike = async () => {
