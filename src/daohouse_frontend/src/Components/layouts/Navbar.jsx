@@ -230,7 +230,7 @@ const Navbar = () => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const { userProfile, fetchUserProfile } = useUserProfile();
-  const { login, isAuthenticated, signInPlug, logout, backendActor } = useAuth();
+  const { login, isAuthenticated, signInPlug, logout, backendActor, stringPrincipal } = useAuth();
   const location = useLocation();
 
   const [username, setUsername] = useState("");
@@ -364,8 +364,8 @@ const Navbar = () => {
                     <div className="w-10 h-10 flex items-center rounded-full overflow-hidden my-auto">
                       <img src={imageSrc} alt="User Avatar" className="w-8 h-8 object-cover rounded-full" />
                     </div>
-                    {username && 
-                    <p className="text-black font-medium truncate w-20">{username}</p>
+                    {(username || stringPrincipal) && 
+                    <p className="text-black font-medium truncate w-20">{username || stringPrincipal}</p>
                     }
                     <LuChevronDown />
                     {dropdownVisible && (
