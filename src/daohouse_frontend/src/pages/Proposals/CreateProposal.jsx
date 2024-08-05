@@ -109,7 +109,7 @@ function CreateProposal() {
 
             <div className='bg-[#c8ced3]'>
                 <Container classes={`${className}__label relative py-8 px-10 flex gap-2 flex-col w-full justify-between items-center`}>
-                    <p className="text-[40px] text-black px-8 mr-auto flex flex-row justify-start items-center gap-4">
+                    <p className="md:text-[40px] text-[30px] text-black px-8 mr-auto flex flex-row justify-start items-center gap-4 ">
                         Create Proposal  
                         <div className="flex flex-col items-start">
                             <div className="w-32 border-t-2 border-black"></div>
@@ -182,7 +182,7 @@ function CreateProposal() {
                         </div>
                     </div>
 
-                    <div className="absolute right-10 top-10">
+                    <div className="absolute right-10 top-10 hidden md:block">
                         <img src={createProposal} alt="Illustration" className="w-[350px] h-[350px]" />
                     </div>
                 </Container>
