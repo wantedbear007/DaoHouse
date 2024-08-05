@@ -75,7 +75,6 @@ const FeedPage = () => {
   }
 
   const handleGetLikePost = (response) => {
-    s
     setGetLike(response)
   }
 
