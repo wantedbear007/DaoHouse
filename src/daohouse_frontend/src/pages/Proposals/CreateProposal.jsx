@@ -162,7 +162,6 @@ function CreateProposal() {
                                 className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent"
                             >
                                 <option value="">Select Proposal Type</option>
-                                <option value="AddMemberProposal">Add Member Proposal</option>
                                 <option value="VotingProposal">Voting Proposal</option>
                                 <option value="RemoveMemberProposal">Remove Member Proposal</option>
                             </select>
