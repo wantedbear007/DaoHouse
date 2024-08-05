@@ -6,12 +6,14 @@ import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { Principal } from "@dfinity/principal";
 import CircularProgress from '@mui/material/CircularProgress';
 import { toast } from "react-toastify";
+import { useAuth} from "../../Components/utils/useAuthClient";
 import Container from "../Container/Container";
 
 const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
 
   const [count, setCount] = useState(1);
   const [showMemberNameInput, setShowMemberNameInput] = useState(true);
+  const { backendActor, frontendCanisterId, identity, principal } = useAuth();
   const [loadingNext, setLoadingNext] = useState(false);
   // const [showCouncilNameInput, setShowCouncilNameInput] = useState(false);
   const [groupNameInputIndex, setGropuNameInputIndex] = useState(null);
@@ -80,6 +82,8 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
     setList(updatedGroups);
     console.log(updatedGroups);
   };
+
+
   const handleMemberAdding1 = (name, event) => {
     const a = setShowCouncilNameInput(true);
     const updateGroups = [
@@ -112,18 +116,41 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
     setAddMemberIndex(index);
   };
 
-  const handleNameEnter = (name, event) => {
-    if ((event.key === "Enter") & (name !== "")) {
-      const updatedList = list.map((item) => {
-        if (item.index === addMemberIndex) {
-          return { ...item, members: [...item.members, name] };
-        }
-        return item;
-      });
-      setList(updatedList);
-      setShowMemberNameInput(false);
+  
+
+  const handleNameEnter = async (name, event) => {
+    if ((event.key === "Enter") && (name.trim() !== "")) {
+      try {
+        const principal = Principal.fromText(name.trim()); 
+        console.log("qqqq",principal)
+        const response = await backendActor.get_profile_by_id(principal); // Fetch profile by ID
+        
+        console.log("Profile Response:", response); // Log the response
+        
+        const updatedList = list.map((item) => {
+          if (item.index === addMemberIndex) {
+            const principalId = principal.toText(); // Get the string representation of the Principal
+  
+            // Check if the Principal ID already exists in the members list
+            if (!item.members.includes(principalId)) {
+              return { ...item, members: [...item.members, principalId] };
+            } else {
+              toast.error("Principal ID already exists");
+            }
+          }
+          return item;
+        });
+  
+        setList(updatedList);
+        setShowMemberNameInput(false);
+        event.target.value = ''; // Clear the input field
+  
+      } catch (error) {
+        toast.error("Invalid Principal ID or error fetching profile");
+      }
     }
   };
+  
 
   const handleCouncilMemAdding = () => {
     setShowCouncilNameInput(true);
@@ -131,24 +158,37 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
 
 
   // Function to add a new member to the Council group
-  const handleCouncilMemberName = (name, event) => {
+  const handleCouncilMemberName =async (name, event) => {
     if (event.key === "Enter" && name.trim()) {
-      setList(prevList =>
-        prevList.map(group => {
-          if (group.name === "Council") {
-            // Check if the name already exists in the members array
-            if (!group.members.includes(name.trim())) {
-              return { ...group, members: [...group.members, name.trim()] };
-            }
-            else {
-              toast.error("Principal Id already exist")
+      try {
+        const principal = Principal.fromText(name.trim());
+        console.log("dsjfkdsfhskd",principal)
+        const response = await backendActor.get_profile_by_id(principal);
+        console.log("response",response);
+        if (response.Err === "User does not exist") {
+          toast.error("User does not exist");
+          return;
+        }
+  
+        const updatedList = list.map((item) => {
+          if (item.index === addMemberIndex) {
+            const principalId = principal.toText();
+            if (!item.members.includes(principalId)) {
+              return { ...item, members: [...item.members, principalId] };
+            } else {
+              toast.error("Principal ID already exists");
             }
           }
-          return group;
-        })
-      );
-      setShowCouncilNameInput(false);
-      event.target.value = '';
+          return item;
+        });
+
+        setList(updatedList);
+        setShowMemberNameInput(false);
+        event.target.value = '';
+      } catch (error) {
+        toast.error("Invalid Principal ID or error fetching profile");
+      }
+
     }
   };
 
@@ -233,6 +273,8 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
   //   });
   // };
   // Function to delete a member from the Council group
+
+ 
   const handleDeleteMember = (indexToDelete) => {
     setList(prevList =>
       prevList.map(group =>
@@ -247,11 +289,50 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
   };
 
 
+    // const councilMembers = list.find(group => group.name === "Council")?.members || [];
+    // const councilObjects = councilMembers.map(id => ({
+    //   principalId: id,
+     
+    // }));
+    // console.log("council objects",councilObjects)
+    // const councilObject1 = councilObjects.length ? councilObjects : null;
+    // console.log("council object",councilObject1)
+   
+  //   const councilMembers = list.find(group => group.name === "Council")?.members || [];
+  //   councilMembers.forEach(function (element) {
+  //     console.log(element,"sadhsa")
+  //     Principal.fromText(element);
+  //   });
+       
+  // useEffect(() => {
+  //   console.log("current council members:", councilMembers);
+  // }, [councilMembers]);
   const councilMembers = list.find(group => group.name === "Council")?.members || [];
+ 
+  councilMembers.forEach((element) => {
+    console.log("Original ID:", element);
+    const principals = Principal.fromText(element);
+    console.log("Principal Object:", principals);
+  });
 
   useEffect(() => {
-    console.log("current council members:", councilMembers);
+  console.log("Current council members:", councilMembers);
   }, [councilMembers]);
+
+  const a = async(principalId)=>{
+    console.log("ppppppppppppppp",principalId)
+    try {
+       const response = await backendActor.get_profile_by_id(principal)
+       console.log("dhsfjkhdkjfhskjdfh",response)
+    } catch (error) {
+      console.log("errorjdsfksdkjf")
+    }
+   }
+ useEffect(() => {
+ a();
+ 
+  
+ }, [backendActor]);
 
   return (
     <React.Fragment>
