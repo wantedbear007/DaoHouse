@@ -16,7 +16,7 @@ const Navbar = () => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const { userProfile, fetchUserProfile } = useUserProfile();
-  const { login, isAuthenticated, signInPlug, logout, backendActor } = useAuth();
+  const { login, isAuthenticated, signInPlug, logout, backendActor, stringPrincipal } = useAuth();
   const location = useLocation();
 
   const [username, setUsername] = useState("");
@@ -177,6 +177,8 @@ const Navbar = () => {
                     {username && 
                     <p className="text-black font-medium truncate w-20">{username}</p>
                     }
+                    <p className="text-black font-medium truncate w-20">{ stringPrincipal}</p>
+
                     <LuChevronDown />
                     {dropdownVisible && (
                       <div className="absolute top-full right-0 bg-white rounded-md border border-gray-300 shadow-md py-2 w-40">
