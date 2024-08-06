@@ -109,6 +109,7 @@ const EditProfile = () => {
         setIsModalOpen(true);
        setTimeout(()=>{
         navigate('/')
+        window.scrollTo(0, 0); // Scrolls to the top of the page
         },2000)
       }
     } catch (error) {
