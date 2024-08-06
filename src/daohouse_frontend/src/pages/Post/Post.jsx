@@ -156,123 +156,123 @@ const Post = () => {
 
         <div className="bg-[#F4F2EC] rounded-2xl p-6 flex flex-col gap-y-6">
 
-        {selectedPost ? (
-    <React.Fragment>
+          {selectedPost ? (
+            <React.Fragment>
 
-      {/* Mobile Layout */}
-      <div className="block md:hidden">
-        {/* Username and Profile Pic */}
-        <div className="flex flex-col gap-y-4">
-          <section className="w-full flex flex-row items-center justify-between">
-            <div className="flex flex-row items-center gap-x-4">
-              <img
-                src={imageSrc}
-                alt="ProfileImage"
-                className="w-10 h-10 rounded-full"
-              />
-              <p className="font-semibold text-lg">{name}</p>
-            </div>
-            <p className="text-slate-500">{selectedPost?.post_created_at}</p>
-          </section>
+              {/* Mobile Layout */}
+              <div className="block md:hidden">
+                {/* Username and Profile Pic */}
+                <div className="flex flex-col gap-y-4">
+                  <section className="w-full flex flex-row items-center justify-between">
+                    <div className="flex flex-row items-center gap-x-4">
+                      <img
+                        src={imageSrc}
+                        alt="ProfileImage"
+                        className="w-10 h-10 rounded-full"
+                      />
+                      <p className="font-semibold text-lg">{name || "no  name"}</p>
+                    </div>
+                    <p className="text-slate-500">{selectedPost?.post_created_at}</p>
+                  </section>
 
-          {/* Description */}
-          <section className="content w-full break-words">
-            {selectedPost.post_description}
-          </section>
+                  {/* Description */}
+                  <section className="content w-full break-words">
+                    {selectedPost.post_description}
+                  </section>
 
-          {/* Post Image */}
-          <section className="relative w-full h-64">
-            <img
-              src={`http://${canisterId}.localhost:4943/f/${selectedPost.post_img}`}
-              alt="selectedPost"
-              className="w-full h-full object-cover rounded-md"
-            />
-          </section>
+                  {/* Post Image */}
+                  <section className="relative w-full h-64 border border-red-500">
+                    <img
+                      src={`http://${canisterId}.localhost:4943/f/${selectedPost.post_img}`}
+                      alt="selectedPost"
+                      className="w-full h-full object-cover rounded-md"
+                    />
+                  </section>
 
-          {/* Like, Share, and Comment Buttons */}
-          <section className="w-full flex flex-row items-center justify-evenly mt-5 flex-wrap gap-y-4">
-            <span className="flex flex-row gap-x-2 items-center text-lg text-dark-green">
-              <FaHeart />
-              {selectedPost.like_count} Likes
-            </span>
-            <span className="flex flex-row gap-x-2 items-center text-lg text-dark-green">
-              <FaTelegramPlane />
-              {selectedPost.shares} Shares
-            </span>
-            <span className="flex flex-row gap-x-2 items-center text-lg text-dark-green">
-              <BiSolidCommentDetail />
-              {selectedPost.comment_count} Comments
-            </span>
-          </section>
-        </div>
-      </div>
-
-      {/* Desktop Layout */}
-      <div className="hidden md:flex w-full">
-        <div className={`${className}__post flex flex-col md:flex-row gap-6 w-full`}>
-          {/* Details Section */}
-          <section className={`${className}__details w-full md:w-[30%] lg:w-[50%] flex flex-col justify-between`}>
-            {/* Top: Username and Profile Pic */}
-            <div className="flex flex-col gap-y-4">
-              <section className="w-full flex flex-row items-center justify-between">
-                <div className="flex flex-row items-center gap-x-4">
-                  <img
-                    src={imageSrc}
-                    alt="ProfileImage"
-                    className="w-10 h-10 rounded-full"
-                  />
-                  <p className="font-semibold text-lg">{name}</p>
+                  {/* Like, Share, and Comment Buttons */}
+                  <section className="w-full flex flex-row items-center justify-evenly mt-5 flex-wrap gap-y-4">
+                    <span className="flex flex-row gap-x-2 items-center text-lg text-dark-green">
+                      <FaHeart />
+                      {selectedPost.like_count} Likes
+                    </span>
+                    <span className="flex flex-row gap-x-2 items-center text-lg text-dark-green">
+                      <FaTelegramPlane />
+                      {selectedPost.shares} Shares
+                    </span>
+                    <span className="flex flex-row gap-x-2 items-center text-lg  text-dark-green">
+                      <BiSolidCommentDetail />
+                      {selectedPost.comment_count} Comments
+                    </span>
+                  </section>
                 </div>
-                <p className="text-slate-500">{selectedPost?.post_created_at}</p>
-              </section>
+              </div>
 
-              {/* Description */}
-              <section className="content w-full break-words">
-                {selectedPost.post_description}
-              </section>
-            </div>
+              {/* Desktop Layout */}
+              <div className="hidden md:flex w-full">
+                <div className={`${className}__post flex flex-col md:flex-row gap-6 w-full`}>
+                  {/* Details Section */}
+                  <section className={`${className}__details w-full md:w-[30%] lg:w-[50%] flex flex-col justify-between`}>
+                    {/* Top: Username and Profile Pic */}
+                    <div className="flex flex-col gap-y-4">
+                      <section className="w-full flex flex-row items-center justify-between">
+                        <div className="flex flex-row items-center gap-x-4">
+                          <img
+                            src={imageSrc}
+                            alt="ProfileImage"
+                            className="w-10 h-10 rounded-full"
+                          />
+                          <p className="font-semibold text-lg">{name || 'no name'}</p>
+                        </div>
+                        <p className="text-slate-500">{selectedPost?.post_created_at}</p>
+                      </section>
 
-            {/* Bottom: Like, Share, and Comment Buttons */}
-            <section className="w-full flex flex-row items-center justify-evenly mt-5 flex-wrap gap-y-4 md:gap-y-0">
-              <span className="flex flex-row gap-x-1 items-center text-lg text-dark-green">
-                <FaHeart />
-                {selectedPost.like_count} Likes
-              </span>
-              <span className="flex flex-row gap-x-1 items-center text-lg text-dark-green">
-                <FaTelegramPlane />
-                {selectedPost.shares} Shares
-              </span>
-              <span className="flex flex-row gap-x-1 items-center text-lg text-dark-green">
-                <BiSolidCommentDetail />
-                {selectedPost.comment_count} Comments
-              </span>
-            </section>
-          </section>
+                      {/* Description */}
+                      <section className="content w-full break-words">
+                        {selectedPost.post_description}
+                      </section>
+                    </div>
 
-          {/* Image Section */}
-          <section className="relative w-full md:w-[70%] lg:w-[50%] h-64">
-            <img
-              src={`http://${canisterId}.localhost:4943/f/${selectedPost.post_img}`}
-              alt="selectedPost"
-              className="w-full h-full object-cover rounded-md"
-            />
-          </section>
+                    {/* Bottom: Like, Share, and Comment Buttons */}
+                    <section className="w-full flex flex-row items-center justify-evenly mt-5 flex-wrap gap-y-4 md:gap-y-0">
+                      <span className="flex flex-row gap-x-1 items-center text-lg text-dark-green">
+                        <FaHeart />
+                        {selectedPost.like_count} Likes
+                      </span>
+                      <span className="flex flex-row gap-x-1 items-center text-lg text-dark-green">
+                        <FaTelegramPlane />
+                        {selectedPost.shares} Shares
+                      </span>
+                      <span className="flex flex-row gap-x-1 items-center text-lg text-dark-green">
+                        <BiSolidCommentDetail />
+                        {selectedPost.comment_count} Comments
+                      </span>
+                    </section>
+                  </section>
+
+                  {/* Image Section */}
+                  <section className="relative w-full md:w-[70%] lg:w-[50%] h-64">
+                    <img
+                      src={`http://${canisterId}.localhost:4943/f/${selectedPost.post_img}`}
+                      alt="selectedPost"
+                      className="w-full h-full object-cover rounded-md"
+                    />
+                  </section>
+                </div>
+              </div>
+
+
+              <hr />
+
+              <div className={`${className}__comments`}>
+                <h1 className="text-dark-green font-semibold text-2xl">Comments </h1>
+                <Comments />
+              </div>
+
+            </React.Fragment>
+          ) : (
+            <p>No post data available</p>
+          )}
         </div>
-      </div>
-
-
-      <hr />
-
-      <div className={`${className}__comments`}>
-        <h1 className="text-dark-green font-semibold text-2xl">Comments</h1>
-        {selectedPost?.comment_list.length > 0 && <Comments />}
-      </div>
-
-    </React.Fragment>
-  ) : (
-    <p>No post data available</p>
-  )}
-</div>
 
       </div>
     </div>
