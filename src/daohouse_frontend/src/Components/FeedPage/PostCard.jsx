@@ -57,6 +57,7 @@ const PostCard = ({ posts, handleGetLikePost }) => {
     try {
       const response = await backendActor.like_post(posts.post_id);
       handleGetLikePost(response);
+      
       if (response?.Ok) {
         toast.success("Post liked successfully");
       } else if (response?.Err) {
