@@ -8,7 +8,7 @@ const EditPersonalLinksAndContactInfo = ({
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
       <div className="mb-4 flex flex-col">
-        {/* Contact No. */}
+        
         <div className="flex items-center mb-4">
           <label
             htmlFor="contactNo"
