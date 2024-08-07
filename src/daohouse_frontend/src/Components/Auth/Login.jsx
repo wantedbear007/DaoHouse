@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import { useAuth } from "../utils/useAuthClient";
+import { useAuth } from "../utils/useAuthClient";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import icp from "../../../assets/icp.png";
@@ -8,7 +8,7 @@ import icp from "../../../assets/icp.png";
 const Login = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  // const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   // Function to handle login
