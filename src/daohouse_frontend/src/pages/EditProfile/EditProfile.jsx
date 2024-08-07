@@ -31,6 +31,7 @@ const EditProfile = () => {
   const [loading, setLoading] = useState(false);
 
   const [imageSrc, setImageSrc] = useState(MyProfileImage);
+  const [errors, setErrors] = useState({}); // To store validation errors
 
   const navigate = useNavigate();
   
@@ -78,7 +79,22 @@ const EditProfile = () => {
     image_content_type: "image/jpg",
   });
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!profileData.name.trim()) newErrors.name = "Name is required.";
+    if (!profileData.email_id.trim()) newErrors.email_id = "Email is required.";
+    if (!/\S+@\S+\.\S+/.test(profileData.email_id)) newErrors.email_id = "Email format is invalid.";
+    if (!profileData.contact_number.trim()) newErrors.contact_number = "Contact number is required.";
+    if (!/^\d+$/.test(profileData.contact_number)) newErrors.contact_number = "Contact number should be numeric.";
+    // Add more validation rules as needed
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSaveChangesClick = async () => {
+    
+    if (!validateForm()) return; // Stop if validation fails
+
     setLoading(true);
     const profilePayload = {
       username: profileData.name,
@@ -327,8 +343,33 @@ const EditProfile = () => {
                   value={profileData.name}
                   onChange={handleInputChange}
                   placeholder="Username.user"
-                  className="border-solid border border-[#DFE9EE] py-2 pl-4 md:w-[40%] w-[82%] rounded-[6px]"
+                  className={`border-solid border ${errors.name ? 'border-red-500' : 'border-[#DFE9EE]'} py-2 pl-4 md:w-[40%] w-[82%] rounded-[6px]`}
                 />
+                {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+              </div>
+              <div className="bg-[#FFFFFF] md:text-[16px] text-[12px] font-normal text-[#646464] py-3 md:px-5 pl-3 my-4 sm:w-[100%] rounded-lg">
+                <span className="text-[#05212C] md:mr-32 mr-4">Email</span>
+                <input
+                  type="text"
+                  name="email_id"
+                  value={profileData.email_id}
+                  onChange={handleInputChange}
+                  placeholder="Email address"
+                  className={`border-solid border ${errors.email_id ? 'border-red-500' : 'border-[#DFE9EE]'} py-2 pl-4 md:w-[40%] w-[82%] rounded-[6px]`}
+                />
+                {errors.email_id && <p className="text-red-500 text-xs mt-1">{errors.email_id}</p>}
+              </div>
+              <div className="bg-[#FFFFFF] md:text-[16px] text-[12px] font-normal text-[#646464] py-3 md:px-5 pl-3 my-4 sm:w-[100%] rounded-lg">
+                <span className="text-[#05212C] md:mr-32 mr-4">Contact Number</span>
+                <input
+                  type="text"
+                  name="contact_number"
+                  value={profileData.contact_number}
+                  onChange={handleInputChange}
+                  placeholder="Contact number"
+                  className={`border-solid border ${errors.contact_number ? 'border-red-500' : 'border-[#DFE9EE]'} py-2 pl-4 md:w-[40%] w-[82%] rounded-[6px]`}
+                />
+                {errors.contact_number && <p className="text-red-500 text-xs mt-1">{errors.contact_number}</p>}
               </div>
               <p className="lg:text-[20px] md:text-[16px] text-[14px] font-semibold text-[#05212C] md:ml-2 md:mb-3">
                 Description
@@ -338,9 +379,10 @@ const EditProfile = () => {
                   name="description"
                   value={profileData.description}
                   onChange={handleInputChange}
-                  className="w-full h-32 border border-gray-300 px-3 py-2 rounded-md"
+                  className={`w-full h-32 border ${errors.description ? 'border-red-500' : 'border-gray-300'} px-3 py-2 rounded-md`}
                   placeholder="Describe yourself here..."
                 />
+                {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
               </div>
               <p className="lg:text-[20px] md:text-[16px] text-[14px] font-semibold text-[#05212C] md:ml-2 md:mb-3 mt-6">
                 Tags That Defines You
