@@ -9,6 +9,7 @@ import MyProfileImage from "../../../assets/MyProfile-img.png";
 import { useUserProfile } from "../../context/UserProfileContext";
 import { toast } from "react-toastify";
 import Container from "../Container/Container";
+// import nfid from "../../../assets/nfidlogo.png";
 
 const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -74,7 +75,12 @@ const Navbar = () => {
 
   const handleLogin = async () => {
     setIsConnecting(true);
-    await login().then(() => window.location.reload());
+    await login("Icp").then(() => window.location.reload());
+  };
+
+  const handleNFIDLogin = async () => {
+    setIsConnecting(true);
+    await login("nfid").then(() => window.location.reload());;
   };
 
   const handleLogout = async () => {
@@ -191,6 +197,7 @@ const Navbar = () => {
           onClose={() => setIsModalOpen(false)}
           onLogin={handleLogin}
           onLoginPlug={handleLoginPlug}
+          onLoginNFID={handleNFIDLogin}
         />
       </div>
     </nav>
@@ -198,3 +205,7 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
+
+

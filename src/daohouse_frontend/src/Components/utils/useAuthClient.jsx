@@ -1,19 +1,44 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthClient } from "@dfinity/auth-client";
 import { createActor, idlFactory as BackendidlFactory } from "../../../../declarations/daohouse_backend/index";
-// import { Principal } from "@dfinity/candid/lib/cjs/idl";
 import { Principal } from "@dfinity/principal";
-const AuthContext = createContext();
-import {idlFactory as DaoFactory} from "../../../../declarations/dao_canister/index"
 import { HttpAgent, Actor } from "@dfinity/agent";
+import { NFID } from "@nfid/embed";
+import { idlFactory as DaoFactory } from "../../../../declarations/dao_canister/index";
 
-export const useAuthClient = () => {
+const AuthContext = createContext();
+
+const defaultOptions = {
+  createOptions: {
+    idleOptions: {
+      idleTimeout: 1000 * 60 * 30, // set to 30 minutes
+      disableDefaultIdleCallback: true, // disable the default reload behavior
+    },
+  },
+  loginOptionsIcp: {
+    identityProvider:
+      process.env.DFX_NETWORK === "ic"
+                ? "https://identity.ic0.app/#authorize"
+                : `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943`,
+  },
+  loginOptionsNfid: {
+    identityProvider:
+      process.env.DFX_NETWORK === "ic"
+        ? `https://nfid.one/authenticate/?applicationName=my-ic-app#authorize`
+        : `https://nfid.one/authenticate/?applicationName=my-ic-app#authorize`
+  },
+};
+
+
+export const useAuthClient = (options = defaultOptions) => {
   const [authClient, setAuthClient] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [identity, setIdentity] = useState(null);
   const [principal, setPrincipal] = useState(null);
   const [backendActor, setBackendActor] = useState(null);
   const [stringPrincipal, setStringPrincipal] = useState(null);
+  const [nfid, setNfid] = useState(null);
+  const [error, setError] = useState(null);
 
   const getPrincipalId = (principal) => {
     if (principal) {
@@ -22,6 +47,7 @@ export const useAuthClient = () => {
     }
     return null;
   };
+  
 
   const backendCanisterId =
     process.env.CANISTER_ID_DAOHOUSE_BACKEND ||
@@ -39,6 +65,9 @@ export const useAuthClient = () => {
     setIdentity(identity);
     setPrincipal(principal);
     setStringPrincipal(principal.toString());
+    console.log(principal.toString());
+    
+
     if (isAuthenticated && identity && principal && principal.isAnonymous() === false) {
       const backendActor = createActor(backendCanisterId, { agentOptions: { identity: identity } });
       setBackendActor(backendActor);
@@ -46,21 +75,11 @@ export const useAuthClient = () => {
 
     return true;
   };
-  
-
-  // to create actor for daoCanister
-
-
-  // if (principal !== null) {
-  // console.log("principal", Principal.valueToString(principal));
-  //     setPrincipal(Principal.valueToString(principal));
-  //   }
 
   useEffect(() => {
     const initializeAuth = async () => {
-
-      const authClient = await AuthClient.create();
-      clientInfo(authClient, authClient.getIdentity());
+      const authClient = await AuthClient.create(options.createOptions);
+      await clientInfo(authClient, authClient.getIdentity());
       if (window.ic?.plug) {
         const isPlugConnected = await window.ic.plug.isConnected();
         if (isPlugConnected) {
@@ -68,28 +87,31 @@ export const useAuthClient = () => {
             await window.ic.plug.createAgent();
           }
           const principal = await window.ic.plug.agent.getPrincipal();
-
-          // Create the backend actor
           const backendActor = await window.ic.plug.createActor({
             canisterId: backendCanisterId,
             interfaceFactory: BackendidlFactory,
           });
-
           setBackendActor(backendActor);
           setIdentity(window.ic.plug);
           setIsAuthenticated(true);
           setPrincipal(principal);
-
         } else {
           console.log("Plug wallet is not connected.");
         }
+        
       }
+        
+      
     };
 
     initializeAuth();
   }, []);
 
-  const login = async () => {
+
+  
+  
+
+  const login = async (val) => {
     return new Promise(async (resolve, reject) => {
       try {
         if (
@@ -99,14 +121,12 @@ export const useAuthClient = () => {
         ) {
           resolve(clientInfo(authClient, authClient.getIdentity()));
         } else {
-          await authClient.login({
-            identityProvider:
-              process.env.DFX_NETWORK === "ic"
-                ? "https://identity.ic0.app/"
-                : `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943`,
-            onError: (error) => reject(error),
-            onSuccess: () => resolve(clientInfo(authClient, authClient.getIdentity())),
-          });
+            const opt = val === "Icp" ? "loginOptionsIcp" : "loginOptionsNfid";
+            await authClient.login({
+              ...options[opt],
+              onError: (error) => reject(error),
+              onSuccess: () => resolve(clientInfo(authClient, authClient.getIdentity())),
+            });
         }
       } catch (error) {
         reject(error);
@@ -121,21 +141,14 @@ export const useAuthClient = () => {
     }
 
     const whitelist = [frontendCanisterId, backendCanisterId];
-    const hasAllowed = await window.ic.plug.requestConnect({
-      whitelist,
-    });
+    const hasAllowed = await window.ic.plug.requestConnect({ whitelist });
 
     if (!hasAllowed) {
       console.error("Connection was refused.");
       return;
     }
     try {
-      // Retrieve the principal ID
       const principal = await window.ic.plug.agent.getPrincipal();
-      console.log("plugID", principal.toText());
-      console.log(backendCanisterId);
-
-      // Create the backend actor
       const backendActor = await window.ic.plug.createActor({
         canisterId: backendCanisterId,
         interfaceFactory: BackendidlFactory,
@@ -146,36 +159,102 @@ export const useAuthClient = () => {
       setIsAuthenticated(true);
       setPrincipal(principal);
 
-      await clientInfo({ isAuthenticated: () => true, getIdentity: () => ({ getPrincipal: () => principal }) }, principal);
+      await clientInfo({
+        isAuthenticated: () => true,
+        getIdentity: () => ({ getPrincipal: () => principal })
+      }, principal);
 
       console.log("Integration actor initialized successfully.");
-      console.log({ backendActor });
-      console.log(window.ic);
     } catch (e) {
       console.error("Failed to initialize the actor with Plug.", e);
     }
+  };
 
-  }
+  useEffect(() => {
+    const initNFID = async () => {
+      try {
+        const nfIDInstance = await NFID.init({
+          application: {
+            name: "NFID Login",
+            logo: "https://dev.nfid.one/static/media/id.300eb72f3335b50f5653a7d6ad5467b3.svg"
+          }
+        });
+        setNfid(nfIDInstance);
+      } catch (error) {
+        console.error("Error initializing NFID:", error);
+        setError("Failed to initialize NFID.");
+      }
+    };
 
+    initNFID();
+  }, []);
 
-  // to create actor for daoCanister
+  // const signInNFID = async () => {
+  //   if (!nfid) {
+  //     console.error("NFID is not initialized.");
+  //     return;
+  //   }
+  
+  //   const canisterArray = [process.env.CANISTER_ID_INTERNET_IDENTITY];
+    
+  //   try {
+  //     const delegationResult = await nfid.getDelegation({ targets: canisterArray });
+  //     const theUserPrincipal = Principal.from(delegationResult.getPrincipal()).toText();
+  //     console.log("The User principal", theUserPrincipal);
+  
+  //     // Create an identity from the delegation result
+  //     // const identity = delegationResult.getIdentity();
+  //     const agent = new HttpAgent({ identity });
+  
+  //     // Fetch root key if in development
+  //     if (process.env.DFX_NETWORK !== 'ic') {
+  //       await agent.fetchRootKey();
+  //     }
+  
+  //     // Create the backend actor
+  //     const backendActor = Actor.createActor({
+  //       canisterId: backendCanisterId,
+  //       interfaceFactory: BackendidlFactory,
+  //     });
+
+      
+  
+  //     // Update state with authenticated user details
+  //     setBackendActor(backendActor);
+  //     setIdentity(theUserPrincipal);
+  //     setIsAuthenticated(true);
+  //     setPrincipal(theUserPrincipal);
+  
+  //     // Optionally, call `clientInfo` to update authentication client state
+  //     await clientInfo({ 
+  //       isAuthenticated: () => true, 
+  //       getIdentity: () => ({ getPrincipal: () => theUserPrincipal })
+  //     }, theUserPrincipal);
+  
+  //     console.log("NFID authentication successful.");
+  //   } catch (error) {
+  //     console.error("Error during NFID authentication:", error);
+  //     setError("Failed to authenticate with NFID. Please check the canister ID and network settings.");
+  //   }
+  // };
+  
+
   const createDaoActor = (canisterId) => {
     try {
-      const agent = new HttpAgent({identity});
+      const agent = new HttpAgent({ identity });
 
       if (process.env.DFX_NETWORK !== 'production') {
         agent.fetchRootKey().catch(err => {
           console.warn('Unable to fetch root key. Check to ensure that your local replica is running');
           console.error(err);
         });
-
-        return Actor.createActor(DaoFactory, { agent, canisterId });
       }
 
+      return Actor.createActor(DaoFactory, { agent, canisterId });
     } catch (err) {
-      console.log(err, "erro ho gya useAuthClient me")
+      console.error("Error creating DAO actor:", err);
     }
-  }
+  };
 
   const disconnectPlug = async () => {
     if (window.ic?.plug) {
@@ -194,7 +273,7 @@ export const useAuthClient = () => {
 
   const logout = async () => {
     await authClient?.logout();
-    disconnectPlug()
+    disconnectPlug();
   };
 
   return {
@@ -202,6 +281,7 @@ export const useAuthClient = () => {
     logout,
     authClient,
     signInPlug,
+    // signInNFID,
     isAuthenticated,
     identity,
     principal,

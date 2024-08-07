@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth, useAuthClient } from "../../Components/utils/useAuthClient";
+import { AuthClient } from "@dfinity/auth-client";
 import { useEffect } from 'react';
 
 export default function Widget() {
