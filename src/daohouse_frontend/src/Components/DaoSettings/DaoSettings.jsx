@@ -81,7 +81,6 @@ const DaoSettings = () => {
               }
               onClick={() => {
                 if (index === 3) {
-                  alert("First go to setp 3");
                   setActiveStep(2)
                   return
                 }

@@ -11,10 +11,11 @@ const AboutMe = () => {
   const className = "AboutMe";
   const { userProfile, fetchUserProfile } = useUserProfile();
   const { stringPrincipal } = useParams();
-  const a = userProfile?.user_id;
-  console.log("dfbsdfbsmdf", a);
-  const principalstring = a.toString();
-  console.log("nbnbb", principalstring)
+  // const a = userProfile?.user_id;
+  // console.log("dfbsdfbsmdf", a);
+  // const principalstring = a.toString();
+  // console.log("nbnbb", principalstring)
+  const principalstring = userProfile?.user_id?.toString() || "";
   const copyToClipboard = () => {
     navigator.clipboard.writeText(principalstring).then(() => {
       toast.success('Copied to clipboard!');

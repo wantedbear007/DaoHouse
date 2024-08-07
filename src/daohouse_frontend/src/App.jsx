@@ -53,7 +53,7 @@ const App = () => {
           <Route path="/my-proposals" element={<MyProposals />} />
           <Route path="/my-proposals/:id" element={<SingleProposal />} />
           <Route
-            path="/my-profile/my-post"
+            path="/my-profile/posts"
             element={<MyProfile childComponent={<MyPosts />} />}
           />
           <Route

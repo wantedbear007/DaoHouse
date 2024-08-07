@@ -11,7 +11,6 @@ const Step1 = ({ setData, setActiveStep }) => {
 
   function handleSaveAndNext() {
     if (inputData.DAOIdentifier == "") {
-      alert("Empty DAO Identifier");
       return;
     }
 
