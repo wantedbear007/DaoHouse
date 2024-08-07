@@ -2,10 +2,32 @@ import React from "react";
 import Tags from "../../../Components/MyProfile/Tags";
 import PersonalLinksAndContactInfo from "../PersonalLinksAndContactInfo";
 import { useUserProfile } from "../../../context/UserProfileContext";
+import { useParams } from "react-router-dom";
+import { Principal } from '@dfinity/principal';
+import { toast } from "react-toastify";
+
 
 const AboutMe = () => {
   const className = "AboutMe";
   const { userProfile, fetchUserProfile } = useUserProfile();
+  const { stringPrincipal } = useParams();
+  const a = userProfile?.user_id;
+  console.log("dfbsdfbsmdf", a);
+  const principalstring = a.toString();
+  console.log("nbnbb", principalstring)
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(principalstring).then(() => {
+      toast.success('Copied to clipboard!');
+    }).catch((err) => {
+      console.error('Could not copy text: ', err);
+    });
+  };
+
+  const CopyIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="24" height="18">
+      <path d="M384 336l-192 0c-8.8 0-16-7.2-16-16l0-256c0-8.8 7.2-16 16-16l140.1 0L400 115.9 400 320c0 8.8-7.2 16-16 16zM192 384l192 0c35.3 0 64-28.7 64-64l0-204.1c0-12.7-5.1-24.9-14.1-33.9L366.1 14.1c-9-9-21.2-14.1-33.9-14.1L192 0c-35.3 0-64 28.7-64 64l0 256c0 35.3 28.7 64 64 64zM64 128c-35.3 0-64 28.7-64 64L0 448c0 35.3 28.7 64 64 64l192 0c35.3 0 64-28.7 64-64l0-32-48 0 0 32c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256c0-8.8 7.2-16 16-16l32 0 0-48-32 0z" />
+    </svg>
+  );
 
   return (
     <div className={className + "w-full"}>
@@ -15,6 +37,23 @@ const AboutMe = () => {
           About Me
         </h3>
         <div className="md:mt-4 mt-2 mb-6 bg-[#F4F2EC] p-4 rounded-lg">
+          <div className="flex flex-col items-start space-y-2">
+            <p className="lg:text-[20px] md:text-[16px] text-[14px] font-semibold text-[#05212C] md:ml-2 md:mb-3">
+              Principal Id
+            </p>
+            <div className="flex items-center w-full max-w-[1200px] bg-white lg:text-[16px] md:text-[14px] text-[12px] font-normal text-[#646464] p-1 rounded-lg">
+              <span className="flex-grow"
+                disabled>{principalstring}</span>
+              <button
+                onClick={copyToClipboard}
+                className="bg-blue-500 text-white p-2 rounded flex items-center justify-center ml-4"
+                aria-label="Copy to clipboard"
+              >
+                <CopyIcon />
+              </button>
+            </div>
+          </div>
+
           <p className="lg:text-[20px] md:text-[16px] text-[14px] font-semibold text-[#05212C] md:ml-2 md:mb-3">
             Description
           </p>
