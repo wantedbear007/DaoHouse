@@ -38,6 +38,7 @@ const DaoProfile = () => {
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
   const { daoCanisterId } = useParams();
+  const [joinStatus, setJoinStatus] = useState("Join DAO");
   const navigate = useNavigate();
 
   const [isFollowing, setIsFollowing] = useState(false);
@@ -73,6 +74,11 @@ const DaoProfile = () => {
 
             const daoFollowers = await daoActor.get_dao_followers();
             setFollowersCount(daoFollowers.length);
+            if (isCurrentUserMember) {
+              setJoinStatus('Joined');
+            } else {
+              setJoinStatus('Join DAO');
+            }
 // <<<<<<< pratap
 //             // <<<<<<< prabhjot
 
@@ -98,6 +104,22 @@ const DaoProfile = () => {
 
     fetchDaoDetails();
   }, [daoCanisterId, backendActor, createDaoActor]);
+
+  const handleJoinDao = async () => {
+    try {
+      const response = await daoCanister.ask_to_join_dao(daohouseBackendCanisterId);
+      if (response.Ok) {
+        setJoinStatus("Requested");
+        toast.success("Join request sent successfully");
+      } else {
+        console.error("Failed to send join request:", response.Err || "Unknown error");
+        toast.error(`Failed to send join request: ${response.Err || "Unknown error"}`);
+      }
+    } catch (error) {
+      console.error('Error sending join request:', error);
+      toast.error('Error sending join request');
+    }
+  };
 
 
   const toggleFollow = async () => {
@@ -388,7 +410,7 @@ const DaoProfile = () => {
               {isFollowing ? "Unfollow" : "Follow"}
             </button>
             <button
-              onClick={() => navigate("/join-dao")}
+              onClick={handleJoinDao}
               className="bg-white text-[16px] text-[#05212C] shadow-xl lg:py-4 lg:px-3 rounded-[27px] lg:w-[131px] lg:h-[40px] md:w-[112px] md:h-[38px] w-[98px] h-[35px] lg:flex items-center justify-center rounded-2xl"
               style={{
                 boxShadow:
