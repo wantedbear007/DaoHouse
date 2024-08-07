@@ -117,7 +117,7 @@ function CreateProposal() {
                         </div>
                     </p>
 
-                    <div className="mx-auto bg-[#F4F2EC] p-6 m-6 rounded-lg shadow w-full">
+                    <div className="mx-auto bg-[#F4F2EC] p-6 m-6 rounded-lg shadow w-full ">
                         <div className="mb-6 max-w-6xl relative">
                             <label className="block mb-2 font-semibold text-xl">Proposal Title</label>
                             <input
@@ -125,7 +125,7 @@ function CreateProposal() {
                                 value={proposalTitle}
                                 onChange={handleProposalTitleChange}
                                 placeholder="Enter proposal title"
-                                className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent"
+                                className=" w-full max-w-[800px] px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent"
                             />
                         </div>
 
@@ -138,7 +138,7 @@ function CreateProposal() {
                                     modules={quillModules}
                                     formats={quillFormats}
                                     placeholder='Write here...'
-                                    className='proposal-editor rounded-xl'
+                                    className='proposal-editor rounded-xl w-full max-w-[800px]'
                                 />
                             </div>
                         </div>
@@ -150,7 +150,7 @@ function CreateProposal() {
                                 value={requiredVotes}
                                 onChange={handleRequiredVotesChange}
                                 placeholder="Enter required votes"
-                                className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent"
+                                className="w-full max-w-[800px] px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent"
                             />
                         </div>
 
@@ -159,7 +159,7 @@ function CreateProposal() {
                             <select
                                 value={proposalType}
                                 onChange={handleProposalTypeChange}
-                                className="w-full px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent"
+                                className="w-full max-w-[800px] px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent"
                             >
                                 <option value="">Select Proposal Type</option>
                                 <option value="VotingProposal">Voting Proposal</option>
