@@ -18,28 +18,28 @@ const HeroSection = () => {
 
   return (
     <Container>
-  <div className="relative flex flex-col md:flex-row justify-center items-center overflow-hidden">
-    <div className="md:w-1/2 w-full px-10 py-8 flex flex-col items-center text-center md:text-left gap-4 md:gap-6 z-10">
-      <p className="text-[#0E3746] font-mulish font-semibold text-4xl sm:text-5xl md:text-6xl mt-8">
-        Building Better Future, Together
-      </p>
-      <div className="text-black font-inter text-sm md:text-base">
-        Efficiently Manage Resources and Proposals with Our DAO Tools
-      </div>
-      <div className="flex flex-col md:flex-row gap-4 md:gap-6">
-        <button
-          onClick={handlemov}
-          className="px-6 py-3 text-base bg-[#0E3746] text-white font-semibold rounded-full shadow-md hover:bg-blue-800 hover:text-white"
-        >
-          Create DAO
-        </button>
-        <button
-          onClick={handleJoinDaoClick}
-          className="px-6 py-3 text-base bg-white text-black font-normal rounded-full shadow-md hover:bg-gray-200 hover:text-blue-900"
-        >
-          Join DAO
-        </button>
-      </div>
+  <div className="relative flex flex-col md:flex-row justify-center items-center  overflow-hidden">
+    <div className="md:w-1/2 w-full px-10 py-8 flex flex-col items-center text-center items-center md:items-start text-center md:text-left mt-5  gap-4 md:gap-6 z-10">
+    <p className="text-[#0E3746] font-mulish font-semibold text-4xl sm:text-5xl md:text-6xl">
+    Building Better Future, Together
+  </p>
+  <div className="text-black font-inter text-sm md:text-base ">
+    Efficiently Manage Resources and Proposals with Our DAO Tools
+  </div>
+  <div className="flex flex-col   md:items-start items-center text-center  flex-col md:flex-row gap-4 md:gap-6 mt-5">
+    <button
+      onClick={handlemov}
+      className="px-6 py-3 text-base bg-[#0E3746] text-white font-semibold rounded-full shadow-md hover:bg-blue-800 hover:text-white"
+    >
+      Create DAO
+    </button>
+    <button
+      onClick={handleJoinDaoClick}
+      className="px-6 py-3 text-base bg-white text-black font-normal rounded-full shadow-md hover:bg-gray-200 hover:text-blue-900"
+    >
+      Join DAO
+    </button>
+  </div>
     </div>
     {/* Gradient and Bottom Left Image */}
     <img
@@ -50,7 +50,7 @@ const HeroSection = () => {
     <img
       src={herosectionleftbottomimg}
       alt="Bottom Left Image"
-      className="absolute pointer-events-none select-none bottom-0 left-0"
+      className="absolute pointer-events-none select-none bottom-0 left-0" 
     />
 
     {/* Right Side */}

@@ -6,9 +6,7 @@ import { PiTelegramLogoBold } from "react-icons/pi";
 import { MdOutlineInsertComment } from "react-icons/md";
 import { Principal } from "@dfinity/principal";
 import { useAuth } from "../../Components/utils/useAuthClient";
-import Post1 from "../../../assets/post1.png";
-import { toast } from "react-toastify";
-
+import Post1 from "../../../assets/post1.png"
 const convertTimestampToDateString = (timestamp) => {
   // Convert the BigInt timestamp to milliseconds
   const milliseconds = Number(timestamp / BigInt(1e6));
@@ -29,10 +27,11 @@ const convertTimestampToDateString = (timestamp) => {
   // Return the formatted date string
   return `${month} ${day}`;
 };
+import { toast } from "react-toastify";
 
 const PostCard = ({ posts, handleGetLikePost }) => {
   const [formattedDate, setFormattedDate] = useState('');
-  const [loading, setLoading] = useState(false); // Loader state
+  const [loading, setLoading] = useState(false);
   const className = "postCard";
   const { backendActor } = useAuth();
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
@@ -49,8 +48,13 @@ const PostCard = ({ posts, handleGetLikePost }) => {
     ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${posts.user_image_id}`
     : '';
 
+    console.log("user_image_id", posts.user_image_id);
+    console.log();
+
+    
+
+
   const getlike = async () => {
-    setLoading(true); // Show loader
     try {
       const response = await backendActor.like_post(posts.post_id);
       handleGetLikePost(response);
@@ -62,7 +66,7 @@ const PostCard = ({ posts, handleGetLikePost }) => {
       }
     } catch (error) {
       console.error("Error fetching like:", error);
-    } finally {
+    }finally {
       setLoading(false); // Hide loader
     }
   };
@@ -140,8 +144,8 @@ const PostCard = ({ posts, handleGetLikePost }) => {
               className="rounded-[50%] w-10 h-10"
             />
             <div>
-              <p className="font-semibold ml-2 truncate ... w-36"> {posts.username || posts.principal_id.toString()}</p>
-              {userProfile && userProfile.user_id.toString() !== posts.principal_id.toString() && (
+            <p className="font-semibold ml-2 truncate ... w-36"> {posts.username || posts.principal_id.toString()}</p>
+            {userProfile && userProfile.user_id.toString() !== posts.principal_id.toString() && (
                 <button
                   onClick={toggleFollow}
                   className={`flex-1 mt-0 text-blue-400 p-1 sm:text-sm md:text-lg`}
@@ -155,6 +159,7 @@ const PostCard = ({ posts, handleGetLikePost }) => {
           <section className={className + "__time text-slate-500 mobile:text-base text-sm"}>
             {formattedDate}
           </section>
+
         </div>
         <div>
           <p className="h-full mobile:text-base text-sm w-full break-words">{posts.post_description}</p>
@@ -162,9 +167,8 @@ const PostCard = ({ posts, handleGetLikePost }) => {
 
         <div className={className + "__buttons mobile:flex hidden flex-row items-center tablet:justify-between tablet:gap-x-2 gap-x-2 big_phone:mt-24 mt-24  desktop-button"}>
           <button
-            className="flex flex-row tablet:gap-2 gap-1 items-center bg-[#0E3746] text-white tablet:text-base text-sm tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]"
-          >
-            {loading ? (
+            className="flex flex-row tablet:gap-2 gap-1 items-center bg-[#0E3746] text-white tablet:text-base text-sm tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]">
+             {loading ? ( // Show loader when loading state is true
               <div className="loader">Loading...</div>
             ) : posts?.is_liked == 1 ? (
               <FavoriteIcon onClick={getlike} className="w-5 h-5" />
@@ -174,8 +178,7 @@ const PostCard = ({ posts, handleGetLikePost }) => {
             {posts.like_count}
           </button>
           <button
-            className="flex flex-row tablet:gap-2 gap-1 items-center bg-[#0E3746] text-white tablet:text-base text-sm tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]"
-          >
+            className="flex flex-row tablet:gap-2 gap-1 items-center bg-[#0E3746] text-white tablet:text-base text-sm tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]">
             <MdOutlineInsertComment />
             {posts.comment_count}
           </button>
@@ -193,12 +196,13 @@ const PostCard = ({ posts, handleGetLikePost }) => {
       <section className={className + "__leftSide w-[100%] md:w-[45%] h-full flex justify-end item-end image-section"}>
         {posts.post_img && (
           <section className="relative w-full h-64 ">
-            <img
-              src={ImageUrl}
-              alt="PostMedia"
-              className="w-full h-full object-cover rounded-md"
-            />
-          </section>
+          <img
+            src={ImageUrl}
+            alt="PostMedia"
+            className="w-full h-full object-cover rounded-md"
+          />
+        
+      </section>
         )}
       </section>
 
@@ -206,13 +210,12 @@ const PostCard = ({ posts, handleGetLikePost }) => {
         <div className="flex flex-row items-center justify-between gap-x-2 ">
           <button>
             <div className="flex gap-2">
-              {loading ? (
-                <div className="loader">Loading...</div>
-              ) : posts?.is_liked == 1 ? (
-                <FavoriteIcon onClick={getlike} className="w-5 h-5" />
-              ) : (
-                <FaRegHeart onClick={getlike} className="text-[#0E3746] text-lg mt-1" />
-              )}
+              {
+                posts?.is_liked == 1 ?
+                  <FavoriteIcon onClick={getlike} className="w-5 h-5" />
+                  :
+                  <FaRegHeart onClick={getlike} className="text-[#0E3746] text-lg mt-1" />
+              }
               <div className="text-lg">
                 {posts.like_count}
               </div>
@@ -241,3 +244,4 @@ const PostCard = ({ posts, handleGetLikePost }) => {
 };
 
 export default PostCard;
+
