@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProfileTitleDivider from "../../Components/ProfileTitleDivider/ProfileTitleDivider";
 import MyProfileRectangle from "../../../assets/MyProfileRectangle.png";
-import MyProfileImage from "../../../assets/MyProfile-img.png";
+import MyProfileImage from "../../../assets/MyProfile-img.png"; // Default profile image
 import UploadIcon from "../../../assets/upload-icon.png";
 import BigCircle from "../../../assets/BigCircle.png";
 import MediumCircle from "../../../assets/MediumCircle.png";
@@ -28,17 +28,15 @@ const EditProfile = () => {
   const { userProfile, fetchUserProfile } = useUserProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { backendActor, frontendCanisterId, identity, principal } = useAuth();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
-  const [imageSrc, setImageSrc] = useState(
-    userProfile?.profile_img
-      ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
-      : MyProfileImage
-  );
+  const [imageSrc, setImageSrc] = useState(MyProfileImage);
+
   const navigate = useNavigate();
+  
   const handleDiscardClick = () => {
     navigate("/my-profile");
-  }
+  };
 
   const isLocal = !window.location.host.endsWith('ic0.app');
   const agent = new HttpAgent({
@@ -63,7 +61,7 @@ const EditProfile = () => {
       }
     };
     fetchData();
-  }, [])
+  }, []);
 
   const [profileData, setProfileData] = useState({
     name: userProfile?.username || "",
@@ -107,10 +105,10 @@ const EditProfile = () => {
       } else {
         toast.success("Profile created successfully");
         setIsModalOpen(true);
-       setTimeout(()=>{
-        navigate('/')
-        window.scrollTo(0, 0); // Scrolls to the top of the page
-        },2000)
+        setTimeout(() => {
+          navigate('/');
+          window.scrollTo(0, 0); // Scrolls to the top of the page
+        }, 2000);
       }
     } catch (error) {
       console.error("Error creating profile:", error);
@@ -163,7 +161,7 @@ const EditProfile = () => {
   
     toast.success("Photo removed successfully"); // Show success notification
   };
-  
+
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -216,7 +214,7 @@ const EditProfile = () => {
     setImageSrc(userProfile?.profile_img
       ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
       : MyProfileImage);
-  }, [userProfile?.profile_img]);
+  }, [userProfile]);
 
   return (
     <div className="bg-zinc-200 w-full pb-20 relative">
@@ -287,6 +285,7 @@ const EditProfile = () => {
                 className="rounded-md lg:w-[105px] md:w-[85px] w-[69px] lg:mr-12 md:mr-4 mr-1 "
                 src={imageSrc}
                 alt="profile-pic"
+                onError={(e) => e.target.src = MyProfileImage} // Fallback to default image on error
                 style={{
                   boxShadow:
                     "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
@@ -309,9 +308,9 @@ const EditProfile = () => {
                 />
               </label>
               <button
-  onClick={handleRemoveImage}
-  className="text-[12px] md:text-[14px] lg:text-[16px] text-black shadow-xl md:h-[50px] h-[40px] md:px-6 px-4 rounded-[27px] bg-white-500 border-solid border border-red-100 hover:bg-red-300 flex items-center transition duration-200 ease-in-out"
->
+                onClick={handleRemoveImage}
+                className="text-[12px] md:text-[14px] lg:text-[16px] text-black shadow-xl md:h-[50px] h-[40px] md:px-6 px-4 rounded-[27px] bg-white-500 border-solid border border-red-100 hover:bg-red-300 flex items-center transition duration-200 ease-in-out"
+              >
                 Remove<span className="hidden sm:inline-block ml-1">Photo</span>
               </button>
             </div>
@@ -362,21 +361,26 @@ const EditProfile = () => {
               <div className="hidden sm:flex justify-center gap-5 mt-8">
                 <button
                   onClick={handleDiscardClick}
-                  className="py-2 px-9 border border-[#0E3746] hover:bg-[#0E3746] hover:text-white rounded-[27px] transition duration-200 ease-in-out">
+                  className="py-2 px-9 border border-[#0E3746] hover:bg-[#0E3746] hover:text-white rounded-[27px] transition duration-200 ease-in-out"
+                >
                   Discard
                 </button>
-                {
-                  loading ? <CircularProgress /> :
-                    <button onClick={handleSaveChangesClick}
-                      className="py-2 px-10 border border-[#0E3746] bg-[#0E3746] text-white  hover:bg-[#0E37464D] hover:border-[#0E37464D] rounded-[27px] transition duration-200 ease-in-out"> Save Changes </button>
-                }
+                {loading ? (
+                  <CircularProgress />
+                ) : (
+                  <button
+                    onClick={handleSaveChangesClick}
+                    className="py-2 px-10 border border-[#0E3746] bg-[#0E3746] text-white hover:bg-[#0E37464D] hover:border-[#0E37464D] rounded-[27px] transition duration-200 ease-in-out"
+                  >
+                    Save Changes
+                  </button>
+                )}
               </div>
             </div>
           </div>
         </div>
       </Container>
       <SuccessModal isOpen={isModalOpen} onClose={closeModal} />
-
       {isModalOpen && (
         <div className="fixed inset-0 bg-black opacity-40 z-40"></div>
       )}
