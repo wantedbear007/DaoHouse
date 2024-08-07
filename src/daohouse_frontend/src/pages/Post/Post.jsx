@@ -149,7 +149,7 @@ const Post = () => {
 
       <div className="__mainComponent px-4 md:px-20 bg-bg-color mb-20">
         <div className="py-5 text-2xl">
-          <Link to="/my-profile/my-post">
+          <Link to="/my-profile/posts">
             <FaArrowLeftLong />
           </Link>
         </div>
