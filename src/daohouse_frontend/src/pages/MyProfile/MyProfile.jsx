@@ -1,11 +1,10 @@
-// Importing necessary modules and assets
 import React, { useEffect, useState } from "react";
 import Lottie from "react-lottie";
 import { Link, useNavigate } from "react-router-dom";
 import { FaArrowRightLong } from "react-icons/fa6";
 
 import EditPen from "../../../assets/edit_pen.png";
-import MyProfileImage from "../../../assets/MyProfile-img.png";
+import MyProfileImage from "../../../assets/MyProfile-img.png"; // Default profile image
 import BigCircle from "../../../assets/BigCircle.png";
 import MediumCircle from "../../../assets/MediumCircle.png";
 import SmallestCircle from "../../../assets/SmallestCircle.png";
@@ -18,26 +17,37 @@ import SmallCircleComponent from "../../Components/Ellipse-Animation/SmallCircle
 import ProfileTitleDivider from "../../Components/ProfileTitleDivider/ProfileTitleDivider";
 import { useUserProfile } from "../../context/UserProfileContext";
 import Container from "../../Components/Container/Container";
-import { useAuth, useAuthClient } from "../../Components/utils/useAuthClient";
+import { useAuth } from "../../Components/utils/useAuthClient";
 
-// Main component function
 const MyProfile = ({ childComponent }) => {
-  const { backendActor, frontendCanisterId, identity } = useAuth();
-  const { userProfile, fetchUserProfile } = useUserProfile();
+  const { backendActor, identity } = useAuth();
+  const { userProfile } = useUserProfile();
+
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
-  const [imageSrc, setImageSrc] = useState(
-    userProfile?.profile_img
-    ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
-    : MyProfileImage
-  );
+
+  // State to store the image source
+  const [imageSrc, setImageSrc] = useState(MyProfileImage); // Initialize with default profile image
+
+  useEffect(() => {
+    const profileImageUrl = userProfile?.profile_img
+      ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
+      : MyProfileImage;
+
+    // Set image source
+    setImageSrc(profileImageUrl);
+  }, [userProfile?.profile_img]); // Depend on userProfile.profile_img for updates
+
+  // Error handler function for image loading
+  const handleImageError = () => {
+    setImageSrc(MyProfileImage); // Fallback to default image if there's an error loading the profile image
+  };
+
   const [activeTab, setActiveTab] = useState(0);
   const navigate = useNavigate();
   const className = "MyProfile";
-  const tabButtonsStyle =
-    "my-1 big_phone:text-base mobile:text-md text-sm flex flex-row items-center gap-2 hover:text-white";
+  const tabButtonsStyle = "my-1 big_phone:text-base mobile:text-md text-sm flex flex-row items-center gap-2 hover:text-white";
 
-  // Animation optioJuly 24ns for the big circle
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -48,7 +58,6 @@ const MyProfile = ({ childComponent }) => {
     },
   };
 
-  // Animation options for the small circle
   const defaultOptions2 = {
     loop: true,
     autoplay: true,
@@ -58,7 +67,7 @@ const MyProfile = ({ childComponent }) => {
       id: "lottie-smallCircle",
     },
   };
-  // Animation options for the medium circle
+
   const defaultOptions3 = {
     loop: true,
     autoplay: true,
@@ -69,13 +78,14 @@ const MyProfile = ({ childComponent }) => {
     },
   };
 
-  const [data, setdata] = useState({})
+  const [data, setData] = useState({});
   const followers = data?.followers_count ? Number(data.followers_count) : 0;
   const post = data?.post_count ? Number(data.post_count) : 0;
   const following = data?.followings_count ? Number(data.followings_count) : 0;
   const email = data?.email_id;
   const name = data?.username;
-  const getdata = async () => {
+
+  const getData = async () => {
     try {
       const response = await backendActor.get_user_profile();
       console.log("api response",response)
@@ -83,200 +93,116 @@ const MyProfile = ({ childComponent }) => {
     } catch (error) {
       console.error("Error :", error);
     }
-  }
+  };
 
   useEffect(() => {
-    getdata();
+    getData();
+  }, [backendActor]);
 
-  }, [backendActor])
-
-  useEffect(() => {
-    setImageSrc(userProfile?.profile_img
-      ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
-      : MyProfileImage)
-  }, [userProfile?.profile_img])
-  // Main return statement
   return (
-    <div className={className + " bg-zinc-200 w-full relative"}>
-      {/* Background image container */}
-      <div style={{
-        backgroundImage: `url("${MyProfileRectangle}")`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}>
+    <div className={`${className} bg-zinc-200 w-full relative`}>
+      <div
+        style={{
+          backgroundImage: `url("${MyProfileRectangle}")`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <Container classes={` ${className} __topComponent w-full lg:h-[25vh] h-[18vh] md:p-20 pt-6 pl-2 flex flex-col items-start md:justify-center relative`}>
           <div className="absolute z-22 top-0 left-0 w-full h-full overflow-x-hidden">
-            {/* Big circle image */}
             <div className="absolute md:right-[3.7%] -right-[3.7%] top-1/2 -translate-y-1/2">
               <div className="relative tablet:w-[96px] tablet:h-[96px] md:w-[88.19px] md:h-[88.19px] w-[65px] h-[65px]">
                 <BigCircleComponent imgSrc={BigCircle} />
               </div>
-
-              {/* Big circle animation */}
               <div className="absolute inset-0 flex items-center justify-center z-20">
                 <div className="tablet:w-[112px] tablet:h-[112px] md:w-[104px] md:h-[104px] w-[75px] h-[75px]">
-                  <Lottie
-                    options={defaultOptions}
-                    style={{ width: "100%", height: "100%" }}
-                  />
+                  <Lottie options={defaultOptions} style={{ width: "100%", height: "100%" }} />
                 </div>
               </div>
             </div>
-
             <div className="absolute right-[25%] -translate-y-full top-[30%]">
               <div className="relative tablet:w-[43px] tablet:h-[43px] md:w-[33.3px] md:h-[33.3px] w-[21.19px] h-[21.19px]">
-                {/* Smallest circle image */}
-
                 <SmallCircleComponent imgSrc={SmallestCircle} />
               </div>
-
-              {/* Small circle animation */}
               <div className="absolute inset-0 flex items-center justify-center z-20">
                 <div className="tablet:w-[47px] tablet:h-[47px] md:w-[37.3px] md:h-[37.3px] w-[23.19px] h-[23.19px]">
-                  <Lottie
-                    options={defaultOptions2}
-                    style={{ width: "100%", height: "100%" }}
-                  />
+                  <Lottie options={defaultOptions2} style={{ width: "100%", height: "100%" }} />
                 </div>
               </div>
             </div>
-
-            {/* Medium circle image */}
             <div className="absolute right-[45%] -translate-y-full top-[95%]">
-              <div className="relative tablet:w-[52px] tablet:h-[52px] md:w-[43.25px] md:h-[43.25px] w-[29.28px] h-[29.28px] ">
+              <div className="relative tablet:w-[52px] tablet:h-[52px] md:w-[43.25px] md:h-[43.25px] w-[29.28px] h-[29.28px]">
                 <MediumCircleComponent imgSrc={MediumCircle} />
               </div>
-
-              {/* Medium circle animation */}
               <div className="absolute inset-0 flex items-center justify-center z-20">
                 <div className="tablet:w-[60px] tablet:h-[60px] md:w-[47.25px] md:h-[47.25px] w-[33.28px] h-[33.28px]">
-                  <Lottie
-                    options={defaultOptions3}
-                    style={{ width: "100%", height: "100%" }}
-                  />
+                  <Lottie options={defaultOptions3} style={{ width: "100%", height: "100%" }} />
                 </div>
               </div>
             </div>
           </div>
-
           <ProfileTitleDivider title="My Profile" />
         </Container>
       </div>
-
-      {/* Main profile content */}
       <div className={`bg-[#c8ced3]`}>
         <Container classes={`__mainComponent big_phone:py-8 big_phone:pb-20 py-6 md:px-8 flex md:flex-row gap-2 flex-col w-full user-container`}>
-          {/* Left side content */}
-          <div
-            className={
-              className +
-              "__mainComponent__leftSide md:mx-0 mx-5 lg:px-20 flex flex-col tablet:items-start justify-center  md:h-[550px] lg:w-[251px] lg:h-[654px] md:px-14  rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal md:mt-[-65px] mt-[-45px] z-20"
-            }
-          >
-            {/* Navigation links */}
-            <div className="flex md:flex-col flex-row items-start md:justify-center justify-around gap-y-6 py-8 md:py-10 lg:text-base md:text-sm text-nowrap">
+          <div className={`${className}__mainComponent__leftSide md:mx-0 mx-5 lg:px-20 flex flex-col tablet:items-start justify-center md:h-[580px] lg:w-[280px] lg:h-[745px] md:px-14 rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal md:mt-[-65px] mt-[-45px] z-20`}>
+            <div className="flex md:flex-col flex-row items-start md:justify-center justify-around gap-y-6 py-50 md:py-90 lg:text-base md:text-sm text-nowrap">
               <Link to="/my-profile" onClick={() => setActiveTab(0)}>
-                <p
-                  className={`${tabButtonsStyle}  ${activeTab == 0 ? "text-white" : ""
-                    }`}
-                >
-                  Overview{" "}
-                  {activeTab == 0 ? (
-                    <FaArrowRightLong className="md:inline hidden" />
-                  ) : (
-                    ""
-                  )}
-                </p>
+                <p className={`${tabButtonsStyle} ${activeTab === 0 ? "text-white" : ""}`}>Overview {activeTab === 0 ? <FaArrowRightLong className="md:inline hidden" /> : ""}</p>
               </Link>
-
-              <Link to="/my-profile/my-post" onClick={() => setActiveTab(1)}>
-                <p
-                  className={`${tabButtonsStyle} ${activeTab == 1 ? "text-white" : ""
-                    }`}
-                >
-                  My Posts{" "}
-                  {activeTab == 1 ? (
-                    <FaArrowRightLong className="md:inline hidden" />
-                  ) : (
-                    ""
-                  )}
-                </p>
+              <Link to="/my-profile/posts" onClick={() => setActiveTab(1)}>
+                <p className={`${tabButtonsStyle} ${activeTab === 1 ? "text-white" : ""}`}>Posts {activeTab === 1 ? <FaArrowRightLong className="md:inline hidden" /> : ""}</p>
               </Link>
-
               <Link to="/my-profile/followers" onClick={() => setActiveTab(2)}>
-                <p
-                  className={`${tabButtonsStyle} ${activeTab == 2 ? "text-white" : ""
-                    }`}
-                >
-                  Followers{" "}
-                  {activeTab == 2 ? (
-                    <FaArrowRightLong className="md:inline hidden" />
-                  ) : (
-                    ""
-                  )}
-                </p>
+                <p className={`${tabButtonsStyle} ${activeTab === 2 ? "text-white" : ""}`}>Followers {activeTab === 2 ? <FaArrowRightLong className="md:inline hidden" /> : ""}</p>
               </Link>
-
               <Link to="/my-profile/following" onClick={() => setActiveTab(3)}>
-                <p
-                  className={`${tabButtonsStyle}  ${activeTab == 3 ? "text-white" : ""
-                    }`}
-                >
-                  Following{" "}
-                  {activeTab == 3 ? (
-                    <FaArrowRightLong className="md:inline hidden" />
-                  ) : (
-                    ""
-                  )}
-                </p>
+                <p className={`${tabButtonsStyle} ${activeTab === 3 ? "text-white" : ""}`}>Following {activeTab === 3 ? <FaArrowRightLong className="md:inline hidden" /> : ""}</p>
               </Link>
             </div>
           </div>
-
-          {/* Right side content */}
-          <div className={className + "__rightSide w-full"}>
-            {/* Profile picture and details */}
+          <div className={`${className}__rightSide w-full`}>
             <div className="flex md:justify-between justify-around w-full gap-2 z-50 relative">
-              <div className="flex items-start md:-ml-[10%] tablet:ml-[-90px]  relative">
-
+              <div className="flex items-start md:-ml-[10%] tablet:ml-[-90px] relative">
                 <div
                   className="fixed-image-container w-[130px] h-[120px] rounded-md overflow-hidden"
                   style={{
-                    boxShadow:
-                      "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
+                    boxShadow: "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
                   }}
                 >
+                  {/* Profile image displayed here */}
                   <img
                     className="w-full h-full object-cover"
-                    src={imageSrc}
+                    src={imageSrc} // Dynamically set to user's profile image or default
                     alt="profile-pic"
+                    onError={handleImageError} // Handle image loading errors
                   />
                 </div>
-
                 <div className="ml-5">
                   <h2 className="tablet:text-[32px] md:text-[24px] text-[16px] tablet:font-normal font-medium text-left text-[#05212C]">
                     {name || "Username.user"}{" "}
                   </h2>
-                  <p className="md:text-[14px] text-[10px]  tablet:text-[16px] font-normal text-left text-[#646464]">
+                  <p className="md:text-[14px] text-[10px] tablet:text-[16px] font-normal text-left text-[#646464]">
                     {email || "gmail@gmail.xyz"}{" "}
                   </p>
                   <div className="md:flex hidden justify-between mt-3">
                     <span className="md:mr-5 tablet:text-[32px] text-[24px] font-normal text-[#05212C] user-acc-info">
                       {post}
-                      <span className=" tablet:text-[16px] text-[14px] mx-1">
+                      <span className="tablet:text-[16px] text-[14px] mx-1">
                         Posts
                       </span>
                     </span>
                     <span className="md:mx-5 tablet:text-[32px] text-[24px] font-normal text-[#05212C] user-acc-info">
                       {followers}
-                      <span className=" tablet:text-[16px] text-[14px] mx-1">
+                      <span className="tablet:text-[16px] text-[14px] mx-1">
                         Followers
                       </span>
                     </span>
-                    <span className="mds:mx-5 tablet:text-[32px] text-[24px] font-normal text-[#05212C] user-acc-info">
+                    <span className="md:mx-5 tablet:text-[32px] text-[24px] font-normal text-[#05212C] user-acc-info">
                       {following}
-                      <span className=" tablet:text-[16px] text-[14px] mx-1">
+                      <span className="tablet:text-[16px] text-[14px] mx-1">
                         Following
                       </span>
                     </span>
@@ -304,17 +230,15 @@ const MyProfile = ({ childComponent }) => {
                 {userProfile?.post_count}{" "}
                 <div className="text-[15px] font-medium">Posts</div>
               </div>
-              <div className=" text-[22px] font-semibold ">
+              <div className="text-[22px] font-semibold ">
                 {userProfile?.followers_count}{" "}
                 <div className="text-[15px] font-medium">Followers</div>
               </div>
-              <div className=" text-[22px] font-semibold ">
+              <div className="text-[22px] font-semibold ">
                 {userProfile?.followings_count}{" "}
                 <div className="text-[15px] font-medium">Following</div>
               </div>
             </div>
-
-            {/*Child Components */}
             {childComponent}
           </div>
         </Container>
@@ -324,6 +248,3 @@ const MyProfile = ({ childComponent }) => {
 };
 
 export default MyProfile;
-
-
-

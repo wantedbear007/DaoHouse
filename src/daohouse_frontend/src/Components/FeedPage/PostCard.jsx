@@ -31,6 +31,7 @@ import { toast } from "react-toastify";
 
 const PostCard = ({ posts, handleGetLikePost }) => {
   const [formattedDate, setFormattedDate] = useState('');
+  const [loading, setLoading] = useState(false);
   const className = "postCard";
   const { backendActor } = useAuth();
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
@@ -65,6 +66,8 @@ const PostCard = ({ posts, handleGetLikePost }) => {
       }
     } catch (error) {
       console.error("Error fetching like:", error);
+    }finally {
+      setLoading(false); // Hide loader
     }
   };
 
@@ -165,12 +168,13 @@ const PostCard = ({ posts, handleGetLikePost }) => {
         <div className={className + "__buttons mobile:flex hidden flex-row items-center tablet:justify-between tablet:gap-x-2 gap-x-2 big_phone:mt-24 mt-24  desktop-button"}>
           <button
             className="flex flex-row tablet:gap-2 gap-1 items-center bg-[#0E3746] text-white tablet:text-base text-sm tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]">
-            {
-              posts?.is_liked == 1 ?
-                <FavoriteIcon onClick={getlike} className="w-5 h-5" />
-                :
-                <FaRegHeart onClick={getlike} className="w-5 h-5" />
-            }
+             {loading ? ( // Show loader when loading state is true
+              <div className="loader">Loading...</div>
+            ) : posts?.is_liked == 1 ? (
+              <FavoriteIcon onClick={getlike} className="w-5 h-5" />
+            ) : (
+              <FaRegHeart onClick={getlike} className="w-5 h-5" />
+            )}
             {posts.like_count}
           </button>
           <button
