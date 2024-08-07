@@ -88,6 +88,7 @@ const MyProfile = ({ childComponent }) => {
   const getData = async () => {
     try {
       const response = await backendActor.get_user_profile();
+      console.log("api response",response)
       setdata(response.Ok || {})
     } catch (error) {
       console.error("Error :", error);
