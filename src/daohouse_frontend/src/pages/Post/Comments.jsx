@@ -1,9 +1,38 @@
-import React, { useState } from "react";
-
-import { FaHeart } from "react-icons/fa6";
+import React from "react";
+import { FaHeart } from "react-icons/fa";
 import { FaTelegramPlane } from "react-icons/fa";
 import { BiSolidCommentDetail } from "react-icons/bi";
-import commentUser from "../../../assets/commentUser.jpg";
+import MyProfileImage from "../../../assets/MyProfile-img.png";
+
+const commentsList = [
+  {
+    userName: "lamcool_1122",
+    userImage: MyProfileImage,
+    commentText: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam",
+    likes: 50,
+    comments: 10,
+    shares: 20,
+    date: "2 days ago",
+  },
+  {
+    userName: "lamcool_1122",
+    userImage: MyProfileImage,
+    commentText: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam",
+    likes: 25,
+    comments: 1,
+    shares: 2,
+    date: "2 days ago",
+  },
+  {
+    userName: "lamcool_112",
+    userImage: MyProfileImage,
+    commentText: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam",
+    likes: 24,
+    comments: 17,
+    shares: 9,
+    date: "2 days ago",
+  },
+];
 
 const Comments = () => {
   const className = "Post__Comments";
@@ -31,15 +60,15 @@ const Comments = () => {
               />
             </div>
             <div className="flex items-center gap-x-8 ml-10">
-              <h1 className="font-semibold text-dark-green">{userName}</h1>
-              <div className="text-xs text-slate-400 y-50">{date}</div>
+              <h1 className="font-semibold text-dark-green">{userName}hi</h1>
+              <div className="text-xs text-slate-400">{date}</div>
             </div>
 
-            <div className="text-slate-600 tablet:text-base text-sm y-50 ml-10">
+            <div className="text-slate-600 tablet:text-base text-sm ml-10">
               {commentText}
             </div>
 
-            <div className="ml-10 flex tablet:text-lg text-xs items-center text-[#000]  text-opacity-50 y-50 gap-x-8">
+            <div className="ml-10 flex tablet:text-lg text-xs items-center text-[#000] text-opacity-50 gap-x-8">
               <span className="flex flex-row gap-x-2 items-center text-sm text-slate-500">
                 <FaHeart />
                 {likes}
@@ -53,19 +82,6 @@ const Comments = () => {
                 {comments}
               </span>
             </div>
-
-            {/** 
-        <div className="flex mt-2">
-        <div className="w-14 h-[1px] bg-[#000] t-8 tablet:mt-9"></div>
-        <div className="">
-        <Replies
-        commentId={comment.commentId}
-        repliesData={repliesData}
-        getReplies={() => getReplies(comment.commentId)}
-        />
-        </div>
-        </div>
-    */}
 
             <div className="-mb-[10px] flex items-center mt-2">
               <div className="w-14 h-[1px] bg-[#000]"> </div>
@@ -81,33 +97,3 @@ const Comments = () => {
 };
 
 export default Comments;
-
-const commentsList = [
-  {
-    userName: "Neha_0102",
-    userImage: commentUser,
-    commentText: "Hey, how do u do?",
-    likes: 50,
-    comments: 10,
-    shares: 20,
-    date: "2 days ago",
-  },
-  {
-    userName: "Nikhil_22",
-    userImage: commentUser,
-    commentText: "Hey, how do u do?",
-    likes: 25,
-    comments: 1,
-    shares: 2,
-    date: "2 days ago",
-  },
-  {
-    userName: "Sudhanshu_0102",
-    userImage: commentUser,
-    commentText: "Hey, how do u do?",
-    likes: 24,
-    comments: 17,
-    shares: 9,
-    date: "2 days ago",
-  },
-];
