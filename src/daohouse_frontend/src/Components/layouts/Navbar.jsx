@@ -23,12 +23,8 @@ const Navbar = () => {
   const [username, setUsername] = useState("");
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
-  const [imageSrc, setImageSrc] = useState(
-    userProfile?.profile_img
-      ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
-      : MyProfileImage
-  );
-  console.log({backendActor});
+  const [imageSrc, setImageSrc] = useState(MyProfileImage); // Initialize with default image
+
   const menuItems = [
     { label: "Home", route: "/" },
     { label: "Social Feed", route: "/social-feed" },
@@ -63,12 +59,19 @@ const Navbar = () => {
   }, [backendActor, fetchUserProfile, userProfile]);
 
   useEffect(() => {
-    setImageSrc(userProfile?.profile_img
-      ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
-      : MyProfileImage);
+    // Debug: Check what userProfile contains
+    console.log("userProfile:", userProfile);
 
+    // Update imageSrc when userProfile changes
+    if (userProfile?.profile_img) {
+      setImageSrc(`${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`);
+    } else {
+      setImageSrc(MyProfileImage); // Set to default if no profile image
+    }
+
+    // Update username
     setUsername(userProfile?.username || "");
-  }, [userProfile?.profile_img]);
+  }, [userProfile, protocol, domain]); // Add dependencies for useEffect
 
   const handleLogin = async () => {
     setIsConnecting(true);
@@ -84,8 +87,6 @@ const Navbar = () => {
     setIsLoading(true);
     try {
       await logout();
-      localStorage.removeItem("username");
-      localStorage.removeItem("userImageId");
       window.location.href = "/";
     } catch (error) {
       toast.error("Error during logout");
@@ -120,6 +121,7 @@ const Navbar = () => {
       <div className="bg-bg-color shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50">
         <Container>
           <div className="tablet:px-20 small_phone:px-8 px-4 small_phone:py-5 py-3 flex justify-between items-center w-full">
+            {/* Navigation menu */}
             <div className="big_phone:flex items-center tablet:space-x-8 space-x-4 hidden lg:w-[33%]">
               {menuItems.map((item, index) => (
                 <div key={index} className="text-lg font-normal font-inter leading-[19.36px] text-[#829095]">
@@ -134,9 +136,11 @@ const Navbar = () => {
                 </div>
               ))}
             </div>
+            {/* Logo */}
             <Link className="w-[33%]" to="/">
               <img src={logo} alt="DAO House" className="mobile:h-10 small_phone:w-30 w-25 h-8 lg:ml-6" />
             </Link>
+            {/* User profile or login */}
             <div>
               {!isAuthenticated ? (
                 <div className="flex items-center tablet:space-x-4 space-x-2">
@@ -149,12 +153,19 @@ const Navbar = () => {
                 </div>
               ) : (
                 <div className="relative">
+                  {/* Updated flex container to align profile image and username */}
                   <div
-                    className="flex items-center space-x-4 relative bg-white rounded-full px-4 cursor-pointer shadow-lg"
+                    className="flex items-center space-x-0.9 bg-white rounded-full px-4 py-2 cursor-pointer shadow-lg"
                     onClick={() => setDropdownVisible(!dropdownVisible)}
                   >
-                    <div className="w-10 h-10 flex items-center rounded-full overflow-hidden my-auto">
-                      <img src={imageSrc} alt="User Avatar" className="w-8 h-8 object-cover rounded-full" />
+                    {/* Profile Image */}
+                    <div className="w-10 h-10 flex items-center rounded-full overflow-hidden">
+                      <img 
+                        src={imageSrc} 
+                        alt="User Avatar" 
+                        className="w-8 h-8 object-cover rounded-full"
+                        onError={() => setImageSrc(MyProfileImage)} // Fallback to default image if the image fails to load
+                      />
                     </div>
                     {(username || stringPrincipal) && 
                     <p className="text-black font-medium truncate w-20">{username || stringPrincipal}</p>

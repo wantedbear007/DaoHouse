@@ -159,7 +159,7 @@ const FeedPage = () => {
                 </Container>
                 :
                 <Container classes={'w-full'}>
-                  {posts?.reverse().map((posts, i) => <PostCard handleGetLikePost={handleGetLikePost} posts={posts} key={i} />)}
+                  {posts?.map((posts, i) => <PostCard handleGetLikePost={handleGetLikePost} posts={posts} key={i} />)}
                 </Container>
             )
         }
