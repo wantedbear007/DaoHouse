@@ -33,12 +33,13 @@ const PostCard = ({ posts, handleGetLikePost }) => {
   const [formattedDate, setFormattedDate] = useState('');
   const [loading, setLoading] = useState(false);
   const className = "postCard";
+  const [localLikeCount, setLocalLikeCount] = useState(posts.like_count); // State for optimistic update
+  const [localIsLiked, setLocalIsLiked] = useState(posts.is_liked === 1); // State for optimistic update
   const { backendActor } = useAuth();
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
   const [isFollowing, setIsFollowing] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
-  
-  const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
+   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
   const ImageUrl = posts?.post_img
     ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${posts.post_img}`

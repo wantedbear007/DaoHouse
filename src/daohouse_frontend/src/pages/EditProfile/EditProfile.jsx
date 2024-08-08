@@ -79,6 +79,12 @@ const EditProfile = () => {
     image_content_type: "image/jpg",
   });
 
+  // Separate state for personal contact info
+  const [personalContactInfo, setPersonalContactInfo] = useState({
+    email_id: userProfile?.email_id || "",
+    contact_number: userProfile?.contact_number || "",
+  });
+
   const validateForm = () => {
     const newErrors = {};
     if (!profileData.name.trim()) newErrors.name = "Name is required.";
@@ -88,6 +94,13 @@ const EditProfile = () => {
     if (!/^\d+$/.test(profileData.contact_number)) newErrors.contact_number = "Contact number should be numeric.";
     // Add more validation rules as needed
     setErrors(newErrors);
+
+    // Identify the first error field
+    if (Object.keys(newErrors).length > 0) {
+      const firstErrorField = Object.keys(newErrors)[0];
+      document.querySelector(`[name=${firstErrorField}]`).scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
     return Object.keys(newErrors).length === 0;
   };
 
