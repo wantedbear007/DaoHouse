@@ -36,6 +36,7 @@ type DaoInput = record {
 type GroupList = record { users : vec principal };
 type Pagination = record { end : nat32; start : nat32 };
 type ProposalInput = record {
+  proposal_expired_at : nat64;
   proposal_title : text;
   proposal_description : text;
   proposal_type : ProposalType;
