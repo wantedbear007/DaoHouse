@@ -40,6 +40,8 @@ const DaoProfile = () => {
   const { daoCanisterId } = useParams();
   const [joinStatus, setJoinStatus] = useState("Join DAO"); // 'Join DAO', 'Requested', 'Joined'
   const [isMember, setIsMember] = useState(false);
+  const [daoFollowers, setDaoFollowers] = useState([])
+  const [daoMembers, setDaoMembers] = useState([])
   const navigate = useNavigate();
 
   const [isFollowing, setIsFollowing] = useState(false);
@@ -60,7 +62,11 @@ const DaoProfile = () => {
             end,
           }
           const daoActor = createDaoActor(daoCanisterId);
+          console.log("daoActor",{daoActor});
+          
           const daoDetails = await daoActor.get_dao_detail();
+          console.log(daoDetails);
+          
           const proposals = await daoActor.get_all_proposals(paginationPayload)
           console.log(proposals, " proposals aa rhe")
           console.log(proposals.map(proposal => proposal.proposal_description), " proposals descriptions");
@@ -73,9 +79,13 @@ const DaoProfile = () => {
             const currentUserId = Principal.fromText(profileResponse.Ok.user_id.toString());
 
             const daoFollowers = await daoActor.get_dao_followers();
+            setDaoFollowers(daoFollowers);
+            console.log(daoFollowers);
+            
             setFollowersCount(daoFollowers.length);
             setIsFollowing(daoFollowers.some(follower => follower.toString() === currentUserId.toString()));
             const daoMembers = await daoActor.get_dao_members();
+            setDaoMembers(daoMembers)
             const isCurrentUserMember = daoMembers.some(member => member.toString() === currentUserId.toString());
             if (isCurrentUserMember) {
               setJoinStatus('Joined');
@@ -495,9 +505,9 @@ const DaoProfile = () => {
           </button>
         </div>
         {activeLink === "proposals" && <ProposalsContent proposals={proposals} />}
-        {activeLink === "feeds" && <FeedsContent />}
+        {activeLink === "feeds" && <FeedsContent  />}
         {activeLink === "member_policy" && <Members />}
-        {activeLink === "followers" && <FollowersContent />}
+        {activeLink === "followers" && <FollowersContent daoFollowers={daoFollowers}/>}
         {activeLink === "funds" && <FundsContent />}
         {activeLink === "settings" && <DaoSettings />}
 

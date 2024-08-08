@@ -1,87 +1,89 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SearchProposals from "../Proposals/SearchProposals";
 import userImage from "../../../assets/commentUser.jpg";
 import { MdAddBox } from "react-icons/md";
 import { IoFilterSharp } from "react-icons/io5";
 import { LuSearch } from "react-icons/lu";
 import { useMediaQuery } from "@mui/material";
+import { useAuth } from "../utils/useAuthClient";
+import Avatar from "../../../assets/Avatar.png"
 
-const followersList = [
-  {
-    userKey: 1,
-    userImage: userImage,
-    userName: "Username.user",
-    userEmail: "gmail@gmail.com",
-  },
-  {
-    userKey: 2,
-    userImage: userImage,
-    userName: "Username.user",
-    userEmail: "gmail@gmail.com",
-  },
-  {
-    userKey: 3,
-    userImage: userImage,
-    userName: "Username.user",
-    userEmail: "gmail@gmail.com",
-  },
-  {
-    userKey: 4,
-    userImage: userImage,
-    userName: "Username.user",
-    userEmail: "gmail@gmail.com",
-  },
-  {
-    userKey: 5,
-    userImage: userImage,
-    userName: "Username.user",
-    userEmail: "gmail@gmail.com",
-  },
-  {
-    userKey: 6,
-    userImage: userImage,
-    userName: "Username.user",
-    userEmail: "gmail@gmail.com",
-  },
-  {
-    userKey: 7,
-    userImage: userImage,
-    userName: "Username.user",
-    userEmail: "gmail@gmail.com",
-  },
-  {
-    userKey: 9,
-    userImage: userImage,
-    userName: "Username.user",
-    userEmail: "gmail@gmail.com",
-  },
-  {
-    userKey: 10,
-    userImage: userImage,
-    userName: "Username.user",
-    userEmail: "gmail@gmail.com",
-  },
-  {
-    userKey: 11,
-    userImage: userImage,
-    userName: "Username.user",
-    userEmail: "gmail@gmail.com",
-  },
-  {
-    userKey: 12,
-    userImage: userImage,
-    userName: "Username.user",
-    userEmail: "gmail@gmail.com",
-  },
-  {
-    userKey: 13,
-    userImage: userImage,
-    userName: "Username.user",
-    userEmail: "gmail@gmail.com",
-  },
-];
+// const followersList = [
+//   {
+//     userKey: 1,
+//     userImage: userImage,
+//     userName: "Username.user",
+//     userEmail: "gmail@gmail.com",
+//   },
+//   {
+//     userKey: 2,
+//     userImage: userImage,
+//     userName: "Username.user",
+//     userEmail: "gmail@gmail.com",
+//   },
+//   {
+//     userKey: 3,
+//     userImage: userImage,
+//     userName: "Username.user",
+//     userEmail: "gmail@gmail.com",
+//   },
+//   {
+//     userKey: 4,
+//     userImage: userImage,
+//     userName: "Username.user",
+//     userEmail: "gmail@gmail.com",
+//   },
+//   {
+//     userKey: 5,
+//     userImage: userImage,
+//     userName: "Username.user",
+//     userEmail: "gmail@gmail.com",
+//   },
+//   {
+//     userKey: 6,
+//     userImage: userImage,
+//     userName: "Username.user",
+//     userEmail: "gmail@gmail.com",
+//   },
+//   {
+//     userKey: 7,
+//     userImage: userImage,
+//     userName: "Username.user",
+//     userEmail: "gmail@gmail.com",
+//   },
+//   {
+//     userKey: 9,
+//     userImage: userImage,
+//     userName: "Username.user",
+//     userEmail: "gmail@gmail.com",
+//   },
+//   {
+//     userKey: 10,
+//     userImage: userImage,
+//     userName: "Username.user",
+//     userEmail: "gmail@gmail.com",
+//   },
+//   {
+//     userKey: 11,
+//     userImage: userImage,
+//     userName: "Username.user",
+//     userEmail: "gmail@gmail.com",
+//   },
+//   {
+//     userKey: 12,
+//     userImage: userImage,
+//     userName: "Username.user",
+//     userEmail: "gmail@gmail.com",
+//   },
+//   {
+//     userKey: 13,
+//     userImage: userImage,
+//     userName: "Username.user",
+//     userEmail: "gmail@gmail.com",
+//   },
+// ];
 
-const FollowersContent = () => {
+const FollowersContent = ({daoFollowers}) => {
   const className = "Followers";
 
   const minWidth = useMediaQuery("(min-width: 800px)");
@@ -92,6 +94,7 @@ const FollowersContent = () => {
     display: "grid",
     gridTemplateColumns: listTemplateColumns,
   };
+  
 
   return (
     <div className="mt-6">
@@ -103,7 +106,7 @@ const FollowersContent = () => {
       <div className="bg-[#F4F2EC] md:pt-3 pt-2 md:pb-8 pb-4 mt-4 md:mb-8 mb-4 rounded-[10px]">
         <div className="flex justify-between items-center px-6 md:mb-3 mb-2">
           <span className="lg:text-[20px] text-[#05212C] font-semibold">
-            {followersList.length} Followers
+            {daoFollowers.length} Followers
           </span>
           <span className="flex">
             <div className="flex-grow md:flex justify-center px-6 mx-2 hidden md:h-12">
@@ -140,23 +143,23 @@ const FollowersContent = () => {
             className="flex md:flex-row flex-col  md:justify-center lg:justify-start gap-4 flex-wrap bg-white md:mx-7 md:mt-2 mx-2 rounded-[10px] scrollable-container md:p-8 lg:p-6 mobile:p-4 p-2"
             style={listContainerStyle}
           >
-            {followersList.map((follower, index) => (
+            {daoFollowers.map((principal, index) => (
               <div
                 key={index}
                 className="flex w-full flex-row items-center justify-between border border-[#97C3D3] rounded-lg big_phone:p-4 p-2"
               >
                 <section className="flex flex-row items-center gap-2">
                   <img
-                    src={follower.userImage}
+                    src={Avatar}
                     alt="Image"
                     className="big_phone:w-12 w-9 big_phone:h-12 h-9 rounded-[50%] object-cover"
                   />
 
                   <div className="flex flex-col items-start">
-                    <p className="text-center font-semibold big_phone:text-1xl text-sm">
-                      {follower.userName}
+                    <p className="text-center font-semibold big_phone:text-1xl text-sm truncate ... w-40 lg:w-60">
+                      {principal.toString()}
                     </p>
-                    <p className="text-center text-xs">{follower.userEmail}</p>
+                    {/* <p className="text-center text-xs">{follower.userEmail}</p> */}
                   </div>
                 </section>
 
