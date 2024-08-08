@@ -6,60 +6,44 @@ import { PiTelegramLogoBold } from "react-icons/pi";
 import { MdOutlineInsertComment } from "react-icons/md";
 import { Principal } from "@dfinity/principal";
 import { useAuth } from "../../Components/utils/useAuthClient";
-import Post1 from "../../../assets/post1.png"
+import Post1 from "../../../assets/post1.png";
+import { toast } from "react-toastify";
+
+// Convert timestamp to formatted date string
 const convertTimestampToDateString = (timestamp) => {
-  // Convert the BigInt timestamp to milliseconds
   const milliseconds = Number(timestamp / BigInt(1e6));
-
-  // Create a new Date object using the milliseconds
   const date = new Date(milliseconds);
-
-  // Define an array of month names
   const monthNames = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
   ];
-
-  // Get the month and day
   const month = monthNames[date.getMonth()];
   const day = date.getDate();
-
-  // Return the formatted date string
   return `${month} ${day}`;
 };
-import { toast } from "react-toastify";
 
 const PostCard = ({ posts, handleGetLikePost }) => {
   const [formattedDate, setFormattedDate] = useState('');
   const [loading, setLoading] = useState(false);
-  const className = "postCard";
-  const [localLikeCount, setLocalLikeCount] = useState(posts.like_count); // State for optimistic update
-  const [localIsLiked, setLocalIsLiked] = useState(posts.is_liked === 1); // State for optimistic update
   const { backendActor } = useAuth();
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
   const [isFollowing, setIsFollowing] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
-   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
+  const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
   const ImageUrl = posts?.post_img
     ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${posts.post_img}`
     : Post1;
-
   const userImage = posts?.user_image_id
     ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${posts.user_image_id}`
     : '';
 
-    console.log("user_image_id", posts.user_image_id);
-    console.log();
-
-    
-
-
   const getlike = async () => {
+    setLoading(true); // Show loader
     try {
       const response = await backendActor.like_post(posts.post_id);
       handleGetLikePost(response);
-      
+
       if (response?.Ok) {
         toast.success("Post liked successfully");
       } else if (response?.Err) {
@@ -67,7 +51,7 @@ const PostCard = ({ posts, handleGetLikePost }) => {
       }
     } catch (error) {
       console.error("Error fetching like:", error);
-    }finally {
+    } finally {
       setLoading(false); // Hide loader
     }
   };
@@ -130,23 +114,19 @@ const PostCard = ({ posts, handleGetLikePost }) => {
 
   return (
     <div
-      className={
-        className +
-        " " +
-        "w-full parent-row flex big_phone:flex-row flex-col items-start big_phone:gap-12 gap-4 bg-white big_phone:p-8 p-6 rounded-lg justify-between mobile:mt-0 mt-4 my-9"
-      }
+      className="postCard w-full parent-row flex big_phone:flex-row flex-col items-start big_phone:gap-12 gap-4 bg-white big_phone:p-8 p-6 rounded-lg justify-between mobile:mt-0 mt-4 my-9"
     >
-      <section className={className + "__rightSide h-full w-[100%] md:w-[45%] lg:w-[50%]  flex flex-col gap-y-4 justify-between"}>
+      <section className="postCard__rightSide h-full w-[100%] md:w-[45%] lg:w-[50%] flex flex-col gap-y-4 justify-between">
         <div className="flex flex-row items-center justify-between">
-          <section className={className + "__userData flex flex-row items-center gap-2"}>
+          <section className="postCard__userData flex flex-row items-center gap-2">
             <img
               src={userImage}
               alt="userImage"
               className="rounded-[50%] w-10 h-10"
             />
             <div>
-            <p className="font-semibold ml-2 truncate ... w-36"> {posts.username || posts.principal_id.toString()}</p>
-            {userProfile && userProfile.user_id.toString() !== posts.principal_id.toString() && (
+              <p className="font-semibold ml-2 truncate w-36"> {posts.username || posts.principal_id.toString()}</p>
+              {userProfile && userProfile.user_id.toString() !== posts.principal_id.toString() && (
                 <button
                   onClick={toggleFollow}
                   className={`flex-1 mt-0 text-blue-400 p-1 sm:text-sm md:text-lg`}
@@ -157,29 +137,31 @@ const PostCard = ({ posts, handleGetLikePost }) => {
             </div>
           </section>
 
-          <section className={className + "__time text-slate-500 mobile:text-base text-sm"}>
+          <section className="postCard__time text-slate-500 mobile:text-base text-sm">
             {formattedDate}
           </section>
-
         </div>
         <div>
           <p className="h-full mobile:text-base text-sm w-full break-words">{posts.post_description}</p>
         </div>
 
-        <div className={className + "__buttons mobile:flex hidden flex-row items-center tablet:justify-between tablet:gap-x-2 gap-x-2 big_phone:mt-24 mt-24  desktop-button"}>
+        <div className="postCard__buttons mobile:flex hidden flex-row items-center tablet:justify-between tablet:gap-x-2 gap-x-2 big_phone:mt-24 mt-24 desktop-button">
           <button
-            className="flex flex-row tablet:gap-2 gap-1 items-center bg-[#0E3746] text-white tablet:text-base text-sm tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]">
-             {loading ? ( // Show loader when loading state is true
+            className="flex flex-row tablet:gap-2 gap-1 items-center bg-[#0E3746] text-white tablet:text-base text-sm tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]"
+            onClick={getlike}
+          >
+            {loading ? (
               <div className="loader">Loading...</div>
-            ) : posts?.is_liked == 1 ? (
-              <FavoriteIcon onClick={getlike} className="w-5 h-5" />
+            ) : posts?.is_liked === 1 ? (
+              <FavoriteIcon className="w-5 h-5" />
             ) : (
-              <FaRegHeart onClick={getlike} className="w-5 h-5" />
+              <FaRegHeart className="w-5 h-5" />
             )}
             {posts.like_count}
           </button>
           <button
-            className="flex flex-row tablet:gap-2 gap-1 items-center bg-[#0E3746] text-white tablet:text-base text-sm tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]">
+            className="flex flex-row tablet:gap-2 gap-1 items-center bg-[#0E3746] text-white tablet:text-base text-sm tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]"
+          >
             <MdOutlineInsertComment />
             {posts.comment_count}
           </button>
@@ -187,36 +169,33 @@ const PostCard = ({ posts, handleGetLikePost }) => {
             <PiTelegramLogoBold />
             Share
           </button>
-
           <button className="m-4">
             <IoLink className="text-2xl" />
           </button>
         </div>
       </section>
 
-      <section className={className + "__leftSide w-[100%] md:w-[45%] h-full flex justify-end item-end image-section"}>
+      <section className="postCard__leftSide w-[100%] md:w-[45%] h-full flex justify-end item-end image-section">
         {posts.post_img && (
-          <section className="relative w-full h-64 ">
-          <img
-            src={ImageUrl}
-            alt="PostMedia"
-            className="w-full h-full object-cover rounded-md"
-          />
-        
-      </section>
+          <section className="relative w-full h-64">
+            <img
+              src={ImageUrl}
+              alt="PostMedia"
+              className="w-full h-full object-cover rounded-md"
+            />
+          </section>
         )}
       </section>
 
-      <section className={className + "__buttons w-full flex flex-row items-center justify-between mobile-buttons"}>
-        <div className="flex flex-row items-center justify-between gap-x-2 ">
-          <button>
+      <section className="postCard__buttons w-full flex flex-row items-center justify-between mobile-buttons">
+        <div className="flex flex-row items-center justify-between gap-x-2">
+          <button onClick={getlike}>
             <div className="flex gap-2">
-              {
-                posts?.is_liked == 1 ?
-                  <FavoriteIcon onClick={getlike} className="w-5 h-5" />
-                  :
-                  <FaRegHeart onClick={getlike} className="text-[#0E3746] text-lg mt-1" />
-              }
+              {posts?.is_liked === 1 ? (
+                <FavoriteIcon className="w-5 h-5" />
+              ) : (
+                <FaRegHeart className="text-[#0E3746] text-lg mt-1" />
+              )}
               <div className="text-lg">
                 {posts.like_count}
               </div>
@@ -245,4 +224,3 @@ const PostCard = ({ posts, handleGetLikePost }) => {
 };
 
 export default PostCard;
-
