@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { RxArrowTopRight } from "react-icons/rx";
 import MuiSkeleton from "../../Skeleton/MuiSkeleton";
 import { useAuth } from "../../utils/useAuthClient";
-import avatar from "../../../../assets/avatar.png"
+import Avatar from "../../../../assets/Avatar.png"
 
 const Following = () => {
   const className = "Following";
@@ -57,18 +57,18 @@ const Following = () => {
                         <div className="flex flex-row tablet:gap-4 gap-2 items-center">
                           <section className="border border-cyan-200 rounded-[50%]">
                             <img
-                              src={avatar}
+                              src={Avatar}
                               alt="Following"
-                              className="tablet:min-w-12 min-w-8 h-full object-contain border-4 border-white rounded-[50%]"
+                              className="tablet:w-16 w-16 h-full object-contain border-4 border-white rounded-[50%]"
                             />
                           </section>
 
                           <section className="flex flex-col items-start">
-                            <p className="tablet:text-lg text-sm">
-                              {principal.toString().slice(0, 37) + "..."}
+                            <p className="tablet:text-lg text-sm truncate ... w-40 lg:w-80">
+                              {principal.toString()}
                             </p>
-                            <p className="text-slate-500 tablet:text-sm text-xs">
-                              {principal.toString().slice(0, 47) + "..."}
+                            <p className="text-slate-500 tablet:text-sm text-xs truncate ... lg:w-80 w-40">
+                              {principal.toString()}
                             </p>
                           </section>
                         </div>
