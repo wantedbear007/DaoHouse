@@ -17,11 +17,7 @@ const CreatePostPopup = ({ onClose, handleGetResponse }) => {
   const [description, setDescription] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { userProfile, fetchUserProfile } = useUserProfile();
-  const [loading, setLoading] = useState(false)
-  const isnetwork  = process.env.DFX_NETWORK
-  
-  console.log('isNetwork ',isnetwork);
-
+  const [loading, setLoading] = useState(false);
   const [imageData, setImageData] = useState({
     base64: "",
     image_content: [],
@@ -29,14 +25,31 @@ const CreatePostPopup = ({ onClose, handleGetResponse }) => {
     image_content_type: "",
     post_image: ''
   });
-// <<<<<<< prabhjot
+
+  // <<<<<<< prabhjot
 //   const [userImage, setUserImage] = useState(userProfile?.profile_img
 //     ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.localhost:4943/f/${userProfile.profile_img}`
 // =======
-  const [userImage, setUserImage] = useState( userProfile?.profile_img
-    ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${process.env.DFX_NETWORK == "ic" ? "raw.icp0.io" : "localhost:4943"}/f/${userProfile.profile_img}`
+ // const [userImage, setUserImage] = useState( userProfile?.profile_img
+ //   ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${process.env.DFX_NETWORK == "ic" ? "raw.icp0.io" : "localhost:4943"}/f/${userProfile.profile_img}`
 
-    : avtarProfileIcon)
+ //   : avtarProfileIcon)
+
+  const [userImage, setUserImage] = useState(MyProfileImage); // Default to MyProfileImage initially
+
+  // Update userImage when userProfile changes
+  useEffect(() => {
+    const profileImageUrl = userProfile?.profile_img
+      ? `http://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943"}/f/${userProfile.profile_img}`
+      : MyProfileImage;
+
+    setUserImage(profileImageUrl);
+  }, [userProfile?.profile_img]);
+
+  // Error handler for profile image
+  const handleImageError = () => {
+    setUserImage(avtarProfileIcon); // Fallback to default avatar profile image
+  };
 
   const { handleFileUpload } = constant();
   const { backendActor } = useAuth();
@@ -44,19 +57,19 @@ const CreatePostPopup = ({ onClose, handleGetResponse }) => {
   async function handleCreatePost(button) {
     disableBtn(button);
     const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
-    const userImageId = localStorage.getItem('userImageId')
+    const userImageId = localStorage.getItem('userImageId');
     const postPayload = {
-      username:  userProfile?.username || "",
+      username: userProfile?.username || "",
       post_img: imageData?.post_image ? imageData?.post_image : MyProfileImage,
       post_description: description || "",
       image_content: imageData.image_content || "",
       image_title: imageData.image_title || "",
       image_content_type: imageData.image_content_type || "",
-      user_image_id : userImageId ? userImageId : " ",
+      user_image_id: userImageId ? userImageId : " ",
     };
 
     try {
-      setLoading(true)
+      setLoading(true);
       const ans = await backendActor.create_new_post(canisterId, postPayload);
       toast.success(ans.Ok);
       handleGetResponse(ans);
@@ -67,34 +80,23 @@ const CreatePostPopup = ({ onClose, handleGetResponse }) => {
         enableBtn(button);
       }, 1000);
       console.error("Error creating post:", error);
-    }
-    finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   }
 
   const handleFileUploading = async (event) => {
-    // Get the file selected by the user
     const file = event.target.files[0];
-  
-    // Check if the file size exceeds 2MB (2 * 1024 * 1024 bytes)
     const maxSizeInBytes = 2 * 1024 * 1024;
     if (file.size > maxSizeInBytes) {
-      // Show an error message if the file is too large
       toast.error("File size exceeds 2MB. Please choose a smaller file.");
-      return; // Stop further execution
+      return;
     }
-  
-    // Convert the file to an ArrayBuffer
     const arrayBuffer = await file.arrayBuffer();
-    // Convert the ArrayBuffer to a Uint8Array
     const content = new Uint8Array(arrayBuffer);
-  
+
     try {
-      // Convert the file to a base64 string
       const { base64 } = await handleFileUpload(event);
-      
-      // Update the imageData state with the new file details
       setImageData((prevData) => ({
         ...prevData,
         base64,
@@ -105,15 +107,12 @@ const CreatePostPopup = ({ onClose, handleGetResponse }) => {
       }));
     } catch (error) {
       if (typeof error === "string") {
-        // Show an error message if the error is a string
         toast.error(error);
       } else {
-        // Log other types of errors
         console.error("Error:", error);
       }
     }
   };
-  
 
   const handleClose = () => {
     if (imageData.base64 !== "") {
@@ -124,17 +123,25 @@ const CreatePostPopup = ({ onClose, handleGetResponse }) => {
   };
 
   const handleDiscard = () => {
-    setImageData(null);
+    setImageData({
+      base64: "",
+      image_content: [],
+      image_title: "",
+      image_content_type: "",
+      post_image: ''
+    });
     setShowConfirmation(false);
-    setImageData({ base64: "" });
     onClose();
   };
 
   const handleDeleteImage = () => {
-    setImageData(null);
-    setImageData({ base64: "" });
-    // const newImages = [...selectedImages];
-    // newImages.splice(index, 1);
+    setImageData({
+      base64: "",
+      image_content: [],
+      image_title: "",
+      image_content_type: "",
+      post_image: ''
+    });
   };
 
   function disableBtn(button) {
@@ -145,7 +152,6 @@ const CreatePostPopup = ({ onClose, handleGetResponse }) => {
     button.removeAttribute("disabled");
     button.style.opacity = "1";
   }
-
 
   return (
     <div
@@ -183,8 +189,9 @@ const CreatePostPopup = ({ onClose, handleGetResponse }) => {
                     <span className="flex items-center md:gap-3 gap-2">
                       <img
                         src={userImage}
-                        alt="avtarProfileIcon"
+                        alt="Profile"
                         className="w-10 h-10 rounded-full"
+                        onError={handleImageError}
                       />
 
                       <p className="md:text-[14px] text-[10px] text-[#05212C] font-medium">
@@ -197,16 +204,7 @@ const CreatePostPopup = ({ onClose, handleGetResponse }) => {
                         <button
                           className="flex items-center justify-center md:w-24 w-18 md:gap-4 gap-2 mt-2 bg-[#0E3746] text-white md:text-[16px] text-[14px] md:px-4 px-3 py-2 font-semibold rounded-[10px]"
                           style={{ boxShadow: "0px 3px 6px 0px #00000026" }}
-                          onClick={() => {
-                            const postButton =
-                              document.getElementById("postButton");
-                            if (postButton) {
-                              postButton.addEventListener(
-                                "click",
-                                handleCreatePost(postButton)
-                              );
-                            }
-                          }}
+                          onClick={(e) => handleCreatePost(e.target)}
                           id="postButton"
                         >
                           <span>Post</span>
@@ -279,6 +277,7 @@ const CreatePostPopup = ({ onClose, handleGetResponse }) => {
             className="w-6 cursor-pointer"
           />
         </button>
+
         {showConfirmation && (
           <div className="absolute z-60 inset-0 overflow-y-auto bg-black bg-opacity-50 flex items-center justify-center">
             <div className="flex flex-col items-center py-16 gap-2 px-24 bg-[#AAC8D6] p-4 rounded">
