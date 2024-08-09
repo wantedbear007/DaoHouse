@@ -68,10 +68,10 @@ pub struct Dao {
     pub purpose: String,
     pub daotype: String,
     pub link_of_document: String,
-    pub cool_down_period: String,
+    pub cool_down_period: u32,
     pub tokenissuer: String,
     pub linksandsocials: Vec<String>,
-    pub required_votes: i8,
+    pub required_votes: u32,
     pub groups_count: u64,
     pub group_name: Vec<String>,
     pub image_id: String,
@@ -82,6 +82,14 @@ pub struct Dao {
     pub followers_count: u32,
     pub proposals_count: u32,
     pub proposal_ids: Vec<String>,
+    // pub dao_groups: Vec<DaoGroup>,
+}
+
+#[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
+pub struct DaoGroup {
+    pub group_name: String,
+    pub group_members: Vec<Principal>,
+    pub group_permissions: Vec<String>,
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
@@ -90,11 +98,12 @@ pub struct DaoInput {
     pub purpose: String,
     pub daotype: String,
     pub link_of_document: String,
-    pub cool_down_period: String,
+    pub cool_down_period: u32,
     pub members: Vec<Principal>,
     pub tokenissuer: String,
     pub linksandsocials: Vec<String>,
-    pub required_votes: i8,
+    pub required_votes: u32,
+    pub dao_groups: Vec<DaoGroup>,
     pub image_id: String,
     pub followers: Vec<Principal>,
     pub members_permissions: Vec<String>,
@@ -164,6 +173,21 @@ impl Storable for Proposals {
 }
 
 impl Storable for GroupList {
+    fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    const BOUND: Bound = Bound::Bounded {
+        max_size: MAX_VALUE_SIZE,
+        is_fixed_size: false,
+    };
+}
+
+impl Storable for DaoGroup {
     fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
         Cow::Owned(Encode!(self).unwrap())
     }

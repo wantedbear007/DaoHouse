@@ -15,23 +15,29 @@ type Dao = record {
   followers_count : nat32;
   tokenissuer : text;
   group_name : vec text;
-  cool_down_period : text;
+  cool_down_period : nat32;
   purpose : text;
-  required_votes : int8;
+  required_votes : nat32;
+};
+type DaoGroup = record {
+  group_members : vec principal;
+  group_name : text;
+  group_permissions : vec text;
 };
 type DaoInput = record {
   members : vec principal;
   linksandsocials : vec text;
   daotype : text;
+  dao_groups : vec DaoGroup;
   dao_name : text;
   image_id : text;
   members_permissions : vec text;
   link_of_document : text;
   followers : vec principal;
   tokenissuer : text;
-  cool_down_period : text;
+  cool_down_period : nat32;
   purpose : text;
-  required_votes : int8;
+  required_votes : nat32;
 };
 type GroupList = record { users : vec principal };
 type Pagination = record { end : nat32; start : nat32 };
@@ -93,6 +99,7 @@ service : (DaoInput) -> {
   comment_on_proposal : (text, text) -> (Result);
   create_proposal : (text, ProposalInput) -> (text);
   follow_dao : () -> (Result);
+  get_all_groups : () -> (vec DaoGroup);
   get_all_proposals : (Pagination) -> (vec Proposals) query;
   get_dao_detail : () -> (Dao) query;
   get_dao_followers : () -> (vec principal) query;

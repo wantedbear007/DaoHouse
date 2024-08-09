@@ -2,7 +2,7 @@ use std::borrow::{Borrow, BorrowMut};
 
 use crate::proposal_route::check_proposal_state;
 use crate::types::{Dao, ProposalInput, Proposals};
-use crate::{guards::*, Pagination};
+use crate::{guards::*, DaoGroup, Pagination};
 use crate::{proposal_route, with_state, ProposalState, VoteParam};
 use candid::Principal;
 use ic_cdk::api;
@@ -227,4 +227,17 @@ fn execute_add_proposals(id: &String) {
     //     }
     //     None => (),
     // })
+}
+
+// get all groups
+#[update]
+fn get_all_groups() -> Vec<DaoGroup> {
+    with_state(|state| {
+        let mut groups: Vec<DaoGroup> = Vec::new();
+
+        for x in state.dao_groups.iter() {
+            groups.push(x.1);
+        }
+        groups
+    })
 }

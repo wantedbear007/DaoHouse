@@ -16,12 +16,18 @@ type DaoDetails = record {
   dao_name : text;
   dao_canister_id : text;
 };
+type DaoGroup = record {
+  group_members : vec principal;
+  group_name : text;
+  group_permissions : vec text;
+};
 type DaoInput = record {
   members : vec principal;
   image_title : text;
   linksandsocials : vec text;
   daotype : text;
   image_content : blob;
+  dao_groups : vec DaoGroup;
   dao_name : text;
   image_id : text;
   members_permissions : vec text;

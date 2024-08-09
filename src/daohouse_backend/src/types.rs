@@ -30,7 +30,6 @@ pub struct CreateCanisterArgument {
     pub settings: Option<CanisterSettings>,
 }
 
-
 pub mod core {
     use std::cmp::Ordering;
 
@@ -77,7 +76,6 @@ pub mod core {
     }
 }
 
-
 pub mod ic {
     use crate::types::core::Blob;
 
@@ -86,7 +84,6 @@ pub mod ic {
         pub install_arg: Vec<u8>,
     }
 }
-
 
 #[derive(
     CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Default,
@@ -549,6 +546,13 @@ pub struct Profileinput {
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
+pub struct DaoGroup {
+    pub group_name: String,
+    pub group_members: Vec<Principal>,
+    pub group_permissions: Vec<String>,
+}
+
+#[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
 pub struct DaoInput {
     pub dao_name: String,
     pub purpose: String,
@@ -559,6 +563,7 @@ pub struct DaoInput {
     pub tokenissuer: String,
     pub linksandsocials: Vec<String>,
     pub required_votes: i8,
+    pub dao_groups: Vec<DaoGroup>,
     // pub followers: Vec<Principal>,
 
     // image data

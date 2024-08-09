@@ -1,5 +1,5 @@
 use crate::types::{Dao, GroupList, Proposals, Votingandpermissions};
-use crate::Memory;
+use crate::{DaoGroup, Memory};
 use candid::Principal;
 use ic_stable_structures::StableBTreeMap;
 // use std::collections::BTreeMap;
@@ -9,6 +9,7 @@ pub struct State {
     pub dao: Dao,
     pub permision: Votingandpermissions,
     pub groups: StableBTreeMap<String, GroupList, Memory>, // pub users: HashMap<Principal, User>,
+    pub dao_groups: StableBTreeMap<String, DaoGroup, Memory>,
 }
 
 impl State {
@@ -21,7 +22,7 @@ impl State {
                 purpose: String::from("Example Purpose"),
                 daotype: String::from("Example Type"),
                 link_of_document: String::from("Example Document"),
-                cool_down_period: String::from("Example Cooldown"),
+                cool_down_period: 7,
                 tokenissuer: String::from("Example Token Issuer"),
                 linksandsocials: Vec::new(),
                 required_votes: 0,
@@ -34,7 +35,8 @@ impl State {
                 members_permissions: Vec::new(),
                 followers_count: 0,
                 proposals_count: 0,
-                proposal_ids: Vec::new()
+                proposal_ids: Vec::new(),
+                // dao_groups: Vec::new(),
             },
 
             permision: Votingandpermissions {
@@ -54,6 +56,7 @@ impl State {
             },
 
             groups: init_pool_data(),
+            dao_groups: init_group_data(),
         }
     }
 }
@@ -69,4 +72,8 @@ fn init_user_data() -> StableBTreeMap<String, Proposals, Memory> {
 }
 fn init_pool_data() -> StableBTreeMap<String, GroupList, Memory> {
     StableBTreeMap::init(crate::memory::get_pool_data_memory())
+}
+
+fn init_group_data() -> StableBTreeMap<String, DaoGroup, Memory> {
+    StableBTreeMap::init(crate::memory::get_group_memory())
 }

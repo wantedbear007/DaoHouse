@@ -1,4 +1,4 @@
-use crate::{guards::*, ProposalInput, UpdateDaoSettings};
+use crate::{guards::*, DaoGroup, ProposalInput, UpdateDaoSettings};
 use crate::{proposal_route, with_state, GroupList};
 use candid::Principal;
 use ic_cdk::api;
@@ -7,12 +7,20 @@ use ic_cdk::{query, update};
 use super::create_proposal;
 
 #[query]
-async fn get_members_of_group(group: String) -> Result<GroupList, String> {
-    with_state(|state| match state.groups.get(&group) {
-        Some(group_list) => Ok(group_list.clone()),
-        None => Err(format!("Group {} not found", group)),
+async fn get_members_of_group(group: String) -> Result<Vec<Principal>, String> {
+    with_state(|state| match state.dao_groups.get(&group) {
+        Some(val) => Ok(val.group_members),
+        None => Err(String::from("No group found with the given name")),
     })
 }
+
+// #[query]
+// async fn get_members_of_group(group: String) -> Result<GroupList, String> {
+//     // with_state(|state| match state.groups.get(&group) {
+//     //     Some(group_list) => Ok(group_list.clone()),
+//     //     None => Err(format!("Group {} not found", group)),
+//     // })
+// }
 
 #[update]
 async fn add_member_to_group(group: String, principal: Principal) -> String {
@@ -95,7 +103,7 @@ async fn ask_to_join_dao(daohouse_backend_id: String) -> Result<String, String> 
     let proposal = ProposalInput {
         proposal_description: String::from("Request to join DAO as a member"),
         proposal_title: String::from("Add member to DAO"),
-        required_votes: 7,
+        required_votes: with_state(|state| state.dao.required_votes),
         proposal_type: crate::ProposalType::AddMemberProposal,
         proposal_expired_at: ic_cdk::api::time() + (20 * 86_400 * 1_000_000_000),
     };
