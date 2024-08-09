@@ -2,15 +2,25 @@ import React, { useState, useEffect } from "react";
 import Xtag from "../../../assets/Xtag.png";
 
 const EditTags = ({ editTags, handleTagsChange }) => {
-  const [tags, setTags] = useState(editTags);
+  const defaultTags = ["Marketer", "Developer", "Entrepreneur", "Investor"];
+  const [tags, setTags] = useState(editTags || []);
   const [newTag, setNewTag] = useState("");
 
   useEffect(() => {
     setTags(editTags);
   }, [editTags]);
 
-  const handleAddTag = () => {
-    if (newTag.trim() !== "") {
+  const toggleTagSelection = (tag) => {
+    const updatedTags = tags.includes(tag)
+      ? tags.filter((t) => t !== tag)
+      : [...tags, tag];
+    setTags(updatedTags);
+    handleTagsChange(updatedTags);
+  };
+
+  const handleAddTag = (e) => {
+    e.preventDefault();
+    if (newTag.trim() !== "" && !tags.includes(newTag)) {
       const updatedTags = [...tags, newTag];
       setTags(updatedTags);
       handleTagsChange(updatedTags);
@@ -18,14 +28,25 @@ const EditTags = ({ editTags, handleTagsChange }) => {
     }
   };
 
-  const handleRemoveTag = (indexToRemove) => {
-    const updatedTags = tags.filter((_, index) => index !== indexToRemove);
-    setTags(updatedTags);
-    handleTagsChange(updatedTags);
-  };
-
   return (
     <div className="bg-[#FFFFFF] md:text-[16px] text-[12px] font-normal text-[#646464] md:py-3 md:px-5 p-3 my-2 rounded-lg">
+      <div className="flex flex-wrap items-center gap-2 mb-4">
+        {defaultTags.map((tag) => (
+          <button
+            key={tag}
+            className={`py-2 px-4 rounded-full transition-colors shadow-md ${
+              tags.includes(tag)
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-600"
+            }`
+            
+          }
+            onClick={() => toggleTagSelection(tag)}
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
       <div className="flex flex-wrap items-center">
         {tags.map((tag, index) => (
           <span
@@ -41,21 +62,22 @@ const EditTags = ({ editTags, handleTagsChange }) => {
               src={Xtag}
               alt="cross-icon"
               className="md:ml-8 ml-3 md:mr-4 mr-3 cursor-pointer"
-              onClick={() => handleRemoveTag(index)}
+              onClick={() => toggleTagSelection(tag)}
             />
           </span>
         ))}
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <input
             type="text"
             value={newTag}
             onChange={(e) => setNewTag(e.target.value)}
-            placeholder="Add new tag"
+            placeholder="Add your own tag"
             className="border border-[#DFE9EE] py-2 px-4 rounded-md mr-2"
           />
           <button
-            onClick={handleAddTag}
+            type="submit"
             className="text-[#05212C] font-semibold ml-2 cursor-pointer"
+            onClick={handleAddTag}
           >
             Add
           </button>

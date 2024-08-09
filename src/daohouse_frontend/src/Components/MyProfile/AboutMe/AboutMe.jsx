@@ -37,7 +37,7 @@ const AboutMe = () => {
               Principal Id
             </p>
             <div className="flex items-center w-full max-w-[1200px] bg-white lg:text-[16px] md:text-[14px] text-[12px] font-normal text-[#646464] p-1 rounded-lg">
-              <span className="flex-grow">{principalstring}</span>
+              <span className="flex-grow p-2">{principalstring}</span>
               <button
                 onClick={copyToClipboard}
                 className="bg-blue-500 text-white p-2 rounded flex items-center justify-center ml-4"
