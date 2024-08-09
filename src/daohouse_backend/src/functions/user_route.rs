@@ -9,14 +9,20 @@ use crate::types::{
 };
 
 use crate::types::{DaoInput, Profileinput, UserProfile};
-use crate::{guards::*, CanisterSettings, DaoCanisterInput};
+use crate::{
+    guards::*, Account, ArchiveOptions, CanisterSettings, DaoCanisterInput, FeatureFlags, ICRC1LedgerInitArgs, InitArgs, LedgerArg
+};
 use crate::{routes, with_state, DaoDetails, DaoResponse, ImageData};
-use candid::{encode_one, Principal};
+use candid::{encode_one, Nat, Principal};
 use ic_cdk::api;
 // use ic_cdk::api::management_canister::main::CanisterSettings;
 use ic_cdk::println;
 use ic_cdk::{query, update};
+// use icrc_ledger_types::icrc1::account::Account;
 use serde_bytes::ByteBuf;
+
+use super::canister_factory::create_new_canister;
+use super::ledger_functions::create_ledger_canister;
 // use ic_cdk::trap;
 
 #[update(guard=prevent_anonymous)]
@@ -278,6 +284,7 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         followers: vec![api::caller()],
         image_id: id.clone(),
         members_permissions: dao_detail.members_permissions,
+        dao_groups: dao_detail.dao_groups,
     };
 
     let dao_detail_bytes: Vec<u8> = match encode_one(&update_dau_detail) {
@@ -294,9 +301,10 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         None => panic!("User profile doesn't exist !"),
     };
 
-    let mut veccc: Vec<Principal> = Vec::new();
-    veccc.push(api::caller());
-    veccc.push(ic_cdk::api::id());
+    // let mut veccc: Vec<Principal> = Vec::new();
+    let veccc: Vec<Principal> = vec![api::caller(), ic_cdk::api::id()];
+    // veccc.push(api::caller());
+    // veccc.push(ic_cdk::api::id());
 
     let conttt = CanisterSettings {
         controllers: Some(veccc),
@@ -319,6 +327,22 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
     let canister_id_principal = canister_id.canister_id;
 
     println!("Canister ID: {}", canister_id_principal.to_string());
+    let wasm_dao: Vec<u8> = Vec::new();
+    with_state(|state| match state.wasm_module.get(&0) {
+        Some(val) => val.wasm,
+        None => panic!("nhi mila"),
+    });
+
+    let arg1 = InstallCodeArgument {
+        mode: CanisterInstallMode::Install,
+        canister_id: canister_id_principal,
+        // wasm_module: vec![],
+        wasm_module: wasm_dao,
+        arg: dao_detail_bytes,
+    };
+    let _installcode = install_code(arg1).await.unwrap();
+    // ic_cdk::println!("errrrrr in installing {:?}", _installcode);
+    println!("Canister ID: {:?}", canister_id);
 
     let dao_details: DaoDetails = DaoDetails {
         dao_canister_id: canister_id_principal.to_string().clone(),
@@ -345,22 +369,22 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         state.user_profile.insert(principal_id, user_profile_detail)
     });
 
-    let wasm_dao: Vec<u8> = Vec::new();
-    with_state(|state| match state.wasm_module.get(&0) {
-        Some(val) => val.wasm,
-        None => panic!("nhi mila"),
-    });
+    // let wasm_dao: Vec<u8> = Vec::new();
+    // with_state(|state| match state.wasm_module.get(&0) {
+    //     Some(val) => val.wasm,
+    //     None => panic!("nhi mila"),
+    // });
 
-    let arg1 = InstallCodeArgument {
-        mode: CanisterInstallMode::Install,
-        canister_id: canister_id_principal,
-        // wasm_module: vec![],
-        wasm_module: wasm_dao,
-        arg: dao_detail_bytes,
-    };
-    let _installcode = install_code(arg1).await.unwrap();
-    // ic_cdk::println!("errrrrr in installing {:?}", _installcode);
-    println!("Canister ID: {:?}", canister_id);
+    // let arg1 = InstallCodeArgument {
+    //     mode: CanisterInstallMode::Install,
+    //     canister_id: canister_id_principal,
+    //     // wasm_module: vec![],
+    //     wasm_module: wasm_dao,
+    //     arg: dao_detail_bytes,
+    // };
+    // let _installcode = install_code(arg1).await.unwrap();
+    // // ic_cdk::println!("errrrrr in installing {:?}", _installcode);
+    // println!("Canister ID: {:?}", canister_id);
     Ok("DAO created successfully".to_string())
 }
 
@@ -564,4 +588,84 @@ fn get_profile_by_id(id: Principal) -> Result<UserProfile, String> {
         Some(profile) => Ok(profile),
         None => Err(String::from("User does not exist")),
     })
+}
+
+#[update]
+async fn create_ledger() -> Result<String, String> {
+    // let ledger_args = ICRC1LedgerInitArgs {
+    //     token_name: String::from("BHANU"),
+    //     token_symbol: String::from("BRO"),
+    //     minting_account: Account {
+    //         owner: api::caller(),
+    //         subaccount: None,
+    //     },
+    //     transfer_fee: Nat::from(10 as u32),
+    //     metadata: vec![],
+    //     initial_balances: vec![(
+    //         Account {
+    //             owner: api::caller(),
+    //             subaccount: None,
+    //         },
+    //         Nat::from(1000000 as u32),
+    //     )],
+    //     archive_options: ArchiveOptions {
+    //         controller_id: api::caller(),
+    //         cycles_for_archive_creation: None,
+    //         max_message_size_bytes: None,
+    //         max_transactions_per_response: None,
+    //         node_max_memory_size_bytes: None,
+    //         num_blocks_to_archive: 100,
+    //         trigger_threshold: 100,
+    //     },
+    //     feature_flags: Some(FeatureFlags { icrc2: true }),
+    //     fee_collector_account: None,
+    //     accounts_overflow_trim_quantity: None,
+    //     maximum_number_of_accounts: None,
+    //     decimals: None,
+
+    //     max_memo_length: None,
+    // };
+
+
+    let ledger_args = LedgerArg::Init(
+        InitArgs {
+                 token_name: String::from("BHANU"),
+        token_symbol: String::from("BRO"),
+        minting_account: Account {
+            owner: api::caller(),
+            subaccount: None,
+        },
+        transfer_fee: Nat::from(10 as u32),
+        metadata: vec![],
+        initial_balances: vec![(
+            Account {
+                owner: api::caller(),
+                subaccount: None,
+            },
+            Nat::from(1000000 as u32),
+        )],
+        archive_options: ArchiveOptions {
+            controller_id: api::caller(),
+            cycles_for_archive_creation: None,
+            max_message_size_bytes: None,
+            max_transactions_per_response: None,
+            node_max_memory_size_bytes: None,
+            num_blocks_to_archive: 100,
+            trigger_threshold: 100,
+        },
+        feature_flags: Some(FeatureFlags { icrc2: true }),
+        fee_collector_account: None,
+        accounts_overflow_trim_quantity: None,
+        maximum_number_of_accounts: None,
+        decimals: None,
+
+        max_memo_length: None,
+        }
+    );
+
+    ic_cdk::println!("ledger canister args are {:?}", ledger_args);
+
+    create_ledger_canister(ledger_args).await
+
+    // Ok("()".to_string())
 }

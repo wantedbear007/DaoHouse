@@ -34,9 +34,9 @@ type DaoInput = record {
   link_of_document : text;
   image_content_type : text;
   tokenissuer : text;
-  cool_down_period : text;
+  cool_down_period : nat32;
   purpose : text;
-  required_votes : int8;
+  required_votes : nat32;
 };
 type GetAllPostsResponse = record { size : nat32; posts : vec PostInfo };
 type ImageData = record { content : blob; name : text; content_type : text };
@@ -114,6 +114,7 @@ service : (PaymentRecipientAccount) -> {
   check_user_existance : () -> (Result) query;
   comment_post : (text, text) -> (Result);
   create_dao : (text, DaoInput) -> (Result);
+  create_ledger : () -> (Result);
   create_new_post : (text, PostInput) -> (Result);
   create_profile : () -> (Result_1);
   delete_profile : () -> (Result_1);

@@ -49,6 +49,9 @@ async fn init(args: PaymentRecipientAccount) {
         let dao_wasm_module: Vec<u8> =
             include_bytes!("../../../.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
 
+        let ledger_wasm_module: Vec<u8> =
+            include_bytes!("../../wasm_modules/icrc1_ledger_canister.wasm").to_vec();
+
         state.borrow_mut().wasm_module.insert(
             0,
             WasmArgs {

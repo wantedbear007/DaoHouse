@@ -39,7 +39,6 @@ type DaoInput = record {
   purpose : text;
   required_votes : nat32;
 };
-type GroupList = record { users : vec principal };
 type Pagination = record { end : nat32; start : nat32 };
 type ProposalInput = record {
   proposal_expired_at : nat64;
@@ -80,7 +79,7 @@ type Proposals = record {
   required_votes : nat32;
 };
 type Result = variant { Ok : text; Err : text };
-type Result_1 = variant { Ok : GroupList; Err : text };
+type Result_1 = variant { Ok : vec principal; Err : text };
 type Result_2 = variant { Ok : vec Proposals; Err : text };
 type UpdateDaoSettings = record {
   members : vec principal;

@@ -9,6 +9,11 @@ cargo build --release --target wasm32-unknown-unknown --package dao_canister
 
 candid-extractor target/wasm32-unknown-unknown/release/dao_canister.wasm >src/dao_canister/dao_canister.did
 
+
+dfx canister create dao_canister
+dfx build dao_canister
+
+
 # dfx deploy daohouse_backend --argument "(record { payment_recipient = principal \"${RECIEVER}\"; })"
 
 

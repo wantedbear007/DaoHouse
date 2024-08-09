@@ -17,7 +17,11 @@ dfx identity new testing --storage-mode=plaintext || true
 dfx canister create dao_canister
 dfx build dao_canister
 
-cargo install candid-extractor
+
+dfx canister create icrc1_ledger_canister
+dfx build icrc1_ledger_canister
+
+# cargo install candid-extractor
 
 # create .did files
 chmod 777 ./generate_did.sh
@@ -51,38 +55,80 @@ record {
  }
 })"
 
-dfx deploy dao_canister --argument '(record{
-    dao_name="Sample DAO";
-    purpose="To manage community projects";
-    daotype="Non-profit";
-    link_of_document="https://example.com/charter.pdf";
-    cool_down_period="7 days";
-    members=vec{
+
+dfx deploy dao_canister --argument '(record {
+    dao_name = "Sample DAO";
+    purpose = "To manage community projects";
+    daotype = "Non-profit";
+    link_of_document = "https://example.com/charter.pdf";
+    cool_down_period = 7;
+    members = vec {
         principal "aaaaa-aa";
     };
-    tokenissuer="sample_token_issuer";
-    linksandsocials=vec{
+    tokenissuer = "sample_token_issuer";
+    linksandsocials = vec {
         "https://twitter.com/sampledao";
         "https://discord.gg/sampledao";
     };
-    required_votes=100;
-    image_id="1";
-    followers=vec{
+    required_votes = 100;
+    image_id = "1";
+    followers = vec {
         principal "aaaaa-aa";
     };
-    members_permissions=vec{
+    members_permissions = vec {
         "mai hi permission hai";
     };
-
+    dao_groups = vec {
+        record {
+            group_name = "Example Group";
+            group_members = vec { principal "aaaaa-aa" };
+            group_permissions = vec { "example_permission" };
+        };
+        record {
+            group_name = "Example Group2";
+            group_members = vec { principal "aaaaa-aa" };
+            group_permissions = vec { "example_permission" };
+        };
+        record {
+            group_name = "Example Group3";
+            group_members = vec { principal "aaaaa-aa" };
+            group_permissions = vec { "example_permission" };
+        }
+    };
 })'
+
+# dfx deploy dao_canister --argument '(record{
+#     dao_name="Sample DAO";
+#     purpose="To manage community projects";
+#     daotype="Non-profit";
+#     link_of_document="https://example.com/charter.pdf";
+#     cool_down_period="7 days";
+#     members=vec{
+#         principal "aaaaa-aa";
+#     };
+#     tokenissuer="sample_token_issuer";
+#     linksandsocials=vec{
+#         "https://twitter.com/sampledao";
+#         "https://discord.gg/sampledao";
+#     };
+#     required_votes=100;
+#     image_id="1";
+#     followers=vec{
+#         principal "aaaaa-aa";
+#     };
+#     members_permissions=vec{
+#         "mai hi permission hai";
+#     };
+
+# })'
 
 dfx deploy daohouse_backend --argument "(record { payment_recipient = principal \"${RECIEVER}\"; })"
 dfx deploy ic_asset_handler
 # # to upload first image
 # ./assets_upload.sh
 
- dfx deploy internet_identity
- dfx deploy daohouse_frontend
+#  dfx deploy internet_identity
+#  dfx deploy daohouse_frontend
 
 
 # dfx generate

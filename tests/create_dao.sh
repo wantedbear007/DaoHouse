@@ -13,7 +13,7 @@ for ((i = 1; i <= COUNT; i++)); do
       purpose = "test krne ke liye ke chota sa sentence";
       daotype = "Non-profit";
       link_of_document = "https://example.com/charter.pdf";
-      cool_down_period = "7 days";
+      cool_down_period = 7;
       members = vec{
         principal "aaaaa-aa";
       };
@@ -28,6 +28,23 @@ for ((i = 1; i <= COUNT; i++)); do
       image_content_type = "image/jpg";
         members_permissions=vec{
         "permission";
+    };
+     dao_groups = vec {
+        record {
+            group_name = "Example Group";
+            group_members = vec { principal "aaaaa-aa" };
+            group_permissions = vec { "example_permission" };
+        };
+        record {
+            group_name = "Example Group2";
+            group_members = vec { principal "aaaaa-aa" };
+            group_permissions = vec { "example_permission" };
+        };
+        record {
+            group_name = "Example Group3";
+            group_members = vec { principal "aaaaa-aa" };
+            group_permissions = vec { "example_permission" };
+        }
     };
       
     }
