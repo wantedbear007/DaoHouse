@@ -22,8 +22,10 @@ const Step2 = ({ setData, setActiveStep }) => {
   }
 
   function changePeriod(value) {
+    // Convert the value to a number and ensure it's non-negative
+    const numberValue = Math.max(parseInt(value, 10) || 0, 0);
     setInputData({
-      setUpPeriod: value,
+      setUpPeriod: numberValue,
     });
   }
 
