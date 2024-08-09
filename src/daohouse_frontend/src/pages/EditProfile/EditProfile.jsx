@@ -79,11 +79,7 @@ const EditProfile = () => {
     image_content_type: "image/jpg",
   });
 
-  // Separate state for personal contact info
-  const [personalContactInfo, setPersonalContactInfo] = useState({
-    email_id: userProfile?.email_id || "",
-    contact_number: userProfile?.contact_number || "",
-  });
+  
 
   const validateForm = () => {
     const newErrors = {};
