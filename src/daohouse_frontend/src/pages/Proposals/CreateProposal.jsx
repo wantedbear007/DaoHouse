@@ -33,7 +33,11 @@ function CreateProposal() {
     };
 
     const handleRequiredVotesChange = (event) => {
-        setRequiredVotes(event.target.value);
+        const value = event.target.value;
+        // Allow any non-negative integer including zero
+        if (value === '' || (Number.isInteger(parseFloat(value)) && parseFloat(value) >= 0)) {
+            setRequiredVotes(value);
+        }
     };
 
     const handleProposalTypeChange = (event) => {
@@ -49,8 +53,9 @@ function CreateProposal() {
     
         try {
             // Validate proposal data before sending
-            if (!proposalTitle || !proposalDescription || isNaN(requiredVotes) || !proposalType) {
-                throw new Error("Please fill all the fields and choose a proposal type.");
+            const votes = parseInt(requiredVotes, 10);
+            if (!proposalTitle || !proposalDescription || isNaN(votes) || !proposalType || votes < 0) {
+                throw new Error("Please fill all the fields with valid data and choose a proposal type.");
             }
             
             const strippedDescription = stripHtmlTags(proposalDescription);
