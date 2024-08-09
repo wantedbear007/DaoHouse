@@ -13,9 +13,9 @@ const Step5 = ({ setData, setActiveStep }) => {
   const [loadingNext, setLoadingNext] = useState(false);
 
   const [quorum, setQuorum] = useState([
-    { name: "Council", index: 0, vote: 0 },
-    { name: "Group 1", index: 1, vote: 0 },
-    { name: "Group 2", index: 2, vote: 0 },
+    { name: "Council", index: 0, vote: 50 },
+    { name: "Group 1", index: 1, vote: 50 },
+    { name: "Group 2", index: 2, vote: 50 },
   ]);
   const className = "DAO_Step5";
 
@@ -152,7 +152,7 @@ const Step5 = ({ setData, setActiveStep }) => {
 export default Step5;
 
 const RangeInput = ({ index, handleVoteChange }) => {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(50);
 
   const handleChange = (e) => {
     const newValue = parseInt(e.target.value);

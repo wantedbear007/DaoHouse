@@ -258,7 +258,7 @@ const CreatePostPopup = ({ onClose, handleGetResponse }) => {
               </span>
 
               <button
-                className="flex items-center justify-center bg-white cursor-pointer w-[150px] h-[35px] rounded-[10px] gap-1 text-[16px] font-semibold"
+                className="flex items-center justify-center bg-white cursor-pointer w-[250px] h-[35px] rounded-[10px] gap-1 text-[16px] font-semibold"
                 onClick={() =>
                   document.querySelector('input[type="file"]').click()
                 }
@@ -266,7 +266,7 @@ const CreatePostPopup = ({ onClose, handleGetResponse }) => {
                 <span>
                   <img src={addImageLogo} alt="Add Image" />
                 </span>
-                Add Images
+                Add Images (Max 2mb)
               </button>
             </React.Fragment>
           )}
