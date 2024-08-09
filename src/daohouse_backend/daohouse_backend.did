@@ -114,7 +114,7 @@ service : (PaymentRecipientAccount) -> {
   check_user_existance : () -> (Result) query;
   comment_post : (text, text) -> (Result);
   create_dao : (text, DaoInput) -> (Result);
-  create_ledger : () -> (Result);
+  create_ledger : (text, nat) -> (Result);
   create_new_post : (text, PostInput) -> (Result);
   create_profile : () -> (Result_1);
   delete_profile : () -> (Result_1);

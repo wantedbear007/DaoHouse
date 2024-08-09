@@ -10,7 +10,8 @@ use crate::types::{
 
 use crate::types::{DaoInput, Profileinput, UserProfile};
 use crate::{
-    guards::*, Account, ArchiveOptions, CanisterSettings, DaoCanisterInput, FeatureFlags, ICRC1LedgerInitArgs, InitArgs, LedgerArg
+    guards::*, Account, ArchiveOptions, CanisterSettings, DaoCanisterInput, FeatureFlags,
+    ICRC1LedgerInitArgs, InitArgs, LedgerArg,
 };
 use crate::{routes, with_state, DaoDetails, DaoResponse, ImageData};
 use candid::{encode_one, Nat, Principal};
@@ -302,12 +303,12 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
     };
 
     // let mut veccc: Vec<Principal> = Vec::new();
-    let veccc: Vec<Principal> = vec![api::caller(), ic_cdk::api::id()];
+    // let veccc: Vec<Principal> = vec![api::caller(), ic_cdk::api::id()];
     // veccc.push(api::caller());
     // veccc.push(ic_cdk::api::id());
 
     let conttt = CanisterSettings {
-        controllers: Some(veccc),
+        controllers: Some(vec![api::caller(), ic_cdk::api::id()]),
         ..Default::default()
     };
 
@@ -591,51 +592,15 @@ fn get_profile_by_id(id: Principal) -> Result<UserProfile, String> {
 }
 
 #[update]
-async fn create_ledger() -> Result<String, String> {
-    // let ledger_args = ICRC1LedgerInitArgs {
-    //     token_name: String::from("BHANU"),
-    //     token_symbol: String::from("BRO"),
-    //     minting_account: Account {
-    //         owner: api::caller(),
-    //         subaccount: None,
-    //     },
-    //     transfer_fee: Nat::from(10 as u32),
-    //     metadata: vec![],
-    //     initial_balances: vec![(
-    //         Account {
-    //             owner: api::caller(),
-    //             subaccount: None,
-    //         },
-    //         Nat::from(1000000 as u32),
-    //     )],
-    //     archive_options: ArchiveOptions {
-    //         controller_id: api::caller(),
-    //         cycles_for_archive_creation: None,
-    //         max_message_size_bytes: None,
-    //         max_transactions_per_response: None,
-    //         node_max_memory_size_bytes: None,
-    //         num_blocks_to_archive: 100,
-    //         trigger_threshold: 100,
-    //     },
-    //     feature_flags: Some(FeatureFlags { icrc2: true }),
-    //     fee_collector_account: None,
-    //     accounts_overflow_trim_quantity: None,
-    //     maximum_number_of_accounts: None,
-    //     decimals: None,
-
-    //     max_memo_length: None,
-    // };
-
-
-    let ledger_args = LedgerArg::Init(
-        InitArgs {
-                 token_name: String::from("BHANU"),
+async fn create_ledger(dao_canister_id: String, tokens: Nat) -> Result<String, String> {
+    let ledger_args = LedgerArg::Init(InitArgs {
+        token_name: String::from("BHANU"),
         token_symbol: String::from("BRO"),
         minting_account: Account {
             owner: api::caller(),
             subaccount: None,
         },
-        transfer_fee: Nat::from(10 as u32),
+        transfer_fee: Nat::from(0 as u32),
         metadata: vec![],
         initial_balances: vec![(
             Account {
@@ -645,7 +610,8 @@ async fn create_ledger() -> Result<String, String> {
             Nat::from(1000000 as u32),
         )],
         archive_options: ArchiveOptions {
-            controller_id: api::caller(),
+            // controller_id: api::caller(),
+            controller_id: Principal::from_text(dao_canister_id).map_err(|err| err.to_string())?,
             cycles_for_archive_creation: None,
             max_message_size_bytes: None,
             max_transactions_per_response: None,
@@ -660,8 +626,7 @@ async fn create_ledger() -> Result<String, String> {
         decimals: None,
 
         max_memo_length: None,
-        }
-    );
+    });
 
     ic_cdk::println!("ledger canister args are {:?}", ledger_args);
 

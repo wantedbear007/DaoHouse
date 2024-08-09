@@ -9,7 +9,7 @@ use state_handler::State;
 mod memory;
 use candid::Principal;
 use memory::Memory;
-
+use candid::Nat;
 // mod user_route;
 // mod post_route;
 

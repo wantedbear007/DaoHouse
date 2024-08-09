@@ -30,6 +30,7 @@ chmod 777 ./generate_did.sh
 MINTER=$(dfx --identity default identity get-principal)
 DEFAULT=$(dfx --identity default identity get-principal)
 RECIEVER=$(dfx --identity reciever identity get-principal)
+BHANU=$(dfx --identity minter identity get-principal)
 TOKEN_SYMBOL=TOK
 TOKEN_NAME="DAOTOKEN"
 TRANSFER_FEE=1000
@@ -45,7 +46,7 @@ record {
      minting_account = record { owner = principal \"${MINTER}\" };
      transfer_fee = ${TRANSFER_FEE};
      metadata = vec {};
-     initial_balances = vec { record { record { owner = principal \"${DEFAULT}\"; }; ${PRE_MINTED_TOKENS}; }; };
+     initial_balances = vec { record { record { owner = principal \"${BHANU}\"; }; ${PRE_MINTED_TOKENS}; record { owner = principal \"${BHANU}\"; }; ${PRE_MINTED_TOKENS}; }; };
      archive_options = record {
          num_blocks_to_archive = 100;
          trigger_threshold = 100;
@@ -81,12 +82,12 @@ dfx deploy dao_canister --argument '(record {
     dao_groups = vec {
         record {
             group_name = "Example Group";
-            group_members = vec { principal "aaaaa-aa" };
+            group_members = vec { principal "yxtej-lmfuu-rp3yv-xzu2h-6q43c-7iast-yiwff-z552q-6ugas-pyd6b-fae" };
             group_permissions = vec { "example_permission" };
         };
         record {
             group_name = "Example Group2";
-            group_members = vec { principal "aaaaa-aa" };
+            group_members = vec { principal "yxtej-lmfuu-rp3yv-xzu2h-6q43c-7iast-yiwff-z552q-6ugas-pyd6b-fae" };
             group_permissions = vec { "example_permission" };
         };
         record {
