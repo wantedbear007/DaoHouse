@@ -113,7 +113,7 @@ export default function Card({ proposal, resData, proposals }) {
       label: "Expires On:", value: proposal?.proposal_expired_at
       , time: "5:32:11"
     },
-    { label: "Votes Required:", value: proposal?.required_votes }
+    // { label: "Votes Required:", value: proposal?.required_votes }
   ];
 
   // console.log("-----g",gridItems)
