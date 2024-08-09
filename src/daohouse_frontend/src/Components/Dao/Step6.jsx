@@ -107,7 +107,7 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
             htmlFor="profile"
             className="flex mobile:text-base text-xs font-semibold cursor-pointer mobile:m-4 m-2 flex-row items-center gap-2 bg-white px-4 py-2 rounded-[2rem] text-black shadow-xl"
           >
-            <FiUpload /> Upload New Photo
+            <FiUpload /> Upload New Photo (Max 2 mb)
           </label>
           <input
             type="file"

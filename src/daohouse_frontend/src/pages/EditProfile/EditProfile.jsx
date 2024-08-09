@@ -327,7 +327,7 @@ const EditProfile = () => {
                   className="md:mr-2 mr-1 md:h-4 md:w-4 w-3 h-3 edit-pen"
                 />
                 <span className="text-[14px] lg:text-[16px]">
-                  Upload New Photo
+                  Upload New Photo (Max 2MB)
                 </span>
                 <input
                   type="file"
@@ -338,7 +338,7 @@ const EditProfile = () => {
               </label>
               <button
                 onClick={handleRemoveImage}
-                className="text-[12px] md:text-[14px] lg:text-[16px] text-black shadow-xl md:h-[50px] h-[40px] md:px-6 px-4 rounded-[27px] bg-white-500 border-solid border border-red-100 hover:bg-red-300 flex items-center transition duration-200 ease-in-out"
+                className="text-[12px] md:text-[14px] lg:text-[16px] text-black shadow-xl md:h-[50px] h-[40px] md:px-6 px-4 rounded-[27px] bg-red-300 border-solid border border-red-100 hover:bg-red-400 flex items-center transition duration-200 ease-in-out"
               >
                 Remove<span className="hidden sm:inline-block ml-1">Photo</span>
               </button>
