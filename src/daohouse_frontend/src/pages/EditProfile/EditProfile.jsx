@@ -322,9 +322,9 @@ const EditProfile = () => {
                   alt="edit"
                   className="md:mr-2 mr-1 md:h-4 md:w-4 w-3 h-3 edit-pen"
                 />
-                <span className="text-[14px] lg:text-[16px]">
-                  Upload New Photo (Max 2MB)
-                </span>
+               <span className="text-[10px] lg:text-[13px]">
+                Upload New Photo (Max 2MB)
+                 </span>
                 <input
                   type="file"
                   accept="image/*"
