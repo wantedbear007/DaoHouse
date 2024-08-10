@@ -1,5 +1,6 @@
 import React from 'react'
-import daobg from "../../../assets/daobg.png";
+// import daobg from "../../../assets/daobg.png";
+import daobg from "../../../assets/daoBg.png";
 import Container from '../Container/Container';
 
 const TopComponent = ({ showButtons, showAll, setShowAll }) => {
