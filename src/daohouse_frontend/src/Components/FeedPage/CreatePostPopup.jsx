@@ -195,7 +195,7 @@ const CreatePostPopup = ({ onClose, handleGetResponse }) => {
                       />
 
                       <p className="md:text-[14px] text-[10px] text-[#05212C] font-medium">
-                        {userProfile.username || "user"}
+                      {userProfile?.username || "user"}
                       </p>
                     </span>
                     {
@@ -256,7 +256,7 @@ const CreatePostPopup = ({ onClose, handleGetResponse }) => {
               </span>
 
               <button
-                className="flex items-center justify-center bg-white cursor-pointer w-[250px] h-[35px] rounded-[10px] gap-1 text-[16px] font-semibold"
+                className="flex items-center justify-center bg-white cursor-pointer w-[150px] h-[35px] rounded-[10px] gap-1 text-[16px] font-semibold"
                 onClick={() =>
                   document.querySelector('input[type="file"]').click()
                 }
@@ -264,7 +264,7 @@ const CreatePostPopup = ({ onClose, handleGetResponse }) => {
                 <span>
                   <img src={addImageLogo} alt="Add Image" />
                 </span>
-                Add Images (Max 2mb)
+                Add Images
               </button>
             </React.Fragment>
           )}
