@@ -5,7 +5,7 @@ import { LuChevronDown } from "react-icons/lu";
 import LoginModal from "../Auth/LoginModal";
 import { FaUser, FaSignOutAlt, FaSitemap, FaComments } from "react-icons/fa";
 import logo from "../../../assets/ColorLogo.png";
-import MyProfileImage from "../../../assets/MyProfile-img.png";
+import MyProfileImage from "../../../assets/Avatar.png";
 import { useUserProfile } from "../../context/UserProfileContext";
 import { toast } from "react-toastify";
 import Container from "../Container/Container";
