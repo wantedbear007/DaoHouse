@@ -19,7 +19,8 @@ const Navbar = () => {
   const { userProfile, fetchUserProfile } = useUserProfile();
   const { login, isAuthenticated, signInPlug, logout, backendActor, stringPrincipal } = useAuth();
   const location = useLocation();
-
+  console.log(stringPrincipal);
+  
   const [username, setUsername] = useState("");
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
