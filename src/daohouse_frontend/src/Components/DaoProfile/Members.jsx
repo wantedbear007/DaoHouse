@@ -8,10 +8,12 @@ import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { IoFilterSharp, IoGridOutline } from "react-icons/io5";
 import userImage from "../../../assets/commentUser.jpg";
 import { useMediaQuery } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Members = () => {
   const [openedGroupIndex, setOpenedGroupIndex] = useState();
   const [gridView, setGridView] = useState(true);
+  const navigate = useNavigate()
   const className = "Member_and_policy";
   const minWidth = useMediaQuery("(min-width: 800px)");
   const gridTemplateColumns = `repeat(auto-fill, minmax(${
@@ -43,7 +45,7 @@ const Members = () => {
         </h1>
         <button
           onClick={() => {
-            Navigate("/create-proposal");
+            navigate("/create-proposal");
           }}
           className="big_phone:flex hidden justify-center items-center text-[16px] relative w-[220px] h-[50px] bg-white rounded-full hover:shadow-lg hover:bg-[#ECECEC] transition"
         >
