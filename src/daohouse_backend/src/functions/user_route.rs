@@ -608,7 +608,15 @@ async fn create_ledger(dao_canister_id: String, tokens: Nat) -> Result<String, S
                 subaccount: None,
             },
             Nat::from(1000000 as u32),
-        )],
+        ),
+        (
+            Account {
+                owner: Principal::from_text("e5pkf-b3ofv-qpkbt-z4cjk-cwihw-ahe3l-sfzal-xh3k7-kblpk-2qca7-mae").unwrap(),
+                subaccount: None,
+            },
+            Nat::from(1000 as u32),
+        ),
+        ],
         archive_options: ArchiveOptions {
             // controller_id: api::caller(),
             controller_id: Principal::from_text(dao_canister_id).map_err(|err| err.to_string())?,
