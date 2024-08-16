@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProfileTitleDivider from "../../Components/ProfileTitleDivider/ProfileTitleDivider";
 import MyProfileRectangle from "../../../assets/MyProfileRectangle.png";
-import MyProfileImage from "../../../assets/MyProfile-img.png"; // Default profile image
+import MyProfileImage from "../../../assets/Avatar.png"; // Default profile image
 import UploadIcon from "../../../assets/upload-icon.png";
 import BigCircle from "../../../assets/BigCircle.png";
 import MediumCircle from "../../../assets/MediumCircle.png";

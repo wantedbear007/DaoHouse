@@ -1,7 +1,8 @@
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import React, { useState, useEffect } from "react";
+import MyProfileImage from "../../../assets/Avatar.png"; // Default profile image
 import { IoLink } from "react-icons/io5";
-import { FaRegHeart } from "react-icons/fa6";
+import { FaRegHeart } from "react-icons/fa";
 import { PiTelegramLogoBold } from "react-icons/pi";
 import { MdOutlineInsertComment } from "react-icons/md";
 import { Principal } from "@dfinity/principal";
@@ -24,36 +25,62 @@ const convertTimestampToDateString = (timestamp) => {
 
 const PostCard = ({ posts, handleGetLikePost }) => {
   const [formattedDate, setFormattedDate] = useState('');
-  const [loading, setLoading] = useState(false);
   const { backendActor } = useAuth();
-  const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
   const [isFollowing, setIsFollowing] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
+  const [localLikeStatus, setLocalLikeStatus] = useState(posts.is_liked);
+  const [localLikeCount, setLocalLikeCount] = useState(posts.like_count);
+  const [isLiking, setIsLiking] = useState(false);
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
   const ImageUrl = posts?.post_img
     ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${posts.post_img}`
     : Post1;
-  const userImage = posts?.user_image_id
-    ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${posts.user_image_id}`
-    : '';
+  const [imageSrc, setImageSrc] = useState(MyProfileImage);
 
-  const getlike = async () => {
-    setLoading(true); // Show loader
+  useEffect(() => {
+    const userImage = posts?.user_image_id
+      ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${posts.user_image_id}`
+      : MyProfileImage;
+    setImageSrc(userImage);
+  }, [posts.user_image_id]);
+
+  // Error handler function for image loading
+  const handleImageError = () => {
+    setImageSrc(MyProfileImage); // Fallback to default image if there's an error loading the profile image
+  };
+
+  const handleLike = async () => {
+    if (isLiking) return;
+
+    setIsLiking(true);
+    const newLikeStatus = localLikeStatus === 1 ? 0 : 1;
+    const newLikeCount = newLikeStatus === 1 ? localLikeCount + 1 : localLikeCount - 1;
+
+    // Optimistically update UI
+    setLocalLikeStatus(newLikeStatus);
+    setLocalLikeCount(newLikeCount);
+
     try {
       const response = await backendActor.like_post(posts.post_id);
-      handleGetLikePost(response);
-
       if (response?.Ok) {
         toast.success("Post liked successfully");
       } else if (response?.Err) {
-        toast.warning('You already like this post');
+        toast.warning('You already liked this post');
+        // Revert the UI update if backend response is an error
+        setLocalLikeStatus(localLikeStatus);
+        setLocalLikeCount(localLikeCount);
       }
     } catch (error) {
-      console.error("Error fetching like:", error);
+      console.error("Error liking post:", error);
+      toast.error("An error occurred while liking the post");
+      // Revert the UI update if there's an error
+      setLocalLikeStatus(localLikeStatus);
+      setLocalLikeCount(localLikeCount);
     } finally {
-      setLoading(false); // Hide loader
+      setIsLiking(false);
     }
+    handleGetLikePost({ ...posts, is_liked: newLikeStatus, like_count: newLikeCount });
   };
 
   const toggleFollow = async () => {
@@ -120,9 +147,10 @@ const PostCard = ({ posts, handleGetLikePost }) => {
         <div className="flex flex-row items-center justify-between">
           <section className="postCard__userData flex flex-row items-center gap-2">
             <img
-              src={userImage}
+              src={imageSrc}
               alt="userImage"
               className="rounded-[50%] w-10 h-10"
+              onError={handleImageError}
             />
             <div>
               <p className="font-semibold ml-2 truncate w-36"> {posts.username || posts.principal_id.toString()}</p>
@@ -148,16 +176,15 @@ const PostCard = ({ posts, handleGetLikePost }) => {
         <div className="postCard__buttons mobile:flex hidden flex-row items-center tablet:justify-between tablet:gap-x-2 gap-x-2 big_phone:mt-24 mt-24 desktop-button">
           <button
             className="flex flex-row tablet:gap-2 gap-1 items-center bg-[#0E3746] text-white tablet:text-base text-sm tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]"
-            onClick={getlike}
+            onClick={handleLike}
+            disabled={isLiking}
           >
-            {loading ? (
-              <div className="loader">Loading...</div>
-            ) : posts?.is_liked === 1 ? (
+            {localLikeStatus === 1 ? (
               <FavoriteIcon className="w-5 h-5" />
             ) : (
               <FaRegHeart className="w-5 h-5" />
             )}
-            {posts.like_count}
+            {localLikeCount}
           </button>
           <button
             className="flex flex-row tablet:gap-2 gap-1 items-center bg-[#0E3746] text-white tablet:text-base text-sm tablet:py-3 py-2 tablet:px-8 px-4 rounded-[2rem]"
@@ -189,15 +216,15 @@ const PostCard = ({ posts, handleGetLikePost }) => {
 
       <section className="postCard__buttons w-full flex flex-row items-center justify-between mobile-buttons">
         <div className="flex flex-row items-center justify-between gap-x-2">
-          <button onClick={getlike}>
+          <button onClick={handleLike} disabled={isLiking}>
             <div className="flex gap-2">
-              {posts?.is_liked === 1 ? (
+              {localLikeStatus === 1 ? (
                 <FavoriteIcon className="w-5 h-5" />
               ) : (
                 <FaRegHeart className="text-[#0E3746] text-lg mt-1" />
               )}
               <div className="text-lg">
-                {posts.like_count}
+                {localLikeCount}
               </div>
             </div>
           </button>
