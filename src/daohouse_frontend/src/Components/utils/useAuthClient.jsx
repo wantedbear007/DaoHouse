@@ -135,41 +135,46 @@ export const useAuthClient = (options = defaultOptions) => {
   };
 
   const signInPlug = async () => {
-    if (!window.ic?.plug) {
-      window.open("https://plugwallet.ooo", "_blank");
-      return;
-    }
+    if (!window.ic?.plug) throw new Error("Plug not installed");
 
     const whitelist = [frontendCanisterId, backendCanisterId];
-    const hasAllowed = await window.ic.plug.requestConnect({ whitelist });
+    const host = process.env.DFX_NETWORK === "ic" ? "https://mainnet.dfinity.network" : "http://127.0.0.1:4943";
+    console.log("Host : ", host)
+    const isConnected = await window.ic.plug.requestConnect({ whitelist, host });
+    console.log("isconnected : ", isConnected)
 
-    if (!hasAllowed) {
-      console.error("Connection was refused.");
-      return;
-    }
-    try {
+    if (isConnected) {
       const principal = await window.ic.plug.agent.getPrincipal();
+      const identity = window.ic.plug.agent;
+
+      setIsAuthenticated(prev => ({ ...prev, plug: true }));
+      setIdentity(identity);
+      console.log(identity);
+      
+      setPrincipal(principal);
+      console.log(principal);
+      
+
+      // const userActor = await window.ic.plug.createActor({
+      //   canisterId: frontendCanisterId,
+      //   interfaceFactory: DaoFactory
+      // });
+      // console.log("userActor", userActor);
+      
       const backendActor = await window.ic.plug.createActor({
         canisterId: backendCanisterId,
-        interfaceFactory: BackendidlFactory,
-      });
-
-      setBackendActor(backendActor);
-      setIdentity(principal);
-      setIsAuthenticated(true);
-      setPrincipal(principal);
-
-      await clientInfo({
-        isAuthenticated: () => true,
-        getIdentity: () => ({ getPrincipal: () => principal })
-      }, principal);
-
-      console.log("Integration actor initialized successfully.");
-    } catch (e) {
-      console.error("Failed to initialize the actor with Plug.", e);
+        interfaceFactory: BackendidlFactory
+      })
+      console.log("ExtActor", backendActor);
+      setBackendActor(backendActor );
+      console.log(backendActor);
+      
+      return backendActor
+      // return userActor
+    } else {
+      throw new Error("Plug connection refused");
     }
   };
-
   useEffect(() => {
     const initNFID = async () => {
       try {
