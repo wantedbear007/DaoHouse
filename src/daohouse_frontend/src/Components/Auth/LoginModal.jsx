@@ -3,6 +3,7 @@ import { FaTimes } from 'react-icons/fa';
 import plug from '../../../assets/plugicon.png';
 import II from '../../../assets/InternetIdentityIcon.png';
 import nfidlogo from '../../../assets/nfidlogo.png';
+<<<<<<< HEAD
 import './global.scss';  // Ensure global styles are imported
 
 const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug, onLoginNFID }) => {
@@ -31,6 +32,43 @@ const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug, onLoginNFID }) => {
     };
   }, [isOpen]);
   
+=======
+import './global.scss'; // Ensure global styles are imported
+
+const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug, onLoginNFID }) => {
+  useEffect(() => {
+    const bodyStyle = document.body.style;
+
+    if (isOpen) {
+      Object.assign(bodyStyle, {
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        width: '100%',
+        overflow: 'hidden',
+      });
+    } else {
+      Object.assign(bodyStyle, {
+        position: '',
+        top: '',
+        left: '',
+        width: '',
+        overflow: '',
+      });
+    }
+
+    return () => {
+      Object.assign(bodyStyle, {
+        position: '',
+        top: '',
+        left: '',
+        width: '',
+        overflow: '',
+      });
+    };
+  }, [isOpen]);
+
+>>>>>>> main
   const buttons = [
     {
       onClick: onLogin,
