@@ -12,6 +12,7 @@ mod guards;
 extern crate ic_cdk_macros;
 use candid::Principal;
 use types::*;
+use icrc_ledger_types::icrc1::transfer::BlockIndex;
 
 thread_local! {
     static STATE: RefCell<State> = RefCell::new(State::new());

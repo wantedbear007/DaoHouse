@@ -606,6 +606,7 @@ dependencies = [
  "ic-cdk-macros 0.13.3",
  "ic-cdk-timers 0.7.0",
  "ic-stable-structures",
+ "icrc-ledger-types",
  "serde",
  "serde_bytes",
  "sha2 0.9.9",

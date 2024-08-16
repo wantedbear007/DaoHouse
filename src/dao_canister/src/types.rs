@@ -156,6 +156,14 @@ pub enum VoteParam {
     No,
 }
 
+#[derive(Clone, CandidType, Serialize, Deserialize)]
+pub struct TokenTransferArgs {
+    pub tokens: u64,
+    pub from: Principal,
+    pub to: Principal,
+    pub dao_canister: Principal
+}
+
 // #[derive(Clone, CandidType, Serialize, Deserialize)]
 // pub struct Vote {
 //     vote_param: VoteParam,

@@ -382,12 +382,16 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         .push(canister_id_principal.to_string());
 
     // updating ledger canister id in newely created canister id
-    
-    let _ = call_inter_canister("add_ledger_canister_id", LedgerCanisterId {
-        id: ledger_canister_id,
-    } , canister_id_principal).await.map_err(|err| {format!("Error occurred {}", err.to_string())});
 
-
+    let _ = call_inter_canister(
+        "add_ledger_canister_id",
+        LedgerCanisterId {
+            id: ledger_canister_id,
+        },
+        canister_id_principal,
+    )
+    .await
+    .map_err(|err| format!("Error occurred {}", err.to_string()));
 
     // let response: CallResult<(Result<String, String>,)> = ic_cdk::call(
     //     canister_id_principal,
@@ -400,30 +404,28 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
 
     // ic_cdk::println!("ye hai bhai canister id of ledger: {:?}", response);
 
-//     let res0: Result<(Result<String, String>,), (RejectionCode, String)> = response;
+    //     let res0: Result<(Result<String, String>,), (RejectionCode, String)> = response;
 
-//     let formatted_value = match res0 {
-//       Ok((Ok(value),)) => {
-//           format!("{}", value);
-//           Ok(format!("{}", value))
-//           // value
-//       }
-//       Ok((Err(err),)) => Err(err),
-//       Err((code, message)) => {
-//           match code {
-//               RejectionCode::NoError => Err("NoError".to_string()),
-//               RejectionCode::SysFatal => Err("SysFatal".to_string()),
-//               RejectionCode::SysTransient => Err("SysTransient".to_string()),
-//               RejectionCode::DestinationInvalid => Err("DestinationInvalid".to_string()),
-//               RejectionCode::CanisterReject => Err("CanisterReject".to_string()),
-//               // Handle other rejection codes here
-//               _ => Err(format!("Unknown rejection code: {:?}: {}", code, message)),
-//               // _ => Err(format!("Unknown rejection code: {:?}", code)),
-//           }
-//       }
-//   };
-
-
+    //     let formatted_value = match res0 {
+    //       Ok((Ok(value),)) => {
+    //           format!("{}", value);
+    //           Ok(format!("{}", value))
+    //           // value
+    //       }
+    //       Ok((Err(err),)) => Err(err),
+    //       Err((code, message)) => {
+    //           match code {
+    //               RejectionCode::NoError => Err("NoError".to_string()),
+    //               RejectionCode::SysFatal => Err("SysFatal".to_string()),
+    //               RejectionCode::SysTransient => Err("SysTransient".to_string()),
+    //               RejectionCode::DestinationInvalid => Err("DestinationInvalid".to_string()),
+    //               RejectionCode::CanisterReject => Err("CanisterReject".to_string()),
+    //               // Handle other rejection codes here
+    //               _ => Err(format!("Unknown rejection code: {:?}: {}", code, message)),
+    //               // _ => Err(format!("Unknown rejection code: {:?}", code)),
+    //           }
+    //       }
+    //   };
 
     with_state(|state| {
         let mut analytics = state.analytics_content.borrow().get(&0).unwrap();

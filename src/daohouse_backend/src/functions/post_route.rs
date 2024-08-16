@@ -36,7 +36,6 @@ use ic_cdk::api::{canister_balance128, time};
 use ic_cdk::{query, update};
 use icrc_ledger_types::icrc1::account::Account;
 use icrc_ledger_types::icrc1::transfer::BlockIndex;
-// <<<<<<< pratap
 use crate::guards::*;
 use icrc_ledger_types::icrc2::transfer_from::{TransferFromArgs, TransferFromError};
 use sha2::{Digest, Sha256};
