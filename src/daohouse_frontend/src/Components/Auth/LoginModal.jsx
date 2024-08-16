@@ -3,36 +3,6 @@ import { FaTimes } from 'react-icons/fa';
 import plug from '../../../assets/plugicon.png';
 import II from '../../../assets/InternetIdentityIcon.png';
 import nfidlogo from '../../../assets/nfidlogo.png';
-<<<<<<< HEAD
-import './global.scss';  // Ensure global styles are imported
-
-const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug, onLoginNFID }) => {
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.position = 'fixed';
-      document.body.style.top = '0';
-      document.body.style.left = '0';
-      document.body.style.width = '100%';
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.width = '';
-      document.body.style.overflow = '';
-    }
-  
-    // Clean up when the component is unmounted or modal closes
-    return () => {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.width = '';
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
-  
-
 import './global.scss'; // Ensure global styles are imported
 
 const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug, onLoginNFID }) => {
