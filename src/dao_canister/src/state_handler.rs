@@ -1,5 +1,5 @@
 use crate::types::{Dao, GroupList, Proposals, Votingandpermissions};
-use crate::{DaoGroup, Memory};
+use crate::{DaoGroup, LedgerCanisterId, Memory};
 use candid::Principal;
 use ic_stable_structures::StableBTreeMap;
 // use std::collections::BTreeMap;
@@ -36,7 +36,9 @@ impl State {
                 followers_count: 0,
                 proposals_count: 0,
                 proposal_ids: Vec::new(),
-                // dao_groups: Vec::new(),
+                token_ledger_id: LedgerCanisterId {
+                    id: Principal::anonymous(),
+                }, // dao_groups: Vec::new(),
             },
 
             permision: Votingandpermissions {

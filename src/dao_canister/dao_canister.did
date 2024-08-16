@@ -2,6 +2,7 @@ type Dao = record {
   members : vec principal;
   dao_id : principal;
   proposals_count : nat32;
+  token_ledger_id : LedgerCanisterId;
   linksandsocials : vec text;
   daotype : text;
   dao_name : text;
@@ -39,6 +40,7 @@ type DaoInput = record {
   purpose : text;
   required_votes : nat32;
 };
+type LedgerCanisterId = record { id : principal };
 type Pagination = record { end : nat32; start : nat32 };
 type ProposalInput = record {
   proposal_expired_at : nat64;
@@ -92,6 +94,7 @@ type UpdateDaoSettings = record {
 };
 type VoteParam = variant { No; Yes };
 service : (DaoInput) -> {
+  add_ledger_canister_id : (LedgerCanisterId) -> (Result);
   add_member_to_group : (text, principal) -> (text);
   ask_to_join_dao : (text) -> (Result);
   change_proposal_state : (text, ProposalState) -> (Result);

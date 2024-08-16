@@ -12,18 +12,17 @@ use crate::types::{
 use crate::types::{DaoInput, Profileinput, UserProfile};
 use crate::{
     guards::*, Account, ArchiveOptions, CanisterSettings, DaoCanisterInput, FeatureFlags,
-    ICRC1LedgerInitArgs, InitArgs, LedgerArg,
+    ICRC1LedgerInitArgs, InitArgs, LedgerArg, LedgerCanisterId,
 };
 use crate::{routes, with_state, DaoDetails, DaoResponse, ImageData};
-use candid::{encode_one, Nat, Principal};
+use candid::{encode_one, Encode, Nat, Principal};
 use ic_cdk::api;
+use ic_cdk::api::call::RejectionCode;
 // use ic_cdk::api::management_canister::main::CanisterSettings;
 use ic_cdk::println;
 use ic_cdk::{query, update};
 // use icrc_ledger_types::icrc1::account::Account;
-use serde_bytes::ByteBuf;
 
-use super::canister_factory::create_new_canister;
 use super::ledger_functions::create_ledger_canister;
 // use ic_cdk::trap;
 
@@ -363,7 +362,7 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         dao_desc: dao_detail.purpose,
         // image_id: id,
         dao_id: canister_id_principal.clone(),
-        dao_associated_ledger: ledger_canister_id.clone(),
+        dao_associated_ledger: ledger_canister_id.to_string().clone(),
     };
 
     ic_cdk::println!(
@@ -380,6 +379,43 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
     user_profile_detail
         .dao_ids
         .push(canister_id_principal.to_string());
+
+    // updating ledger canister id in newely created canister id
+
+    let response: CallResult<(Result<String, String>,)> = ic_cdk::call(
+        canister_id_principal,
+        "add_ledger_canister_id",
+        (LedgerCanisterId {
+            id: ledger_canister_id,
+        },),
+    )
+    .await;
+
+    ic_cdk::println!("ye hai bhai canister id of ledger: {:?}", response);
+
+    let res0: Result<(Result<String, String>,), (RejectionCode, String)> = response;
+
+    let formatted_value = match res0 {
+      Ok((Ok(value),)) => {
+          format!("{}", value);
+          Ok(format!("{}", value))
+          // value
+      }
+      Ok((Err(err),)) => Err(err),
+      Err((code, message)) => {
+          match code {
+              RejectionCode::NoError => Err("NoError".to_string()),
+              RejectionCode::SysFatal => Err("SysFatal".to_string()),
+              RejectionCode::SysTransient => Err("SysTransient".to_string()),
+              RejectionCode::DestinationInvalid => Err("DestinationInvalid".to_string()),
+              RejectionCode::CanisterReject => Err("CanisterReject".to_string()),
+              // Handle other rejection codes here
+              _ => Err(format!("Unknown rejection code: {:?}: {}", code, message)),
+              // _ => Err(format!("Unknown rejection code: {:?}", code)),
+          }
+      }
+  };
+
 
     with_state(|state| {
         let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
@@ -620,7 +656,7 @@ pub async fn create_ledger(
     token_name: String,
     token_symbol: String,
     members: Vec<Principal>,
-) -> Result<String, String> {
+) -> Result<Principal, String> {
     let tokens_per_user = total_tokens / members.len();
 
     let mut accounts: Vec<(Account, Nat)> = vec![];
@@ -661,7 +697,7 @@ pub async fn create_ledger(
         //     // ),
         // ],
         archive_options: ArchiveOptions {
-            controller_id: api::caller(), // TODO FIX THIS, THIS NEED TO BE DAO CANISTER ID 
+            controller_id: api::caller(), // TODO: FIX THIS, THIS NEED TO BE DAO CANISTER ID
             // controller_id: Principal::from_text(dao_canister_id).map_err(|err| err.to_string())?,
             cycles_for_archive_creation: None,
             max_message_size_bytes: None,
@@ -685,10 +721,6 @@ pub async fn create_ledger(
 
     // Ok("()".to_string())
 }
-
-
-// TEMP CANISTER CALLS
-
 
 // BACKUP
 // async fn create_ledger(dao_canister_id: String, total_tokens: Nat, acc: Principal, token_name: String, token_symbol: String) -> Result<String, String> {

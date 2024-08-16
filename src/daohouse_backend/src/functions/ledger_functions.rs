@@ -13,16 +13,9 @@ use super::canister_factory::{
     create_new_canister, deposit_cycles_in_canister, install_code_in_canister,
 };
 
-pub async fn create_ledger_canister(ledger_args: LedgerArg) -> Result<String, String> {
+pub async fn create_ledger_canister(ledger_args: LedgerArg) -> Result<Principal, String> {
     // add dao canister id as controller
     // add factory canister id as controller
-
-    // let ledger_args_bytes: Vec<u8> = match encode_one(ledger_args) {
-    //     Ok(bytes) => bytes,
-    //     Err(e) => {
-    //         return Err(format!("Failed to serialize Ledger inputs: {}", e));
-    //     }
-    // };
 
     let ledger_args_bytes: Vec<u8> = encode_one(ledger_args).map_err(|er| er.to_string())?;
 
@@ -85,7 +78,9 @@ pub async fn create_ledger_canister(ledger_args: LedgerArg) -> Result<String, St
     //     }
     // };
 
-    Ok(format!("Ledger created, id: {}", canister_id_principal))
+    // Ok(format!("Ledger created, id: {}", canister_id_principal))
+    Ok(canister_id_principal)
     // Ok(canister_id_principal.tos)
-
 }
+
+// get canister details

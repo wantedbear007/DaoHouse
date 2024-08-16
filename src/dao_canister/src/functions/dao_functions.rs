@@ -1,4 +1,4 @@
-use crate::{guards::*, DaoGroup, ProposalInput, UpdateDaoSettings};
+use crate::{guards::*, DaoGroup, LedgerCanisterId, ProposalInput, UpdateDaoSettings};
 use crate::{proposal_route, with_state, GroupList};
 use candid::Principal;
 use ic_cdk::api;
@@ -169,4 +169,14 @@ fn unfollow_dao() -> Result<String, String> {
             Err(String::from("You don't follow this dao."))
         }
     })
+}
+
+// add members guard
+#[update]
+fn add_ledger_canister_id(id: LedgerCanisterId) -> Result<String, String> {
+    ic_cdk::println!("ledger inter canister called");
+
+    with_state(|state| state.dao.token_ledger_id = id);
+
+    Ok("Canister id Updated".to_string())
 }

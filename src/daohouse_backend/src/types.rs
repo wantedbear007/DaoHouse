@@ -719,6 +719,11 @@ pub struct ReplyCommentData {
     pub post_id: String,
 }
 
+#[derive(CandidType, Serialize, Deserialize, Clone)]
+pub struct LedgerCanisterId {
+    pub id: Principal
+}
+
 // dao response
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
 pub struct DaoResponse {

@@ -46,7 +46,9 @@ async fn init(dao_input: DaoInput) {
         followers_count: dao_input.followers.len() as u32,
         proposals_count: 0,
         proposal_ids: Vec::new(),
-        // dao_groups: dao_input.dao_groups.clone(), // to be removed (debug impl)
+        token_ledger_id: LedgerCanisterId {
+            id: Principal::anonymous(),
+        }, // dao_groups: dao_input.dao_groups.clone(), // to be removed (debug impl)
     };
 
     let permission = Votingandpermissions {

@@ -61,6 +61,11 @@ pub struct Pagination {
     pub start: u32,
     pub end: u32,
 }
+
+#[derive(CandidType, Serialize, Deserialize, Clone, Debug)]
+pub struct LedgerCanisterId {
+    pub id: Principal
+}
 #[derive(Clone, CandidType, Serialize, Deserialize)]
 pub struct Dao {
     pub dao_id: Principal,
@@ -82,6 +87,7 @@ pub struct Dao {
     pub followers_count: u32,
     pub proposals_count: u32,
     pub proposal_ids: Vec<String>,
+    pub token_ledger_id: LedgerCanisterId
     // pub dao_groups: Vec<DaoGroup>,
 }
 
