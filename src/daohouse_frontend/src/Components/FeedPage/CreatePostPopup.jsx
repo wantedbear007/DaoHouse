@@ -3,7 +3,7 @@ import addImageLogo from "../../../assets/addImageLogo.png";
 import addImageHero from "../../../assets/addImageHero.png";
 import closeIcon from "../../../assets/close-icon.png";
 import TrashIcon from "../../../assets/Trash.png";
-import avtarProfileIcon from "../../../assets/avatarprofile.png";
+import avtarProfileIcon from "../../../assets/Avatar.png";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { useAuth } from "../utils/useAuthClient";
 import { constant } from "../utils/constants";
