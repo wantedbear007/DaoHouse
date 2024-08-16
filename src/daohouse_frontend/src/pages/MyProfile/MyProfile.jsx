@@ -147,7 +147,7 @@ const MyProfile = ({ childComponent }) => {
       </div>
       <div className={`bg-[#c8ced3]`}>
         <Container classes={`__mainComponent big_phone:py-8 big_phone:pb-20 py-6 md:px-8 flex md:flex-row gap-2 flex-col w-full user-container`}>
-          <div className={`${className}__mainComponent__leftSide md:mx-0 mx-5 lg:px-20 flex flex-col tablet:items-start justify-center md:h-[580px] lg:w-[280px] lg:h-[745px] md:px-14 rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal md:mt-[-65px] mt-[-45px] z-20`}>
+          <div className={`${className}__mainComponent__leftSide md:mx-0 mx-5 lg:px-20 flex flex-col tablet:items-start justify-center md:h-[580px] lg:w-[280px] lg:h-[754px] md:px-14 rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal md:mt-[-65px] mt-[-45px] z-20`}>
             <div className="flex md:flex-col flex-row items-start md:justify-center justify-around gap-y-6 py-50 md:py-90 lg:text-base md:text-sm text-nowrap">
               <Link to="/my-profile" onClick={() => setActiveTab(0)}>
                 <p className={`${tabButtonsStyle} ${activeTab === 0 ? "text-white" : ""}`}>Overview {activeTab === 0 ? <FaArrowRightLong className="md:inline hidden" /> : ""}</p>
