@@ -86,4 +86,6 @@ pub async fn create_ledger_canister(ledger_args: LedgerArg) -> Result<String, St
     // };
 
     Ok(format!("Ledger created, id: {}", canister_id_principal))
+    // Ok(canister_id_principal.tos)
+
 }

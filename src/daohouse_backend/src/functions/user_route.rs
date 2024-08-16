@@ -2,6 +2,7 @@ use std::borrow::Borrow;
 
 use crate::api::call::{call_with_payment128, CallResult};
 use crate::api::canister_version;
+
 use crate::routes::upload_image;
 use crate::types::{
     CanisterIdRecord, CanisterInstallMode, CreateCanisterArgument, CreateCanisterArgumentExtended,
@@ -660,8 +661,8 @@ pub async fn create_ledger(
         //     // ),
         // ],
         archive_options: ArchiveOptions {
-            // controller_id: api::caller(),
-            controller_id: Principal::from_text(dao_canister_id).map_err(|err| err.to_string())?,
+            controller_id: api::caller(), // TODO FIX THIS, THIS NEED TO BE DAO CANISTER ID 
+            // controller_id: Principal::from_text(dao_canister_id).map_err(|err| err.to_string())?,
             cycles_for_archive_creation: None,
             max_message_size_bytes: None,
             max_transactions_per_response: None,
@@ -684,6 +685,10 @@ pub async fn create_ledger(
 
     // Ok("()".to_string())
 }
+
+
+// TEMP CANISTER CALLS
+
 
 // BACKUP
 // async fn create_ledger(dao_canister_id: String, total_tokens: Nat, acc: Principal, token_name: String, token_symbol: String) -> Result<String, String> {

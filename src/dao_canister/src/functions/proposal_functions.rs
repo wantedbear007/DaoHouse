@@ -1,5 +1,3 @@
-use std::borrow::{Borrow, BorrowMut};
-
 use crate::proposal_route::check_proposal_state;
 use crate::types::{Dao, ProposalInput, Proposals};
 use crate::{guards::*, DaoGroup, Pagination};
@@ -232,6 +230,8 @@ fn execute_add_proposals(id: &String) {
 // get all groups
 #[update]
 fn get_all_groups() -> Vec<DaoGroup> {
+
+    
     with_state(|state| {
         let mut groups: Vec<DaoGroup> = Vec::new();
 
