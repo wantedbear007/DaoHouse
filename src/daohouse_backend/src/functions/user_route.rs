@@ -345,13 +345,30 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
     // ic_cdk::println!("errrrrr in installing {:?}", _installcode);
     println!("Canister ID: {:?}", canister_id);
 
+    // creating ledger account associated with dao
+    let ledger_canister_id = create_ledger(
+        canister_id_principal.to_string().clone(),
+        dao_detail.total_tokens,
+        dao_detail.token_name,
+        dao_detail.token_symbol,
+        dao_detail.members,
+    )
+    .await
+    .map_err(|er| format!("Error while creating ledger canister {}", String::from(er)))?;
+
     let dao_details: DaoDetails = DaoDetails {
         dao_canister_id: canister_id_principal.to_string().clone(),
         dao_name: dao_detail.dao_name,
         dao_desc: dao_detail.purpose,
         // image_id: id,
         dao_id: canister_id_principal.clone(),
+        dao_associated_ledger: ledger_canister_id.clone(),
     };
+
+    ic_cdk::println!(
+        "ledger canister created successfully {}",
+        ledger_canister_id
+    );
 
     with_state(|state| {
         state
@@ -386,7 +403,11 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
     // let _installcode = install_code(arg1).await.unwrap();
     // // ic_cdk::println!("errrrrr in installing {:?}", _installcode);
     // println!("Canister ID: {:?}", canister_id);
-    Ok("DAO created successfully".to_string())
+    // Ok("DAO created successfully".to_string())
+    Ok(format!(
+        "Dao created, canister id: {}",
+        canister_id_principal.to_string()
+    ))
 }
 
 async fn create_canister(
@@ -591,8 +612,8 @@ fn get_profile_by_id(id: Principal) -> Result<UserProfile, String> {
     })
 }
 
-#[update]
-async fn create_ledger(
+// #[update]
+pub async fn create_ledger(
     dao_canister_id: String,
     total_tokens: Nat,
     token_name: String,

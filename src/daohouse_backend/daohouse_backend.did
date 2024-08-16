@@ -12,6 +12,7 @@ type Comment = record {
 };
 type DaoDetails = record {
   dao_id : principal;
+  dao_associated_ledger : text;
   dao_desc : text;
   dao_name : text;
   dao_canister_id : text;
@@ -24,6 +25,7 @@ type DaoGroup = record {
 type DaoInput = record {
   members : vec principal;
   image_title : text;
+  token_symbol : text;
   linksandsocials : vec text;
   daotype : text;
   image_content : blob;
@@ -33,8 +35,10 @@ type DaoInput = record {
   members_permissions : vec text;
   link_of_document : text;
   image_content_type : text;
+  total_tokens : nat;
   tokenissuer : text;
   cool_down_period : nat32;
+  token_name : text;
   purpose : text;
   required_votes : nat32;
 };
@@ -114,7 +118,6 @@ service : (PaymentRecipientAccount) -> {
   check_user_existance : () -> (Result) query;
   comment_post : (text, text) -> (Result);
   create_dao : (text, DaoInput) -> (Result);
-  create_ledger : (text, nat, text, text, vec principal) -> (Result);
   create_new_post : (text, PostInput) -> (Result);
   create_profile : () -> (Result_1);
   delete_profile : () -> (Result_1);

@@ -601,6 +601,9 @@ pub struct ICRC1LedgerInitArgs {
     pub archive_options: ArchiveOptions,
 }
 
+
+
+
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
 pub struct DaoInput {
     pub dao_name: String,
@@ -613,6 +616,9 @@ pub struct DaoInput {
     pub linksandsocials: Vec<String>,
     pub required_votes: u32,
     pub dao_groups: Vec<DaoGroup>,
+    pub token_name: String,
+    pub token_symbol: String,
+    pub total_tokens: Nat,
     // pub followers: Vec<Principal>,
 
     // image data
@@ -648,6 +654,7 @@ pub struct DaoDetails {
     // pub image_id: String,
     pub dao_desc: String,
     pub dao_canister_id: String,
+    pub dao_associated_ledger: String
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
