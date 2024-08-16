@@ -6,6 +6,7 @@ import nfidlogo from '../../../assets/nfidlogo.png';
 import './global.scss'; // Ensure global styles are imported
 
 const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug, onLoginNFID }) => {
+  // added logic here for stop scrolling
   useEffect(() => {
     const bodyStyle = document.body.style;
 
