@@ -84,3 +84,5 @@ pub async fn create_ledger_canister(ledger_args: LedgerArg) -> Result<Principal,
 }
 
 // get canister details
+
+// get user balance

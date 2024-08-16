@@ -25,6 +25,7 @@ pub fn with_state<R>(f: impl FnOnce(&mut State) -> R) -> R {
 async fn init(dao_input: DaoInput) {
     ic_cdk::println!("data is {:?}", dao_input);
 
+
     let principal_id = api::caller();
     let new_dao = Dao {
         dao_id: principal_id,

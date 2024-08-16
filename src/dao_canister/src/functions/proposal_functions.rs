@@ -143,30 +143,46 @@ fn proposal_refresh() -> Result<String, String> {
     Ok("Refresh completed".to_string())
 }
 
-#[update(guard = prevent_anonymous)]
-fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String> {
-    check_voting_right(&proposal_id)?;
-    let principal_id = api::caller();
+// #[update(guard = prevent_anonymous)]
+// fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String> {
+//     check_voting_right(&proposal_id)?;
+//     let principal_id = api::caller();
 
-    with_state(|state| match &mut state.proposals.get(&proposal_id) {
-        Some(pro) => {
-            if voting == VoteParam::Yes {
-                pro.approved_votes_list.push(principal_id);
-                pro.proposal_approved_votes += 1;
+//     with_state(|state| match &mut state.proposals.get(&proposal_id) {
+//         Some(pro) => {
+//             if voting == VoteParam::Yes {
+//                 pro.approved_votes_list.push(principal_id);
+//                 pro.proposal_approved_votes += 1;
 
-                state.proposals.insert(proposal_id, pro.to_owned());
-                Ok(String::from("Successfully voted in favour of Proposal."))
-            } else {
-                pro.rejected_votes_list.push(principal_id);
-                pro.proposal_rejected_votes += 1;
+//                 state.proposals.insert(proposal_id, pro.to_owned());
+//                 Ok(String::from("Successfully voted in favour of Proposal."))
+//             } else {
+//                 pro.rejected_votes_list.push(principal_id);
+//                 pro.proposal_rejected_votes += 1;
 
-                state.proposals.insert(proposal_id, pro.to_owned());
-                Ok(String::from("Successfully voted against the proposal."))
-            }
-        }
-        None => Err(String::from("Proposal ID is invalid !")),
-    })
-}
+//                 state.proposals.insert(proposal_id, pro.to_owned());
+//                 Ok(String::from("Successfully voted against the proposal."))
+//             }
+//         }
+//         None => Err(String::from("Proposal ID is invalid !")),
+//     })
+// }
+
+
+// async fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String>{
+
+    // // to check if user has already voted
+    // check_voting_right(&proposal_id)?;
+
+    // let principal_id = api::caller();
+
+
+
+    // Ok("()".to_string())
+
+// }
+
+
 #[query(guard=prevent_anonymous)]
 fn search_proposal(proposal_id: String) -> Vec<Proposals> {
     let mut propo: Vec<Proposals> = Vec::new();

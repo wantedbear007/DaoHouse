@@ -92,7 +92,6 @@ type UpdateDaoSettings = record {
   followers : vec principal;
   purpose : text;
 };
-type VoteParam = variant { No; Yes };
 service : (DaoInput) -> {
   add_ledger_canister_id : (LedgerCanisterId) -> (Result);
   add_member_to_group : (text, principal) -> (text);
@@ -114,5 +113,4 @@ service : (DaoInput) -> {
   search_proposal : (text) -> (vec Proposals) query;
   unfollow_dao : () -> (Result);
   update_dao_settings : (UpdateDaoSettings) -> (Result);
-  vote : (text, VoteParam) -> (Result);
 }

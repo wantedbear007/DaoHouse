@@ -21,8 +21,10 @@ use ic_cdk::api::call::RejectionCode;
 // use ic_cdk::api::management_canister::main::CanisterSettings;
 use ic_cdk::println;
 use ic_cdk::{query, update};
+// use crate::functions::cani
 // use icrc_ledger_types::icrc1::account::Account;
 
+use super::canister_functions::call_inter_canister;
 use super::ledger_functions::create_ledger_canister;
 // use ic_cdk::trap;
 
@@ -40,7 +42,6 @@ async fn create_profile(// asset_handler_canister_id: String,
     if principal_id == Principal::anonymous() {
         return Err("Anonymous principal not allowed to make calls.".to_string());
     }
-
     // Check if the user is already registered
     // let is_registered = with_state(|state| {
     //     if state.user_profile.contains_key(&principal_id) {
@@ -381,40 +382,47 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         .push(canister_id_principal.to_string());
 
     // updating ledger canister id in newely created canister id
+    
+    let _ = call_inter_canister("add_ledger_canister_id", LedgerCanisterId {
+        id: ledger_canister_id,
+    } , canister_id_principal).await.map_err(|err| {format!("Error occurred {}", err.to_string())});
 
-    let response: CallResult<(Result<String, String>,)> = ic_cdk::call(
-        canister_id_principal,
-        "add_ledger_canister_id",
-        (LedgerCanisterId {
-            id: ledger_canister_id,
-        },),
-    )
-    .await;
 
-    ic_cdk::println!("ye hai bhai canister id of ledger: {:?}", response);
 
-    let res0: Result<(Result<String, String>,), (RejectionCode, String)> = response;
+    // let response: CallResult<(Result<String, String>,)> = ic_cdk::call(
+    //     canister_id_principal,
+    //     "add_ledger_canister_id",
+    //     (LedgerCanisterId {
+    //         id: ledger_canister_id,
+    //     },),
+    // )
+    // .await;
 
-    let formatted_value = match res0 {
-      Ok((Ok(value),)) => {
-          format!("{}", value);
-          Ok(format!("{}", value))
-          // value
-      }
-      Ok((Err(err),)) => Err(err),
-      Err((code, message)) => {
-          match code {
-              RejectionCode::NoError => Err("NoError".to_string()),
-              RejectionCode::SysFatal => Err("SysFatal".to_string()),
-              RejectionCode::SysTransient => Err("SysTransient".to_string()),
-              RejectionCode::DestinationInvalid => Err("DestinationInvalid".to_string()),
-              RejectionCode::CanisterReject => Err("CanisterReject".to_string()),
-              // Handle other rejection codes here
-              _ => Err(format!("Unknown rejection code: {:?}: {}", code, message)),
-              // _ => Err(format!("Unknown rejection code: {:?}", code)),
-          }
-      }
-  };
+    // ic_cdk::println!("ye hai bhai canister id of ledger: {:?}", response);
+
+//     let res0: Result<(Result<String, String>,), (RejectionCode, String)> = response;
+
+//     let formatted_value = match res0 {
+//       Ok((Ok(value),)) => {
+//           format!("{}", value);
+//           Ok(format!("{}", value))
+//           // value
+//       }
+//       Ok((Err(err),)) => Err(err),
+//       Err((code, message)) => {
+//           match code {
+//               RejectionCode::NoError => Err("NoError".to_string()),
+//               RejectionCode::SysFatal => Err("SysFatal".to_string()),
+//               RejectionCode::SysTransient => Err("SysTransient".to_string()),
+//               RejectionCode::DestinationInvalid => Err("DestinationInvalid".to_string()),
+//               RejectionCode::CanisterReject => Err("CanisterReject".to_string()),
+//               // Handle other rejection codes here
+//               _ => Err(format!("Unknown rejection code: {:?}: {}", code, message)),
+//               // _ => Err(format!("Unknown rejection code: {:?}", code)),
+//           }
+//       }
+//   };
+
 
 
     with_state(|state| {
