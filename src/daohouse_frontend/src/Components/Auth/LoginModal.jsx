@@ -1,10 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import plug from '../../../assets/plugicon.png';
 import II from '../../../assets/InternetIdentityIcon.png';
-import nfidlogo from '../../../assets/nfidlogo.png'
+import nfidlogo from '../../../assets/nfidlogo.png';
+import './global.scss';  // Ensure global styles are imported
 
 const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug, onLoginNFID }) => {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.position = 'fixed';
+      document.body.style.top = '0';
+      document.body.style.left = '0';
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+    }
+  
+    // Clean up when the component is unmounted or modal closes
+    return () => {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+  
   const buttons = [
     {
       onClick: onLogin,
@@ -34,35 +60,34 @@ const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug, onLoginNFID }) => {
 
   return (
     <>
-    {isOpen && (
-  <div className="fixed inset-0 flex justify-center items-center z-[100]">
-    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-[150]">
-      <div className="bg-[#AAC8D6] p-4 rounded-lg shadow-lg w-80 h-75 max-h-[100vh] overflow-y-auto z-[200]">
-        <div className="flex justify-center items-center mb-3 border-b-2 border-white relative">
-          <span className="text-[#0E3746] font-medium">Connect With</span>
-          <button onClick={onClose} className="absolute right-0 text-gray-400 hover:text-gray-600">
-            <FaTimes color='#0E3746' />
-          </button>
-        </div>
-        <div className='flex items-center justify-center flex-col mt-4'>
-          {buttons.map((button, index) => (
-            <button
-              key={index}
-              onClick={button.onClick}
-              className={`flex items-center justify-start w-full p-2 mb-3 text-black hover:text-white hover:bg-black border-2 border-[#4993B0] rounded-lg`}
-            >
-              <div className='w-fit text-center mx-auto inline-flex'>
-                <img src={button.icon} alt={button.label} className="w-6 h-6 mr-2 bg-white rounded-xl" />
-                <span className='w-[7rem] truncate text-left'>{button.label}</span>
+      {isOpen && (
+        <div className="fixed inset-0 flex justify-center items-center z-[100]">
+          <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-[150]">
+            <div className="bg-[#AAC8D6] p-4 rounded-lg shadow-lg w-80 h-75 max-h-[100vh] overflow-y-auto z-[200]">
+              <div className="flex justify-center items-center mb-3 border-b-2 border-white relative">
+                <span className="text-[#0E3746] font-medium">Connect With</span>
+                <button onClick={onClose} className="absolute right-0 text-gray-400 hover:text-gray-600">
+                  <FaTimes color='#0E3746' />
+                </button>
               </div>
-            </button>
-          ))}
+              <div className='flex items-center justify-center flex-col mt-4'>
+                {buttons.map((button, index) => (
+                  <button
+                    key={index}
+                    onClick={button.onClick}
+                    className={`flex items-center justify-start w-full p-2 mb-3 text-black hover:text-white hover:bg-black border-2 border-[#4993B0] rounded-lg`}
+                  >
+                    <div className='w-fit text-center mx-auto inline-flex'>
+                      <img src={button.icon} alt={button.label} className="w-6 h-6 mr-2 bg-white rounded-xl" />
+                      <span className='w-[7rem] truncate text-left'>{button.label}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-)}
-
+      )}
     </>
   );
 };
