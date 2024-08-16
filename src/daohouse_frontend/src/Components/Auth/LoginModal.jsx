@@ -32,7 +32,7 @@ const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug, onLoginNFID }) => {
     };
   }, [isOpen]);
   
-=======
+
 import './global.scss'; // Ensure global styles are imported
 
 const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug, onLoginNFID }) => {
@@ -68,7 +68,6 @@ const LoginModal = ({ isOpen, onClose, onLogin, onLoginPlug, onLoginNFID }) => {
     };
   }, [isOpen]);
 
->>>>>>> main
   const buttons = [
     {
       onClick: onLogin,
