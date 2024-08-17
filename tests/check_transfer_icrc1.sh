@@ -1,8 +1,5 @@
 
 
-# start writing about tokens transfer
-# check for user to canister 
-
 # DAO bw4dl-smaaa-aaaaa-qaacq-cai
 # LEDGER b77ix-eeaaa-aaaaa-qaada-cai
 
@@ -26,6 +23,7 @@ function debug_print() {
     echo "Balance of testing: $(dfx canister call b77ix-eeaaa-aaaaa-qaada-cai icrc1_balance_of "(record {owner = principal \"$USER\"})")"
     echo "Balance of reciever: $(dfx canister call b77ix-eeaaa-aaaaa-qaada-cai icrc1_balance_of "(record {owner = principal \"$RECIEVER\"})")"
     echo "Balance of Bhanu identity is: $(dfx canister call b77ix-eeaaa-aaaaa-qaada-cai icrc1_balance_of "(record {owner = principal \"$BHANU\"})")"
+        echo "Balance of DAO Canister  is: $(dfx canister call b77ix-eeaaa-aaaaa-qaada-cai icrc1_balance_of "(record {owner = principal \"$DAO\"})")"
 }
 
 # # TRANSFER
@@ -33,6 +31,8 @@ function debug_print() {
 # dfx --identity default canister call b77ix-eeaaa-aaaaa-qaada-cai icrc1_transfer "(record { to = record { owner = principal \"$BHANU\" }; amount = 1000000000 })"
 # echo $TRANSFER
 
+
+# APPROVAL NEEDS TO BE DONE ON FRONTEND
 
 # # # # # to approve 
 APPROVE=$(dfx --identity Bhanu canister call b77ix-eeaaa-aaaaa-qaada-cai icrc2_approve "(record { amount = 100; spender = record { owner = principal \"$DAO\"} })")

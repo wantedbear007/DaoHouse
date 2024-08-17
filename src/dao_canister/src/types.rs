@@ -161,7 +161,7 @@ pub struct TokenTransferArgs {
     pub tokens: u64,
     pub from: Principal,
     pub to: Principal,
-    pub dao_canister: Principal
+    // pub dao_canister: Principal
 }
 
 // #[derive(Clone, CandidType, Serialize, Deserialize)]

@@ -88,7 +88,6 @@ type TokenTransferArgs = record {
   to : principal;
   from : principal;
   tokens : nat64;
-  dao_canister : principal;
 };
 type UpdateDaoSettings = record {
   members : vec principal;
@@ -118,8 +117,7 @@ service : (DaoInput) -> {
   proposal_refresh : () -> (Result);
   remove_member_from_group : (text, principal) -> (text);
   search_proposal : (text) -> (vec Proposals) query;
-  transfer : (nat64, principal, principal, principal) -> (Result_3);
-  transfer_tokens : (TokenTransferArgs) -> (Result_3);
+  transfer : (TokenTransferArgs) -> (Result_3);
   unfollow_dao : () -> (Result);
   update_dao_settings : (UpdateDaoSettings) -> (Result);
 }

@@ -8,7 +8,7 @@ use icrc_ledger_types::{
     icrc2::transfer_from::{TransferFromArgs, TransferFromError},
 };
 
-use crate::TokenTransferArgs;
+use crate::{with_state, TokenTransferArgs};
 
 use super::call_inter_canister;
 // pub async fn transfer_tokens(
@@ -21,27 +21,22 @@ use super::call_inter_canister;
 //     Ok("()".to_string())
 // }
 
-#[update]
-async fn transfer_tokens(args: TokenTransferArgs) -> Result<Nat, String>{
+// #[update]
+// async fn transfer_tokens(args: TokenTransferArgs) -> Result<Nat, String>{
 
-  transfer(args.tokens, args.from, args.to, args.dao_canister).await.map_err(|err| err.to_string())
+//   transfer(args.tokens, args.from, args.to, args.dao_canister).await.map_err(|err| err.to_string())
 
-//   Ok("Sucess ho gya bhai".to_string())
-}
-
-
+// //   Ok("Sucess ho gya bhai".to_string())
+// }
 
 #[update]
-async fn transfer(
-    tokens: u64,
-    from: Principal,
-    to: Principal,
-    canister_id: Principal,
-) -> Result<BlockIndex, String> {
+async fn transfer(args: TokenTransferArgs) -> Result<BlockIndex, String> {
+    let ledger_id = with_state(|state| state.dao.token_ledger_id.id);
+
     let transfer_args = TransferFromArgs {
-        amount: tokens.into(),
+        amount: args.tokens.into(),
         to: Account {
-            owner: to,
+            owner: args.to,
             subaccount: None,
         },
         fee: None,
@@ -49,13 +44,13 @@ async fn transfer(
         created_at_time: None,
         spender_subaccount: None,
         from: Account {
-            owner: from,
+            owner: args.from,
             subaccount: None,
         },
     };
 
     ic_cdk::call::<(TransferFromArgs,), (Result<BlockIndex, TransferFromError>,)>(
-        canister_id,
+        ledger_id,
         "icrc2_transfer_from",
         (transfer_args,),
     )
