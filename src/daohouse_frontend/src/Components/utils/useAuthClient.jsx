@@ -2,8 +2,8 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthClient } from "@dfinity/auth-client";
 import { createActor, idlFactory as BackendidlFactory } from "../../../../declarations/daohouse_backend/index";
 import { Principal } from "@dfinity/principal";
-import { HttpAgent, Actor } from "@dfinity/agent";
-//import { NFID } from "@nfid/embed";
+import { HttpAgent, Actor, AnonymousIdentity } from "@dfinity/agent";
+import { NFID } from "@nfid/embed";
 import { idlFactory as DaoFactory } from "../../../../declarations/dao_canister/index";
 
 const AuthContext = createContext();
@@ -246,7 +246,7 @@ export const useAuthClient = (options = defaultOptions) => {
 
   const createDaoActor = (canisterId) => {
     try {
-      const agent = new HttpAgent({ identity });
+      const agent = new HttpAgent({ identity: new AnonymousIdentity() });
 
       if (process.env.DFX_NETWORK !== 'production') {
         agent.fetchRootKey().catch(err => {
