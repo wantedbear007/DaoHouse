@@ -20,19 +20,19 @@ function debug_print() {
 }
 
 # # TRANSFER
-# TRANSFER=$(
-# dfx --identity default canister call icrc1_ledger_canister icrc1_transfer "(record { to = record { owner = principal \"$USER\" }; amount = 1000000000 })")
-# echo $TRANSFER
+TRANSFER=$(
+dfx --identity default canister call icrc1_ledger_canister icrc1_transfer "(record { to = record { owner = principal \"$USER\" }; amount = 1000000000 })")
+echo $TRANSFER
 
 
 # # # to approve 
-# APPROVE=$(dfx --identity testing canister call icrc1_ledger_canister icrc2_approve "(record { amount = 9999999999999999; spender = record { owner = principal \"$CANISTER\"} })")
-# echo $APPROVE
+APPROVE=$(dfx --identity testing canister call icrc1_ledger_canister icrc2_approve "(record { amount = 9999999999999999; spender = record { owner = principal \"$CANISTER\"} })")
+echo $APPROVE
 
 
 # debug_print 1
 # # TRANSFER TO USER
-# USER_TRANSFER=$(dfx canister call daohouse_backend make_payment "(100000000, principal \"$USER\")")
-# echo $USER_TRANSFER
+USER_TRANSFER=$(dfx canister call daohouse_backend make_payment "(100000000, principal \"$USER\")")
+echo $USER_TRANSFER
 
-debug_print 2
+# debug_print 2

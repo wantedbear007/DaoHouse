@@ -22,16 +22,16 @@ use super::call_inter_canister;
 // }
 
 #[update]
-async fn transfer_tokens(args: TokenTransferArgs) -> Result<String, String>{
+async fn transfer_tokens(args: TokenTransferArgs) -> Result<Nat, String>{
 
-  let _ = transfer(args.tokens, args.from, args.to, args.dao_canister).await.map_err(|err| err.to_string());
+  transfer(args.tokens, args.from, args.to, args.dao_canister).await.map_err(|err| err.to_string())
 
-  Ok("Sucess ho gya bhai".to_string())
+//   Ok("Sucess ho gya bhai".to_string())
 }
 
 
 
-// #[update]
+#[update]
 async fn transfer(
     tokens: u64,
     from: Principal,

@@ -83,6 +83,7 @@ type Proposals = record {
 type Result = variant { Ok : text; Err : text };
 type Result_1 = variant { Ok : vec principal; Err : text };
 type Result_2 = variant { Ok : vec Proposals; Err : text };
+type Result_3 = variant { Ok : nat; Err : text };
 type TokenTransferArgs = record {
   to : principal;
   from : principal;
@@ -117,7 +118,8 @@ service : (DaoInput) -> {
   proposal_refresh : () -> (Result);
   remove_member_from_group : (text, principal) -> (text);
   search_proposal : (text) -> (vec Proposals) query;
-  transfer_tokens : (TokenTransferArgs) -> (Result);
+  transfer : (nat64, principal, principal, principal) -> (Result_3);
+  transfer_tokens : (TokenTransferArgs) -> (Result_3);
   unfollow_dao : () -> (Result);
   update_dao_settings : (UpdateDaoSettings) -> (Result);
 }
