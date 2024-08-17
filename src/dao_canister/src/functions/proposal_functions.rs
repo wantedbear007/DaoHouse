@@ -168,19 +168,28 @@ fn proposal_refresh() -> Result<String, String> {
 //     })
 // }
 
+#[update]
+// only members
+// prevent anonymous
+async fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String>{
 
-// async fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String>{
+    // to check if user has already voted
+    check_voting_right(&proposal_id)?;
 
-    // // to check if user has already voted
-    // check_voting_right(&proposal_id)?;
+    let principal_id = api::caller();
 
-    // let principal_id = api::caller();
+    
+
+    // frontend need to approve 
 
 
 
-    // Ok("()".to_string())
 
-// }
+
+
+    Ok("()".to_string())
+
+}
 
 
 #[query(guard=prevent_anonymous)]

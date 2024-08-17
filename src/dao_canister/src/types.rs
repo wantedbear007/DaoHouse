@@ -1,5 +1,6 @@
 use candid::{CandidType, Decode, Encode, Principal};
 use ic_stable_structures::{storable::Bound, Storable};
+use icrc_ledger_types::icrc1::account::Subaccount;
 // use serde::Deserialize;
 use serde::{Deserialize, Serialize};
 use std::borrow::Cow;
@@ -50,7 +51,7 @@ pub struct ProposalInput {
     pub proposal_description: String,
     pub required_votes: u32,
     pub proposal_type: ProposalType,
-    pub proposal_expired_at: u64,
+    // pub proposal_expired_at: u64,
     // pub proposal_amount:String,
     // pub proposal_receiver_id:String,
     // pub created_by: Principal,
@@ -64,7 +65,7 @@ pub struct Pagination {
 
 #[derive(CandidType, Serialize, Deserialize, Clone, Debug)]
 pub struct LedgerCanisterId {
-    pub id: Principal
+    pub id: Principal,
 }
 #[derive(Clone, CandidType, Serialize, Deserialize)]
 pub struct Dao {
@@ -87,8 +88,8 @@ pub struct Dao {
     pub followers_count: u32,
     pub proposals_count: u32,
     pub proposal_ids: Vec<String>,
-    pub token_ledger_id: LedgerCanisterId
-    // pub dao_groups: Vec<DaoGroup>,
+    pub token_ledger_id: LedgerCanisterId,
+    pub tokens_required_to_vote: u32, // pub dao_groups: Vec<DaoGroup>,
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
@@ -113,6 +114,7 @@ pub struct DaoInput {
     pub image_id: String,
     pub followers: Vec<Principal>,
     pub members_permissions: Vec<String>,
+    pub tokens_required_to_vote: u32,
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
@@ -162,6 +164,12 @@ pub struct TokenTransferArgs {
     pub from: Principal,
     pub to: Principal,
     // pub dao_canister: Principal
+}
+
+#[derive(CandidType, Serialize, Deserialize)]
+pub struct TokenBalanceArgs {
+    pub owner: Principal,
+    pub subaccount: Option<Vec<u8>>,
 }
 
 // #[derive(Clone, CandidType, Serialize, Deserialize)]

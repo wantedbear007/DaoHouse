@@ -38,7 +38,8 @@ impl State {
                 proposal_ids: Vec::new(),
                 token_ledger_id: LedgerCanisterId {
                     id: Principal::anonymous(),
-                }, // dao_groups: Vec::new(),
+                },
+                tokens_required_to_vote: 0,
             },
 
             permision: Votingandpermissions {

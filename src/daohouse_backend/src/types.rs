@@ -619,6 +619,7 @@ pub struct DaoInput {
     pub token_name: String,
     pub token_symbol: String,
     pub total_tokens: Nat,
+    pub tokens_required_to_vote: u32,
     // pub followers: Vec<Principal>,
 
     // image data
@@ -645,6 +646,7 @@ pub struct DaoCanisterInput {
     pub image_id: String,
     pub members_permissions: Vec<String>,
     pub dao_groups: Vec<DaoGroup>,
+    pub tokens_required_to_vote: u32
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]

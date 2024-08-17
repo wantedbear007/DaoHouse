@@ -287,6 +287,7 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         image_id: id.clone(),
         members_permissions: dao_detail.members_permissions,
         dao_groups: dao_detail.dao_groups,
+        tokens_required_to_vote: dao_detail.tokens_required_to_vote,
     };
 
     let dao_detail_bytes: Vec<u8> = match encode_one(&update_dau_detail) {
@@ -383,7 +384,7 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
 
     // updating ledger canister id in newely created canister id
 
-    let _ = call_inter_canister(
+    let _ = call_inter_canister::<LedgerCanisterId, String>(
         "add_ledger_canister_id",
         LedgerCanisterId {
             id: ledger_canister_id,

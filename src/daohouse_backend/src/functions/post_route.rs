@@ -2,7 +2,6 @@
 
 use std::borrow::{Borrow, BorrowMut};
 
-use crate::ic::WasmArg;
 use crate::routes::upload_image;
 use crate::types::{Comment, PostInfo, PostInput};
 use crate::{
@@ -11,7 +10,6 @@ use crate::{
 };
 use candid::{Nat, Principal};
 use ic_cdk::api;
-use ic_cdk::api::call::CallResult;
 // use ic_cdk::api::management_canister::main::{install_code, raw_rand, CanisterInstallMode, CanisterSettings};
 // use ic_cdk::{
 //     api::{

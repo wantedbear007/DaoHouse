@@ -14,6 +14,8 @@ use candid::Principal;
 use types::*;
 use icrc_ledger_types::icrc1::transfer::BlockIndex;
 use candid::Nat;
+use crate::api::call::CallResult;
+
 
 thread_local! {
     static STATE: RefCell<State> = RefCell::new(State::new());
@@ -52,6 +54,7 @@ async fn init(dao_input: DaoInput) {
         token_ledger_id: LedgerCanisterId {
             id: Principal::anonymous(),
         }, // dao_groups: dao_input.dao_groups.clone(), // to be removed (debug impl)
+        tokens_required_to_vote: dao_input.tokens_required_to_vote
     };
 
     let permission = Votingandpermissions {

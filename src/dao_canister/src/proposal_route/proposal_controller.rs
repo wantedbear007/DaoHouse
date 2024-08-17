@@ -15,6 +15,7 @@ pub fn create_new_proposal(
         proposal_title: proposal.proposal_title,
         proposal_description: proposal.proposal_description,
         proposal_status: ProposalState::Open,
+        
         // proposal_amount: proposal.proposal_amount,
         proposal_submitted_at: ic_cdk::api::time(),
         // proposal_expired_at: proposal.proposal_expired_at,

@@ -2,32 +2,18 @@
 // transfer funds
 
 use candid::{Nat, Principal};
-use ic_cdk::update;
+use ic_cdk::{
+    api::call::{CallResult, RejectionCode},
+    update,
+};
 use icrc_ledger_types::{
     icrc1::{account::Account, transfer::BlockIndex},
     icrc2::transfer_from::{TransferFromArgs, TransferFromError},
 };
 
-use crate::{with_state, TokenTransferArgs};
+use crate::{with_state, TokenBalanceArgs, TokenTransferArgs};
 
 use super::call_inter_canister;
-// pub async fn transfer_tokens(
-//     from: Principal,
-//     to: Principal,
-//     amount: Nat,
-// ) -> Result<String, String> {
-//     // call_inter_canister(function, args, canister_id)
-
-//     Ok("()".to_string())
-// }
-
-// #[update]
-// async fn transfer_tokens(args: TokenTransferArgs) -> Result<Nat, String>{
-
-//   transfer(args.tokens, args.from, args.to, args.dao_canister).await.map_err(|err| err.to_string())
-
-// //   Ok("Sucess ho gya bhai".to_string())
-// }
 
 #[update]
 async fn transfer(args: TokenTransferArgs) -> Result<BlockIndex, String> {
@@ -58,4 +44,20 @@ async fn transfer(args: TokenTransferArgs) -> Result<BlockIndex, String> {
     .map_err(|e| format!("failed to call ledger: {:?}", e))?
     .0
     .map_err(|e| format!("ledger transfer error {:?}", e))
+}
+
+// to check balance
+#[update]
+async fn get_balance(id: Principal) -> Result<Nat, String> {
+    let ledger_canister = with_state(|state| state.dao.token_ledger_id.id);
+
+    call_inter_canister::<Account, Nat>(
+        "icrc1_balance_of",
+        Account {
+            owner: id,
+            subaccount: None,
+        },
+        ledger_canister,
+    )
+    .await
 }
