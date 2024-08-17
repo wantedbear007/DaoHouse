@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import Container from "../Container/Container";
 
 
-const Step1 = ({ setData, setActiveStep }) => {
+const Step1 = ({ setData, setActiveStep,data }) => {
   const [loading, setLoading] = useState(false);
   const [inputData, setInputData] = useState({
     DAOIdentifier: "",
@@ -17,7 +17,36 @@ const Step1 = ({ setData, setActiveStep }) => {
   });
 
   const className = "DAO__Step1";
+ 
+  //   if (data) {
+  //     setInputData({
+  //       DAOIdentifier: data.DAOIdentifier || "",
+  //       Purpose: data.Purpose || "",
+  //       DAOType: data.DAOType || "",
+  //       initialTokenSupply: data.initialTokenSupply || 0,
+  //     });
+  //   }
+  // }, [data]);
+  
 
+  useEffect(() => {
+    const savedData = localStorage.getItem('step1Data');
+    if (savedData) {
+      setInputData(JSON.parse(savedData));
+    } else if (data) {
+      setInputData({
+        DAOIdentifier: data.DAOIdentifier || "",
+        Purpose: data.Purpose || "",
+        DAOType: data.DAOType || "",
+        initialTokenSupply: data.initialTokenSupply || 0,
+      });
+    }
+  }, [data]);
+
+  // Save data to local storage whenever inputData changes
+  useEffect(() => {
+    localStorage.setItem('step1Data', JSON.stringify(inputData));
+  }, [inputData]);
   async function handleSaveAndNext() {
     if (
       inputData.DAOIdentifier === "" ||

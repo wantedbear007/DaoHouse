@@ -3,7 +3,7 @@ import { AuthClient } from "@dfinity/auth-client";
 import { createActor, idlFactory as BackendidlFactory } from "../../../../declarations/daohouse_backend/index";
 import { Principal } from "@dfinity/principal";
 import { HttpAgent, Actor } from "@dfinity/agent";
-//import { NFID } from "@nfid/embed";
+import { NFID } from "@nfid/embed";
 import { idlFactory as DaoFactory } from "../../../../declarations/dao_canister/index";
 
 const AuthContext = createContext();
@@ -36,6 +36,7 @@ export const useAuthClient = (options = defaultOptions) => {
   const [identity, setIdentity] = useState(null);
   const [principal, setPrincipal] = useState(null);
   const [backendActor, setBackendActor] = useState(null);
+  console.log("backendActor",backendActor)
   const [stringPrincipal, setStringPrincipal] = useState(null);
   const [nfid, setNfid] = useState(null);
   const [error, setError] = useState(null);
@@ -149,17 +150,17 @@ export const useAuthClient = (options = defaultOptions) => {
 
       setIsAuthenticated(prev => ({ ...prev, plug: true }));
       setIdentity(identity);
-      console.log(identity);
+      console.log("i",identity);
       
       setPrincipal(principal);
-      console.log(principal);
+      console.log("p",principal);
       
 
-      // const userActor = await window.ic.plug.createActor({
-      //   canisterId: frontendCanisterId,
-      //   interfaceFactory: DaoFactory
-      // });
-      // console.log("userActor", userActor);
+      const userActor = await window.ic.plug.createActor({
+        canisterId: frontendCanisterId,
+        interfaceFactory: DaoFactory
+      });
+      console.log("userActor", userActor);
       
       const backendActor = await window.ic.plug.createActor({
         canisterId: backendCanisterId,
@@ -167,10 +168,10 @@ export const useAuthClient = (options = defaultOptions) => {
       })
       console.log("ExtActor", backendActor);
       setBackendActor(backendActor );
-      console.log(backendActor);
+      console.log("b",backendActor);
       
-      return backendActor
-      // return userActor
+      // return backendActor
+      return userActor
     } else {
       throw new Error("Plug connection refused");
     }

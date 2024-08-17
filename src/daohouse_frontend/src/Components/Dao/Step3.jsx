@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../Components/utils/useAuthClient";
 import Container from "../Container/Container";
 
-const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
+const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
   const [count, setCount] = useState(1);
   const [showMemberNameInput, setShowMemberNameInput] = useState(false);
   const [addMemberIndex, setAddMemberIndex] = useState(null);
@@ -19,7 +19,17 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
   ]);
 
   const className = "DAO__Step3";
+  useEffect(() => {
+    // Retrieve data from local storage
+    const savedData = localStorage.getItem('step3Data');
+    if (savedData) {
+      setList(JSON.parse(savedData));
+    }
+  }, []);
+  
+
   const handleSaveAndNext = () => {
+    localStorage.setItem('step3Data', JSON.stringify(list));
     setData(prev => ({
       ...prev,
       step3: [...list],
@@ -193,9 +203,19 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref }) => {
 
   const councilMembers = list.find(group => group.name === "Council")?.members || [];
 
+  // useEffect(() => {
+  //   console.log("Current council members:", councilMembers);
+  // }, [councilMembers]);
   useEffect(() => {
+ 
+    const savedData = localStorage.getItem('step3Data');
+    if (savedData) {
+      setList(JSON.parse(savedData));
+    }
+    
     console.log("Current council members:", councilMembers);
   }, [councilMembers]);
+
 
   return (
     <React.Fragment>

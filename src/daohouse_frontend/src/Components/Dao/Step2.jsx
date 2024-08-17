@@ -1,13 +1,34 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import CircularProgress from '@mui/material/CircularProgress';
 import Container from "../Container/Container";
 
-const Step2 = ({ setData, setActiveStep }) => {
+const Step2 = ({ setData, setActiveStep ,data}) => {
   const [inputData, setInputData] = useState({ setUpPeriod: 0 });
+  console.log("inputData",inputData)
   const [loadingNext, setLoadingNext] = useState(false);
   const [loadingBack, setLoadingBack] = useState(false);
   const className = "DAO__Step2";
+  // useEffect(() => {
+  //   if (data?.setUpPeriod !== undefined) {
+  //     setInputData({ setUpPeriod: data.setUpPeriod });
+  //   }
+  // }, [data]);
+  
+
+  useEffect(() => {
+    const savedData = localStorage.getItem('step2Data');
+    if (savedData) {
+      setInputData(JSON.parse(savedData));
+    } else if (data?.setUpPeriod !== undefined) {
+      setInputData({ setUpPeriod: data.setUpPeriod });
+    }
+  }, [data]);
+
+  // Save data to local storage whenever inputData changes
+  useEffect(() => {
+    localStorage.setItem('step2Data', JSON.stringify(inputData));
+  }, [inputData]);
 
   function handleSaveAndNext() {
     setData((prev) => ({

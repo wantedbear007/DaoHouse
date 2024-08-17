@@ -11,14 +11,22 @@ import Container from "../Container/Container";
 
 const Step5 = ({ setData, setActiveStep }) => {
   const [loadingNext, setLoadingNext] = useState(false);
-
-  const [quorum, setQuorum] = useState([
-    { name: "Council", index: 0, vote: 50 },
-    { name: "Group 1", index: 1, vote: 50 },
-    { name: "Group 2", index: 2, vote: 50 },
-  ]);
+ 
+  // const [quorum, setQuorum] = useState([
+  //   { name: "Council", index: 0, vote: 50 },
+  //   { name: "Group 1", index: 1, vote: 50 },
+  //   { name: "Group 2", index: 2, vote: 50 },
+  // ]);
+  const [quorum, setQuorum] = useState(() => {
+    const savedData = localStorage.getItem('step5Quorum');
+    return savedData ? JSON.parse(savedData) : [
+      { name: "Council", index: 0, vote: 50 },
+      { name: "Group 1", index: 1, vote: 50 },
+      { name: "Group 2", index: 2, vote: 50 },
+    ];
+  });
   const className = "DAO_Step5";
-
+ 
   const handleVoteChange = (index, newValue) => {
     setQuorum((prevQuorum) =>
       prevQuorum.map((item, i) =>
@@ -34,7 +42,11 @@ const Step5 = ({ setData, setActiveStep }) => {
     }));
     setActiveStep(5);
   }
-
+  
+  useEffect(() => {
+    // Save quorum data to local storage whenever it changes
+    localStorage.setItem('step5Quorum', JSON.stringify(quorum));
+  }, [quorum]);
   return (
     <React.Fragment>
     <Container>
@@ -159,7 +171,9 @@ const RangeInput = ({ index, handleVoteChange }) => {
     setValue(newValue);
     handleVoteChange(index, newValue);
   };
-
+  useEffect(() => {
+    setValue(value); // Update rangeValue when prop value changes
+  }, [value]);
   const gradient = `linear-gradient(to right, #0e3746 ${value}%, #fff ${value}%)`;
 
   return (
