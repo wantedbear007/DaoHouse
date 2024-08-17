@@ -15,8 +15,10 @@ use crate::{with_state, TokenBalanceArgs, TokenTransferArgs};
 
 use super::call_inter_canister;
 
+// TODO REMOVE THIS UPDATE FROM HERE (INTERNAL FUNCTION)
 #[update]
-async fn transfer(args: TokenTransferArgs) -> Result<BlockIndex, String> {
+// to Transfer custom tokens
+pub async fn icrc_transfer(args: TokenTransferArgs) -> Result<BlockIndex, String> {
     let ledger_id = with_state(|state| state.dao.token_ledger_id.id);
 
     let transfer_args = TransferFromArgs {
@@ -47,8 +49,8 @@ async fn transfer(args: TokenTransferArgs) -> Result<BlockIndex, String> {
 }
 
 // to check balance
-#[update]
-async fn get_balance(id: Principal) -> Result<Nat, String> {
+// #[update]
+pub async fn icrc_get_balance(id: Principal) -> Result<Nat, String> {
     let ledger_canister = with_state(|state| state.dao.token_ledger_id.id);
 
     call_inter_canister::<Account, Nat>(
