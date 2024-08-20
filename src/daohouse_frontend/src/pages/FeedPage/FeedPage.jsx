@@ -9,11 +9,14 @@ import Pagignation from "../../Components/pagignation/Pagignation";
 import NoPostProfile from "../../Components/Dao/NoPostProfile";
 import nodata from "../../../assets/nodata.png";
 import MuiSkeleton from "../../Components/Skeleton/MuiSkeleton";
+import LoginModal from "../../Components/Auth/LoginModal";
 
 
 const FeedPage = () => {
   const [active, setActive] = useState({ all: true, latest: false });
   const [showPopup, setShowPopup] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const { isAuthenticated } = useAuth()
   const [posts, setPosts] = useState([]);
   const [uplodedPost, setUplodedPost] = useState('')
   const [getLike, setGetLike] = useState(null)
@@ -79,8 +82,12 @@ const FeedPage = () => {
   }
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      setShowLoginModal(true); // Show login modal if not authenticated
+      return;
+    }
     getDetails();
-  }, [backendActor, uplodedPost, getLike, active.all, active?.latest, currentPage]);
+  }, [isAuthenticated, backendActor, uplodedPost, getLike, active.all, active.latest, currentPage]);
 
   return (
     <div className={className + " " + "w-full"}>
@@ -166,7 +173,7 @@ const FeedPage = () => {
       </div>
 
       {showPopup && <CreatePostPopup handleGetResponse={handleGetResponse} onClose={() => setShowPopup(false)} />}
-
+      {showLoginModal && <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} onLogin={() => setShowLoginModal(false)} />}
       <div
         className={
           className +
