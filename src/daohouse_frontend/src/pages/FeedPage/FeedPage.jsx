@@ -140,7 +140,7 @@ const FeedPage = () => {
         </Container>
       </div>
 
-      <div
+      <div 
         className={
           className +
           "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col"
@@ -159,7 +159,7 @@ const FeedPage = () => {
                 </Container>
                 :
                 <Container classes={'w-full'}>
-                  {posts?.map((posts, i) => <PostCard handleGetLikePost={handleGetLikePost} posts={posts} key={i} />)}
+                  {posts?.reverse().map((posts, i) => <PostCard handleGetLikePost={handleGetLikePost} posts={posts} key={i} />)}
                 </Container>
             )
         }
