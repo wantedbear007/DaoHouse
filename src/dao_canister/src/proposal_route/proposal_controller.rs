@@ -15,13 +15,15 @@ pub fn create_new_proposal(
         proposal_title: proposal.proposal_title,
         proposal_description: proposal.proposal_description,
         proposal_status: ProposalState::Open,
-        
+
         // proposal_amount: proposal.proposal_amount,
         proposal_submitted_at: ic_cdk::api::time(),
         // proposal_expired_at: proposal.proposal_expired_at,
         // proposal_expired_at: with_state(|sta| ),
+        // proposal_expired_at: ic_cdk::api::time()
+        //     + (with_state(|state| state.dao.cool_down_period) as u64 * 86_400 * 1_000_000_000),
         proposal_expired_at: ic_cdk::api::time()
-            + (with_state(|state| state.dao.cool_down_period) as u64 * 86_400 * 1_000_000_000),
+            + (state.dao.cool_down_period as u64 * 86_400 * 1_000_000_000),
         // proposal_expired_at: ic_cdk::api::time() + (2 * 60 * 1_000_000_000),
 
         // proposal_receiver_id: proposal.proposal_receiver_id,
@@ -29,7 +31,8 @@ pub fn create_new_proposal(
         approved_votes_list: Vec::new(),
         proposal_rejected_votes: 0,
         rejected_votes_list: Vec::new(),
-        required_votes: with_state(|state| state.dao.required_votes),
+        // required_votes: with_state(|state| state.dao.required_votes),
+        required_votes: state.dao.required_votes,
         created_by: api::caller(),
         comments: 0,
         comments_list: Vec::new(),

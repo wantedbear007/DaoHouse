@@ -22,6 +22,20 @@ pub enum ProposalType {
     VotingProposal,
 }
 
+#[derive(Clone, CandidType, Deserialize, Serialize)]
+pub struct AccountBalance {
+    pub id: Principal,
+    // pub balance: u32,
+    pub staked: u32
+}
+
+#[derive(Clone, CandidType, Deserialize, Serialize)]
+pub struct ProposalStakes {
+    pub proposal_id: String,
+    pub balances: Vec<AccountBalance>,
+    // pub staked_balances: Vec<AccountBalance>,
+}
+
 #[derive(Clone, CandidType, Deserialize, Debug)]
 pub struct Proposals {
     pub proposal_id: String,
@@ -49,13 +63,25 @@ pub struct Proposals {
 pub struct ProposalInput {
     pub proposal_title: String,
     pub proposal_description: String,
-    pub required_votes: u32,
+    // pub required_votes: u32,
     pub proposal_type: ProposalType,
     // pub proposal_expired_at: u64,
     // pub proposal_amount:String,
     // pub proposal_receiver_id:String,
     // pub created_by: Principal,
 }
+
+// #[derive(Clone, CandidType, Serialize, Deserialize)]
+// pub struct NewProposal {
+//     pub proposal_title: String,
+//     pub proposal_description: String,
+//     pub required_votes: u32,
+//     pub proposal_type: ProposalType,
+//     // pub proposal_expired_at: u64,
+//     // pub proposal_amount:String,
+//     // pub proposal_receiver_id:String,
+//     // pub created_by: Principal,
+// }
 
 #[derive(CandidType, Serialize, Deserialize)]
 pub struct Pagination {
@@ -210,6 +236,21 @@ impl Storable for GroupList {
 }
 
 impl Storable for DaoGroup {
+    fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    const BOUND: Bound = Bound::Bounded {
+        max_size: MAX_VALUE_SIZE,
+        is_fixed_size: false,
+    };
+}
+
+impl Storable for ProposalStakes {
     fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
         Cow::Owned(Encode!(self).unwrap())
     }

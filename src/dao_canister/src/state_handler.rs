@@ -1,5 +1,5 @@
 use crate::types::{Dao, GroupList, Proposals, Votingandpermissions};
-use crate::{DaoGroup, LedgerCanisterId, Memory};
+use crate::{DaoGroup, LedgerCanisterId, Memory, ProposalStakes};
 use candid::Principal;
 use ic_stable_structures::StableBTreeMap;
 // use std::collections::BTreeMap;
@@ -10,6 +10,7 @@ pub struct State {
     pub permision: Votingandpermissions,
     pub groups: StableBTreeMap<String, GroupList, Memory>, // pub users: HashMap<Principal, User>,
     pub dao_groups: StableBTreeMap<String, DaoGroup, Memory>,
+    pub proposal_balances: StableBTreeMap<String, ProposalStakes, Memory>,
 }
 
 impl State {
@@ -60,6 +61,7 @@ impl State {
 
             groups: init_pool_data(),
             dao_groups: init_group_data(),
+            proposal_balances: init_dao_stake_data(),
         }
     }
 }
@@ -79,4 +81,8 @@ fn init_pool_data() -> StableBTreeMap<String, GroupList, Memory> {
 
 fn init_group_data() -> StableBTreeMap<String, DaoGroup, Memory> {
     StableBTreeMap::init(crate::memory::get_group_memory())
+}
+
+fn init_dao_stake_data() -> StableBTreeMap<String, ProposalStakes, Memory> {
+    StableBTreeMap::init(crate::memory::get_proposal_memory())
 }

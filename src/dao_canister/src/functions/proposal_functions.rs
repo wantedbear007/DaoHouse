@@ -1,6 +1,6 @@
 use crate::proposal_route::check_proposal_state;
 use crate::types::{Dao, ProposalInput, Proposals};
-use crate::{guards::*, DaoGroup, Pagination, TokenTransferArgs};
+use crate::{guards::*, AccountBalance, DaoGroup, Pagination, ProposalStakes, TokenTransferArgs};
 use crate::{proposal_route, with_state, ProposalState, VoteParam};
 use candid::Principal;
 use ic_cdk::api;
@@ -173,6 +173,7 @@ fn proposal_refresh() -> Result<String, String> {
 #[update]
 // only members
 // prevent anonymous
+// TODO: SAVE THE TRANSFERED TOKES TO PARTICULAR CANISTER AND REVERT IT BACK WHEN COMPLETED
 async fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String> {
     // to check if user has already voted
     check_voting_right(&proposal_id)?;
@@ -201,6 +202,23 @@ async fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String> 
         icrc_transfer(token_transfer_args)
             .await
             .map_err(|err| format!("Error in transfer of tokens: {}", String::from(err)))?;
+
+        // storing staked tokens
+        with_state(|state| {
+            let account_balance = AccountBalance {
+                id: principal_id.clone(),
+                staked: state.dao.tokens_required_to_vote,
+            };
+
+            let proposal_stake = ProposalStakes {
+                proposal_id: proposal_id.clone(),
+                balances: vec![account_balance],
+            };
+
+            state
+                .proposal_balances
+                .insert(proposal_id.clone(), proposal_stake);
+        });
 
         // perform voting
         with_state(|state| match &mut state.proposals.get(&proposal_id) {

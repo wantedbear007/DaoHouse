@@ -103,7 +103,7 @@ async fn ask_to_join_dao(daohouse_backend_id: String) -> Result<String, String> 
     let proposal = ProposalInput {
         proposal_description: String::from("Request to join DAO as a member"),
         proposal_title: String::from("Add member to DAO"),
-        required_votes: with_state(|state| state.dao.required_votes),
+        // required_votes: with_state(|state| state.dao.required_votes),
         proposal_type: crate::ProposalType::AddMemberProposal,
         // proposal_expired_at: ic_cdk::api::time() + (20 * 86_400 * 1_000_000_000),
         // proposal_expired_at: ic_cdk::api::time()

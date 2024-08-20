@@ -35,7 +35,7 @@ function debug_print() {
 # APPROVAL NEEDS TO BE DONE ON FRONTEND
 
 # # # # # to approve 
-APPROVE=$(dfx --identity Bhanu canister call b77ix-eeaaa-aaaaa-qaada-cai icrc2_approve "(record { amount = 100; spender = record { owner = principal \"$DAO\"} })")
+APPROVE=$(dfx --identity minter canister call b77ix-eeaaa-aaaaa-qaada-cai icrc2_approve "(record { amount = 100; spender = record { owner = principal \"$DAO\"} })")
 echo $APPROVE
 
 

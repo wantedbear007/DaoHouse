@@ -2,16 +2,13 @@
 // transfer funds
 
 use candid::{Nat, Principal};
-use ic_cdk::{
-    api::call::{CallResult, RejectionCode},
-    update,
-};
+use ic_cdk::update;
 use icrc_ledger_types::{
     icrc1::{account::Account, transfer::BlockIndex},
     icrc2::transfer_from::{TransferFromArgs, TransferFromError},
 };
 
-use crate::{with_state, TokenBalanceArgs, TokenTransferArgs};
+use crate::{with_state, TokenTransferArgs};
 
 use super::call_inter_canister;
 
