@@ -78,6 +78,12 @@ const CreateDao = () => {
         toast.error(`${response.Err}`);
       } else {
         toast.success("Dao created successfully");
+        localStorage.removeItem('step1Data');
+        localStorage.removeItem('step2Data');
+        localStorage.removeItem('step3Data');
+        localStorage.removeItem('inputData');
+        localStorage.removeItem('step5Data');
+        localStorage.removeItem('step6Data');
         setTimeout(() => {
           window.location.href = '/dao';
         }, 500);

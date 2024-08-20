@@ -31,8 +31,9 @@ const Dao = () => {
     await Promise.all(daoList.map(async (data) => {
       try {
         const daoCanister = await createDaoActor(data.dao_canister_id);
-        console.log("DAO Canister:", daoCanister);
         const dao_details = await daoCanister.get_dao_detail();
+        // console.log("dao_details", dao_details);
+        
         allDaoDetails.push({ ...dao_details, daoCanister, dao_canister_id: data.dao_canister_id });
       } catch (err) {
         console.error(`Error fetching details for DAO ${data.dao_canister_id}:`, err);
