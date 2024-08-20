@@ -8,11 +8,14 @@ import Container from "../../Components/Container/Container";
 import { useAuth } from "../../Components/utils/useAuthClient";
 import MuiSkeleton from "../../Components/Skeleton/MuiSkeleton";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import LoginModal from "../../Components/Auth/LoginModal";
 
 
 const Dao = () => {
   const [showAll, setShowAll] = useState(true);
   const [joinedDAO, setJoinedDAO] = useState([]);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const { isAuthenticated } = useAuth()
   const [dao, setDao] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -29,16 +32,26 @@ const Dao = () => {
   const fetchDaoDetails = async (daoList) => {
     let allDaoDetails = [];
     await Promise.all(daoList.map(async (data) => {
-      const daoCanister = createDaoActor(data.dao_canister_id);
-      const dao_details = await daoCanister.get_dao_detail();
-      allDaoDetails.push({ ...dao_details, daoCanister, dao_canister_id: data.dao_canister_id });
+      try {
+        const daoCanister = await createDaoActor(data.dao_canister_id);
+        const dao_details = await daoCanister.get_dao_detail();
+        // console.log("dao_details", dao_details);
+        
+        allDaoDetails.push({ ...dao_details, daoCanister, dao_canister_id: data.dao_canister_id });
+      } catch (err) {
+        console.error(`Error fetching details for DAO ${data.dao_canister_id}:`, err);
+      }
     }));
     return allDaoDetails;
   };
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      setShowLoginModal(true); // Show login modal if not authenticated
+      return;
+    }
     getDaos(currentPage);
-  }, [backendActor, currentPage]);
+  }, [ isAuthenticated, backendActor, currentPage]);
 
   const getDaos = async () => {
     const start = (currentPage - 1) * itemsPerPage;
@@ -111,6 +124,7 @@ const Dao = () => {
             </button>
           </Link>
         </Container>
+        {showLoginModal && <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} onLogin={() => setShowLoginModal(false)} />}
       </div>
       {showAll ? (
         loading ? (
@@ -167,6 +181,7 @@ const Dao = () => {
                 );
               })}
             </Container>
+            
             <Pagignation currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             hasMore={hasMore} />

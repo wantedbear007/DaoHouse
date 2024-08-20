@@ -17,7 +17,7 @@ const Navbar = () => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const { userProfile, fetchUserProfile } = useUserProfile();
-  const { login, isAuthenticated, signInPlug, logout, backendActor, stringPrincipal } = useAuth();
+  const { login, isAuthenticated, signInNFID, logout, backendActor, stringPrincipal } = useAuth();
   const location = useLocation();
   console.log(stringPrincipal);
   
@@ -81,7 +81,7 @@ const Navbar = () => {
 
   const handleNFIDLogin = async () => {
     setIsConnecting(true);
-    await login("nfid").then(() => window.location.reload());;
+    await signInNFID();
   };
 
   const handleLogout = async () => {
@@ -96,10 +96,10 @@ const Navbar = () => {
     }
   };
 
-  const handleLoginPlug = async () => {
-    setIsConnecting(true);
-    await signInPlug().then(() => setIsModalOpen(false));
-  };
+  // const handleLoginPlug = async () => {
+  //   setIsConnecting(true);
+  //   await signInPlug().then(() => setIsModalOpen(false));
+  // };
 
   const handleLoginModalOpen = () => {
     setIsConnecting(false);
@@ -197,7 +197,7 @@ const Navbar = () => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onLogin={handleLogin}
-          onLoginPlug={handleLoginPlug}
+          // onLoginPlug={handleLoginPlug}
           onLoginNFID={handleNFIDLogin}
         />
       </div>

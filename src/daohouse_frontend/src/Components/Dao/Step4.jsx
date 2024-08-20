@@ -9,9 +9,18 @@ const Step4 = ({ data, setData, setActiveStep }) => {
   const [activeStage, setActiveStage] = useState(0);
   const groups = data.step3.map((grp) => grp.name).filter((name) => name !== "all");
 
-  const [inputData, setInputData] = useState({
-    proposal: theList(),
-    voting: theList(),
+  // const [inputData, setInputData] = useState({
+  //   proposal: theList(),
+  //   voting: theList(),
+  // });
+
+
+  const [inputData, setInputData] = useState(() => {
+    const savedData = localStorage.getItem('inputData');
+    return savedData ? JSON.parse(savedData) : {
+      proposal: theList(),
+      voting: theList(),
+    };
   });
 
   const className = "DAO__Step4";
@@ -101,7 +110,15 @@ const Step4 = ({ data, setData, setActiveStep }) => {
     setActiveStep(2);
   }
 
+  // useEffect(() => {
+  //   console.log("Filtered Permissions:", getTruePermissions(inputData));
+  // }, [inputData]);
+  
   useEffect(() => {
+    localStorage.setItem('activeStage', JSON.stringify(activeStage));
+  }, [activeStage]);
+  useEffect(() => {
+    localStorage.setItem('inputData', JSON.stringify(inputData));
     console.log("Filtered Permissions:", getTruePermissions(inputData));
   }, [inputData]);
 
