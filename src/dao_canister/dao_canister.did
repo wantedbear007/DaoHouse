@@ -1,3 +1,4 @@
+type AccountBalance = record { id : principal; staked : nat32 };
 type Dao = record {
   members : vec principal;
   dao_id : principal;
@@ -48,6 +49,10 @@ type ProposalInput = record {
   proposal_title : text;
   proposal_description : text;
   proposal_type : ProposalType;
+};
+type ProposalStakes = record {
+  proposal_id : text;
+  balances : vec AccountBalance;
 };
 type ProposalState = variant {
   Open;
@@ -107,6 +112,7 @@ service : (DaoInput) -> {
   comment_on_proposal : (text, text) -> (Result);
   create_proposal : (text, ProposalInput) -> (text);
   follow_dao : () -> (Result);
+  get_all_balances : (text) -> (ProposalStakes) query;
   get_all_groups : () -> (vec DaoGroup);
   get_all_proposals : (Pagination) -> (vec Proposals) query;
   get_dao_detail : () -> (Dao) query;

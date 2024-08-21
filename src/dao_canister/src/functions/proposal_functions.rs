@@ -316,3 +316,17 @@ fn get_all_groups() -> Vec<DaoGroup> {
         groups
     })
 }
+
+// TODO debug functions
+
+// to get all stakes
+#[query]
+fn get_all_balances(proposal_id: String) -> ProposalStakes {
+    with_state(|state| state.proposal_balances.get(&proposal_id).unwrap())
+}
+
+// get all groups
+// #[query]
+// fn get_all_members() {
+//   with_state(|state| state.groups)
+// }
