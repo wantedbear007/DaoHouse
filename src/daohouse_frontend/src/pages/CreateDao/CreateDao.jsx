@@ -29,6 +29,47 @@ const CreateDao = () => {
     },
   });
 
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem('step1Data');
+      localStorage.removeItem('step2Data');
+      localStorage.removeItem('step3Data');
+      localStorage.removeItem('inputData');
+      localStorage.removeItem('step5Data');
+      localStorage.removeItem('step6Data');
+
+      setData({
+        step1: {},
+        step2: {},
+        step3: {},
+        step4: {},
+        step5: {},
+        step6: {
+          imageURI: "",
+        },
+      });
+    };
+  }, []);
+
+
+  useEffect(() => {
+    const clearDataOnUnload = () => {
+      localStorage.removeItem('step1Data');
+      localStorage.removeItem('step2Data');
+      localStorage.removeItem('step3Data');
+      localStorage.removeItem('step4Data');
+      localStorage.removeItem('step5Data');
+      localStorage.removeItem('step6Data');
+    };
+  
+    window.addEventListener('beforeunload', clearDataOnUnload);
+  
+    return () => {
+      window.removeEventListener('beforeunload', clearDataOnUnload);
+    };
+  }, []);
+  
+
   const handleDaoClick = async () => {
     setLoadingNext(true)
     const { step1, step2, step3, step4, step6 } = data;

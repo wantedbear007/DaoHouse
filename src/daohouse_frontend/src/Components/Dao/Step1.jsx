@@ -46,6 +46,7 @@ const Step1 = ({ setData, setActiveStep,data }) => {
       });
     }
   }, [data]);
+  
 
   // Save data to local storage whenever inputData changes
   useEffect(() => {

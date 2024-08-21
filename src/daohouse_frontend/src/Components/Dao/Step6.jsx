@@ -78,6 +78,12 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick, loadingNext, setL
   };
 
   useEffect(() => {
+    return () => {
+      localStorage.removeItem('step6Data');
+    };
+  }, []);
+
+  useEffect(() => {
     if (shouldCreateDAO) {
       handleDaoClick();
       setShouldCreateDAO(false);
