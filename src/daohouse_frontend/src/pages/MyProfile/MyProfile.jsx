@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Lottie from "react-lottie";
 import { Link, useNavigate } from "react-router-dom";
 import { FaArrowRightLong } from "react-icons/fa6";
@@ -21,7 +21,7 @@ import { useAuth } from "../../Components/utils/useAuthClient";
 
 const MyProfile = ({ childComponent }) => {
   const { backendActor, identity } = useAuth();
-  const { userProfile } = useUserProfile();
+  const { userProfile } = useUserProfile() || {};
 
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
@@ -29,15 +29,11 @@ const MyProfile = ({ childComponent }) => {
   // State to store the image source
   const [imageSrc, setImageSrc] = useState(MyProfileImage); // Initialize with default profile image
 
-  useEffect(() => {
-    const profileImageUrl = userProfile?.profile_img
+  const profileImageUrl = useMemo(() => (
+    userProfile?.profile_img
       ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
-      : MyProfileImage;
-
-    // Set image source
-    setImageSrc(profileImageUrl);
-  }, [userProfile?.profile_img]); // Depend on userProfile.profile_img for updates
-
+      : MyProfileImage
+  ), [userProfile?.profile_img]);
   // Error handler function for image loading
   const handleImageError = () => {
     setImageSrc(MyProfileImage); // Fallback to default image if there's an error loading the profile image
@@ -175,7 +171,7 @@ const MyProfile = ({ childComponent }) => {
                   {/* Profile image displayed here */}
                   <img
                     className="w-full h-full object-cover"
-                    src={imageSrc} // Dynamically set to user's profile image or default
+                    src={profileImageUrl} // Dynamically set to user's profile image or default
                     alt="profile-pic"
                     onError={handleImageError} // Handle image loading errors
                   />
