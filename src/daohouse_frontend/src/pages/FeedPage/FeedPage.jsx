@@ -16,7 +16,7 @@ const FeedPage = () => {
   const [active, setActive] = useState({ all: true, latest: false });
   const [showPopup, setShowPopup] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, login, signInNFID } = useAuth()
   const [posts, setPosts] = useState([]);
   const [uplodedPost, setUplodedPost] = useState('')
   const [getLike, setGetLike] = useState(null)
@@ -39,6 +39,30 @@ const FeedPage = () => {
 
   const handleCreatePostClick = () => {
     setShowPopup(!showPopup);
+  };
+
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      await login("Icp");
+      window.location.reload(); // Reload after successful login
+    } catch (error) {
+      console.error('Login failed:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNFIDLogin = async () => {
+    setLoading(true);
+    try {
+      await signInNFID();
+      window.location.reload(); // Reload after successful NFID login
+    } catch (error) {
+      console.error('NFID login failed:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getDetails = async () => {
@@ -173,7 +197,8 @@ const FeedPage = () => {
       </div>
 
       {showPopup && <CreatePostPopup handleGetResponse={handleGetResponse} onClose={() => setShowPopup(false)} />}
-      {showLoginModal && <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} onLogin={() => setShowLoginModal(false)} />}
+      {showLoginModal && <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} onLogin={handleLogin} 
+          onNFIDLogin={handleNFIDLogin} />}
       <div
         className={
           className +

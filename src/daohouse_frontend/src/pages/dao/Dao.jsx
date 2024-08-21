@@ -27,7 +27,7 @@ const Dao = () => {
   // console.log("totalitems",totalItems)
   const itemsPerPage = 4;
 
-  const { backendActor, createDaoActor } = useAuth();
+  const { backendActor, createDaoActor, login, signInNFID } = useAuth();
 
   const fetchDaoDetails = async (daoList) => {
     let allDaoDetails = [];
@@ -52,6 +52,30 @@ const Dao = () => {
     }
     getDaos(currentPage);
   }, [ isAuthenticated, backendActor, currentPage]);
+
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      await login("Icp");
+      window.location.reload(); // Reload after successful login
+    } catch (error) {
+      console.error('Login failed:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNFIDLogin = async () => {
+    setLoading(true);
+    try {
+      await signInNFID();
+      window.location.reload(); // Reload after successful NFID login
+    } catch (error) {
+      console.error('NFID login failed:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getDaos = async () => {
     const start = (currentPage - 1) * itemsPerPage;
@@ -124,8 +148,9 @@ const Dao = () => {
             </button>
           </Link>
         </Container>
-        {showLoginModal && <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} onLogin={() => setShowLoginModal(false)} />}
       </div>
+      {showLoginModal && <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} onLogin={handleLogin} 
+          onNFIDLogin={handleNFIDLogin} />}
       {showAll ? (
         loading ? (
           <div className="flex justify-center items-center h-full">
