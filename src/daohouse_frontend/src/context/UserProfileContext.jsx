@@ -8,10 +8,9 @@ export const UserProfileProvider = ({ children }) => {
   const { backendActor } = useAuth();
 
   useEffect(() => {
-    if (backendActor === null) {
-      return;
-    } 
-    fetchUserProfile();
+    if (backendActor) {
+      fetchUserProfile();
+    }
   }, [backendActor]);
 
   const fetchUserProfile = async () => {
@@ -20,8 +19,8 @@ export const UserProfileProvider = ({ children }) => {
       const userProfile = userProfileResponse.Ok;
       if (userProfile) {
         setUserProfile(userProfile);
-        localStorage.setItem('username', userProfile?.username);
-        localStorage.setItem('userImageId', userProfile?.profile_img);
+        localStorage.setItem('username', userProfile.username);
+        localStorage.setItem('userImageId', userProfile.profile_img);
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
@@ -36,3 +35,4 @@ export const UserProfileProvider = ({ children }) => {
 };
 
 export const useUserProfile = () => useContext(UserProfileContext);
+

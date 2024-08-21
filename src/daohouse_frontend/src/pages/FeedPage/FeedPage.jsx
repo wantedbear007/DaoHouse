@@ -10,13 +10,15 @@ import NoPostProfile from "../../Components/Dao/NoPostProfile";
 import nodata from "../../../assets/nodata.png";
 import MuiSkeleton from "../../Components/Skeleton/MuiSkeleton";
 import LoginModal from "../../Components/Auth/LoginModal";
+import { useNavigate } from "react-router-dom";
 
 
 const FeedPage = () => {
   const [active, setActive] = useState({ all: true, latest: false });
   const [showPopup, setShowPopup] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const { isAuthenticated, login, signInNFID } = useAuth()
+  const { isAuthenticated, login, signInNFID } = useAuth();
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [uplodedPost, setUplodedPost] = useState('')
   const [getLike, setGetLike] = useState(null)
@@ -110,8 +112,16 @@ const FeedPage = () => {
       setShowLoginModal(true); // Show login modal if not authenticated
       return;
     }
+    setShowLoginModal(false)
     getDetails();
   }, [isAuthenticated, backendActor, uplodedPost, getLike, active.all, active.latest, currentPage]);
+
+  const handleModalClose = () => {
+    setShowLoginModal(false);
+    if (!isAuthenticated) {
+      navigate("/"); // Redirect to home page if not authenticated
+    }
+  };
 
   return (
     <div className={className + " " + "w-full"}>
@@ -197,7 +207,7 @@ const FeedPage = () => {
       </div>
 
       {showPopup && <CreatePostPopup handleGetResponse={handleGetResponse} onClose={() => setShowPopup(false)} />}
-      {showLoginModal && <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} onLogin={handleLogin} 
+      {showLoginModal && <LoginModal isOpen={showLoginModal} onClose={handleModalClose} onLogin={handleLogin} 
           onNFIDLogin={handleNFIDLogin} />}
       <div
         className={
