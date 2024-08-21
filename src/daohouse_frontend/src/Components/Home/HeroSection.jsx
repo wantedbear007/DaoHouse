@@ -19,7 +19,7 @@ const HeroSection = () => {
   return (
     <Container>
   <div className="relative flex flex-col md:flex-row justify-center items-center  overflow-hidden">
-    <div className="md:w-1/2 w-full px-10 py-8 flex flex-col items-center text-center items-center md:items-start text-center md:text-left mt-5  gap-4 md:gap-6 z-10">
+    <div className="md:w-1/2 w-full px-20 py-8 flex flex-col items-center text-center items-center md:items-start text-center md:text-left mt-5  gap-4 md:gap-6 z-10">
     <p className="text-[#0E3746] font-mulish font-semibold text-4xl sm:text-5xl md:text-6xl">
     Building Better Future, Together
   </p>

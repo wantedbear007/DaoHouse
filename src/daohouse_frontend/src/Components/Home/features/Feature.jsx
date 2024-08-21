@@ -1,8 +1,8 @@
 import React from 'react';
 import Card from './Card';
-import feature1 from "../../../../assets/feature1.png"
-import feature2 from "../../../../assets/feature2.png"
-import feature3 from "../../../../assets/feature3.png"
+import feature1 from "../../../../assets/feature1.png";
+import feature2 from "../../../../assets/feature2.png";
+import feature3 from "../../../../assets/feature3.png";
 import Container from '../../Container/Container';
 
 const Feature = () => {
@@ -23,26 +23,38 @@ const Feature = () => {
       imageSrc: feature3
     }
   ];
+
   return (
     <div className='bg-[#dadee4] mobile:py-16 py-6'>
-      <Container>
+      <Container className='w-full'>
         <div className="flex big_phone:justify-center justify-start py-5 mobile:px-12 px-8">
           <div className="flex flex-col">
-            <h2 className="text-about-heading font-mulish text-[#0E3746] font-normal text-[16ox] md:text-[16ox] lg:text-[16ox] leading-tight">Our Features</h2>
-            <p className="text-about-subheading font-mulish text-[#0E3746] font-[500] small_phone:text-3xl text-2xl leading-tight  mb-3">Engaging Management Suite</p>
+            <h2 className="text-about-heading font-mulish text-[#0E3746] font-normal text-[16px] md:text-[16px] lg:text-[16px] leading-tight">Our Features</h2>
+            <p className="text-about-subheading font-mulish text-[#0E3746] font-[500] small_phone:text-3xl text-2xl leading-tight mb-3">Engaging Management Suite</p>
           </div>
         </div>
-        <div className="flex flex-col big_phone:flex-row justify-center items-center gap-4 px-4
-       ">
-          {cardData.map((data, index) => (
+        <div className="flex w-full flex-col big_phone:flex-row justify-between items-center gap-10 px-4">
+          <div className="flex justify-start flex-1">
             <Card
-              key={index}
-              title={data.title}
-              subtitle={data.subtitle}
-              imageSrc={data.imageSrc}
-
+              title={cardData[0].title}
+              subtitle={cardData[0].subtitle}
+              imageSrc={cardData[0].imageSrc}
             />
-          ))}
+          </div>
+          <div className="flex justify-center flex-1">
+            <Card
+              title={cardData[1].title}
+              subtitle={cardData[1].subtitle}
+              imageSrc={cardData[1].imageSrc}
+            />
+          </div>
+          <div className="flex justify-end flex-1">
+            <Card
+              title={cardData[2].title}
+              subtitle={cardData[2].subtitle}
+              imageSrc={cardData[2].imageSrc}
+            />
+          </div>
         </div>
       </Container>
     </div>
