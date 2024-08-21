@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { HiPlus } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DaoCard from "../../Components/Dao/DaoCard";
 import NoDataComponent from "../../Components/Dao/NoDataComponent";
 import TopComponent from "../../Components/Dao/TopComponent";
@@ -15,7 +15,8 @@ const Dao = () => {
   const [showAll, setShowAll] = useState(true);
   const [joinedDAO, setJoinedDAO] = useState([]);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [dao, setDao] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -50,6 +51,7 @@ const Dao = () => {
       setShowLoginModal(true); // Show login modal if not authenticated
       return;
     }
+    setShowLoginModal(false)
     getDaos(currentPage);
   }, [ isAuthenticated, backendActor, currentPage]);
 
@@ -74,6 +76,13 @@ const Dao = () => {
       console.error('NFID login failed:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleModalClose = () => {
+    setShowLoginModal(false);
+    if (!isAuthenticated) {
+      navigate("/"); // Redirect to home page if not authenticated
     }
   };
 
@@ -149,8 +158,7 @@ const Dao = () => {
           </Link>
         </Container>
       </div>
-      {showLoginModal && <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} onLogin={handleLogin} 
-          onNFIDLogin={handleNFIDLogin} />}
+      {showLoginModal && <LoginModal isOpen={showLoginModal} onClose={handleModalClose} onLogin={handleLogin} onNFIDLogin={handleNFIDLogin} />}
       {showAll ? (
         loading ? (
           <div className="flex justify-center items-center h-full">

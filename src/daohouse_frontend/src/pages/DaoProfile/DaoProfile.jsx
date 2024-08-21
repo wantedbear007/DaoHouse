@@ -88,8 +88,10 @@ const DaoProfile = () => {
             setDaoMembers(daoMembers)
             const isCurrentUserMember = daoMembers.some(member => member.toString() === currentUserId.toString());
             if (isCurrentUserMember) {
+              setIsMember(true)
               setJoinStatus('Joined');
             } else {
+              setIsMember(false)
               setJoinStatus('Join DAO');
             }
           }
@@ -504,7 +506,7 @@ const DaoProfile = () => {
             Settings
           </button>
         </div>
-        {activeLink === "proposals" && <ProposalsContent proposals={proposals} />}
+        {activeLink === "proposals" && <ProposalsContent proposals={proposals} isMember={isMember} />}
         {activeLink === "feeds" && <FeedsContent  />}
         {activeLink === "member_policy" && <Members />}
         {activeLink === "followers" && <FollowersContent daoFollowers={daoFollowers}/>}
