@@ -26,24 +26,24 @@ const Feature = () => {
 
   return (
     <div className='bg-[#dadee4] mobile:py-16 py-6'>
-      <Container className='w-full'>
-        <div className="flex justify-start big_phone:justify-center py-5 mobile:px-12 px-8">
+      <Container className='w-[100vh]'>
+        <div className="flex justify-start big_phone:justify-center py-5 mobile:px-10 px-8">
           <div className="flex flex-col">
             <h2 className="text-about-heading font-mulish text-[#0E3746] font-normal text-[16px] md:text-[16px] lg:text-[16px] leading-tight">Our Features</h2>
             <p className="text-about-subheading font-mulish text-[#0E3746] font-[500] small_phone:text-3xl text-2xl leading-tight mb-3">Engaging Management Suite</p>
           </div>
         </div>
 
-        {/* Updated layout for centering in mobile view */}
-        <div className="flex flex-col big_phone:flex-row big_phone:justify-between justify-center items-center gap-10 px-4">
-          <div className="flex justify-center w-full big_phone:w-auto">
+        {/* Increasing gap between cards */}
+        <div className="flex flex-col big_phone:flex-row big_phone:justify-center justify-center items-center gap-20 md:gap-242 px-6">
+          <div className="flex justify-center  w-full big_phone:w-auto mb-10 big_phone:mb-0"> {/* Added margin-bottom for smaller screens */}
             <Card
               title={cardData[0].title}
               subtitle={cardData[0].subtitle}
               imageSrc={cardData[0].imageSrc}
             />
           </div>
-          <div className="flex justify-center w-full big_phone:w-auto">
+          <div className="flex justify-center w-full big_phone:w-auto mb-10 big_phone:mb-0">
             <Card
               title={cardData[1].title}
               subtitle={cardData[1].subtitle}

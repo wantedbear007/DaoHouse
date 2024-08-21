@@ -44,7 +44,7 @@ const SupportingPartners = () => {
             className="tablet:w-36 mobile:w-28 w-20 h-auto rounded-full"
           />
           </div>
-          <div className="4">
+          <div className="6">
           <img
             src={pandg}
             alt="P&G"
