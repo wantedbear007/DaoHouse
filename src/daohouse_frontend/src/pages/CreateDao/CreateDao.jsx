@@ -17,6 +17,7 @@ const CreateDao = () => {
   const className = "CreateDAO";
   const [activeStep, setActiveStep] = useState(0);
   const { backendActor, frontendCanisterId, identity } = useAuth();
+  const [loadingNext, setLoadingNext] = useState(false)
   const [data, setData] = useState({
     step1: {},
     step2: {},
@@ -27,8 +28,52 @@ const CreateDao = () => {
       imageURI: "",
     },
   });
- 
+
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem('step1Data');
+      localStorage.removeItem('step2Data');
+      localStorage.removeItem('step3Data');
+      localStorage.removeItem('inputData');
+      localStorage.removeItem('step5Data');
+      localStorage.removeItem('step6Data');
+
+      setData({
+        step1: {},
+        step2: {},
+        step3: {},
+        step4: {},
+        step5: {},
+        step6: {
+          imageURI: "",
+        },
+      });
+    };
+  }, []);
+
+
+  useEffect(() => {
+    const clearDataOnUnload = () => {
+      localStorage.removeItem('step1Data');
+      localStorage.removeItem('step2Data');
+      localStorage.removeItem('step3Data');
+      localStorage.removeItem('step4Data');
+      localStorage.removeItem('step5Data');
+      localStorage.removeItem('step6Data');
+    };
+  
+    window.addEventListener('beforeunload', clearDataOnUnload);
+  
+    return () => {
+      window.removeEventListener('beforeunload', clearDataOnUnload);
+    };
+  }, []);
+  
+
+
   const handleDaoClick = async () => {
+    setLoadingNext(true)
     const { step1, step2, step3, step4, step6 } = data;
     const council = step4.voting.Council;
     const councilArray = Object.entries(council)
@@ -77,12 +122,20 @@ const CreateDao = () => {
       if (response.Err) {
         toast.error(`${response.Err}`);
       } else {
+        setLoadingNext(false)
         toast.success("Dao created successfully");
+        localStorage.removeItem('step1Data');
+        localStorage.removeItem('step2Data');
+        localStorage.removeItem('step3Data');
+        localStorage.removeItem('inputData');
+        localStorage.removeItem('step5Data');
+        localStorage.removeItem('step6Data');
         setTimeout(() => {
           window.location.href = '/dao';
         }, 500);
       }
     } catch (error) {
+      setLoadingNext(false)
       console.error("Error creating Dao:", error);
     }
   };
@@ -102,7 +155,7 @@ const CreateDao = () => {
       case 4:
         return <Step5 data={data.step5} setData={setData} setActiveStep={setActiveStep} />;
       case 5:
-        return <Step6 data={data} setData={setData} setActiveStep={setActiveStep} handleDaoClick={handleDaoClick} />;
+        return <Step6 data={data} setData={setData} setActiveStep={setActiveStep} handleDaoClick={handleDaoClick} loadingNext={loadingNext} setLoadingNext={setLoadingNext} />;
       default:
         return null;
     }

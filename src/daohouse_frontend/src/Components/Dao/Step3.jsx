@@ -12,6 +12,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
   const [showMemberNameInput, setShowMemberNameInput] = useState(false);
   const [addMemberIndex, setAddMemberIndex] = useState(null);
   const [groupNameInputIndex, setGroupNameInputIndex] = useState(null);
+  const [memberName, setMemberName] = useState("");
   const { backendActor } = useAuth();
 
   const [list, setList] = useState([
@@ -19,17 +20,17 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
   ]);
 
   const className = "DAO__Step3";
-  useEffect(() => {
-    // Retrieve data from local storage
-    const savedData = localStorage.getItem('step3Data');
-    if (savedData) {
-      setList(JSON.parse(savedData));
-    }
-  }, []);
-  
 
+      useEffect(() => {
+        // Retrieve data from local storage
+        const savedData = localStorage.getItem('step3Data');
+        if (savedData) {
+          setList(JSON.parse(savedData));
+        }
+      }, []);
   const handleSaveAndNext = () => {
-    localStorage.setItem('step3Data', JSON.stringify(list));
+  localStorage.setItem('step3Data', JSON.stringify(list));
+
     setData(prev => ({
       ...prev,
       step3: [...list],
@@ -39,6 +40,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
   function handleBack() {
     setActiveStep(1);
   }
+
 
   const handleGroupAdding = () => {
     setList(prevList => [
@@ -98,44 +100,27 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
     setShowMemberNameInput(true);
   };
   
-  const handleNameEnter = async (name, event) => {
-    if (event.key === "Enter" && name.trim() !== "") {
+  const handleAddMember = async () => {
+    if (memberName.trim() !== "") {
       try {
-        const principal = Principal.fromText(name.trim());
+        const principal = Principal.fromText(memberName.trim());
         const response = await backendActor.get_profile_by_id(principal);
-  
+
         if (response.Ok) {
-          if (addMemberIndex === 'council') {
-            // Add to council
-            setList(prevList =>
-              prevList.map(item => {
-                if (item.name === "Council") {
-                  const principalId = principal.toText();
-                  if (!item.members.includes(principalId)) {
-                    return { ...item, members: [...item.members, principalId] };
-                  } else {
-                    toast.error("Principal ID already exists");
-                  }
+          setList((prevList) =>
+            prevList.map((item) => {
+              if (item.index === addMemberIndex || (addMemberIndex === "council" && item.name === "Council")) {
+                const principalId = principal.toText();
+                if (!item.members.includes(principalId)) {
+                  return { ...item, members: [...item.members, principalId] };
+                } else {
+                  toast.error("Principal ID already exists");
                 }
-                return item;
-              })
-            );
-          } else {
-            // Add to group
-            setList(prevList =>
-              prevList.map(item => {
-                if (item.index === addMemberIndex) {
-                  const principalId = principal.toText();
-                  if (!item.members.includes(principalId)) {
-                    return { ...item, members: [...item.members, principalId] };
-                  } else {
-                    toast.error("Principal ID already exists");
-                  }
-                }
-                return item;
-              })
-            );
-          }
+              }
+              return item;
+            })
+          );
+          setMemberName("");
           setShowMemberNameInput(false);
         } else {
           toast.error("User does not exist");
@@ -208,11 +193,13 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
   // }, [councilMembers]);
   useEffect(() => {
  
-    const savedData = localStorage.getItem('step3Data');
-    if (savedData) {
-      setList(JSON.parse(savedData));
-    }
-    
+
+    // const savedData = localStorage.getItem('step3Data');
+    // if (savedData) {
+    //   setList(JSON.parse(savedData));
+    // }
+
+
     console.log("Current council members:", councilMembers);
   }, [councilMembers]);
 
@@ -281,12 +268,21 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
   </section>
   <section className="py-4 mobile:px-8 p-2 pl-4 transition">
     {showMemberNameInput && addMemberIndex === 'council' ? (
+      <div className="flex flex-row gap-2 items-center">
       <input
         type="text"
         className="mobile:p-2 p-1 mobile:text-base text-sm rounded-md border border-slate-500"
         placeholder="Enter Member Name"
-        onKeyDown={(e) => handleNameEnter(e.target.value, e)}
+        value={memberName}
+        onChange={(e) => setMemberName(e.target.value)}
       />
+      <button
+        onClick={handleAddMember}
+        className="bg-[#229ED9] text-white p-2 rounded-md"
+      >
+        Add
+      </button>
+    </div>
     ) : null}
   </section>
   {councilMembers.map((name, index) => (
@@ -341,12 +337,21 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
                 {addMemberIndex === item.index && (
                   <section className="p-4 gap-2 flex flex-col items-start">
                     {showMemberNameInput ? (
-                      <input
-                        type="text"
-                        className="mobile:p-2 p-1 mobile:text-base text-sm rounded-md border border-slate-500"
-                        placeholder="Enter Member Name"
-                        onKeyDown={(e) => handleNameEnter(e.target.value, e)}
-                      />
+                      <div className="flex flex-row gap-2 items-center">
+                        <input
+                          type="text"
+                          className="mobile:p-2 p-1 mobile:text-base text-sm rounded-md border border-slate-500"
+                          placeholder="Enter Member Name"
+                          onChange={(e) => setMemberName(e.target.value)}
+                          // onKeyDown={(e) => handleNameEnter(e.target.value, e)}
+                        />
+                        <button
+                          onClick={handleAddMember}
+                          className="bg-[#229ED9] text-white p-2 rounded-md"
+                        >
+                          Add
+                        </button>
+                      </div>
                     ) : null}
                     {item.members.map((memberName, memberIndex) => (
                       <div key={memberIndex} className="w-full flex flex-row items-center justify-between">
@@ -391,3 +396,8 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
 };
 
 export default Step3;
+
+
+
+
+

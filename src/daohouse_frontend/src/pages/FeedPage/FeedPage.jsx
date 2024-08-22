@@ -9,11 +9,16 @@ import Pagignation from "../../Components/pagignation/Pagignation";
 import NoPostProfile from "../../Components/Dao/NoPostProfile";
 import nodata from "../../../assets/nodata.png";
 import MuiSkeleton from "../../Components/Skeleton/MuiSkeleton";
+import LoginModal from "../../Components/Auth/LoginModal";
+import { useNavigate } from "react-router-dom";
 
 
 const FeedPage = () => {
   const [active, setActive] = useState({ all: true, latest: false });
   const [showPopup, setShowPopup] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const { isAuthenticated, login, signInNFID } = useAuth();
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [uplodedPost, setUplodedPost] = useState('')
   const [getLike, setGetLike] = useState(null)
@@ -36,6 +41,30 @@ const FeedPage = () => {
 
   const handleCreatePostClick = () => {
     setShowPopup(!showPopup);
+  };
+
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      await login("Icp");
+      window.location.reload(); // Reload after successful login
+    } catch (error) {
+      console.error('Login failed:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNFIDLogin = async () => {
+    setLoading(true);
+    try {
+      await signInNFID();
+      window.location.reload(); // Reload after successful NFID login
+    } catch (error) {
+      console.error('NFID login failed:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getDetails = async () => {
@@ -79,8 +108,20 @@ const FeedPage = () => {
   }
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      setShowLoginModal(true); // Show login modal if not authenticated
+      return;
+    }
+    setShowLoginModal(false)
     getDetails();
-  }, [backendActor, uplodedPost, getLike, active.all, active?.latest, currentPage]);
+  }, [isAuthenticated, backendActor, uplodedPost, getLike, active.all, active.latest, currentPage]);
+
+  const handleModalClose = () => {
+    setShowLoginModal(false);
+    if (!isAuthenticated) {
+      navigate("/"); // Redirect to home page if not authenticated
+    }
+  };
 
   return (
     <div className={className + " " + "w-full"}>
@@ -140,7 +181,7 @@ const FeedPage = () => {
         </Container>
       </div>
 
-      <div
+      <div 
         className={
           className +
           "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col"
@@ -159,14 +200,15 @@ const FeedPage = () => {
                 </Container>
                 :
                 <Container classes={'w-full'}>
-                  {posts?.map((posts, i) => <PostCard handleGetLikePost={handleGetLikePost} posts={posts} key={i} />)}
+                  {posts?.reverse().map((posts, i) => <PostCard handleGetLikePost={handleGetLikePost} posts={posts} key={i} />)}
                 </Container>
             )
         }
       </div>
 
       {showPopup && <CreatePostPopup handleGetResponse={handleGetResponse} onClose={() => setShowPopup(false)} />}
-
+      {showLoginModal && <LoginModal isOpen={showLoginModal} onClose={handleModalClose} onLogin={handleLogin} 
+          onNFIDLogin={handleNFIDLogin} />}
       <div
         className={
           className +

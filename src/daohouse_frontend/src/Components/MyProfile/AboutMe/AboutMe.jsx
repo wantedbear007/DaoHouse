@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 const AboutMe = () => {
   const className = "AboutMe";
-  const { userProfile } = useUserProfile();
+  const { userProfile } = useUserProfile() || {};
   const { stringPrincipal } = useParams();
   const principalstring = userProfile?.user_id?.toString() || "";
   

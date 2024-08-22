@@ -6,11 +6,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { toast } from 'react-toastify';
 import Container from "../Container/Container";
 
-const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
+const Step6 = ({ data, setData, setActiveStep, handleDaoClick, loadingNext, setLoadingNext }) => {
   const [file, setFile] = useState(null);
   const [fileURL, setFileURL] = useState(defaultImage);
   const [shouldCreateDAO, setShouldCreateDAO] = useState(false);
-  const [loadingNext, setLoadingNext] = useState(false);
+  // const [loadingNext, setLoadingNext] = useState(false);
   const className = "DAO__Step6";
 
   const handleFileInput = async (event) => {
@@ -63,7 +63,7 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
           },
         }));
       }
-      setLoadingNext(false);
+      // setLoadingNext(false);
       setShouldCreateDAO(true);
     }, 2000);
   };
@@ -76,6 +76,12 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
       reader.readAsArrayBuffer(file);
     });
   };
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem('step6Data');
+    };
+  }, []);
 
   useEffect(() => {
     if (shouldCreateDAO) {

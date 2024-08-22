@@ -13,6 +13,7 @@ const Step4 = ({ data, setData, setActiveStep }) => {
   //   proposal: theList(),
   //   voting: theList(),
   // });
+
   const [inputData, setInputData] = useState(() => {
     const savedData = localStorage.getItem('inputData');
     return savedData ? JSON.parse(savedData) : {
@@ -107,14 +108,17 @@ const Step4 = ({ data, setData, setActiveStep }) => {
     setActiveStep(2);
   }
 
-  useEffect(() => {
-    localStorage.setItem('inputData', JSON.stringify(inputData));
-  }, [inputData]);
-
+  // useEffect(() => {
+  //   console.log("Filtered Permissions:", getTruePermissions(inputData));
+  // }, [inputData]);
+  
   useEffect(() => {
     localStorage.setItem('activeStage', JSON.stringify(activeStage));
   }, [activeStage]);
   useEffect(() => {
+    localStorage.setItem('inputData', JSON.stringify(inputData));
+
+
     console.log("Filtered Permissions:", getTruePermissions(inputData));
   }, [inputData]);
 

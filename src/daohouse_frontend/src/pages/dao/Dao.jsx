@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { HiPlus } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DaoCard from "../../Components/Dao/DaoCard";
 import NoDataComponent from "../../Components/Dao/NoDataComponent";
 import TopComponent from "../../Components/Dao/TopComponent";
@@ -8,11 +8,15 @@ import Container from "../../Components/Container/Container";
 import { useAuth } from "../../Components/utils/useAuthClient";
 import MuiSkeleton from "../../Components/Skeleton/MuiSkeleton";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import LoginModal from "../../Components/Auth/LoginModal";
 
 
 const Dao = () => {
   const [showAll, setShowAll] = useState(true);
   const [joinedDAO, setJoinedDAO] = useState([]);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [dao, setDao] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,21 +28,63 @@ const Dao = () => {
   // console.log("totalitems",totalItems)
   const itemsPerPage = 4;
 
-  const { backendActor, createDaoActor } = useAuth();
+  const { backendActor, createDaoActor, login, signInNFID } = useAuth();
 
   const fetchDaoDetails = async (daoList) => {
     let allDaoDetails = [];
     await Promise.all(daoList.map(async (data) => {
-      const daoCanister = createDaoActor(data.dao_canister_id);
-      const dao_details = await daoCanister.get_dao_detail();
-      allDaoDetails.push({ ...dao_details, daoCanister, dao_canister_id: data.dao_canister_id });
+      try {
+        const daoCanister = await createDaoActor(data.dao_canister_id);
+        const dao_details = await daoCanister.get_dao_detail();
+        // console.log("dao_details", dao_details);
+        
+        allDaoDetails.push({ ...dao_details, daoCanister, dao_canister_id: data.dao_canister_id });
+      } catch (err) {
+        console.error(`Error fetching details for DAO ${data.dao_canister_id}:`, err);
+      }
     }));
     return allDaoDetails;
   };
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      setShowLoginModal(true); // Show login modal if not authenticated
+      return;
+    }
+    setShowLoginModal(false)
     getDaos(currentPage);
-  }, [backendActor, currentPage]);
+  }, [ isAuthenticated, backendActor, currentPage]);
+
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      await login("Icp");
+      window.location.reload(); // Reload after successful login
+    } catch (error) {
+      console.error('Login failed:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNFIDLogin = async () => {
+    setLoading(true);
+    try {
+      await signInNFID();
+      window.location.reload(); // Reload after successful NFID login
+    } catch (error) {
+      console.error('NFID login failed:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleModalClose = () => {
+    setShowLoginModal(false);
+    if (!isAuthenticated) {
+      navigate("/"); // Redirect to home page if not authenticated
+    }
+  };
 
   const getDaos = async () => {
     const start = (currentPage - 1) * itemsPerPage;
@@ -112,6 +158,7 @@ const Dao = () => {
           </Link>
         </Container>
       </div>
+      {showLoginModal && <LoginModal isOpen={showLoginModal} onClose={handleModalClose} onLogin={handleLogin} onNFIDLogin={handleNFIDLogin} />}
       {showAll ? (
         loading ? (
           <div className="flex justify-center items-center h-full">
@@ -167,6 +214,7 @@ const Dao = () => {
                 );
               })}
             </Container>
+            
             <Pagignation currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             hasMore={hasMore} />
