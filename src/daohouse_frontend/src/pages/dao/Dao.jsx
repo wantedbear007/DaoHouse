@@ -88,7 +88,7 @@ const Dao = () => {
 
   const getDaos = async () => {
     const start = (currentPage - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
+    const end = start + itemsPerPage + 1;
     const pagination = {
       start,
       end,
@@ -98,8 +98,8 @@ const Dao = () => {
       let response = await backendActor.get_all_dao(pagination);
       console.log("response",response)
       // setTotalItems(response.totalItems);
-      const combinedDaoDetails = await fetchDaoDetails(response);
-      setHasMore(response.length >= itemsPerPage);
+      const combinedDaoDetails = await fetchDaoDetails(response.slice(0, itemsPerPage)); // Get only the current page items
+    setHasMore(response.length > itemsPerPage);
       setDao(combinedDaoDetails);
     } catch (error) {
       console.error('Error fetching DAOs:', error);
@@ -301,15 +301,31 @@ export const Pagignation = ({ currentPage, setCurrentPage, hasMore }) => {
 
   return (
     <div className="pagination">
-    <div className="flex items-center gap-12 justify-center mt-3 ">
-      <button className="`text-black hover:text-gray-500 ml-1 text-xl flex items-center cursor-pointer" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+  <div className="flex items-center gap-12 justify-center mt-3">
+    <button
+      className={`text-xl flex items-center ml-1 ${
+        currentPage === 1
+          ? "text-gray-400 cursor-not-allowed"
+          : "text-black hover:text-gray-500 cursor-pointer"
+      }`}
+      onClick={() => handlePageChange(currentPage - 1)}
+      disabled={currentPage === 1}
+    >
       <FaArrowLeft /> Prev
-      </button>
-      <button className={" text-black hover:text-gray-500 px-3 py-1 transition duration-300 text-xl ease-in-out flex items-center cursor-pointer"}
- onClick={() => handlePageChange(currentPage + 1)} disabled={!hasMore}>
-        Next <FaArrowRight/>
-      </button>
-      </div>
-    </div>
+    </button>
+    <button
+      className={`text-xl flex items-center px-3 py-1 transition duration-300 ease-in-out ${
+        !hasMore
+          ? "text-gray-400 cursor-not-allowed"
+          : "text-black hover:text-gray-500 cursor-pointer"
+      }`}
+      onClick={() => handlePageChange(currentPage + 1)}
+      disabled={!hasMore}
+    >
+      Next <FaArrowRight />
+    </button>
+  </div>
+</div>
+
   );
 };
