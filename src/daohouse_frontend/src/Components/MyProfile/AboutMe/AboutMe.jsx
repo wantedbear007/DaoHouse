@@ -40,7 +40,7 @@ const AboutMe = () => {
               <span className="flex-grow p-2">{principalstring}</span>
               <button
                 onClick={copyToClipboard}
-                className="bg-blue-500 text-white p-2 rounded flex items-center justify-center ml-4"
+                className="text-white p-2 rounded flex items-center justify-center ml-4"
                 aria-label="Copy to clipboard"
               >
                 <CopyIcon />

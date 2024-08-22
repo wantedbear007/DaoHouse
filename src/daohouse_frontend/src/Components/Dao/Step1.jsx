@@ -6,9 +6,11 @@ import Container from "../Container/Container";
 const Step1 = ({ setData, setActiveStep,data }) => {
   const [localData, setLocalData] = useState(data);
 
+
   useEffect(() => {
     setLocalData(data); // Update local data when data prop changes
   }, [data]);
+
   const [loading, setLoading] = useState(false);
   const [inputData, setInputData] = useState({
     DAOIdentifier: "",
@@ -46,7 +48,10 @@ const Step1 = ({ setData, setActiveStep,data }) => {
       });
     }
   }, [data]);
+// <<<<<<< prabhjot
+// =======
   
+// >>>>>>> main
 
   // Save data to local storage whenever inputData changes
   useEffect(() => {
@@ -129,7 +134,7 @@ console.log(inputData);
       onChange={handleChange}
     />
 
-    {/** DAO Type 
+   {/** DAO Type */}
     <label htmlFor="type" className="font-semibold mobile:text-base text-sm">
       DAO Type
     </label>
@@ -139,9 +144,9 @@ console.log(inputData);
       value={inputData.DAOType}
       name="DAOType"
       className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"
-    />*/}
+    />
 
-    {/** DAO Token 
+    {/** DAO Token */}
     <div className="flex mobile:flex-row flex-col mobile:gap-4 gap-2 mobile:items-center items-start">
       <p htmlFor="type" className="font-semibold mobile:text-base text-sm">
         DAO Token*
@@ -173,9 +178,11 @@ console.log(inputData);
       </div>
     </div>
 
+
     <div className="flex mobile:flex-row flex-col mobile:gap-4 gap-2">
       <div className="flex flex-col mobile:w-1/2 mobile:gap-4 gap-2">
         <label htmlFor="tokenName" className="font-semibold mobile:text-base text-xs">Token Name</label>
+
         <input
           required
           type="text"
@@ -184,9 +191,11 @@ console.log(inputData);
           onChange={handleChange}
           className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"
         />
+
       </div>
       <div className="flex flex-col mobile:w-1/2 mobile:gap-4 gap-2">
         <label htmlFor="tokenSymbol" className="font-semibold mobile:text-base text-xs">Token Symbol</label>
+
         <input
           required
           type="text"
@@ -196,20 +205,20 @@ console.log(inputData);
           className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"
         />
       </div>
-    </div>*/}
+    </div>
 
     {/** Initial Token Supply */}
-   {/** <label htmlFor="initialTokenSupply" className="font-semibold mobile:text-base text-sm">
-      Initial Token Supply
-    </label>
+    <label htmlFor="initialTokenSupply" className="font-semibold mobile:text-base text-sm">
+    Initial Token Supply
+  </label>
     <input
-      type="text"
+     type="text"
       onChange={handleChange}
-      value={inputData.initialTokenSupply}
+    value={inputData.initialTokenSupply}
       name="initialTokenSupply"
       placeholder="Enter number of tokens to be minted"
       className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"
-    />*/} 
+    />
   </div>
 
   <div
