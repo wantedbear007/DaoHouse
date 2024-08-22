@@ -11,7 +11,7 @@ const Step2 = ({ setData, setActiveStep ,data}) => {
     setLocalData(data); // Update local data when data prop changes
   }, [data]);
   const [inputData, setInputData] = useState({
-    setUpPeriod: data?.step2?.setUpPeriod || "0 days",
+    setUpPeriod: data?.step2?.setUpPeriod || "1 day",
   });
 
   console.log("inputData",inputData)
@@ -53,7 +53,7 @@ const Step2 = ({ setData, setActiveStep ,data}) => {
 
   function changePeriod(value) {
     // Convert the value to a number, ensure it's non-negative, and append "days"
-    const numberValue = Math.max(parseInt(value, 10) || 0, 0);
+    const numberValue = Math.max(parseInt(value, 10) || 1, 0);
     const periodText = `${numberValue} ${numberValue === 1 ? "day" : "days"}`;
     setInputData({
       setUpPeriod: periodText,

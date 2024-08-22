@@ -8,11 +8,11 @@ import Widget from "./Widget";
 
 const SupportingPartners = () => {
   return (
-    <div className="bg-gray-200 mobile:py-[10rem] py-20">
-      <div className="justify-center mt-[-200px] items-center flex">
+    <div className="bg-gray-200 mobile:py-[5rem] py-20  bottom-0">
+      <div className="justify-center mt-[-130px] items-center flex">
         <Widget />
       </div>
-      <div className="container mx-auto text-center pt-4 mb-8 mt-8">
+      {/* <div className="container mx-auto text-center pt-4 mb-8 mt-8">
         <h2 className="text-2xl mobile:text-4xl font-medium mobile:mb-12 mb-4">
           Supporting Partners
         </h2>
@@ -51,7 +51,7 @@ const SupportingPartners = () => {
             className="tablet:w-36 mobile:w-28 w-20 h-auto rounded-full"
           />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

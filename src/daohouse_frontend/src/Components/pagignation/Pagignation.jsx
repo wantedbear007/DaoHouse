@@ -19,14 +19,14 @@ const Pagination = ({ totalItems, currentPage, setCurrentPage , costomClass}) =>
                 <button
                     onClick={handlePrevPage}
                     disabled={currentPage === 1}
-                    className={`text-black hover:text-gray-500 ml-1 text-xl flex items-center ${currentPage === 1 ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                    className={`text-black hover:text-gray-500 ml-1 text-xl flex items-center ${currentPage === 1 ? 'text-gray-400 cursor-not-allowed' : 'cursor-pointer'}`}
                 >
                     <FaArrowLeft /> Prev
                 </button>
 
                 <button onClick={handleNextPage}
-                    disabled={currentPage === totalItems || totalItems == 0}
-                    className={`text-black hover:text-gray-500 text-xl flex items-center ${(currentPage === totalItems || totalItems == 0) ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
+                    disabled={currentPage >= totalItems || totalItems === 0}
+                    className={`text-black hover:text-gray-500 text-xl flex items-center ${(currentPage >= totalItems || totalItems === 0) ? 'text-gray-400 cursor-not-allowed' : 'cursor-pointer'}`}>
                     Next <FaArrowRight />
                 </button>
             </div>
