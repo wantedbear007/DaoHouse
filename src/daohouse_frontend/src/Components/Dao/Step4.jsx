@@ -75,7 +75,6 @@ const Step4 = ({ data, setData, setActiveStep }) => {
       voting: theList(),
     };
   });
-
   const className = "DAO__Step4";
 
   function theList() {
@@ -172,6 +171,8 @@ const Step4 = ({ data, setData, setActiveStep }) => {
   }, [activeStage]);
   useEffect(() => {
     localStorage.setItem('inputData', JSON.stringify(inputData));
+
+
     console.log("Filtered Permissions:", getTruePermissions(inputData));
   }, [inputData]);
 

@@ -4,6 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Container from "../Container/Container";
 
 const Step2 = ({ setData, setActiveStep ,data}) => {
+
   const [localData, setLocalData] = useState(data);
 
   useEffect(() => {
@@ -12,6 +13,7 @@ const Step2 = ({ setData, setActiveStep ,data}) => {
   const [inputData, setInputData] = useState({
     setUpPeriod: data?.step2?.setUpPeriod || "1 day",
   });
+
   console.log("inputData",inputData)
   const [loadingNext, setLoadingNext] = useState(false);
   const [loadingBack, setLoadingBack] = useState(false);

@@ -29,6 +29,7 @@ const CreateDao = () => {
     },
   });
 
+
   useEffect(() => {
     return () => {
       localStorage.removeItem('step1Data');
@@ -69,6 +70,7 @@ const CreateDao = () => {
     };
   }, []);
   
+
 
   const handleDaoClick = async () => {
     setLoadingNext(true)
@@ -143,15 +145,15 @@ const CreateDao = () => {
   const Form = () => {
     switch (activeStep) {
       case 0:
-        return <Step1 setData={setData} setActiveStep={setActiveStep} />;
+        return <Step1 setData={setData} data={data.step1 || {}} setActiveStep={setActiveStep} />;
       case 1:
-        return <Step2 setData={setData} setActiveStep={setActiveStep} />;
+        return <Step2 setData={setData} data={data.step2}  setActiveStep={setActiveStep} />;
       case 2:
-        return <Step3 setData={setData} setActiveStep={setActiveStep} Step1Ref={Step1Ref} Step4Ref={Step4Ref} />;
+        return <Step3 setData={setData} data={data.step3} setActiveStep={setActiveStep} Step1Ref={Step1Ref} Step4Ref={Step4Ref} />;
       case 3:
         return <Step4 data={data} setData={setData} setActiveStep={setActiveStep} />;
       case 4:
-        return <Step5 setData={setData} setActiveStep={setActiveStep} />;
+        return <Step5 data={data.step5} setData={setData} setActiveStep={setActiveStep} />;
       case 5:
         return <Step6 data={data} setData={setData} setActiveStep={setActiveStep} handleDaoClick={handleDaoClick} loadingNext={loadingNext} setLoadingNext={setLoadingNext} />;
       default:

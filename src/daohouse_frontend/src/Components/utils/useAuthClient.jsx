@@ -2,7 +2,9 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthClient } from "@dfinity/auth-client";
 import { createActor, idlFactory as BackendidlFactory } from "../../../../declarations/daohouse_backend/index";
 import { Principal } from "@dfinity/principal";
+
 import { HttpAgent, Actor, AnonymousIdentity } from "@dfinity/agent";
+
 import { NFID } from "@nfid/embed";
 import { idlFactory as DaoFactory } from "../../../../declarations/dao_canister/index";
 
@@ -36,6 +38,7 @@ export const useAuthClient = (options = defaultOptions) => {
   const [identity, setIdentity] = useState(null);
   const [principal, setPrincipal] = useState(null);
   const [backendActor, setBackendActor] = useState(null);
+  console.log("backendActor",backendActor)
   const [stringPrincipal, setStringPrincipal] = useState(null);
   const [nfid, setNfid] = useState(null);
   const [error, setError] = useState(null);
@@ -150,6 +153,7 @@ export const useAuthClient = (options = defaultOptions) => {
   //     const principal = await window.ic.plug.agent.getPrincipal();
   //     const identity = window.ic.plug.agent;
 
+
   //     setIsAuthenticated(prev => ({ ...prev, plug: true }));
   //     setIdentity(identity);
   //     console.log(identity);
@@ -179,6 +183,7 @@ export const useAuthClient = (options = defaultOptions) => {
   //     throw new Error("Plug connection refused");
   //   }
   // };
+
 
 
   useEffect(() => {
