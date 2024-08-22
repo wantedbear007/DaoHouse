@@ -124,7 +124,7 @@ const Step1 = ({ setData, setActiveStep,data }) => {
           onChange={handleChange}
         />
 
-        {/** DAO Type 
+        {/* * DAO Type  */}
         <label htmlFor="type" className="font-semibold mobile:text-base text-sm">
           DAO Type
         </label>
@@ -134,9 +134,9 @@ const Step1 = ({ setData, setActiveStep,data }) => {
           value={inputData.DAOType}
           name="DAOType"
           className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"
-        />*/}
+        />
 
-        {/** DAO Token 
+         {/* DAO Token  */}
         <div className="flex mobile:flex-row flex-col mobile:gap-4 gap-2 mobile:items-center items-start">
           <p htmlFor="type" className="font-semibold mobile:text-base text-sm">
             DAO Token*
@@ -191,10 +191,10 @@ const Step1 = ({ setData, setActiveStep,data }) => {
               className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"
             />
           </div>
-        </div>*/}
+        </div>
 
         {/** Initial Token Supply */}
-       {/** <label htmlFor="initialTokenSupply" className="font-semibold mobile:text-base text-sm">
+        <label htmlFor="initialTokenSupply" className="font-semibold mobile:text-base text-sm">
           Initial Token Supply
         </label>
         <input
@@ -204,7 +204,7 @@ const Step1 = ({ setData, setActiveStep,data }) => {
           name="initialTokenSupply"
           placeholder="Enter number of tokens to be minted"
           className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"
-        />*/} 
+        />
       </div>
 
       <div
