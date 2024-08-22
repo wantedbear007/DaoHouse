@@ -18,8 +18,8 @@ const Footer = () => {
               className="small_phone:w-32 w-20 mx-auto small_phone:mb-10 mb-6"
             />
                
-          </Link>
-          <div className="flex justify-center mb-4 gap-x-3">
+               </Link>
+          <div className="flex justify-center mb-6 gap-x-6">
             <Link
               to="/"
               className="text-[#728288] small_phone:text-base text-sm font-inter font-normal hover:underline"
@@ -28,24 +28,24 @@ const Footer = () => {
             </Link>
             <Link
               to="/social-feed"
-              className="text-[#728288] small_phone:text-base text-sm font-inter font-norma  hover:underline"
+              className="text-[#728288] small_phone:text-base text-sm font-inter font-normal hover:underline"
             >
               Social Feed
             </Link>
             <Link
               to="/dao"
-              className="text-[#728288] small_phone:text-base text-sm font-inter font-norma  hover:underline"
+              className="text-[#728288] small_phone:text-base text-sm font-inter font-normal hover:underline"
             >
               DAOs
             </Link>
             <Link
               to="/proposals"
-              className="text-[#728288] small_phone:text-base tex-sm font-inter font-norma r:underline"
+              className="text-[#728288] small_phone:text-base text-sm font-inter font-normal hover:underline"
             >
               Proposals
             </Link>
           </div>
-          <div className="flex justify-center mb-4 gap-4">
+          <div className="flex justify-center mb-6 gap-6">
             <img
               src={tw}
               alt="Twitter"
@@ -70,7 +70,7 @@ const Footer = () => {
         </div>
       </footer>
       <div className="bg-[#0E3746] py-4 flex justify-center items-center">
-        <p className="text-white font-inter font-normal  text-[10px] md:text-base ">
+        <p className="text-white font-inter font-normal text-[10px] md:text-base">
           &copy; {new Date().getFullYear()}, DAO House. All rights reserved.
         </p>
       </div>
