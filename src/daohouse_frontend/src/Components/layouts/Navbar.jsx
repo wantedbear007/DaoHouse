@@ -5,25 +5,25 @@ import { LuChevronDown } from "react-icons/lu";
 import LoginModal from "../Auth/LoginModal";
 import { FaUser, FaSignOutAlt, FaSitemap, FaComments } from "react-icons/fa";
 import logo from "../../../assets/ColorLogo.png";
-import MyProfileImage from "../../../assets/MyProfile-img.png";
+import MyProfileImage from "../../../assets/Avatar.png";
 import { useUserProfile } from "../../context/UserProfileContext";
 import { toast } from "react-toastify";
 import Container from "../Container/Container";
-// import nfid from "../../../assets/nfidlogo.png";
 
 const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const { userProfile, fetchUserProfile } = useUserProfile();
-  const { login, isAuthenticated, signInPlug, logout, backendActor, stringPrincipal } = useAuth();
+  
+  const { userProfile, fetchUserProfile } = useUserProfile() || {}; // Add fallback to avoid destructuring undefined
+  const { login, isAuthenticated, signInNFID, logout, backendActor, stringPrincipal } = useAuth();
   const location = useLocation();
-
+  
   const [username, setUsername] = useState("");
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
-  const [imageSrc, setImageSrc] = useState(MyProfileImage); // Initialize with default image
+  const [imageSrc, setImageSrc] = useState(MyProfileImage);
 
   const menuItems = [
     { label: "Home", route: "/" },
@@ -32,13 +32,13 @@ const Navbar = () => {
   ];
 
   useEffect(() => {
-    if (backendActor === null || userProfile) return;
+    if (!backendActor || userProfile) return;
 
     const createAndFetchUserProfile = async () => {
       try {
         const response = await backendActor.check_user_existance();
 
-        if (response["Ok"]) {
+        if (response.Ok) {
           await fetchUserProfile();
         } else {
           const profileResponse = await backendActor.create_profile();
@@ -59,19 +59,14 @@ const Navbar = () => {
   }, [backendActor, fetchUserProfile, userProfile]);
 
   useEffect(() => {
-    // Debug: Check what userProfile contains
-    console.log("userProfile:", userProfile);
-
-    // Update imageSrc when userProfile changes
     if (userProfile?.profile_img) {
       setImageSrc(`${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`);
     } else {
       setImageSrc(MyProfileImage); // Set to default if no profile image
     }
 
-    // Update username
     setUsername(userProfile?.username || "");
-  }, [userProfile, protocol, domain]); // Add dependencies for useEffect
+  }, [userProfile, protocol, domain]);
 
   const handleLogin = async () => {
     setIsConnecting(true);
@@ -80,7 +75,7 @@ const Navbar = () => {
 
   const handleNFIDLogin = async () => {
     setIsConnecting(true);
-    await login("nfid").then(() => window.location.reload());;
+    await signInNFID();
   };
 
   const handleLogout = async () => {
@@ -95,10 +90,10 @@ const Navbar = () => {
     }
   };
 
-  const handleLoginPlug = async () => {
-    setIsConnecting(true);
-    await signInPlug().then(() => setIsModalOpen(false));
-  };
+  // const handleLoginPlug = async () => {
+  //   setIsConnecting(true);
+  //   await signInPlug().then(() => setIsModalOpen(false));
+  // };
 
   const handleLoginModalOpen = () => {
     setIsConnecting(false);
@@ -196,7 +191,7 @@ const Navbar = () => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onLogin={handleLogin}
-          onLoginPlug={handleLoginPlug}
+          // onLoginPlug={handleLoginPlug}
           onLoginNFID={handleNFIDLogin}
         />
       </div>
@@ -205,7 +200,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
-
-

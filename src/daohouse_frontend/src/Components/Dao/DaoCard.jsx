@@ -79,7 +79,7 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCaniste
 
   const handleJoinDao = async () => {
     try {
-      const response = await daoCanister.ask_to_join_dao(daohouseBackendCanisterId);
+      const response = await daoCanister.ask_to_join_dao(daoCanisterId);
       if (response.Ok) {
         setJoinStatus("Requested");
         toast.success("Join request sent successfully");

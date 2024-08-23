@@ -32,9 +32,14 @@ function CreateProposal() {
         setProposalDescription(value);
     };
 
-    const handleRequiredVotesChange = (event) => {
-        setRequiredVotes(event.target.value);
-    };
+
+//     const handleRequiredVotesChange = (event) => {
+//         const value = event.target.value;
+//         // Allow any non-negative integer including zero
+//         if (value === '' || (Number.isInteger(parseFloat(value)) && parseFloat(value) >= 0)) {
+//             setRequiredVotes(value);
+//         }
+//     };
 
     const handleProposalTypeChange = (event) => {
         setProposalType(event.target.value);
@@ -49,8 +54,9 @@ function CreateProposal() {
     
         try {
             // Validate proposal data before sending
-            if (!proposalTitle || !proposalDescription || isNaN(requiredVotes) || !proposalType) {
-                throw new Error("Please fill all the fields and choose a proposal type.");
+            const votes = parseInt(requiredVotes, 10);
+            if (!proposalTitle || !proposalDescription || isNaN(votes) || !proposalType || votes < 0) {
+                throw new Error("Please fill all the fields with valid data and choose a proposal type.");
             }
             
             const strippedDescription = stripHtmlTags(proposalDescription);
@@ -143,7 +149,7 @@ function CreateProposal() {
                             </div>
                         </div>
 
-                        <div className="mb-6 max-w-6xl relative">
+                        {/* <div className="mb-6 max-w-6xl relative">
                             <label className="block mb-2 font-semibold text-xl">Required Votes</label>
                             <input
                                 type="number"
@@ -152,7 +158,7 @@ function CreateProposal() {
                                 placeholder="Enter required votes"
                                 className="w-full max-w-[800px] px-4 py-3 mb-4 border-opacity-30 border border-[#aba9a5] rounded-xl bg-transparent"
                             />
-                        </div>
+                        </div> */}
 
                         <div className="mb-6 max-w-6xl relative">
                             <label className="block mb-2 font-semibold text-xl">Proposal Type</label>

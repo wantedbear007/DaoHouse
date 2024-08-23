@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProfileTitleDivider from "../../Components/ProfileTitleDivider/ProfileTitleDivider";
 import MyProfileRectangle from "../../../assets/MyProfileRectangle.png";
-import MyProfileImage from "../../../assets/MyProfile-img.png"; // Default profile image
+import MyProfileImage from "../../../assets/Avatar.png"; // Default profile image
 import UploadIcon from "../../../assets/upload-icon.png";
 import BigCircle from "../../../assets/BigCircle.png";
 import MediumCircle from "../../../assets/MediumCircle.png";
@@ -79,6 +79,8 @@ const EditProfile = () => {
     image_content_type: "image/jpg",
   });
 
+  
+
   const validateForm = () => {
     const newErrors = {};
     if (!profileData.name.trim()) newErrors.name = "Name is required.";
@@ -88,6 +90,13 @@ const EditProfile = () => {
     if (!/^\d+$/.test(profileData.contact_number)) newErrors.contact_number = "Contact number should be numeric.";
     // Add more validation rules as needed
     setErrors(newErrors);
+
+    // Identify the first error field
+    if (Object.keys(newErrors).length > 0) {
+      const firstErrorField = Object.keys(newErrors)[0];
+      document.querySelector(`[name=${firstErrorField}]`).scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
     return Object.keys(newErrors).length === 0;
   };
 
@@ -313,9 +322,9 @@ const EditProfile = () => {
                   alt="edit"
                   className="md:mr-2 mr-1 md:h-4 md:w-4 w-3 h-3 edit-pen"
                 />
-                <span className="text-[14px] lg:text-[16px]">
-                  Upload New Photo
-                </span>
+               <span className="text-[10px] lg:text-[13px]">
+                Upload New Photo (Max 2MB)
+                 </span>
                 <input
                   type="file"
                   accept="image/*"
@@ -325,7 +334,7 @@ const EditProfile = () => {
               </label>
               <button
                 onClick={handleRemoveImage}
-                className="text-[12px] md:text-[14px] lg:text-[16px] text-black shadow-xl md:h-[50px] h-[40px] md:px-6 px-4 rounded-[27px] bg-white-500 border-solid border border-red-100 hover:bg-red-300 flex items-center transition duration-200 ease-in-out"
+                className="text-[12px] md:text-[14px] lg:text-[16px] text-black shadow-xl md:h-[50px] h-[40px] md:px-6 px-4 rounded-[27px] bg-red-300 border-solid border border-red-100 hover:bg-red-400 flex items-center transition duration-200 ease-in-out"
               >
                 Remove<span className="hidden sm:inline-block ml-1">Photo</span>
               </button>

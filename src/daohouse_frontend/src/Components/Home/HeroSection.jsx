@@ -19,7 +19,7 @@ const HeroSection = () => {
   return (
     <Container>
   <div className="relative flex flex-col md:flex-row justify-center items-center  overflow-hidden">
-    <div className="md:w-1/2 w-full px-10 py-8 flex flex-col items-center text-center items-center md:items-start text-center md:text-left mt-5  gap-4 md:gap-6 z-10">
+    <div className="md:w-1/2 w-full px-20 py-8 flex flex-col items-center text-center items-center md:items-start text-center md:text-left mt-5  gap-4 md:gap-6 z-10">
     <p className="text-[#0E3746] font-mulish font-semibold text-4xl sm:text-5xl md:text-6xl">
     Building Better Future, Together
   </p>
@@ -42,28 +42,30 @@ const HeroSection = () => {
   </div>
     </div>
     {/* Gradient and Bottom Left Image */}
-    <img
-      src={herosectiongradient}
-      alt="hero section gradient"
-      className="absolute pointer-events-none select-none bottom-0 left-0 mb-24 md:mb-0 md:left-0 md:ml-4 animate-gradient"
-    />
-    <img
-      src={herosectionleftbottomimg}
-      alt="Bottom Left Image"
-      className="absolute pointer-events-none select-none bottom-0 left-0" 
-    />
+    <div>
+  <img
+    src={herosectiongradient}
+    alt="hero section gradient"
+    className="absolute pointer-events-none select-none bottom-0 left-0 mb-24 md:mb-0 md:left-0 md:ml-4 animate-gradient"
+  />
+  <img
+    src={herosectionleftbottomimg}
+    alt="Bottom Left Image"
+    className="absolute pointer-events-none select-none bottom-0 left-0" 
+  />
+</div>
 
-    {/* Right Side */}
-    <div className="md:w-1/2 w-full flex items-center justify-center py-10">
-      <div className="relative w-[75%] md:w-[85%] lg:w-[90%] xl:w-[92%] 2xl:w-full h-auto">
-        <img
-          src={circle}
-          alt="Placeholder"
-          className="w-full h-full object-cover animate-spin-slow"
-        />
-      </div>
-    </div>
+{/* Right Side */}
+<div className="md:w-1/2 w-full flex items-center justify-center  py-20">
+  <div className="relative w-[60%] md:w-[71%] lg:w-[80%] xl:w-[70%] 2xl:w-[70%] h-auto">
+    <img
+      src={circle}
+      alt="Placeholder"
+      className="w-full h-full object-cover animate-spin-slow"
+    />
   </div>
+</div>
+</div>
 </Container>
 
   );

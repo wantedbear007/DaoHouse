@@ -11,14 +11,22 @@ import Container from "../Container/Container";
 
 const Step5 = ({ setData, setActiveStep }) => {
   const [loadingNext, setLoadingNext] = useState(false);
-
-  const [quorum, setQuorum] = useState([
-    { name: "Council", index: 0, vote: 0 },
-    { name: "Group 1", index: 1, vote: 0 },
-    { name: "Group 2", index: 2, vote: 0 },
-  ]);
+ 
+  // const [quorum, setQuorum] = useState([
+  //   { name: "Council", index: 0, vote: 50 },
+  //   { name: "Group 1", index: 1, vote: 50 },
+  //   { name: "Group 2", index: 2, vote: 50 },
+  // ]);
+  const [quorum, setQuorum] = useState(() => {
+    const savedData = localStorage.getItem('step5Quorum');
+    return savedData ? JSON.parse(savedData) : [
+      { name: "Council", index: 0, vote: 50 },
+      { name: "Group 1", index: 1, vote: 50 },
+      { name: "Group 2", index: 2, vote: 50 },
+    ];
+  });
   const className = "DAO_Step5";
-
+ 
   const handleVoteChange = (index, newValue) => {
     setQuorum((prevQuorum) =>
       prevQuorum.map((item, i) =>
@@ -34,7 +42,11 @@ const Step5 = ({ setData, setActiveStep }) => {
     }));
     setActiveStep(5);
   }
-
+  
+  useEffect(() => {
+    // Save quorum data to local storage whenever it changes
+    localStorage.setItem('step5Quorum', JSON.stringify(quorum));
+  }, [quorum]);
   return (
     <React.Fragment>
     <Container>
@@ -84,7 +96,7 @@ const Step5 = ({ setData, setActiveStep }) => {
         </section>
 
         {/**On the Phone after 800px */}
-        <div className="bg-white mobile:p-5 p-3 rounded-lg flex flex-col gap-y-4">
+        {/* <div className="bg-white mobile:p-5 p-3 rounded-lg flex flex-col gap-y-4">
           {quorum.map(({ name, index, vote }) => (
             <div
               key={index}
@@ -116,7 +128,7 @@ const Step5 = ({ setData, setActiveStep }) => {
               </section>
             </div>
           ))}
-        </div>
+        </div> */}
 
         <div
           className={
@@ -152,14 +164,16 @@ const Step5 = ({ setData, setActiveStep }) => {
 export default Step5;
 
 const RangeInput = ({ index, handleVoteChange }) => {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(50);
 
   const handleChange = (e) => {
     const newValue = parseInt(e.target.value);
     setValue(newValue);
     handleVoteChange(index, newValue);
   };
-
+  useEffect(() => {
+    setValue(value); // Update rangeValue when prop value changes
+  }, [value]);
   const gradient = `linear-gradient(to right, #0e3746 ${value}%, #fff ${value}%)`;
 
   return (

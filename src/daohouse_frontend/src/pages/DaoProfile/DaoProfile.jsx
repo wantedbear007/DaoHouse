@@ -38,21 +38,23 @@ const DaoProfile = () => {
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
   const { daoCanisterId } = useParams();
-  const [joinStatus, setJoinStatus] = useState("Join DAO");
+  const [joinStatus, setJoinStatus] = useState("Join DAO"); // 'Join DAO', 'Requested', 'Joined'
+  const [isMember, setIsMember] = useState(false);
+  const [daoFollowers, setDaoFollowers] = useState([])
+  const [daoMembers, setDaoMembers] = useState([])
   const navigate = useNavigate();
 
   const [isFollowing, setIsFollowing] = useState(false);
   const [followersCount, setFollowersCount] = useState(0);
   const [userProfile, setUserProfile] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  // console.log("proposals", dao.proposals_count)
  
   useEffect(() => {
     const fetchDaoDetails = async () => {
       if (daoCanisterId) {
         setLoading(true);
         try {
-          const itemsPerPage = 4;
+          const itemsPerPage = 8;
           const start = (currentPage - 1) * itemsPerPage;
           const end = start + itemsPerPage;
           const paginationPayload = {
@@ -60,7 +62,11 @@ const DaoProfile = () => {
             end,
           }
           const daoActor = createDaoActor(daoCanisterId);
+          console.log("daoActor",{daoActor});
+          
           const daoDetails = await daoActor.get_dao_detail();
+          console.log(daoDetails);
+          
           const proposals = await daoActor.get_all_proposals(paginationPayload)
           console.log(proposals, " proposals aa rhe")
           console.log(proposals.map(proposal => proposal.proposal_description), " proposals descriptions");
@@ -73,26 +79,21 @@ const DaoProfile = () => {
             const currentUserId = Principal.fromText(profileResponse.Ok.user_id.toString());
 
             const daoFollowers = await daoActor.get_dao_followers();
+            setDaoFollowers(daoFollowers);
+            console.log(daoFollowers);
+            
             setFollowersCount(daoFollowers.length);
+            setIsFollowing(daoFollowers.some(follower => follower.toString() === currentUserId.toString()));
+            const daoMembers = await daoActor.get_dao_members();
+            setDaoMembers(daoMembers)
+            const isCurrentUserMember = daoMembers.some(member => member.toString() === currentUserId.toString());
             if (isCurrentUserMember) {
+              setIsMember(true)
               setJoinStatus('Joined');
             } else {
+              setIsMember(false)
               setJoinStatus('Join DAO');
             }
-// <<<<<<< pratap
-//             // <<<<<<< prabhjot
-
-//             //             // Check follow status from local storage
-//             //             const storedIsFollowing = localStorage.getItem(`dao-${daoCanisterId}-isFollowing`);
-//             //             setIsFollowing(storedIsFollowing === null ? daoFollowers.some(follower => follower.toString() === currentUserId.toString()) : JSON.parse(storedIsFollowing));
-//             // =======
-//             setIsFollowing(daoFollowers.some(follower => follower.toString() === currentUserId.toString()));
-
-//             // >>>>>>> main
-// =======
-
-            setIsFollowing(daoFollowers.some(follower => follower.toString() === currentUserId.toString()));
-// >>>>>>> main
           }
         } catch (error) {
           console.error('Error fetching DAO details:', error);
@@ -107,7 +108,10 @@ const DaoProfile = () => {
 
   const handleJoinDao = async () => {
     try {
-      const response = await daoCanister.ask_to_join_dao(daohouseBackendCanisterId);
+      const daoActor = createDaoActor(daoCanisterId);
+      console.log({daoActor});
+      
+      const response = await daoActor.ask_to_join_dao(daoCanisterId);
       if (response.Ok) {
         setJoinStatus("Requested");
         toast.success("Join request sent successfully");
@@ -124,58 +128,16 @@ const DaoProfile = () => {
 
   const toggleFollow = async () => {
     if (!userProfile) return;
-// <<<<<<< pratap
-    // <<<<<<< prabhjot
-
-    // =======
-    //     const newIsFollowing = !isFollowing;
-    //     setIsFollowing(newIsFollowing);
-    //     setFollowersCount(prevCount => newIsFollowing ? prevCount + 1 : prevCount - 1);
-
-    // >>>>>>> main
-// =======
 
     const newIsFollowing = !isFollowing;
     setIsFollowing(newIsFollowing);
     setFollowersCount(prevCount => newIsFollowing ? prevCount + 1 : prevCount - 1);
 
-// >>>>>>> main
     try {
       const daoActor = createDaoActor(daoCanisterId);
       const response = isFollowing
         ? await daoActor.unfollow_dao()
         : await daoActor.follow_dao();
-// <<<<<<< pratap
-//       // <<<<<<< prabhjot
-
-//       //       if (response?.Ok) {
-//       //         // Update state immediately
-//       //         setIsFollowing(!isFollowing);
-
-//       //         // Update followers count immediately
-//       //         const updatedFollowers = await daoActor.get_dao_followers();
-//       //         setFollowersCount(updatedFollowers.length);
-
-//       //         // Store the follow status in local storage
-//       //         localStorage.setItem(`dao-${daoCanisterId}-isFollowing`, !isFollowing);
-
-//       //         toast.success(isFollowing ? "Successfully unfollowed" : "Successfully followed");
-//       //       } else if (response?.Err) {
-//       //         toast.error(response.Err);
-//       //       }
-//       // =======
-
-//       if (response?.Ok) {
-//         toast.success(newIsFollowing ? "Successfully followed" : "Successfully unfollowed");
-//       } else if (response?.Err) {
-//         // Revert the state if there's an error
-//         setIsFollowing(!newIsFollowing);
-//         setFollowersCount(prevCount => newIsFollowing ? prevCount - 1 : prevCount + 1);
-//         toast.error(response.Err);
-//       }
-//       // >>>>>>> main
-// =======
-
   
         if (response?.Ok) {
           toast.success(newIsFollowing ? "Successfully followed" : "Successfully unfollowed");
@@ -185,7 +147,7 @@ const DaoProfile = () => {
           setFollowersCount(prevCount => newIsFollowing ? prevCount - 1 : prevCount + 1);
           toast.error(response.Err);
         }
-// >>>>>>> main
+
     } catch (error) {
       console.error('Error following/unfollowing DAO:', error);
       // Revert the state if there's an error
@@ -399,13 +361,6 @@ const DaoProfile = () => {
                 boxShadow:
                   "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
               }}
-// <<<<<<< pratap
-//               className={`cursor-pointer text-nowrap ${activeLink === "proposals"
-//                 ? "underline text-[#0E3746]"
-//                 : "text-[#0E37464D]"
-//                 }`}
-// =======
-// >>>>>>> main
             >
               {isFollowing ? "Unfollow" : "Follow"}
             </button>
@@ -417,7 +372,7 @@ const DaoProfile = () => {
                   "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
               }}
             >
-              Join DAO
+              {joinStatus}
             </button>
           </div>
         </div>
@@ -551,10 +506,10 @@ const DaoProfile = () => {
             Settings
           </button>
         </div>
-        {activeLink === "proposals" && <ProposalsContent proposals={proposals} />}
-        {activeLink === "feeds" && <FeedsContent />}
+        {activeLink === "proposals" && <ProposalsContent proposals={proposals} isMember={isMember} />}
+        {activeLink === "feeds" && <FeedsContent  />}
         {activeLink === "member_policy" && <Members />}
-        {activeLink === "followers" && <FollowersContent />}
+        {activeLink === "followers" && <FollowersContent daoFollowers={daoFollowers}/>}
         {activeLink === "funds" && <FundsContent />}
         {activeLink === "settings" && <DaoSettings />}
 

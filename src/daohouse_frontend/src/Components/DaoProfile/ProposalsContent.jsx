@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../Components/utils/useAuthClient";
 import { useParams } from "react-router-dom";
 
-const ProposalsContent = ({ proposals }) => {
+const ProposalsContent = ({ proposals, isMember }) => {
   const { backendActor, createDaoActor } = useAuth();
   const { daoCanisterId } = useParams();
   const [searchTerm, setSearchTerm] = useState("");
@@ -47,6 +47,7 @@ const ProposalsContent = ({ proposals }) => {
         <h1 className="lg:text-[24px] md:text-[18px] text-[16px] font-bold">
           Proposals
         </h1>
+        {isMember && (
         <Link
           to="/create-proposal"
           className="flex justify-center items-center text-[16px] relative lg:w-[220px] lg:h-[50px] md:w-[185px] md:h-[46px] w-[30px] h-[30px] bg-white rounded-full"
@@ -60,6 +61,7 @@ const ProposalsContent = ({ proposals }) => {
           </span>
           <span className="ml-6 hidden md:block">Create Proposals</span>
         </Link>
+        )}
       </div>
       <div className="bg-[#F4F2EC] pt-3 pb-8 mt-4 mb-8 rounded-[10px] hidden md:block">
         <div className="flex justify-between items-center px-6 mb-3">

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Lottie from "react-lottie";
 import { Link, useNavigate } from "react-router-dom";
 import { FaArrowRightLong } from "react-icons/fa6";
 
 import EditPen from "../../../assets/edit_pen.png";
-import MyProfileImage from "../../../assets/MyProfile-img.png"; // Default profile image
+import MyProfileImage from "../../../assets/Avatar.png"; // Default profile image
 import BigCircle from "../../../assets/BigCircle.png";
 import MediumCircle from "../../../assets/MediumCircle.png";
 import SmallestCircle from "../../../assets/SmallestCircle.png";
@@ -21,7 +21,7 @@ import { useAuth } from "../../Components/utils/useAuthClient";
 
 const MyProfile = ({ childComponent }) => {
   const { backendActor, identity } = useAuth();
-  const { userProfile } = useUserProfile();
+  const { userProfile } = useUserProfile() || {};
 
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
@@ -29,15 +29,11 @@ const MyProfile = ({ childComponent }) => {
   // State to store the image source
   const [imageSrc, setImageSrc] = useState(MyProfileImage); // Initialize with default profile image
 
-  useEffect(() => {
-    const profileImageUrl = userProfile?.profile_img
+  const profileImageUrl = useMemo(() => (
+    userProfile?.profile_img
       ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
-      : MyProfileImage;
-
-    // Set image source
-    setImageSrc(profileImageUrl);
-  }, [userProfile?.profile_img]); // Depend on userProfile.profile_img for updates
-
+      : MyProfileImage
+  ), [userProfile?.profile_img]);
   // Error handler function for image loading
   const handleImageError = () => {
     setImageSrc(MyProfileImage); // Fallback to default image if there's an error loading the profile image
@@ -147,7 +143,7 @@ const MyProfile = ({ childComponent }) => {
       </div>
       <div className={`bg-[#c8ced3]`}>
         <Container classes={`__mainComponent big_phone:py-8 big_phone:pb-20 py-6 md:px-8 flex md:flex-row gap-2 flex-col w-full user-container`}>
-          <div className={`${className}__mainComponent__leftSide md:mx-0 mx-5 lg:px-20 flex flex-col tablet:items-start justify-center md:h-[580px] lg:w-[280px] lg:h-[745px] md:px-14 rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal md:mt-[-65px] mt-[-45px] z-20`}>
+          <div className={`${className}__mainComponent__leftSide md:mx-0 mx-5 lg:px-20 flex flex-col tablet:items-start justify-center md:h-[580px] lg:w-[280px] lg:h-[754px] md:px-14 rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal md:mt-[-65px] mt-[-45px] z-20`}>
             <div className="flex md:flex-col flex-row items-start md:justify-center justify-around gap-y-6 py-50 md:py-90 lg:text-base md:text-sm text-nowrap">
               <Link to="/my-profile" onClick={() => setActiveTab(0)}>
                 <p className={`${tabButtonsStyle} ${activeTab === 0 ? "text-white" : ""}`}>Overview {activeTab === 0 ? <FaArrowRightLong className="md:inline hidden" /> : ""}</p>
@@ -175,7 +171,7 @@ const MyProfile = ({ childComponent }) => {
                   {/* Profile image displayed here */}
                   <img
                     className="w-full h-full object-cover"
-                    src={imageSrc} // Dynamically set to user's profile image or default
+                    src={profileImageUrl} // Dynamically set to user's profile image or default
                     alt="profile-pic"
                     onError={handleImageError} // Handle image loading errors
                   />

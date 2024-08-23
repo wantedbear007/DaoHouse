@@ -7,13 +7,74 @@ import Container from "../Container/Container";
 
 const Step4 = ({ data, setData, setActiveStep }) => {
   const [activeStage, setActiveStage] = useState(0);
-  const groups = data.step3.map((grp) => grp.name).filter((name) => name !== "all");
+  const [groups, setGroups] = useState(() =>
+    data.step3.map((grp) => grp.name).filter((name) => name !== "all")
+  );
 
-  const [inputData, setInputData] = useState({
-    proposal: theList(),
-    voting: theList(),
+  // const [inputData, setInputData] = useState({
+  //   proposal: theList(),
+  //   voting: theList(),
+  // });
+
+  useEffect(() => {
+    // Update groups whenever step3 data changes
+    const updatedGroups = data.step3.map((grp) => grp.name).filter((name) => name !== "all");
+    setGroups(updatedGroups);
+
+    // Adjust inputData based on updated groups
+    setInputData((prevData) => {
+      const updatedInputData = { ...prevData };
+      
+      // Add new groups
+      updatedGroups.forEach((group) => {
+        if (!updatedInputData.proposal[group]) {
+          updatedInputData.proposal[group] = {
+            ChangeDAOConfig: false,
+            ChangeDAOPolicy: false,
+            Transfer: false,
+            Polls: false,
+            AddMembers: false,
+            FunctionCalls: false,
+            UpgradeSelf: false,
+            UpgradeRemote: false,
+            setVoteToken: false,
+          };
+        }
+        if (!updatedInputData.voting[group]) {
+          updatedInputData.voting[group] = {
+            ChangeDAOConfig: false,
+            ChangeDAOPolicy: false,
+            Transfer: false,
+            Polls: false,
+            AddMembers: false,
+            FunctionCalls: false,
+            UpgradeSelf: false,
+            UpgradeRemote: false,
+            setVoteToken: false,
+          };
+        }
+      });
+
+      // Remove deleted groups
+      Object.keys(updatedInputData.proposal).forEach((group) => {
+        if (!updatedGroups.includes(group)) {
+          delete updatedInputData.proposal[group];
+          delete updatedInputData.voting[group];
+        }
+      });
+
+      return updatedInputData;
+    });
+  }, [data.step3]);
+
+
+  const [inputData, setInputData] = useState(() => {
+    const savedData = localStorage.getItem('inputData');
+    return savedData ? JSON.parse(savedData) : {
+      proposal: theList(),
+      voting: theList(),
+    };
   });
-
   const className = "DAO__Step4";
 
   function theList() {
@@ -101,7 +162,17 @@ const Step4 = ({ data, setData, setActiveStep }) => {
     setActiveStep(2);
   }
 
+  // useEffect(() => {
+  //   console.log("Filtered Permissions:", getTruePermissions(inputData));
+  // }, [inputData]);
+  
   useEffect(() => {
+    localStorage.setItem('activeStage', JSON.stringify(activeStage));
+  }, [activeStage]);
+  useEffect(() => {
+    localStorage.setItem('inputData', JSON.stringify(inputData));
+
+
     console.log("Filtered Permissions:", getTruePermissions(inputData));
   }, [inputData]);
 

@@ -6,11 +6,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { toast } from 'react-toastify';
 import Container from "../Container/Container";
 
-const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
+const Step6 = ({ data, setData, setActiveStep, handleDaoClick, loadingNext, setLoadingNext }) => {
   const [file, setFile] = useState(null);
   const [fileURL, setFileURL] = useState(defaultImage);
   const [shouldCreateDAO, setShouldCreateDAO] = useState(false);
-  const [loadingNext, setLoadingNext] = useState(false);
+  // const [loadingNext, setLoadingNext] = useState(false);
   const className = "DAO__Step6";
 
   const handleFileInput = async (event) => {
@@ -63,7 +63,7 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
           },
         }));
       }
-      setLoadingNext(false);
+      // setLoadingNext(false);
       setShouldCreateDAO(true);
     }, 2000);
   };
@@ -76,6 +76,12 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
       reader.readAsArrayBuffer(file);
     });
   };
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem('step6Data');
+    };
+  }, []);
 
   useEffect(() => {
     if (shouldCreateDAO) {
@@ -107,7 +113,7 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick }) => {
             htmlFor="profile"
             className="flex mobile:text-base text-xs font-semibold cursor-pointer mobile:m-4 m-2 flex-row items-center gap-2 bg-white px-4 py-2 rounded-[2rem] text-black shadow-xl"
           >
-            <FiUpload /> Upload New Photo
+            <FiUpload /> Upload New Photo (Max 2 mb)
           </label>
           <input
             type="file"
