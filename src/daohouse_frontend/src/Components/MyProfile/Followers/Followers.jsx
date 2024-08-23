@@ -49,7 +49,9 @@ const Followers = () => {
           <MuiSkeleton />
         ) :
           data.length === 0 ? (
-            <p className=" text-black mt-10 "></p>
+
+             <p className=" text-black mt-10 "></p>
+
           ) : (
             <div className="flex gap-5 md:w-[50%]">
               <div className="flex flex-1 flex-col gap-4 bg-[#F4F2EC] p-4 rounded-[10px] overflow-y-auto max-h-[300px]">

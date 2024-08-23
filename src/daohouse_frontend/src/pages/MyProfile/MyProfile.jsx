@@ -28,7 +28,6 @@ const MyProfile = ({ childComponent }) => {
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
 
-  // State to store the image source
   const [imageSrc, setImageSrc] = useState(MyProfileImage); // Initialize with default profile image
 
   const profileImageUrl = useMemo(() => (
@@ -36,7 +35,7 @@ const MyProfile = ({ childComponent }) => {
       ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
       : MyProfileImage
   ), [userProfile?.profile_img]);
-  // Error handler function for image loading
+
   const handleImageError = () => {
     setImageSrc(MyProfileImage); // Fallback to default image if there's an error loading the profile image
   };
@@ -88,8 +87,8 @@ const MyProfile = ({ childComponent }) => {
   const getData = async () => {
     try {
       const response = await backendActor.get_user_profile();
-      console.log("api response",response)
-      setData(response.Ok || {})
+      console.log("api response", response);
+      setData(response.Ok || {});
     } catch (error) {
       console.error("Error :", error);
     }
@@ -162,8 +161,8 @@ const MyProfile = ({ childComponent }) => {
         </Container>
       </div>
       <div className={`bg-[#c8ced3]`}>
-        <Container classes={`__mainComponent big_phone:py-8 big_phone:pb-20 py-6 md:px-8 flex md:flex-row gap-2 flex-col w-full user-container`}>
-          <div className={`${className}__mainComponent__leftSide md:mx-0 mx-5 lg:px-20 flex flex-col tablet:items-start justify-center md:h-[580px] lg:w-[280px] lg:h-[754px] md:px-14 rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal md:mt-[-65px] mt-[-45px] z-20`}>
+        <Container classes={`__mainComponent big_phone:py-8 big_phone:pb-20 py-7 md:px-8 flex md:flex-row gap-2 flex-col w-full user-container`}>
+          <div className={`${className}__mainComponent__leftSide md:mx-0 mx-5 lg:px-20 flex flex-col tablet:items-start justify-center md:h-[580px] lg:w-[280px] lg:h-[762px] md:px-14 rounded-[10px] bg-[#0E3746] text-white text-opacity-50 font-normal md:mt-[-65px] mt-[-45px] z-20`}>
             <div className="flex md:flex-col flex-row items-start md:justify-center justify-around gap-y-6 py-50 md:py-90 lg:text-base md:text-sm text-nowrap">
               <Link to="/my-profile" onClick={() => setActiveTab(0)}>
                 <p className={`${tabButtonsStyle} ${activeTab === 0 ? "text-white" : ""}`}>Overview {activeTab === 0 ? <FaArrowRightLong className="md:inline hidden" /> : ""}</p>
@@ -188,7 +187,6 @@ const MyProfile = ({ childComponent }) => {
                     boxShadow: "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
                   }}
                 >
-                  {/* Profile image displayed here */}
                   <img
                     className="w-full h-full object-cover"
                     src={profileImageUrl} // Dynamically set to user's profile image or default

@@ -18,7 +18,9 @@ const Footer = () => {
               className="small_phone:w-32 w-20 mx-auto small_phone:mb-10 mb-6"
             />
                
-          </Link>
+
+               </Link>
+
           <div className="flex justify-center mb-6 gap-x-6">
             <Link
               to="/"
@@ -34,13 +36,17 @@ const Footer = () => {
             </Link>
             <Link
               to="/dao"
-              className="text-[#728288] small_phone:text-base text-sm font-inter font-normal  hover:underline"
+
+              className="text-[#728288] small_phone:text-base text-sm font-inter font-normal hover:underline"
+
             >
               DAOs
             </Link>
             <Link
               to="/proposals"
-              className="text-[#728288] small_phone:text-base text-sm font-inter font-norma r:underline"
+
+              className="text-[#728288] small_phone:text-base text-sm font-inter font-normal hover:underline"
+
             >
               Proposals
             </Link>
@@ -70,7 +76,7 @@ const Footer = () => {
         </div>
       </footer>
       <div className="bg-[#0E3746] py-4 flex justify-center items-center">
-        <p className="text-white font-inter font-normal  text-[10px] md:text-base ">
+        <p className="text-white font-inter font-normal text-[10px] md:text-base">
           &copy; {new Date().getFullYear()}, DAO House. All rights reserved.
         </p>
       </div>
