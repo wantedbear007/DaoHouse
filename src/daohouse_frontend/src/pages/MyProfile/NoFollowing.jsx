@@ -12,4 +12,6 @@ const NoFollowing = () => {
   );
 };
 
+
 export default NoFollowing;
+
