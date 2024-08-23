@@ -18,6 +18,8 @@ import ProfileTitleDivider from "../../Components/ProfileTitleDivider/ProfileTit
 import { useUserProfile } from "../../context/UserProfileContext";
 import Container from "../../Components/Container/Container";
 import { useAuth } from "../../Components/utils/useAuthClient";
+import NoFollowers from "./NoFollowers";
+import NoFollowing from "./NoFollowing";
 
 const MyProfile = ({ childComponent }) => {
   const { backendActor, identity } = useAuth();
@@ -40,6 +42,8 @@ const MyProfile = ({ childComponent }) => {
   };
 
   const [activeTab, setActiveTab] = useState(0);
+  const [showNoFollowers, setShowNoFollowers] = useState(false);
+  const [showNoFollowing, setShowNoFollowing] = useState(false); // New state for NoFollowing component
   const navigate = useNavigate();
   const className = "MyProfile";
   const tabButtonsStyle = "my-1 big_phone:text-base mobile:text-md text-sm flex flex-row items-center gap-2 hover:text-white";
@@ -94,6 +98,22 @@ const MyProfile = ({ childComponent }) => {
   useEffect(() => {
     getData();
   }, [backendActor]);
+
+  useEffect(() => {
+    if (activeTab === 2 && followers === 0) {
+      setShowNoFollowers(true);
+    } else {
+      setShowNoFollowers(false);
+    }
+  }, [activeTab, followers]);
+
+  useEffect(() => {
+    if (activeTab === 3 && following === 0) {
+      setShowNoFollowing(true);
+    } else {
+      setShowNoFollowing(false);
+    }
+  }, [activeTab, following]); // Updated to include following
 
   return (
     <div className={`${className} bg-zinc-200 w-full relative`}>
@@ -236,6 +256,8 @@ const MyProfile = ({ childComponent }) => {
               </div>
             </div>
             {childComponent}
+            {activeTab === 2 && showNoFollowers && <NoFollowers setFollowers={setShowNoFollowers} />}
+            {activeTab === 3 && showNoFollowing && <NoFollowing />} {/* Render NoFollowing component */}
           </div>
         </Container>
       </div>

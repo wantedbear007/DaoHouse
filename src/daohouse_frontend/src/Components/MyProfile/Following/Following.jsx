@@ -43,7 +43,7 @@ const Following = () => {
           <MuiSkeleton />
         ) :
           data.length === 0 ? (
-            <p className=" text-black mt-10 ">No following</p>
+            <p className=" text-black mt-10 "></p>
           ) :
             (
               <>
