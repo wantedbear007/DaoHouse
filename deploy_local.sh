@@ -153,8 +153,13 @@ dfx deploy ic_asset_handler
 # # to upload first image
 # ./assets_upload.sh
 
+
+
+
 #  dfx deploy internet_identity
 #  dfx deploy daohouse_frontend
+
+dfx deploy
 
 
 # dfx generate
