@@ -1,14 +1,5 @@
-mod proposal_functions;
 use candid::{CandidType, Principal};
 use ic_cdk::api::call::{CallResult, RejectionCode};
-pub use proposal_functions::*;
-
-mod dao_functions;
-pub use dao_functions::*;
-
-mod ledger_functions;
-pub use ledger_functions::*;
-
 use serde::Serialize;
 
 // inter canister call
@@ -21,12 +12,14 @@ where
     T: CandidType + Serialize,
     U: CandidType + for<'de> serde::Deserialize<'de>,
 {
-    let response: CallResult<(U,)> = ic_cdk::call(canister_id, function, (args,)).await;
+    let response: CallResult<(Result<U, String>,)> =
+        ic_cdk::call(canister_id, function, (args,)).await;
 
-    let res0: Result<(U,), (RejectionCode, String)> = response;
+    let res0: Result<(Result<U, String>,), (RejectionCode, String)> = response;
 
     match res0 {
-        Ok(val) => Ok(val.0),
+        Ok((Ok(value),)) => Ok(value),
+        Ok((Err(err),)) => Err(err),
         Err((code, message)) => match code {
             RejectionCode::NoError => Err("NoError".to_string()),
             RejectionCode::SysFatal => Err("SysFatal".to_string()),

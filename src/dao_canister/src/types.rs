@@ -1,5 +1,6 @@
 use candid::{CandidType, Decode, Encode, Principal};
 use ic_stable_structures::{storable::Bound, Storable};
+use icrc_ledger_types::icrc1::account::Subaccount;
 // use serde::Deserialize;
 use serde::{Deserialize, Serialize};
 use std::borrow::Cow;
@@ -11,14 +12,28 @@ pub enum ProposalState {
     Rejected,
     Executing,
     Succeeded,
-    Expired
+    Expired,
 }
 
 #[derive(Debug, Clone, CandidType, Deserialize, Serialize)]
 pub enum ProposalType {
     AddMemberProposal,
     RemoveMemberPrposal,
-    VotingProposal
+    VotingProposal,
+}
+
+#[derive(Clone, CandidType, Deserialize, Serialize)]
+pub struct AccountBalance {
+    pub id: Principal,
+    // pub balance: u32,
+    pub staked: u32
+}
+
+#[derive(Clone, CandidType, Deserialize, Serialize)]
+pub struct ProposalStakes {
+    pub proposal_id: String,
+    pub balances: Vec<AccountBalance>,
+    // pub staked_balances: Vec<AccountBalance>,
 }
 
 #[derive(Clone, CandidType, Deserialize, Debug)]
@@ -44,22 +59,39 @@ pub struct Proposals {
     pub share_count: u64,
 }
 
-
 #[derive(Clone, CandidType, Serialize, Deserialize)]
 pub struct ProposalInput {
     pub proposal_title: String,
     pub proposal_description: String,
-    pub required_votes: u32,
-    pub proposal_type: ProposalType
+    // pub required_votes: u32,
+    pub proposal_type: ProposalType,
+    // pub proposal_expired_at: u64,
     // pub proposal_amount:String,
     // pub proposal_receiver_id:String,
     // pub created_by: Principal,
 }
 
+// #[derive(Clone, CandidType, Serialize, Deserialize)]
+// pub struct NewProposal {
+//     pub proposal_title: String,
+//     pub proposal_description: String,
+//     pub required_votes: u32,
+//     pub proposal_type: ProposalType,
+//     // pub proposal_expired_at: u64,
+//     // pub proposal_amount:String,
+//     // pub proposal_receiver_id:String,
+//     // pub created_by: Principal,
+// }
+
 #[derive(CandidType, Serialize, Deserialize)]
 pub struct Pagination {
     pub start: u32,
     pub end: u32,
+}
+
+#[derive(CandidType, Serialize, Deserialize, Clone, Debug)]
+pub struct LedgerCanisterId {
+    pub id: Principal,
 }
 #[derive(Clone, CandidType, Serialize, Deserialize)]
 pub struct Dao {
@@ -68,10 +100,10 @@ pub struct Dao {
     pub purpose: String,
     pub daotype: String,
     pub link_of_document: String,
-    pub cool_down_period: String,
+    pub cool_down_period: u32,
     pub tokenissuer: String,
     pub linksandsocials: Vec<String>,
-    pub required_votes: i8,
+    pub required_votes: u32,
     pub groups_count: u64,
     pub group_name: Vec<String>,
     pub image_id: String,
@@ -81,7 +113,16 @@ pub struct Dao {
     pub members_permissions: Vec<String>,
     pub followers_count: u32,
     pub proposals_count: u32,
-    pub proposal_ids: Vec<String>
+    pub proposal_ids: Vec<String>,
+    pub token_ledger_id: LedgerCanisterId,
+    pub tokens_required_to_vote: u32, // pub dao_groups: Vec<DaoGroup>,
+}
+
+#[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
+pub struct DaoGroup {
+    pub group_name: String,
+    pub group_members: Vec<Principal>,
+    pub group_permissions: Vec<String>,
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
@@ -90,14 +131,16 @@ pub struct DaoInput {
     pub purpose: String,
     pub daotype: String,
     pub link_of_document: String,
-    pub cool_down_period: String,
+    pub cool_down_period: u32,
     pub members: Vec<Principal>,
     pub tokenissuer: String,
     pub linksandsocials: Vec<String>,
-    pub required_votes: i8,
+    pub required_votes: u32,
+    pub dao_groups: Vec<DaoGroup>,
     pub image_id: String,
     pub followers: Vec<Principal>,
     pub members_permissions: Vec<String>,
+    pub tokens_required_to_vote: u32,
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
@@ -141,6 +184,20 @@ pub enum VoteParam {
     No,
 }
 
+#[derive(Clone, CandidType, Serialize, Deserialize)]
+pub struct TokenTransferArgs {
+    pub tokens: u64,
+    pub from: Principal,
+    pub to: Principal,
+    // pub dao_canister: Principal
+}
+
+#[derive(CandidType, Serialize, Deserialize)]
+pub struct TokenBalanceArgs {
+    pub owner: Principal,
+    pub subaccount: Option<Vec<u8>>,
+}
+
 // #[derive(Clone, CandidType, Serialize, Deserialize)]
 // pub struct Vote {
 //     vote_param: VoteParam,
@@ -164,6 +221,36 @@ impl Storable for Proposals {
 }
 
 impl Storable for GroupList {
+    fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    const BOUND: Bound = Bound::Bounded {
+        max_size: MAX_VALUE_SIZE,
+        is_fixed_size: false,
+    };
+}
+
+impl Storable for DaoGroup {
+    fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    const BOUND: Bound = Bound::Bounded {
+        max_size: MAX_VALUE_SIZE,
+        is_fixed_size: false,
+    };
+}
+
+impl Storable for ProposalStakes {
     fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
         Cow::Owned(Encode!(self).unwrap())
     }

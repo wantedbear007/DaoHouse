@@ -2,7 +2,6 @@
 
 use std::borrow::{Borrow, BorrowMut};
 
-use crate::ic::WasmArg;
 use crate::routes::upload_image;
 use crate::types::{Comment, PostInfo, PostInput};
 use crate::{
@@ -11,7 +10,6 @@ use crate::{
 };
 use candid::{Nat, Principal};
 use ic_cdk::api;
-use ic_cdk::api::call::CallResult;
 // use ic_cdk::api::management_canister::main::{install_code, raw_rand, CanisterInstallMode, CanisterSettings};
 // use ic_cdk::{
 //     api::{
@@ -36,7 +34,6 @@ use ic_cdk::api::{canister_balance128, time};
 use ic_cdk::{query, update};
 use icrc_ledger_types::icrc1::account::Account;
 use icrc_ledger_types::icrc1::transfer::BlockIndex;
-// <<<<<<< pratap
 use crate::guards::*;
 use icrc_ledger_types::icrc2::transfer_from::{TransferFromArgs, TransferFromError};
 use sha2::{Digest, Sha256};

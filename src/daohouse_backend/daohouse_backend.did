@@ -12,25 +12,36 @@ type Comment = record {
 };
 type DaoDetails = record {
   dao_id : principal;
+  dao_associated_ledger : text;
   dao_desc : text;
   dao_name : text;
   dao_canister_id : text;
 };
+type DaoGroup = record {
+  group_members : vec principal;
+  group_name : text;
+  group_permissions : vec text;
+};
 type DaoInput = record {
   members : vec principal;
   image_title : text;
+  token_symbol : text;
   linksandsocials : vec text;
   daotype : text;
+  tokens_required_to_vote : nat32;
   image_content : blob;
+  dao_groups : vec DaoGroup;
   dao_name : text;
   image_id : text;
   members_permissions : vec text;
   link_of_document : text;
   image_content_type : text;
+  total_tokens : nat;
   tokenissuer : text;
-  cool_down_period : text;
+  cool_down_period : nat32;
+  token_name : text;
   purpose : text;
-  required_votes : int8;
+  required_votes : nat32;
 };
 type GetAllPostsResponse = record { size : nat32; posts : vec PostInfo };
 type ImageData = record { content : blob; name : text; content_type : text };

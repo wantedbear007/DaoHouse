@@ -1,8 +1,6 @@
-use std::borrow::{Borrow, BorrowMut};
-
 use crate::proposal_route::check_proposal_state;
 use crate::types::{Dao, ProposalInput, Proposals};
-use crate::{guards::*, Pagination};
+use crate::{guards::*, AccountBalance, DaoGroup, Pagination, ProposalStakes, TokenTransferArgs};
 use crate::{proposal_route, with_state, ProposalState, VoteParam};
 use candid::Principal;
 use ic_cdk::api;
@@ -10,6 +8,8 @@ use ic_cdk::api::call::CallResult;
 use ic_cdk::api::management_canister::main::raw_rand;
 use ic_cdk::{query, update};
 use sha2::{Digest, Sha256};
+
+use super::{icrc_get_balance, icrc_transfer};
 
 #[update(guard=check_members)]
 pub async fn create_proposal(daohouse_backend_id: String, proposal: ProposalInput) -> String {
@@ -145,30 +145,105 @@ fn proposal_refresh() -> Result<String, String> {
     Ok("Refresh completed".to_string())
 }
 
-#[update(guard = prevent_anonymous)]
-fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String> {
+// #[update(guard = prevent_anonymous)]
+// fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String> {
+//     check_voting_right(&proposal_id)?;
+//     let principal_id = api::caller();
+
+//     with_state(|state| match &mut state.proposals.get(&proposal_id) {
+//         Some(pro) => {
+//             if voting == VoteParam::Yes {
+//                 pro.approved_votes_list.push(principal_id);
+//                 pro.proposal_approved_votes += 1;
+
+//                 state.proposals.insert(proposal_id, pro.to_owned());
+//                 Ok(String::from("Successfully voted in favour of Proposal."))
+// } else {
+//     pro.rejected_votes_list.push(principal_id);
+//     pro.proposal_rejected_votes += 1;
+
+//     state.proposals.insert(proposal_id, pro.to_owned());
+//     Ok(String::from("Successfully voted against the proposal."))
+// }
+//         }
+//         None => Err(String::from("Proposal ID is invalid !")),
+//     })
+// }
+
+#[update]
+// only members
+// prevent anonymous
+// TODO: SAVE THE TRANSFERED TOKES TO PARTICULAR CANISTER AND REVERT IT BACK WHEN COMPLETED
+async fn vote(proposal_id: String, voting: VoteParam) -> Result<String, String> {
+    // to check if user has already voted
     check_voting_right(&proposal_id)?;
+
     let principal_id = api::caller();
 
-    with_state(|state| match &mut state.proposals.get(&proposal_id) {
-        Some(pro) => {
-            if voting == VoteParam::Yes {
-                pro.approved_votes_list.push(principal_id);
-                pro.proposal_approved_votes += 1;
+    // user balance validation
+    let balance = icrc_get_balance(principal_id)
+        .await
+        .map_err(|err| format!("Error while fetching user balance {}", err))?;
 
-                state.proposals.insert(proposal_id, pro.to_owned());
-                Ok(String::from("Successfully voted in favour of Proposal."))
-            } else {
-                pro.rejected_votes_list.push(principal_id);
-                pro.proposal_rejected_votes += 1;
+    let min_vote_req = with_state(|state| state.dao.tokens_required_to_vote);
 
-                state.proposals.insert(proposal_id, pro.to_owned());
-                Ok(String::from("Successfully voted against the proposal."))
+    if balance < min_vote_req {
+        return Err(String::from(
+            "User token balance is less then the required threshold",
+        ));
+    } else {
+        // frontend need to approve
+        // transfer of tokens
+        let token_transfer_args = TokenTransferArgs {
+            from: principal_id,
+            to: ic_cdk::api::id(),
+            tokens: min_vote_req as u64,
+        };
+        icrc_transfer(token_transfer_args)
+            .await
+            .map_err(|err| format!("Error in transfer of tokens: {}", String::from(err)))?;
+
+        // storing staked tokens
+        with_state(|state| {
+            let account_balance = AccountBalance {
+                id: principal_id.clone(),
+                staked: state.dao.tokens_required_to_vote,
+            };
+
+            let proposal_stake = ProposalStakes {
+                proposal_id: proposal_id.clone(),
+                balances: vec![account_balance],
+            };
+
+            state
+                .proposal_balances
+                .insert(proposal_id.clone(), proposal_stake);
+        });
+
+        // perform voting
+        with_state(|state| match &mut state.proposals.get(&proposal_id) {
+            Some(pro) => {
+                if voting == VoteParam::Yes {
+                    pro.approved_votes_list.push(principal_id);
+                    pro.proposal_approved_votes += 1;
+
+                    state.proposals.insert(proposal_id, pro.to_owned());
+                    Ok(String::from("Successfully voted in favour of Proposal."))
+                } else {
+                    pro.rejected_votes_list.push(principal_id);
+                    pro.proposal_rejected_votes += 1;
+
+                    state.proposals.insert(proposal_id, pro.to_owned());
+                    Ok(String::from("Successfully voted against the proposal."))
+                }
             }
-        }
-        None => Err(String::from("Proposal ID is invalid !")),
-    })
+            None => Err(String::from("Proposal ID is invalid !")),
+        })
+    }
+
+    // Ok("()".to_string())
 }
+
 #[query(guard=prevent_anonymous)]
 fn search_proposal(proposal_id: String) -> Vec<Proposals> {
     let mut propo: Vec<Proposals> = Vec::new();
@@ -228,3 +303,30 @@ fn execute_add_proposals(id: &String) {
     //     None => (),
     // })
 }
+
+// get all groups
+#[update]
+fn get_all_groups() -> Vec<DaoGroup> {
+    with_state(|state| {
+        let mut groups: Vec<DaoGroup> = Vec::new();
+
+        for x in state.dao_groups.iter() {
+            groups.push(x.1);
+        }
+        groups
+    })
+}
+
+// TODO debug functions
+
+// to get all stakes
+#[query]
+fn get_all_balances(proposal_id: String) -> ProposalStakes {
+    with_state(|state| state.proposal_balances.get(&proposal_id).unwrap())
+}
+
+// get all groups
+// #[query]
+// fn get_all_members() {
+//   with_state(|state| state.groups)
+// }

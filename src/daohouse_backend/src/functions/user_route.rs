@@ -2,6 +2,7 @@ use std::borrow::Borrow;
 
 use crate::api::call::{call_with_payment128, CallResult};
 use crate::api::canister_version;
+
 use crate::routes::upload_image;
 use crate::types::{
     CanisterIdRecord, CanisterInstallMode, CreateCanisterArgument, CreateCanisterArgumentExtended,
@@ -9,14 +10,22 @@ use crate::types::{
 };
 
 use crate::types::{DaoInput, Profileinput, UserProfile};
-use crate::{guards::*, CanisterSettings, DaoCanisterInput};
+use crate::{
+    guards::*, Account, ArchiveOptions, CanisterSettings, DaoCanisterInput, FeatureFlags,
+    ICRC1LedgerInitArgs, InitArgs, LedgerArg, LedgerCanisterId,
+};
 use crate::{routes, with_state, DaoDetails, DaoResponse, ImageData};
-use candid::{encode_one, Principal};
+use candid::{encode_one, Encode, Nat, Principal};
 use ic_cdk::api;
+use ic_cdk::api::call::RejectionCode;
 // use ic_cdk::api::management_canister::main::CanisterSettings;
 use ic_cdk::println;
 use ic_cdk::{query, update};
-use serde_bytes::ByteBuf;
+// use crate::functions::cani
+// use icrc_ledger_types::icrc1::account::Account;
+
+use super::canister_functions::call_inter_canister;
+use super::ledger_functions::create_ledger_canister;
 // use ic_cdk::trap;
 
 #[update(guard=prevent_anonymous)]
@@ -33,7 +42,6 @@ async fn create_profile(// asset_handler_canister_id: String,
     if principal_id == Principal::anonymous() {
         return Err("Anonymous principal not allowed to make calls.".to_string());
     }
-
     // Check if the user is already registered
     // let is_registered = with_state(|state| {
     //     if state.user_profile.contains_key(&principal_id) {
@@ -278,6 +286,8 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         followers: vec![api::caller()],
         image_id: id.clone(),
         members_permissions: dao_detail.members_permissions,
+        dao_groups: dao_detail.dao_groups,
+        tokens_required_to_vote: dao_detail.tokens_required_to_vote,
     };
 
     let dao_detail_bytes: Vec<u8> = match encode_one(&update_dau_detail) {
@@ -294,12 +304,13 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         None => panic!("User profile doesn't exist !"),
     };
 
-    let mut veccc: Vec<Principal> = Vec::new();
-    veccc.push(api::caller());
-    veccc.push(ic_cdk::api::id());
+    // let mut veccc: Vec<Principal> = Vec::new();
+    // let veccc: Vec<Principal> = vec![api::caller(), ic_cdk::api::id()];
+    // veccc.push(api::caller());
+    // veccc.push(ic_cdk::api::id());
 
     let conttt = CanisterSettings {
-        controllers: Some(veccc),
+        controllers: Some(vec![api::caller(), ic_cdk::api::id()]),
         ..Default::default()
     };
 
@@ -319,32 +330,6 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
     let canister_id_principal = canister_id.canister_id;
 
     println!("Canister ID: {}", canister_id_principal.to_string());
-
-    let dao_details: DaoDetails = DaoDetails {
-        dao_canister_id: canister_id_principal.to_string().clone(),
-        dao_name: dao_detail.dao_name,
-        dao_desc: dao_detail.purpose,
-        // image_id: id,
-        dao_id: canister_id_principal.clone(),
-    };
-
-    with_state(|state| {
-        state
-            .dao_details
-            .insert(canister_id_principal.to_string().clone(), dao_details)
-    });
-
-    user_profile_detail
-        .dao_ids
-        .push(canister_id_principal.to_string());
-
-    with_state(|state| {
-        let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
-        analytics.dao_counts += 1;
-        state.analytics_content.insert(0, analytics);
-        state.user_profile.insert(principal_id, user_profile_detail)
-    });
-
     let wasm_dao: Vec<u8> = Vec::new();
     with_state(|state| match state.wasm_module.get(&0) {
         Some(val) => val.wasm,
@@ -361,7 +346,116 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
     let _installcode = install_code(arg1).await.unwrap();
     // ic_cdk::println!("errrrrr in installing {:?}", _installcode);
     println!("Canister ID: {:?}", canister_id);
-    Ok("DAO created successfully".to_string())
+
+    // creating ledger account associated with dao
+    let ledger_canister_id = create_ledger(
+        canister_id_principal.to_string().clone(),
+        dao_detail.total_tokens,
+        dao_detail.token_name,
+        dao_detail.token_symbol,
+        dao_detail.members,
+    )
+    .await
+    .map_err(|er| format!("Error while creating ledger canister {}", String::from(er)))?;
+
+    let dao_details: DaoDetails = DaoDetails {
+        dao_canister_id: canister_id_principal.to_string().clone(),
+        dao_name: dao_detail.dao_name,
+        dao_desc: dao_detail.purpose,
+        // image_id: id,
+        dao_id: canister_id_principal.clone(),
+        dao_associated_ledger: ledger_canister_id.to_string().clone(),
+    };
+
+    ic_cdk::println!(
+        "ledger canister created successfully {}",
+        ledger_canister_id
+    );
+
+    with_state(|state| {
+        state
+            .dao_details
+            .insert(canister_id_principal.to_string().clone(), dao_details)
+    });
+
+    user_profile_detail
+        .dao_ids
+        .push(canister_id_principal.to_string());
+
+    // updating ledger canister id in newely created canister id
+
+    let _ = call_inter_canister::<LedgerCanisterId, String>(
+        "add_ledger_canister_id",
+        LedgerCanisterId {
+            id: ledger_canister_id,
+        },
+        canister_id_principal,
+    )
+    .await
+    .map_err(|err| format!("Error occurred {}", err.to_string()));
+
+    // let response: CallResult<(Result<String, String>,)> = ic_cdk::call(
+    //     canister_id_principal,
+    //     "add_ledger_canister_id",
+    //     (LedgerCanisterId {
+    //         id: ledger_canister_id,
+    //     },),
+    // )
+    // .await;
+
+    // ic_cdk::println!("ye hai bhai canister id of ledger: {:?}", response);
+
+    //     let res0: Result<(Result<String, String>,), (RejectionCode, String)> = response;
+
+    //     let formatted_value = match res0 {
+    //       Ok((Ok(value),)) => {
+    //           format!("{}", value);
+    //           Ok(format!("{}", value))
+    //           // value
+    //       }
+    //       Ok((Err(err),)) => Err(err),
+    //       Err((code, message)) => {
+    //           match code {
+    //               RejectionCode::NoError => Err("NoError".to_string()),
+    //               RejectionCode::SysFatal => Err("SysFatal".to_string()),
+    //               RejectionCode::SysTransient => Err("SysTransient".to_string()),
+    //               RejectionCode::DestinationInvalid => Err("DestinationInvalid".to_string()),
+    //               RejectionCode::CanisterReject => Err("CanisterReject".to_string()),
+    //               // Handle other rejection codes here
+    //               _ => Err(format!("Unknown rejection code: {:?}: {}", code, message)),
+    //               // _ => Err(format!("Unknown rejection code: {:?}", code)),
+    //           }
+    //       }
+    //   };
+
+    with_state(|state| {
+        let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
+        analytics.dao_counts += 1;
+        state.analytics_content.insert(0, analytics);
+        state.user_profile.insert(principal_id, user_profile_detail)
+    });
+
+    // let wasm_dao: Vec<u8> = Vec::new();
+    // with_state(|state| match state.wasm_module.get(&0) {
+    //     Some(val) => val.wasm,
+    //     None => panic!("nhi mila"),
+    // });
+
+    // let arg1 = InstallCodeArgument {
+    //     mode: CanisterInstallMode::Install,
+    //     canister_id: canister_id_principal,
+    //     // wasm_module: vec![],
+    //     wasm_module: wasm_dao,
+    //     arg: dao_detail_bytes,
+    // };
+    // let _installcode = install_code(arg1).await.unwrap();
+    // // ic_cdk::println!("errrrrr in installing {:?}", _installcode);
+    // println!("Canister ID: {:?}", canister_id);
+    // Ok("DAO created successfully".to_string())
+    Ok(format!(
+        "Dao created, canister id: {}",
+        canister_id_principal.to_string()
+    ))
 }
 
 async fn create_canister(
@@ -565,3 +659,128 @@ fn get_profile_by_id(id: Principal) -> Result<UserProfile, String> {
         None => Err(String::from("User does not exist")),
     })
 }
+
+// #[update]
+pub async fn create_ledger(
+    dao_canister_id: String,
+    total_tokens: Nat,
+    token_name: String,
+    token_symbol: String,
+    members: Vec<Principal>,
+) -> Result<Principal, String> {
+    let tokens_per_user = total_tokens / members.len();
+
+    let mut accounts: Vec<(Account, Nat)> = vec![];
+
+    for acc in members.iter() {
+        let account = Account {
+            owner: acc.to_owned(),
+            subaccount: None,
+        };
+
+        accounts.push((account, tokens_per_user.clone()))
+    }
+
+    let ledger_args = LedgerArg::Init(InitArgs {
+        token_name: token_name,
+        token_symbol: token_symbol,
+        minting_account: Account {
+            owner: api::caller(),
+            subaccount: None,
+        },
+        transfer_fee: Nat::from(0 as u32),
+        metadata: vec![],
+        initial_balances: accounts,
+        // initial_balances: vec![
+        //     // (
+        //     //     Account {
+        //     //         owner: api::caller(),
+        //     //         subaccount: None,
+        //     //     },
+        //     //     Nat::from(1000000 as u32),
+        //     // ),
+        //     // (
+        //     //     Account {
+        //     //         owner: acc,
+        //     //         subaccount: None,
+        //     //     },
+        //     //     Nat::from(290999 as u32),
+        //     // ),
+        // ],
+        archive_options: ArchiveOptions {
+            controller_id: api::caller(), // TODO: FIX THIS, THIS NEED TO BE DAO CANISTER ID
+            // controller_id: Principal::from_text(dao_canister_id).map_err(|err| err.to_string())?,
+            cycles_for_archive_creation: None,
+            max_message_size_bytes: None,
+            max_transactions_per_response: None,
+            node_max_memory_size_bytes: None,
+            num_blocks_to_archive: 100,
+            trigger_threshold: 100,
+        },
+        feature_flags: Some(FeatureFlags { icrc2: true }),
+        fee_collector_account: None,
+        accounts_overflow_trim_quantity: None,
+        maximum_number_of_accounts: None,
+        decimals: None,
+
+        max_memo_length: None,
+    });
+
+    ic_cdk::println!("ledger canister args are {:?}", ledger_args);
+
+    create_ledger_canister(ledger_args).await
+
+    // Ok("()".to_string())
+}
+
+// BACKUP
+// async fn create_ledger(dao_canister_id: String, total_tokens: Nat, acc: Principal, token_name: String, token_symbol: String) -> Result<String, String> {
+//     let ledger_args = LedgerArg::Init(InitArgs {
+//         token_name: String::from("BHANU"),
+//         token_symbol: String::from("BRO"),
+//         minting_account: Account {
+//             owner: api::caller(),
+//             subaccount: None,
+//         },
+//         transfer_fee: Nat::from(0 as u32),
+//         metadata: vec![],
+//         initial_balances: vec![(
+//             Account {
+//                 owner: api::caller(),
+//                 subaccount: None,
+//             },
+//             Nat::from(1000000 as u32),
+//         ),
+//         (
+//             Account {
+//                 owner: acc,
+//                 subaccount: None,
+//             },
+//             Nat::from(290999 as u32),
+//         ),
+//         ],
+//         archive_options: ArchiveOptions {
+//             // controller_id: api::caller(),
+//             controller_id: Principal::from_text(dao_canister_id).map_err(|err| err.to_string())?,
+//             cycles_for_archive_creation: None,
+//             max_message_size_bytes: None,
+//             max_transactions_per_response: None,
+//             node_max_memory_size_bytes: None,
+//             num_blocks_to_archive: 100,
+//             trigger_threshold: 100,
+//         },
+//         feature_flags: Some(FeatureFlags { icrc2: true }),
+//         fee_collector_account: None,
+//         accounts_overflow_trim_quantity: None,
+//         maximum_number_of_accounts: None,
+//         decimals: None,
+
+//         max_memo_length: None,
+//     });
+
+//     ic_cdk::println!("ledger canister args are {:?}", ledger_args);
+
+//     create_ledger_canister(ledger_args).await
+
+//     // Ok("()".to_string())
+// }

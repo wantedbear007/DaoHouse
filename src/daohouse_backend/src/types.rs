@@ -1,6 +1,8 @@
 use candid::{CandidType, Nat, Principal};
 use candid::{Decode, Encode};
 use ic_stable_structures::{storable::Bound, Storable};
+// use icrc_ledger_types::icrc::generic_metadata_value::MetadataValue;
+// use icrc_ledger_types::icrc1::account::Account;
 use serde::{Deserialize, Serialize};
 use serde_bytes::{self, ByteBuf};
 use std::{borrow::Cow, default};
@@ -29,7 +31,6 @@ pub struct CreateCanisterArgument {
     /// See [CanisterSettings].
     pub settings: Option<CanisterSettings>,
 }
-
 
 pub mod core {
     use std::cmp::Ordering;
@@ -77,7 +78,6 @@ pub mod core {
     }
 }
 
-
 pub mod ic {
     use crate::types::core::Blob;
 
@@ -86,7 +86,6 @@ pub mod ic {
         pub install_arg: Vec<u8>,
     }
 }
-
 
 #[derive(
     CandidType, Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Default,
@@ -549,16 +548,78 @@ pub struct Profileinput {
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
+pub struct DaoGroup {
+    pub group_name: String,
+    pub group_members: Vec<Principal>,
+    pub group_permissions: Vec<String>,
+}
+
+#[derive(CandidType, Serialize, Deserialize, Debug, Clone)]
+pub enum MetadataValue {
+    Nat(Nat),
+    Int(i64),
+    Text(String),
+    Blob(Vec<u8>),
+}
+
+#[derive(CandidType, Serialize, Deserialize, Debug, Clone)]
+pub struct Metadata {
+    pub key: String,
+    pub value: MetadataValue,
+}
+
+#[derive(CandidType, Serialize, Deserialize, Debug)]
+pub struct ArchiveOptions {
+    pub num_blocks_to_archive: u64,
+    pub max_transactions_per_response: Option<u64>,
+    pub trigger_threshold: u64,
+    pub max_message_size_bytes: Option<u64>,
+    pub cycles_for_archive_creation: Option<u64>,
+    pub node_max_memory_size_bytes: Option<u64>,
+    pub controller_id: Principal,
+}
+
+#[derive(CandidType, Serialize, Deserialize, Debug)]
+pub struct FeatureFlags {
+    pub icrc2: bool,
+}
+
+#[derive(CandidType, Serialize, Deserialize, Debug)]
+pub struct ICRC1LedgerInitArgs {
+    pub minting_account: Account,
+    pub fee_collector_account: Option<Account>,
+    pub transfer_fee: Nat,
+    pub decimals: Option<u8>,
+    pub max_memo_length: Option<u16>,
+    pub token_symbol: String,
+    pub token_name: String,
+    pub metadata: Vec<Metadata>,
+    pub initial_balances: Vec<(Account, Nat)>,
+    pub feature_flags: Option<FeatureFlags>,
+    pub maximum_number_of_accounts: Option<u64>,
+    pub accounts_overflow_trim_quantity: Option<u64>,
+    pub archive_options: ArchiveOptions,
+}
+
+
+
+
+#[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
 pub struct DaoInput {
     pub dao_name: String,
     pub purpose: String,
     pub daotype: String,
     pub link_of_document: String,
-    pub cool_down_period: String,
+    pub cool_down_period: u32,
     pub members: Vec<Principal>,
     pub tokenissuer: String,
     pub linksandsocials: Vec<String>,
-    pub required_votes: i8,
+    pub required_votes: u32,
+    pub dao_groups: Vec<DaoGroup>,
+    pub token_name: String,
+    pub token_symbol: String,
+    pub total_tokens: Nat,
+    pub tokens_required_to_vote: u32,
     // pub followers: Vec<Principal>,
 
     // image data
@@ -576,14 +637,16 @@ pub struct DaoCanisterInput {
     pub purpose: String,
     pub daotype: String,
     pub link_of_document: String,
-    pub cool_down_period: String,
+    pub cool_down_period: u32,
     pub members: Vec<Principal>,
     pub tokenissuer: String,
     pub linksandsocials: Vec<String>,
-    pub required_votes: i8,
+    pub required_votes: u32,
     pub followers: Vec<Principal>,
     pub image_id: String,
     pub members_permissions: Vec<String>,
+    pub dao_groups: Vec<DaoGroup>,
+    pub tokens_required_to_vote: u32
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
@@ -593,6 +656,7 @@ pub struct DaoDetails {
     // pub image_id: String,
     pub dao_desc: String,
     pub dao_canister_id: String,
+    pub dao_associated_ledger: String
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
@@ -657,6 +721,11 @@ pub struct ReplyCommentData {
     pub post_id: String,
 }
 
+#[derive(CandidType, Serialize, Deserialize, Clone)]
+pub struct LedgerCanisterId {
+    pub id: Principal
+}
+
 // dao response
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
 pub struct DaoResponse {
@@ -696,6 +765,61 @@ pub struct WasmArgs {
 pub struct PaymentRecipientAccount {
     pub payment_recipient: Principal, // payment recipient principal address
 }
+
+
+// LEDGER PARAMS
+#[derive(CandidType, Serialize, Deserialize, Debug)]
+pub enum LedgerArg {
+    Init(InitArgs),
+    Upgrade(Option<UpgradeArgs>),
+}
+
+#[derive(CandidType, Serialize, Deserialize, Debug)]
+pub struct Account {
+    pub owner: Principal,
+    pub subaccount: Option<Vec<u8>>,
+}
+
+
+
+#[derive(CandidType, Serialize, Deserialize, Debug)]
+pub struct InitArgs {
+    pub minting_account: Account,
+    pub fee_collector_account: Option<Account>,
+    pub transfer_fee: Nat,
+    pub decimals: Option<u8>,
+    pub max_memo_length: Option<u16>,
+    pub token_symbol: String,
+    pub token_name: String,
+    pub metadata: Vec<Metadata>,
+    pub initial_balances: Vec<(Account, Nat)>,
+    pub feature_flags: Option<FeatureFlags>,
+    pub maximum_number_of_accounts: Option<u64>,
+    pub accounts_overflow_trim_quantity: Option<u64>,
+    pub archive_options: ArchiveOptions,
+}
+
+
+#[derive(CandidType, Serialize, Deserialize, Debug)]
+pub enum ChangeFeeCollector {
+    Unset,
+    SetTo(Account),
+}
+
+
+#[derive(CandidType, Serialize, Deserialize, Debug)]
+pub struct UpgradeArgs {
+    pub metadata: Option<Vec<Metadata>>,
+    pub token_symbol: Option<String>,
+    pub token_name: Option<String>,
+    pub transfer_fee: Option<Nat>,
+    pub change_fee_collector: Option<ChangeFeeCollector>,
+    pub max_memo_length: Option<u16>,
+    pub feature_flags: Option<FeatureFlags>,
+    pub maximum_number_of_accounts: Option<u64>,
+    pub accounts_overflow_trim_quantity: Option<u64>,
+}
+
 
 const MAX_VALUE_SIZE: u32 = 800;
 const MAX_VALUE_SIZE_ANALYTICS: u32 = 300;
