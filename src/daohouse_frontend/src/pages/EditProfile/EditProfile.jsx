@@ -351,12 +351,12 @@ const EditProfile = () => {
                   name="name"
                   value={profileData.name}
                   onChange={handleInputChange}
-                  placeholder="Username.user"
+                  placeholder="Username"
                   className={`border-solid border ${errors.name ? 'border-red-500' : 'border-[#DFE9EE]'} py-2 pl-4 md:w-[40%] w-[82%] rounded-[6px]`}
                 />
                 {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
               </div>
-              <div className="bg-[#FFFFFF] md:text-[16px] text-[12px] font-normal text-[#646464] py-3 md:px-5 pl-3 my-4 sm:w-[100%] rounded-lg">
+              {/* <div className="bg-[#FFFFFF] md:text-[16px] text-[12px] font-normal text-[#646464] py-3 md:px-5 pl-3 my-4 sm:w-[100%] rounded-lg">
                 <span className="text-[#05212C] md:mr-32 mr-4">Email</span>
                 <input
                   type="text"
@@ -367,8 +367,8 @@ const EditProfile = () => {
                   className={`border-solid border ${errors.email_id ? 'border-red-500' : 'border-[#DFE9EE]'} py-2 pl-4 md:w-[40%] w-[82%] rounded-[6px]`}
                 />
                 {errors.email_id && <p className="text-red-500 text-xs mt-1">{errors.email_id}</p>}
-              </div>
-              <div className="bg-[#FFFFFF] md:text-[16px] text-[12px] font-normal text-[#646464] py-3 md:px-5 pl-3 my-4 sm:w-[100%] rounded-lg">
+              </div> */}
+              {/* <div className="bg-[#FFFFFF] md:text-[16px] text-[12px] font-normal text-[#646464] py-3 md:px-5 pl-3 my-4 sm:w-[100%] rounded-lg">
                 <span className="text-[#05212C] md:mr-32 mr-4">Contact Number</span>
                 <input
                   type="text"
@@ -379,7 +379,7 @@ const EditProfile = () => {
                   className={`border-solid border ${errors.contact_number ? 'border-red-500' : 'border-[#DFE9EE]'} py-2 pl-4 md:w-[40%] w-[82%] rounded-[6px]`}
                 />
                 {errors.contact_number && <p className="text-red-500 text-xs mt-1">{errors.contact_number}</p>}
-              </div>
+              </div> */}
               <p className="lg:text-[20px] md:text-[16px] text-[14px] font-semibold text-[#05212C] md:ml-2 md:mb-3">
                 Description
               </p>
