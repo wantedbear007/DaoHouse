@@ -11,7 +11,7 @@ const Step2 = ({ setData, setActiveStep ,data}) => {
     setLocalData(data); // Update local data when data prop changes
   }, [data]);
   const [inputData, setInputData] = useState({
-    setUpPeriod: data?.step2?.setUpPeriod || "1 day",
+    setUpPeriod: data?.step2?.setUpPeriod || 1,
   });
 
   console.log("inputData",inputData)
@@ -54,9 +54,8 @@ const Step2 = ({ setData, setActiveStep ,data}) => {
   function changePeriod(value) {
     // Convert the value to a number, ensure it's non-negative, and append "days"
     const numberValue = Math.max(parseInt(value, 10) || 1, 0);
-    const periodText = `${numberValue} ${numberValue === 1 ? "day" : "days"}`;
     setInputData({
-      setUpPeriod: periodText,
+      setUpPeriod: numberValue,
     });
   }
 
@@ -78,7 +77,7 @@ const Step2 = ({ setData, setActiveStep ,data}) => {
         <input
           type="number"
           name="purpose"
-          value={inputData.setUpPeriod.split(" ")[0]}
+          value={inputData.setUpPeriod}
           onChange={(e) => changePeriod(e.target.value)}
           placeholder="Setup the period between when a proposal is approved and is executed."
           className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"

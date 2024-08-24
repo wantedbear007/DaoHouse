@@ -28,15 +28,48 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
           setList(JSON.parse(savedData));
         }
       }, []);
-  const handleSaveAndNext = () => {
-  localStorage.setItem('step3Data', JSON.stringify(list));
 
-    setData(prev => ({
-      ...prev,
-      step3: [...list],
-    }));
-    setActiveStep(3);
-  };
+
+      const getUniqueMembers = () => {
+        const allMembers = new Set();
+      
+        // Add council members
+        const council = list.find(group => group.name === "Council");
+        if (council) {
+          council.members.forEach(member => allMembers.add(member));
+        }
+      
+        // Add group members
+        list.filter(group => group.name !== "Council").forEach(group => {
+          group.members.forEach(member => allMembers.add(member));
+        });
+
+        console.log(Array.from(allMembers));
+        
+      
+        // Convert Set to array
+        return Array.from(allMembers);
+      };
+      
+      const handleSaveAndNext = () => {
+        localStorage.setItem('step3Data', JSON.stringify(list));
+        
+        const uniqueMembers = getUniqueMembers();
+        console.log(uniqueMembers);
+        
+        
+        setData(prev => ({
+          ...prev,
+          step3: {
+            groups: list.slice(1) || [],  // Default to empty array if list is undefined
+            council: list.find(group => group.name === "Council")?.members || [],
+            members: uniqueMembers || []  // Default to empty array if uniqueMembers is undefined
+          },
+        }));
+        setActiveStep(3);
+      };
+
+
   function handleBack() {
     setActiveStep(1);
   }
