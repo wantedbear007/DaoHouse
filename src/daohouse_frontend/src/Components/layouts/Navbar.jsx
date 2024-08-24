@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../utils/useAuthClient";
 import { LuChevronDown } from "react-icons/lu";
@@ -15,7 +15,7 @@ const Navbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  
+  const hasShownToastRef = useRef(false);
   const { userProfile, fetchUserProfile } = useUserProfile() || {}; // Add fallback to avoid destructuring undefined
   const { login, isAuthenticated, signInNFID, logout, backendActor, stringPrincipal } = useAuth();
   const location = useLocation();
@@ -33,11 +33,12 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!backendActor || userProfile) return;
-
+  
     const createAndFetchUserProfile = async () => {
+  
       try {
         const response = await backendActor.check_user_existance();
-
+  
         if (response.Ok) {
           await fetchUserProfile();
         } else {
@@ -52,11 +53,16 @@ const Navbar = () => {
         }
       } catch (error) {
         console.error("Error creating or fetching user profile:", error);
+      } finally {
+        hasShownToastRef.current = true; // Set ref to true after showing the toast
       }
     };
-
+  
     createAndFetchUserProfile();
-  }, [backendActor, fetchUserProfile, userProfile]);
+  }, [backendActor, fetchUserProfile]);
+  
+  
+  
 
   useEffect(() => {
     if (userProfile?.profile_img) {
@@ -66,7 +72,7 @@ const Navbar = () => {
     }
 
     setUsername(userProfile?.username || "");
-  }, [userProfile, protocol, domain]);
+  }, [userProfile]);
 
   const handleLogin = async () => {
     setIsConnecting(true);
