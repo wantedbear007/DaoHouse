@@ -241,6 +241,38 @@ const EditProfile = () => {
       : MyProfileImage);
   }, [userProfile]);
 
+  // ADDED LOGIC FOR STOP SCROLLING 
+  useEffect(() => {
+    const bodyStyle = document.body.style;
+ if (isModalOpen) {
+      Object.assign(bodyStyle, {
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        width: '100%',
+        overflow: 'hidden',
+      });
+    } else {
+      Object.assign(bodyStyle, {
+        position: '',
+        top: '',
+        left: '',
+        width: '',
+        overflow: '',
+      });
+    }
+
+    return () => {
+      Object.assign(bodyStyle, {
+        position: '',
+        top: '',
+        left: '',
+        width: '',
+        overflow: '',
+      });
+    };
+  }, [isModalOpen]); // STOP SCROLLING 
+
   return (
     <div className="bg-zinc-200 w-full pb-20 relative">
       <div
