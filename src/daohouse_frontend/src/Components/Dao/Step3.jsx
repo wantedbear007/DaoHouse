@@ -52,22 +52,36 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
       };
       
       const handleSaveAndNext = () => {
+        // Validation: Ensure at least one member in Council
+        const council = list.find(group => group.name === "Council");
+        if (!council || council.members.length === 0) {
+            toast.error("Please add at least one member to the Council.");
+            return;
+        }
+    
+        // Validation: Ensure all groups have at least one member
+        const invalidGroup = list.slice(1).find(group => group.members.length === 0);
+        if (invalidGroup) {
+            toast.error(`Please add at least one member to ${invalidGroup.name}.`);
+            return;
+        }
+    
+        // Save data to local storage
         localStorage.setItem('step3Data', JSON.stringify(list));
-        
+    
+        // Set data and move to the next step
         const uniqueMembers = getUniqueMembers();
-        console.log(uniqueMembers);
-        
-        
         setData(prev => ({
-          ...prev,
-          step3: {
-            groups: list.slice(1) || [],  // Default to empty array if list is undefined
-            council: list.find(group => group.name === "Council")?.members || [],
-            members: uniqueMembers || []  // Default to empty array if uniqueMembers is undefined
-          },
+            ...prev,
+            step3: {
+                groups: list.slice(1) || [],  // Default to empty array if list is undefined
+                council: council.members || [],
+                members: uniqueMembers || []  // Default to empty array if uniqueMembers is undefined
+            },
         }));
         setActiveStep(3);
-      };
+    };
+    
 
 
   function handleBack() {
