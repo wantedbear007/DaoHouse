@@ -166,7 +166,7 @@ const Dao = () => {
           </div>
         ) : noDaoFound ? (
           <div className="flex justify-center items-center h-full">
-            <p className="text-lg font-bold">No DAO found</p>
+            <p className="text-lg font-bold">No DAOs found</p>
           </div>
         ) : (searchTerm && fetchedDAOs.length > 0 ? (
           <div className={"bg-[#c8ced3]"}>
