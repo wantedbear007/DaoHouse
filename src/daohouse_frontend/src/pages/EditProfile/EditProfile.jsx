@@ -83,22 +83,27 @@ const EditProfile = () => {
 
   const validateForm = () => {
     const newErrors = {};
+    
+    // Validate only empty fields
     if (!profileData.name.trim()) newErrors.name = "Name is required.";
     if (!profileData.email_id.trim()) newErrors.email_id = "Email is required.";
-    if (!/\S+@\S+\.\S+/.test(profileData.email_id)) newErrors.email_id = "Email format is invalid.";
+    else if (!/\S+@\S+\.\S+/.test(profileData.email_id)) newErrors.email_id = "Email format is invalid.";
+    
     if (!profileData.contact_number.trim()) newErrors.contact_number = "Contact number is required.";
-    if (!/^\d+$/.test(profileData.contact_number)) newErrors.contact_number = "Contact number should be numeric.";
-    // Add more validation rules as needed
+    else if (!/^\d+$/.test(profileData.contact_number)) newErrors.contact_number = "Contact number should be numeric.";
+    
+    // Set errors state
     setErrors(newErrors);
-
-    // Identify the first error field
+  
+    // Scroll to the first error if any
     if (Object.keys(newErrors).length > 0) {
       const firstErrorField = Object.keys(newErrors)[0];
       document.querySelector(`[name=${firstErrorField}]`).scrollIntoView({ behavior: "smooth", block: "center" });
     }
-
+  
     return Object.keys(newErrors).length === 0;
   };
+  
 
   const handleSaveChangesClick = async () => {
     
@@ -150,6 +155,7 @@ const EditProfile = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProfileData((prevData) => ({ ...prevData, [name]: value }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
   const handleImageChange = async (e) => {
