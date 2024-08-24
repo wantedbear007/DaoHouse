@@ -11,7 +11,8 @@ const Tags = ({ tags }) => {
       }
     >
       <div className="flex flex-wrap">
-        {tags.map((tag, index) => (
+        {tags.length ? 
+          tags.map((tag, index) => (
           <span
             key={index}
             className="lg:mr-3 mr-2 my-2 py-2 lg:px-12 px-6 rounded-full bg-white font-normal text-[#646464]"
@@ -22,7 +23,10 @@ const Tags = ({ tags }) => {
           >
             {tag}
           </span>
-        ))}
+        )) 
+      :
+        "No Data"
+      }
       </div>
     </div>
   );

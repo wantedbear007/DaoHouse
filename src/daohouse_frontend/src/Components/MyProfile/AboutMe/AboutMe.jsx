@@ -75,23 +75,23 @@ const AboutMe = () => {
               links={[
                 { icon: "phone-icon", 
                   name: "Phone", 
-                  value: userProfile?.contact_number 
+                  value: userProfile?.contact_number || "No Data"
                 },
                 { icon: "email-icon", 
                   name: "Email", 
-                  value: userProfile?.email_id 
+                  value: userProfile?.email_id || "No Data"
                 },
                 { icon: "X-icon", 
                   name: "X", 
-                  value: userProfile?.twitter_id 
+                  value: userProfile?.twitter_id || "No Data"
                 },
                 { icon: "telegram-icon", 
                   name: "Telegram", 
-                  value: userProfile?.telegram 
+                  value: userProfile?.telegram || "No Data"
                 },
                 { icon: "web-icon", 
                   name: "Web", 
-                  value: userProfile?.website 
+                  value: userProfile?.website || "No Data"
                 },
               ]}
             />

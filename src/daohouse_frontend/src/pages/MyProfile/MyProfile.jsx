@@ -27,14 +27,20 @@ const MyProfile = ({ childComponent }) => {
 
   const protocol = process.env.DFX_NETWORK === "ic" ? "https" : "http";
   const domain = process.env.DFX_NETWORK === "ic" ? "raw.icp0.io" : "localhost:4943";
+  const [imageSrc, setImageSrc] = useState(MyProfileImage);
 
-  const [imageSrc, setImageSrc] = useState(MyProfileImage); // Initialize with default profile image
-
-  const profileImageUrl = useMemo(() => (
-    userProfile?.profile_img
-      ? `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
-      : MyProfileImage
-  ), [userProfile?.profile_img]);
+  useEffect(() => {
+    console.log("User Profile Image:", userProfile?.profile_img);
+    if (userProfile?.profile_img) {
+      const profileImageUrl = `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`;
+      console.log("Profile Image URL:", profileImageUrl);
+      setImageSrc(profileImageUrl);
+    } else {
+      console.log("No profile image found. Using default.");
+      setImageSrc(MyProfileImage);
+    }
+  }, [userProfile]);
+  
 
   const handleImageError = () => {
     setImageSrc(MyProfileImage); // Fallback to default image if there's an error loading the profile image
@@ -224,20 +230,23 @@ const MyProfile = ({ childComponent }) => {
                 </div>
               </div>
               <div className="flex justify-end gap-4 tablet:mt-4 tablet:mr-4">
-                <button
-                  onClick={() => navigate("/edit-profile")}
-                  className="bg-white text-[16px] text-[#05212C] gap-1 shadow-xl md:px-3 rounded-[27px] tablet:w-[181px] tablet:h-[40px] md:w-[151px] md:h-[35px] w-[2.5rem] h-[2.5rem] flex items-center justify-center space-x-4 rounded-2xl"
-                >
-                  <img
-                    src={EditPen}
-                    alt="edit"
-                    className="tablet:mr-2 h-4 w-4 edit-pen"
-                  />
-                  <span className="md:inline hidden whitespace-nowrap">
-                    {userProfile === null ? "Complete Profile" : "Edit Profile"}
-                  </span>
-                </button>
+                {activeTab === 0 && (
+                  <button
+                    onClick={() => navigate("/edit-profile")}
+                    className="bg-white text-[16px] text-[#05212C] gap-1 shadow-xl md:px-3 rounded-[27px] tablet:w-[181px] tablet:h-[40px] md:w-[151px] md:h-[35px] w-[2.5rem] h-[2.5rem] flex items-center justify-center space-x-4 rounded-2xl"
+                  >
+                    <img
+                      src={EditPen}
+                      alt="edit"
+                      className="tablet:mr-2 h-4 w-4 edit-pen"
+                    />
+                    <span className="md:inline hidden whitespace-nowrap">
+                      {userProfile === null ? "Complete Profile" : "Edit Profile"}
+                    </span>
+                  </button>
+                )}
               </div>
+
             </div>
             <div className="flex justify-start gap-8 p-4 mx-6 md:hidden text-center text-[#05212C]">
               <div className="text-[22px] font-semibold ">
