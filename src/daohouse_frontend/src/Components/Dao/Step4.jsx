@@ -7,9 +7,17 @@ import Container from "../Container/Container";
 
 const Step4 = ({ data, setData, setActiveStep }) => {
   const [activeStage, setActiveStage] = useState(0);
-  const [groups, setGroups] = useState(() =>
-    data.step3.map((grp) => grp.name).filter((name) => name !== "all")
-  );
+  const [groups, setGroups] = useState(() => {
+    // Include both groups and council for permissions setup
+    const groupsList = data.step3.groups.map(group => group.name);
+    if (data.step3.council && !groupsList.includes("Council")) {
+      groupsList.unshift("Council");
+    }
+    return groupsList;
+  });
+
+  const className = "DAO__Step4";
+
 
   // const [inputData, setInputData] = useState({
   //   proposal: theList(),
@@ -17,46 +25,25 @@ const Step4 = ({ data, setData, setActiveStep }) => {
   // });
 
   useEffect(() => {
-    // Update groups whenever step3 data changes
-    const updatedGroups = data.step3.map((grp) => grp.name).filter((name) => name !== "all");
+    const updatedGroups = data.step3.groups.map(group => group.name);
+    if (data.step3.council && !updatedGroups.includes("Council")) {
+      updatedGroups.unshift("Council");
+    }
     setGroups(updatedGroups);
 
-    // Adjust inputData based on updated groups
-    setInputData((prevData) => {
+    setInputData(prevData => {
       const updatedInputData = { ...prevData };
-      
-      // Add new groups
-      updatedGroups.forEach((group) => {
+
+      updatedGroups.forEach(group => {
         if (!updatedInputData.proposal[group]) {
-          updatedInputData.proposal[group] = {
-            ChangeDAOConfig: false,
-            ChangeDAOPolicy: false,
-            Transfer: false,
-            Polls: false,
-            AddMembers: false,
-            FunctionCalls: false,
-            UpgradeSelf: false,
-            UpgradeRemote: false,
-            setVoteToken: false,
-          };
+          updatedInputData.proposal[group] = defaultPermissions();
         }
         if (!updatedInputData.voting[group]) {
-          updatedInputData.voting[group] = {
-            ChangeDAOConfig: false,
-            ChangeDAOPolicy: false,
-            Transfer: false,
-            Polls: false,
-            AddMembers: false,
-            FunctionCalls: false,
-            UpgradeSelf: false,
-            UpgradeRemote: false,
-            setVoteToken: false,
-          };
+          updatedInputData.voting[group] = defaultPermissions();
         }
       });
 
-      // Remove deleted groups
-      Object.keys(updatedInputData.proposal).forEach((group) => {
+      Object.keys(updatedInputData.proposal).forEach(group => {
         if (!updatedGroups.includes(group)) {
           delete updatedInputData.proposal[group];
           delete updatedInputData.voting[group];
@@ -65,36 +52,49 @@ const Step4 = ({ data, setData, setActiveStep }) => {
 
       return updatedInputData;
     });
-  }, [data.step3]);
+  }, [data.step3.groups, data.step3.council]);
 
+
+  const defaultPermissions = () => ({
+    ChangeDAOConfig: false,
+    ChangeDAOPolicy: false,
+    Transfer: false,
+    Polls: false,
+    AddMembers: false,
+    FunctionCalls: false,
+    UpgradeSelf: false,
+    UpgradeRemote: false,
+    setVoteToken: false,
+  });
+
+  const permissionList = [
+    "ChangeDAOConfig",
+    "ChangeDAOPolicy",
+    "Transfer",
+    "Polls",
+    "AddMembers",
+    "FunctionCalls",
+    "UpgradeSelf",
+    "UpgradeRemote",
+    "setVoteToken",
+  ];
+
+
+  const initializePermissions = () => {
+    const permissions = {};
+    groups.forEach(group => {
+      permissions[group] = defaultPermissions();
+    });
+    return permissions;
+  };
 
   const [inputData, setInputData] = useState(() => {
     const savedData = localStorage.getItem('inputData');
     return savedData ? JSON.parse(savedData) : {
-      proposal: theList(),
-      voting: theList(),
+      proposal: initializePermissions(),
+      voting: initializePermissions(),
     };
   });
-  const className = "DAO__Step4";
-
-  function theList() {
-    return groups.reduce((acc, group) => {
-      acc[group] = {
-        ChangeDAOConfig: false,
-        ChangeDAOPolicy: false,
-     //   Bounty: false,
-       // BountyDone: false,
-        Transfer: false,
-        Polls: false,
-        AddMembers: false,
-        FunctionCalls: false,
-        UpgradeSelf: false,
-        UpgradeRemote: false,
-        setVoteToken: false,
-      };
-      return acc;
-    }, {});
-  }
 
   function toggleCheckbox(step, groupName, permissionName) {
     const updatedInputData = {
@@ -108,7 +108,6 @@ const Step4 = ({ data, setData, setActiveStep }) => {
       },
     };
 
-    // Synchronize proposal and voting permissions for Council
     if (groupName === "Council") {
       const otherStep = step === "proposal" ? "voting" : "proposal";
       updatedInputData[otherStep][groupName][permissionName] =
@@ -118,32 +117,15 @@ const Step4 = ({ data, setData, setActiveStep }) => {
     setInputData(updatedInputData);
   }
 
-  const permissionList = [
-    "ChangeDAOConfig",
-    "ChangeDAOPolicy",
-    // "Bounty",
-    // "BountyDone",
-    "Transfer",
-    "Polls",
-    "AddMembers",
-    "FunctionCalls",
-    "UpgradeSelf",
-    "UpgradeRemote",
-    "setVoteToken",
-  ];
-
   function filterPermissions(data) {
     const result = { proposal: {}, voting: {} };
 
-    // Iterate over each group in proposal and voting
     for (const step of ["proposal", "voting"]) {
       for (const groupName of Object.keys(data[step])) {
         const filteredPermissions = Object.keys(data[step][groupName]).filter(
-          (key) => data[step][groupName][key]
+          key => data[step][groupName][key]
         );
-        if (groupName === "Council") {
-          result[step][groupName] = filteredPermissions;
-        }
+        result[step][groupName] = filteredPermissions;
       }
     }
 
@@ -151,10 +133,28 @@ const Step4 = ({ data, setData, setActiveStep }) => {
   }
 
   function handleSaveAndNext() {
-    setData((prev) => ({
-      ...prev,
-      step4: filterPermissions(inputData),
+    const filteredPermissions = filterPermissions(inputData);
+
+    const daoGroups = data.step3.groups.map(group => ({
+      group_name: group.name,
+      group_members: group.members,
+      group_permissions: filteredPermissions.proposal[group.name] || [],
     }));
+
+    const membersPermissions = new Set();
+
+    // Combine all permissions from council and groups
+    Object.values(filteredPermissions.proposal).forEach(permissions =>
+      permissions.forEach(permission => membersPermissions.add(permission))
+    );
+
+    setData(prev => ({
+      ...prev,
+      step4: filteredPermissions,
+      dao_groups: daoGroups,
+      members_permissions: Array.from(membersPermissions),
+    }));
+
     setActiveStep(4);
   }
 
@@ -162,17 +162,12 @@ const Step4 = ({ data, setData, setActiveStep }) => {
     setActiveStep(2);
   }
 
-  // useEffect(() => {
-  //   console.log("Filtered Permissions:", getTruePermissions(inputData));
-  // }, [inputData]);
-  
   useEffect(() => {
     localStorage.setItem('activeStage', JSON.stringify(activeStage));
   }, [activeStage]);
+
   useEffect(() => {
     localStorage.setItem('inputData', JSON.stringify(inputData));
-
-
     console.log("Filtered Permissions:", getTruePermissions(inputData));
   }, [inputData]);
 
