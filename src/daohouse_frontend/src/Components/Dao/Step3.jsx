@@ -319,7 +319,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
       <input
         type="text"
         className="mobile:p-2 p-1 mobile:text-base text-sm rounded-md border border-slate-500"
-        placeholder="Enter Member Name"
+        placeholder="Enter Member Principal Id"
         value={memberName}
         onChange={(e) => setMemberName(e.target.value)}
       />
@@ -388,7 +388,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
                         <input
                           type="text"
                           className="mobile:p-2 p-1 mobile:text-base text-sm rounded-md border border-slate-500"
-                          placeholder="Enter Member Name"
+                          placeholder="Enter Member Principal Id"
                           onChange={(e) => setMemberName(e.target.value)}
                           // onKeyDown={(e) => handleNameEnter(e.target.value, e)}
                         />
