@@ -49,7 +49,7 @@ const AboutMe = () => {
           </div>
 
 
-          <p className="lg:text-[20px] md:text-[16px] text-[14px] font-semibold text-[#05212C] md:ml-2 my-4 md:mb-3">
+          <p className="lg:text-[20px] md:text-[16px] text-[14px] font-semibold text-[#05212C] md:ml-2 my-4 md:mb-3 break-words">
          
             Description
           </p>
