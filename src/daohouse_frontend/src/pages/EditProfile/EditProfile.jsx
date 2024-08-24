@@ -377,7 +377,7 @@ const EditProfile = () => {
                 About Me
               </h3>
               <div className="bg-[#FFFFFF] md:text-[16px] text-[12px] font-normal text-[#646464] py-3 md:px-5 pl-3 my-4 sm:w-[100%] rounded-lg">
-                <span className="text-[#05212C] md:mr-32 mr-4">Name</span>
+                <span className="text-[#05212C] md:mr-32 mr-4">Name <span className="text-red-500">*</span></span>
                 <input
                   type="text"
                   name="name"
@@ -440,6 +440,7 @@ const EditProfile = () => {
                 handleInputChange={handleInputChange}
                 handleSaveChangesClick={handleSaveChangesClick}
                 closeModal={closeModal}
+                errors={errors}
               />
               <div className="hidden sm:flex justify-center gap-5 mt-8">
                 <button

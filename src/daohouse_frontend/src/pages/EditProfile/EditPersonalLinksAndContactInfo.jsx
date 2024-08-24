@@ -4,51 +4,64 @@ const EditPersonalLinksAndContactInfo = ({
   profileData,
   handleInputChange,
   handleSaveChangesClick,
+  errors
 }) => {
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
-      <div className="mb-4 flex flex-col">
-        
-        <div className="flex items-center mb-4">
-          <label
-            htmlFor="contactNo"
-            className="block md:text-[16px] text-[12px] font-semibold text-[#05212C] mr-2 md:w-[100px] w-[70px]"
-          >
-            Contact No.
-          </label>
-          <div className="flex flex-grow">
-            <input
-              id="contact_number"
-              name="contact_number"
-              type="tel"
-              value={profileData.contact_number}
-              onChange={handleInputChange}
-              placeholder="0123456789"
-              className="py-2 px-3 w-full lg:w-[50%] md:w-[100%] lg:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm box-border text-[12px]"
-            />
-          </div>
+  <div className="mb-4 flex flex-col">
+    
+    <div className="flex flex-col mb-4">
+      <div className="flex items-center">
+        <label
+          htmlFor="contactNo"
+          className="block md:text-[16px] text-[12px] font-semibold text-[#05212C] md:w-[100px] w-[70px]"
+        >
+          Contact No.<span className="text-red-500">*</span>
+        </label>
+        <div className="flex flex-grow">
+          <input
+            id="contact_number"
+            name="contact_number"
+            type="tel"
+            value={profileData.contact_number}
+            onChange={handleInputChange}
+            placeholder="0123456789"
+            className="py-2 px-3 w-full lg:w-[50%]  md:w-[100%] lg:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm text-[12px]"
+          />
         </div>
+      </div>
+      {errors.contact_number && (
+        <p className="text-red-500 text-xs mt-1">{errors.contact_number}</p>
+      )}
+    </div>
 
-        {/* Email */}
-        <div className="flex items-center mb-4">
-          <label
-            htmlFor="email"
-            className="block md:text-[16px] text-[12px] font-semibold text-[#05212C] mr-2 md:w-[100px] w-[70px]"
-          >
-            Email
-          </label>
-          <div className="flex flex-grow">
-            <input
-              id="email"
-              name="email_id"
-              type="email"
-              value={profileData.email_id}
-              onChange={handleInputChange}
-              placeholder="Emailid.id@example.com"
-              className="py-2 px-3 w-full lg:w-[50%] md:w-[100%] lg:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm box-border text-[12px]"
-            />
-          </div>
+    {/* Email */}
+    <div className="flex flex-col mb-4">
+      <div className="flex items-center">
+        <label
+          htmlFor="email"
+          className="block md:text-[16px] text-[12px] font-semibold text-[#05212C] md:w-[100px] w-[70px]"
+        >
+          Email <span className="text-red-500">*</span>
+        </label>
+        <div className="flex-grow ml-2">
+          <input
+            id="email"
+            name="email_id"
+            type="email"
+            value={profileData.email_id}
+            onChange={handleInputChange}
+            placeholder="Emailid.id@example.com"
+            className="py-2 px-3 w-full lg:w-[50%]  md:w-[100%] lg:ml-16 ml-1 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm text-[12px]"
+          />
         </div>
+      </div>
+      {errors.email_id && (
+        <p className="text-red-500 text-xs mt-1">{errors.email_id}</p>
+      )}
+    </div>
+  
+
 
         {/* Twitter */}
         <div className="flex items-center mb-4">
