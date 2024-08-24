@@ -1,6 +1,5 @@
 import React from "react";
 import nodata from "../../../assets/nodata.png";
-
 const NoFollowers = () => {
   return (
     <div className="w-full max-w-[93%] mx-auto flex flex-col items-center justify-center p-4 bg-slate-100 rounded-md">
