@@ -189,7 +189,7 @@ const MyProfile = ({ childComponent }) => {
                 >
                   <img
                     className="w-full h-full object-cover"
-                    src={profileImageUrl} // Dynamically set to user's profile image or default
+                    src={imageSrc} // Dynamically set to user's profile image or default
                     alt="profile-pic"
                     onError={handleImageError} // Handle image loading errors
                   />
