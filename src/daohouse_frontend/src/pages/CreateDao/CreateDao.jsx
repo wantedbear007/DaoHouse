@@ -68,54 +68,6 @@ const CreateDao = () => {
     };
   }, []);
 
-  // const handleDaoClick = async () => {
-  //   setLoadingNext(true);
-  //   const { step1, step2, step3, step4, step6 } = data;
-  //   const council = step4.voting?.Council;
-  //   const councilArray = Object.entries(council)
-  //     .filter(([permission, hasPermission]) => hasPermission)
-  //     .map(([permission]) => permission);
-
-  //     console.log("councilArray", councilArray);
-  //     console.log("council", council);
-      
-      
-
-  //     const allMembers = new Set(); // Using a Set to avoid duplicates
-
-  //     // Add council members
-  //     const councilMembers = step3.find(group => group.name === "Council")?.members || [];
-  //     councilMembers.forEach(member => allMembers.add(Principal.fromText(member).toText()));
-      
-  //     // Add members from each group
-  //     step3.filter(group => group.name !== "Council").forEach(group => {
-  //       group.members.forEach(member => allMembers.add(Principal.fromText(member).toText()));
-  //     });
-      
-  //     const principalMembers = Array.from(allMembers).map(member => Principal.fromText(member));
-
-  //   const daoPayload = {
-  //     dao_name: step1.DAOIdentifier || '',
-  //     purpose: step1.Purpose || '',
-  //     daotype: step1.DAOType || '',
-  //     link_of_document: '',
-  //     cool_down_period: step2.setUpPeriod || 1,
-  //     members: principalMembers || [],
-  //     members_permissions: councilArray || [],
-  //     tokenissuer: step1.tokenissuer || '',
-  //     token_name: step1.tokenName || '',
-  //     token_symbol: step1.tokenSymbol || '',
-  //     tokens_required_to_vote: step1.tokensRequiredToVote || 1,
-  //     linksandsocials: [],
-  //     required_votes: 10,
-  //     image_content: step6.image_content || '',
-  //     image_title: step6.image_title || '',
-  //     image_content_type: step6.image_content_type || '',
-  //     image_id: '12',
-  //     dao_groups: step4.groups || [],
-  //     total_tokens: 1000,
-  //   };
-
 
   const handleDaoClick = async () => {
     setLoadingNext(true);
