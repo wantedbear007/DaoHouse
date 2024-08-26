@@ -152,8 +152,9 @@ dfx deploy dao_canister --argument '(record {
 
 dfx deploy daohouse_backend --argument "(record { payment_recipient = principal \"${RECIEVER}\"; })"
 dfx deploy ic_asset_handler
-# # to upload first image
-# ./assets_upload.sh
+# to upload first image
+chmod 777 ./assets_upload.sh
+./assets_upload.sh
 
 
 
