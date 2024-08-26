@@ -21,7 +21,7 @@ const Dao = () => {
   const [dao, setDao] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [fetchedDAOs, setFetchedDAOs] = useState([]); 
+  const [fetchedDAOs, setFetchedDAOs] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   console.log("current page",currentPage)
@@ -38,7 +38,7 @@ const Dao = () => {
         const daoCanister = await createDaoActor(data.dao_canister_id);
         const dao_details = await daoCanister.get_dao_detail();
         // console.log("dao_details", dao_details);
-        
+
         allDaoDetails.push({ ...dao_details, daoCanister, dao_canister_id: data.dao_canister_id });
       } catch (err) {
         console.error(`Error fetching details for DAO ${data.dao_canister_id}:`, err);
@@ -100,7 +100,7 @@ const Dao = () => {
       console.log("response",response)
       // setTotalItems(response.totalItems);
       const combinedDaoDetails = await fetchDaoDetails(response.slice(0, itemsPerPage)); // Get only the current page items
-    setHasMore(response.length > itemsPerPage);
+      setHasMore(response.length > itemsPerPage);
       setDao(combinedDaoDetails);
     } catch (error) {
       console.error('Error fetching DAOs:', error);
@@ -175,7 +175,7 @@ const Dao = () => {
           </div>
         ) : (searchTerm && fetchedDAOs.length > 0 ? (
           <div className={"bg-[#c8ced3]"}>
-            <Container classes={`__cards tablet:px-10 px-4 pb-10 grid grid-cols-1 big_phone:grid-cols-2 tablet:gap-6 gap-4`}>
+            <Container classes={`__cards tablet:px-10 px-4 pb-10 grid grid-cols-1 big_phone:grid-cols-1 tablet:gap-6 gap-4`}>
               {fetchedDAOs.map((daos, index) => {
                 const daoCanisterId = daos.dao_canister_id ? daos.dao_canister_id : 'No ID';
                 return (
@@ -195,8 +195,8 @@ const Dao = () => {
               })}
             </Container>
             <Pagignation currentPage={currentPage}
-            setCurrentPage={setCurrentPage} 
-            hasMore={hasMore}/>
+              setCurrentPage={setCurrentPage}
+              hasMore={hasMore}/>
           </div>
         ) : dao && dao.length > 0 ? (
           <div className={"bg-[#c8ced3]"}>
@@ -209,7 +209,7 @@ const Dao = () => {
                     name={daos.dao_name || 'No Name'}
                     followers={daos.followers_count || '0'}
                     members={daos.members_count ? Number(BigInt(daos.members_count)) : '0'}
-                    groups={daos.groups_count ? Number(BigInt(daos.groups_count)) : 'No Groups'}
+                    // groups={daos.groups_count ? Number(BigInt(daos.groups_count)) : 'No Groups'}
                     proposals={daos.proposals_count || '0'}
                     image_id={daos.image_id || 'No Image'}
                     daoCanister={daos.daoCanister}
@@ -219,10 +219,10 @@ const Dao = () => {
                 );
               })}
             </Container>
-            
+
             <Pagignation currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            hasMore={hasMore} />
+              setCurrentPage={setCurrentPage}
+              hasMore={hasMore} />
           </div>
         ) : (
           <NoDataComponent />
@@ -238,7 +238,7 @@ const Dao = () => {
                   name={a.name}
                   funds={a.funds}
                   members={a.members}
-                  groups={a.groups}
+                  // groups={a.groups}
                   proposals={a.proposals}
                   daoCanister={a.daoCanister}
                   daoCanisterId={daoCanisterId}
@@ -269,7 +269,7 @@ export const SearchProposals = ({
       className={`${className} flex items-center p-2 bg-${bgColor} rounded-full max-w-md mx-auto`}
       style={{ minWidth: width }}
     >
-      <div className="mx-3">
+       <div className="mx-3">
         <svg
           width="26"
           height="26"
@@ -278,14 +278,15 @@ export const SearchProposals = ({
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M25 25L19.2094 19.2094M19.2094 19.2094C20.1999 18.218"
+            d="M25 25L19.2094 19.2094M19.2094 19.2094C20.1999 18.2189 20.9856 17.043 21.5217 15.7488C22.0577 14.4547 22.3336 13.0676 22.3336 11.6668C22.3336 10.266 22.0577 8.87896 21.5217 7.5848C20.9856 6.29065 20.1999 5.11475 19.2094 4.12424C18.2189 3.13373 17.043 2.34802 15.7488 1.81196C14.4547 1.27591 13.0676 1 11.6668 1C10.266 1 8.87896 1.27591 7.5848 1.81196C6.29065 2.34802 5.11474 3.13373 4.12424 4.12424C2.12382 6.12466 1 8.8378 1 11.6668C1 14.4958 2.12382 17.209 4.12424 19.2094C6.12466 21.2098 8.8378 22.3336 11.6668 22.3336C14.4958 22.3336 17.209 21.2098 19.2094 19.2094Z"
             stroke="black"
-            strokeWidth="2"
             strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       </div>
-    
+
+
 
 
       <input
@@ -299,6 +300,46 @@ export const SearchProposals = ({
   );
 };
 
+
+//   width,
+//   bgColor,
+//   placeholder,
+//   className,
+//   onChange,
+//   ...inputProps
+// }) => {
+//   return (
+//     <div
+//       className={`${className} flex items-center p-2 bg-${bgColor} rounded-full max-w-md mx-auto`}
+//       style={{ minWidth: width }}
+//     >
+      // <div className="mx-3">
+      //   <svg
+      //     width="26"
+      //     height="26"
+      //     viewBox="0 0 26 26"
+      //     fill="none"
+      //     xmlns="http://www.w3.org/2000/svg"
+      //   >
+      //     <path
+      //       d="M25 25L19.2094 19.2094M19.2094 19.2094C20.1999 18.2189 20.9856 17.043 21.5217 15.7488C22.0577 14.4547 22.3336 13.0676 22.3336 11.6668C22.3336 10.266 22.0577 8.87896 21.5217 7.5848C20.9856 6.29065 20.1999 5.11475 19.2094 4.12424C18.2189 3.13373 17.043 2.34802 15.7488 1.81196C14.4547 1.27591 13.0676 1 11.6668 1C10.266 1 8.87896 1.27591 7.5848 1.81196C6.29065 2.34802 5.11474 3.13373 4.12424 4.12424C2.12382 6.12466 1 8.8378 1 11.6668C1 14.4958 2.12382 17.209 4.12424 19.2094C6.12466 21.2098 8.8378 22.3336 11.6668 22.3336C14.4958 22.3336 17.209 21.2098 19.2094 19.2094Z"
+      //       stroke="#646464"
+      //       strokeLinecap="round"
+      //       strokeLinejoin="round"
+      //     />
+      //   </svg>
+      // </div>
+
+//       <input
+//         onChange={onChange}
+//         type="text"
+//         placeholder={placeholder}
+//         className="pl-4 pr-10 py-2 w-full bg-transparent focus:outline-none placeholder-zinc-400 text-zinc-700 placeholder-custom"
+//         {...inputProps}
+//       />
+//     </div>
+//   );
+// };
 export const Pagignation = ({ currentPage, setCurrentPage, hasMore }) => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -306,31 +347,29 @@ export const Pagignation = ({ currentPage, setCurrentPage, hasMore }) => {
 
   return (
     <div className="pagination">
-  <div className="flex items-center gap-12 justify-center mt-3">
-    <button
-      className={`text-xl flex items-center ml-1 ${
-        currentPage === 1
-          ? "text-gray-400 cursor-not-allowed"
-          : "text-black hover:text-gray-500 cursor-pointer"
-      }`}
-      onClick={() => handlePageChange(currentPage - 1)}
-      disabled={currentPage === 1}
-    >
-      <FaArrowLeft /> Prev
-    </button>
-    <button
-      className={`text-xl flex items-center px-3 py-1 transition duration-300 ease-in-out ${
-        !hasMore
-          ? "text-gray-400 cursor-not-allowed"
-          : "text-black hover:text-gray-500 cursor-pointer"
-      }`}
-      onClick={() => handlePageChange(currentPage + 1)}
-      disabled={!hasMore}
-    >
-      Next <FaArrowRight />
-    </button>
-  </div>
-</div>
+      <div className="flex items-center gap-12 justify-center mt-3">
+        <button
+          className={`text-xl flex items-center ml-1 ${currentPage === 1
+            ? "text-gray-400 cursor-not-allowed"
+            : "text-black hover:text-gray-500 cursor-pointer"
+            }`}
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          <FaArrowLeft /> Prev
+        </button>
+        <button
+          className={`text-xl flex items-center px-3 py-1 transition duration-300 ease-in-out ${!hasMore
+            ? "text-gray-400 cursor-not-allowed"
+            : "text-black hover:text-gray-500 cursor-pointer"
+            }`}
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={!hasMore}
+        >
+          Next <FaArrowRight />
+        </button>
+      </div>
+    </div>
 
   );
 };
