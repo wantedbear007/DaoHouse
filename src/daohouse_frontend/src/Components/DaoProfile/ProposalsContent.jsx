@@ -4,6 +4,7 @@ import Card from "../Proposals/Card";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../Components/utils/useAuthClient";
 import { useParams } from "react-router-dom";
+import nodata from "../../../assets/nodata.png";
 
 const ProposalsContent = ({ proposals, isMember }) => {
   const { backendActor, createDaoActor } = useAuth();
@@ -82,7 +83,10 @@ const ProposalsContent = ({ proposals, isMember }) => {
         <div className="w-full border-t py-6 px-4 border-[#0000004D] rounded-[10px] mb-4">
           <div className="bg-transparent rounded flex flex-col gap-8">
             {displayedProposals.length === 0 ? (
-              <p className="text-center font-black">No proposal found</p>
+              <p className="text-center font-black">
+                 <img src={nodata} alt="No Data" className="mx-auto block " />
+                {/* No proposal found */}
+                </p>
             ) : (
               displayedProposals.map((proposal, index) => (
                 <Card key={index} proposal={proposal} />
@@ -94,7 +98,10 @@ const ProposalsContent = ({ proposals, isMember }) => {
 
       <div className="bg-white md:hidden rounded-[10px] mt-4 mb-8 flex flex-col gap-8">
         {displayedProposals.length === 0 ? (
-          <p className="text-center font-black">No proposal found</p>
+          <p className="text-center font-black">
+                    <img src={nodata} alt="No Data" className="mb-1 mx-auto block " />
+            {/* No proposal found */}
+            </p>
         ) : (
           displayedProposals.map((proposal, index) => (
             <Card key={index} proposal={proposal} />
