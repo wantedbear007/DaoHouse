@@ -118,17 +118,17 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCaniste
         </div>
       </div>
 
-      <div className="big_phone:grid hidden grid-cols-4 text-center mb-4 bg-white tablet:p-4 pb-4 p-2 rounded-lg">
-        <div>
+      <div className="big_phone:grid hidden grid-cols-3 text-center mb-4 bg-white tablet:p-4 pb-4 p-2 rounded-lg">
+        {/* <div>
           <p className="font-bold text-dark-green">{funds}</p>
           <p className="text-sm text-dark-green">DAO Funds</p>
-        </div>
+        </div> */}
         <div>
           <p className="font-bold text-dark-green">{members}</p>
           <p className="text-sm text-dark-green">Members</p>
         </div>
         <div>
-          <p className="font-bold text-dark-green">{groups}</p>
+          <p className="font-bold text-dark-green">{groups || '0'}</p>
           <p className="text-sm text-dark-green">Groups</p>
         </div>
         <div>
@@ -137,17 +137,17 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCaniste
         </div>
       </div>
 
-      <div className="big_phone:hidden grid grid-cols-2 text-center my-4 small_phone:gap-4 gap-2">
-        <div className="bg-white rounded-lg py-4">
+      <div className="big_phone:hidden grid grid-cols-1 text-center my-4 small_phone:gap-4 gap-2">
+        {/* <div className="bg-white rounded-lg py-4">
           <p className="font-bold text-dark-green">{funds}</p>
           <p className="text-sm text-dark-green">DAO Funds</p>
-        </div>
+        </div> */}
         <div className="bg-white rounded-lg py-4">
           <p className="font-bold text-dark-green">{members}</p>
           <p className="text-sm text-dark-green">Members</p>
         </div>
         <div className="bg-white rounded-lg py-4">
-          <p className="font-bold text-dark-green">{groups}</p>
+          <p className="font-bold text-dark-green">{groups || '0'}</p>
           <p className="text-sm text-dark-green">Groups</p>
         </div>
         <div className="bg-white rounded-lg py-4">
