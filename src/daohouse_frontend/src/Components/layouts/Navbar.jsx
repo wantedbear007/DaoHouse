@@ -35,7 +35,6 @@ const Navbar = () => {
     if (!backendActor || userProfile) return;
   
     const createAndFetchUserProfile = async () => {
-  
       try {
         const response = await backendActor.check_user_existance();
   
@@ -43,23 +42,31 @@ const Navbar = () => {
           await fetchUserProfile();
         } else {
           const profileResponse = await backendActor.create_profile();
-          if (profileResponse.Ok === null) {
+  
+          if (profileResponse.Ok === null && !hasShownToastRef.current) {
             toast.success("User login successfully");
-          } else {
+          } else if (!hasShownToastRef.current) {
             toast.error("User login failed");
           }
+  
           await fetchUserProfile();
-          toast.warning("Please update your details");
+  
+          if (!hasShownToastRef.current) {
+            toast.warning("Please update your details");
+          }
         }
+  
+        hasShownToastRef.current = true;
+        
       } catch (error) {
         console.error("Error creating or fetching user profile:", error);
-      } finally {
-        hasShownToastRef.current = true; // Set ref to true after showing the toast
       }
     };
   
     createAndFetchUserProfile();
   }, [backendActor, fetchUserProfile]);
+  
+  
   
   
   

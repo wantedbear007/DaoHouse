@@ -34,6 +34,10 @@ const App = () => {
     <PostProvider>
       <Router>
         <Navbar />
+        <ToastContainer
+          position="top-right"
+          style={{ marginTop: '6rem' }}
+        />
 
         <Routes>
           <Route path="/*" element={<Error404 />} />
@@ -68,7 +72,7 @@ const App = () => {
         <Footer />
  
       </Router>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </PostProvider>
   );
 };
