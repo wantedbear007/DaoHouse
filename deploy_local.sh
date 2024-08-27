@@ -23,6 +23,12 @@ dfx build dao_canister
 dfx canister create icrc1_ledger_canister
 dfx build icrc1_ledger_canister
 
+
+# FOR ICP LEDGER
+MINTER_ACCOUNT_ID=$(dfx --identity anonymous ledger account-id)
+DEFAULT_ACCOUNT_ID=$(dfx --identity default ledger account-id)
+
+
 # cargo install candid-extractor
 
 # create .did files
@@ -44,22 +50,29 @@ echo $RECIEVER
 
 # dfx canister create --all
 
-# dfx deploy icrc1_ledger_canister --argument "(variant {Init = 
-# record {
-#      token_symbol = \"${TOKEN_SYMBOL}\";
-#      token_name = \"${TOKEN_NAME}\";
-#      minting_account = record { owner = principal \"${MINTER}\" };
-#      transfer_fee = ${TRANSFER_FEE};
-#      metadata = vec {};
-#      initial_balances = vec { record { record { owner = principal \"${BHANU}\"; }; ${PRE_MINTED_TOKENS}; record { owner = principal \"${BHANU}\"; }; ${PRE_MINTED_TOKENS}; }; };
-#      archive_options = record {
-#          num_blocks_to_archive = 100;
-#          trigger_threshold = 100;
-#          controller_id = principal \"${DEFAULT}\";
-#      };
-#      feature_flags = opt record {icrc2 = true;};
-#  }
-# })"
+# NOT FOR MAINNET
+dfx deploy icp_ledger_canister --argument "
+  (variant {
+    Init = record {
+      minting_account = \"$MINTER_ACCOUNT_ID\";
+      initial_values = vec {
+        record {
+          \"$DEFAULT_ACCOUNT_ID\";
+          record {
+            e8s = 10_000_000_000 : nat64;
+          };
+        };
+      };
+      send_whitelist = vec {};
+      transfer_fee = opt record {
+        e8s = 10_000 : nat64;
+      };
+      token_symbol = opt \"LICP\";
+      token_name = opt \"Local ICP\";
+    }
+  })
+"
+
 
 dfx deploy icrc1_ledger_canister --argument "(variant {Init = 
 record {
@@ -125,30 +138,7 @@ dfx deploy dao_canister --argument '(record {
     };
 })'
 
-# dfx deploy dao_canister --argument '(record{
-#     dao_name="Sample DAO";
-#     purpose="To manage community projects";
-#     daotype="Non-profit";
-#     link_of_document="https://example.com/charter.pdf";
-#     cool_down_period="7 days";
-#     members=vec{
-#         principal "aaaaa-aa";
-#     };
-#     tokenissuer="sample_token_issuer";
-#     linksandsocials=vec{
-#         "https://twitter.com/sampledao";
-#         "https://discord.gg/sampledao";
-#     };
-#     required_votes=100;
-#     image_id="1";
-#     followers=vec{
-#         principal "aaaaa-aa";
-#     };
-#     members_permissions=vec{
-#         "mai hi permission hai";
-#     };
 
-# })'
 
 dfx deploy daohouse_backend --argument "(record { payment_recipient = principal \"${RECIEVER}\"; })"
 dfx deploy ic_asset_handler
@@ -162,7 +152,7 @@ chmod 777 ./assets_upload.sh
 #  dfx deploy internet_identity
 #  dfx deploy daohouse_frontend
 
-dfx deploy
+# dfx deploy
 
 
 # dfx generate

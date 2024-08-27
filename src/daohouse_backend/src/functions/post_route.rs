@@ -24,6 +24,7 @@ use ic_cdk::api;
 //     },
 //     query, update,
 // };
+use crate::guards::*;
 use ic_cdk::api::management_canister::main::{
     canister_status as ic_canister_status, create_canister, delete_canister,
     deposit_cycles as ic_deposit_cycles, install_code as ic_install_code, raw_rand, stop_canister,
@@ -34,7 +35,6 @@ use ic_cdk::api::{canister_balance128, time};
 use ic_cdk::{query, update};
 use icrc_ledger_types::icrc1::account::Account;
 use icrc_ledger_types::icrc1::transfer::BlockIndex;
-use crate::guards::*;
 use icrc_ledger_types::icrc2::transfer_from::{TransferFromArgs, TransferFromError};
 use sha2::{Digest, Sha256};
 
@@ -520,23 +520,27 @@ fn get_caller() -> Principal {
 
 // ledger handlers
 async fn transfer(tokens: u64, user_principal: Principal) -> Result<BlockIndex, String> {
-    let payment_recipient = with_state(|state| state.borrow_mut().get_payment_recipient());
+    // let payment_recipient = with_state(|state| state.borrow_mut().get_payment_recipient());
 
-    ic_cdk::println!("id is {}", payment_recipient.to_string());
+    // ic_cdk::println!("id is {}", payment_recipient.to_string());
     // let payment_recipient = STATE.with(|state| {
     //     let state = state.borrow();
     //     state.get_payment_recipient()
     // });
 
     ic_cdk::println!(
-        "Transferring {} tokens to principal {}",
+        "Transferring {} tokens to principal ",
         tokens,
-        payment_recipient
+        // payment_recipient
     );
     let transfer_args = TransferFromArgs {
         amount: tokens.into(),
         to: Account {
-            owner: payment_recipient,
+            // owner: payment_recipient,
+            owner: Principal::from_text(
+                "m2zqz-pr5r2-ozayk-w5trf-mt6mw-7vuys-mitrw-4qdpb-dm5p7-77ey6-fae",
+            )
+            .map_err(|err| err.to_string())?,
             subaccount: None,
         },
         fee: None,
@@ -550,7 +554,7 @@ async fn transfer(tokens: u64, user_principal: Principal) -> Result<BlockIndex, 
     };
 
     ic_cdk::call::<(TransferFromArgs,), (Result<BlockIndex, TransferFromError>,)>(
-        Principal::from_text("mxzaz-hqaaa-aaaar-qaada-cai")
+        Principal::from_text("ryjl3-tyaaa-aaaaa-aaaba-cai")
             .expect("Could not decode the principal."),
         "icrc2_transfer_from",
         (transfer_args,),
@@ -617,7 +621,7 @@ fn get_trusted_origins() -> Vec<String> {
         String::from("http://fkqof-vqaaa-aaaak-qirwq-cai.icp0.io"),
         String::from("http://localhost:3000"),
         String::from("http://127.0.0.1:4943/>canisterId=bd3sg-teaaa-aaaaa-qaaba-cai"),
-        String::from("http://bd3sg-teaaa-aaaaa-qaaba-cai.localhost:4943")
+        String::from("http://bd3sg-teaaa-aaaaa-qaaba-cai.localhost:4943"),
     ]
 }
 
