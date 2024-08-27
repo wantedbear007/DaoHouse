@@ -58,7 +58,7 @@ const About = () => {
             <h2 className="text-about-heading font-mulish font-normal text-[16px] md:text-[16px] lg:text-[16px] leading-tight mt-4 mb-1">
               About Platform
             </h2>
-            <p className="text-about-subheading font-mulish font-medium text-[32px] lg:text-[40px] leading-tight mt-1">
+            <p className="text-about-subheading font-mulish font-medium text-[20px] small_phone:text-[32px] lg:text-[40px] leading-tight mt-1 whitespace-nowrap">
               Unlocking Collective Intelligence
             </p>
           </div>
