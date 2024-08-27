@@ -101,41 +101,6 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
     setList(prevList => prevList.filter(item => item.index !== index));
   };
 
-  // const handleMemberAdding = (index) => {
-  //   setAddMemberIndex(index);
-  //   setShowMemberNameInput(true);
-  // };
-
-  // const handleNameEnter = async (name, event) => {
-  //   if (event.key === "Enter" && name.trim() !== "") {
-  //     try {
-  //       const principal = Principal.fromText(name.trim());
-  //       const response = await backendActor.get_profile_by_id(principal);
-
-  //       if (response.Ok) {
-  //         setList(prevList =>
-  //           prevList.map(item => {
-  //             if (item.index === addMemberIndex) {
-  //               const principalId = principal.toText();
-  //               if (!item.members.includes(principalId)) {
-  //                 return { ...item, members: [...item.members, principalId] };
-  //               } else {
-  //                 toast.error("Principal ID already exists");
-  //               }
-  //             }
-  //             return item;
-  //           })
-  //         );
-  //         setShowMemberNameInput(false);
-  //       } else {
-  //         toast.error("User does not exist");
-  //       }
-  //     } catch (error) {
-  //       toast.error("Invalid Principal ID or error fetching profile");
-  //     }
-  //   }
-  // };
-
   const handleMemberAdding = (index) => {
     if (index === null) {
       // Council case
