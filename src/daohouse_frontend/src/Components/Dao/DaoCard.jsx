@@ -107,7 +107,7 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCaniste
           />
         </div>
         <div>
-          <h2 className="mobile:text-2xl text-lg font-semibold">{name}</h2>
+          <h2 className="mobile:text-2xl text-lg font-semibold truncate ... w-20 md:w-80">{name}</h2>
           <button
             onClick={toggleFollow}
             className={`flex-1 mt-2 text-blue-400 p-1 sm:text-sm md:text-lg`}
