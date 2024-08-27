@@ -5,33 +5,13 @@ use std::borrow::{Borrow, BorrowMut};
 use crate::routes::upload_image;
 use crate::types::{Comment, PostInfo, PostInput};
 use crate::{
-    with_state, Analytics, DaoCanisterInput, DaoDetails, DaoInput, GetAllPostsResponse, ImageData,
-    Pagination, ReplyCommentData,
+    with_state, Analytics, DaoDetails, GetAllPostsResponse, ImageData, Pagination, ReplyCommentData,
 };
-use candid::{Nat, Principal};
+use candid::Principal;
 use ic_cdk::api;
-// use ic_cdk::api::management_canister::main::{install_code, raw_rand, CanisterInstallMode, CanisterSettings};
-// use ic_cdk::{
-//     api::{
-//         call::call_with_payment128,
-//         management_canister::{
-//             self,
-//             main::{
-//                 create_canister, deposit_cycles, CanisterIdRecord, CreateCanisterArgument,
-//                 InstallCodeArgument,
-//             },
-//         },
-//     },
-//     query, update,
-// };
+
 use crate::guards::*;
-use ic_cdk::api::management_canister::main::{
-    canister_status as ic_canister_status, create_canister, delete_canister,
-    deposit_cycles as ic_deposit_cycles, install_code as ic_install_code, raw_rand, stop_canister,
-    update_settings, CanisterId, CanisterIdRecord, CanisterInstallMode, CanisterSettings,
-    CreateCanisterArgument, InstallCodeArgument, UpdateSettingsArgument,
-};
-use ic_cdk::api::{canister_balance128, time};
+use ic_cdk::api::management_canister::main::raw_rand;
 use ic_cdk::{query, update};
 use icrc_ledger_types::icrc1::account::Account;
 use icrc_ledger_types::icrc1::transfer::BlockIndex;
@@ -41,12 +21,7 @@ use sha2::{Digest, Sha256};
 #[update(guard = prevent_anonymous)]
 async fn create_new_post(canister_id: String, post_details: PostInput) -> Result<String, String> {
     let principal_id = api::caller();
-    // if principal_id == Principal::anonymous() {
-    //     return Err("Anonymous principal not allowed to make calls.".to_string());
-    // }
 
-    // let uuids = raw_rand().await.unwrap().0;
-    // let post_id = format!("{:x}", Sha256::digest(&uuids));
     let uuids = match raw_rand().await {
         Ok(uuids) => uuids.0,
         Err(_) => {
@@ -65,19 +40,7 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
         },
     )
     .await;
-    // let image_id = upload_image(canister_id, ImageData {
-    //     content: post_details.image_content,
-    //     name: post_details.image_title,
-    //     content_type: post_details.image_content_type,
-    // }).await;
 
-    // let image_id = match image_id {
-    //     Ok(id) => id,
-    //     Err(er) => {
-    //         ic_cdk::println!("error {}", er);
-    //         return Err("Image upload failed".to_string());
-    //     }
-    // };
     let mut id = String::new();
     let image_create_res: bool = (match image_id {
         Ok(value) => {
@@ -376,25 +339,6 @@ fn get_latest_post(page_data: Pagination) -> GetAllPostsResponse {
 fn get_my_post(page_data: Pagination) -> Result<GetAllPostsResponse, String> {
     let principal_id = api::caller();
 
-    // let mut posts: Vec<PostInfo> = Vec::new();
-
-    // with_state(|state| {
-    //     for v in state.post_detail.iter() {
-
-    //         let mut post = v.1;
-
-    //         if post.like_id_list.contains(&api::caller()) {
-    //             post.is_liked = 1;
-    //         } else {
-    //             post.is_liked = 0;
-    //         }
-    //         // posts.push(post.clone());
-
-    //         if post.principal_id == principal_id {
-    //             posts.push(post.clone());
-    //         }
-    //     }
-    // });
     let posts: Vec<PostInfo> = with_state(|state| {
         state
             .post_detail
@@ -520,27 +464,12 @@ fn get_caller() -> Principal {
 
 // ledger handlers
 async fn transfer(tokens: u64, user_principal: Principal) -> Result<BlockIndex, String> {
-    // let payment_recipient = with_state(|state| state.borrow_mut().get_payment_recipient());
+    let payment_recipient = with_state(|state| state.borrow_mut().get_payment_recipient());
 
-    // ic_cdk::println!("id is {}", payment_recipient.to_string());
-    // let payment_recipient = STATE.with(|state| {
-    //     let state = state.borrow();
-    //     state.get_payment_recipient()
-    // });
-
-    ic_cdk::println!(
-        "Transferring {} tokens to principal ",
-        tokens,
-        // payment_recipient
-    );
     let transfer_args = TransferFromArgs {
         amount: tokens.into(),
         to: Account {
-            // owner: payment_recipient,
-            owner: Principal::from_text(
-                "m2zqz-pr5r2-ozayk-w5trf-mt6mw-7vuys-mitrw-4qdpb-dm5p7-77ey6-fae",
-            )
-            .map_err(|err| err.to_string())?,
+            owner: payment_recipient,
             subaccount: None,
         },
         fee: None,
@@ -555,7 +484,7 @@ async fn transfer(tokens: u64, user_principal: Principal) -> Result<BlockIndex, 
 
     ic_cdk::call::<(TransferFromArgs,), (Result<BlockIndex, TransferFromError>,)>(
         Principal::from_text("ryjl3-tyaaa-aaaaa-aaaba-cai")
-            .expect("Could not decode the principal."),
+            .expect("Could not decode the principal if ICP ledger."),
         "icrc2_transfer_from",
         (transfer_args,),
     )

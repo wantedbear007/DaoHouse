@@ -1,12 +1,10 @@
 use candid::{encode_one, Principal};
 use ic_cdk::api::{
     self,
-    management_canister::main::{create_canister, deposit_cycles},
 };
 
 use crate::{
-    CanisterInstallMode, CanisterSettings, CreateCanisterArgument, ICRC1LedgerInitArgs,
-    InstallCodeArgument, LedgerArg,
+    CanisterInstallMode, CanisterSettings, CreateCanisterArgument, InstallCodeArgument, LedgerArg,
 };
 
 use super::canister_factory::{
