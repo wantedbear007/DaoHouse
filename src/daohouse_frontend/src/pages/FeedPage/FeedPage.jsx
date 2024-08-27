@@ -81,6 +81,7 @@ const FeedPage = () => {
 
       if (active.all) {
         response = await backendActor.get_all_posts(paginationPayload);
+        console.log("res",response);
         const dataLength = response?.size || 0;
         setTotalItems(Math.ceil(dataLength / 4));
         setPosts(response?.posts);
@@ -195,7 +196,7 @@ const FeedPage = () => {
                 <Container classes="w-full flex flex-col items-center justify-center p-2">
                   <img src={nodata} alt="No Data" className="mb-1 " />
                   <p className="text-center text-gray-700 text-2xl">
-                    There are no post availabel yet!
+                  There are no post availabel yet!
                   </p>
                 </Container>
                 :
@@ -214,7 +215,7 @@ const FeedPage = () => {
           className +
           "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col"
         }>
-        <Pagignation totalItems={totalItems} currentPage={currentPage}
+        <Pagignation  totalItems={totalItems} currentPage={currentPage}
           setCurrentPage={setCurrentPage} />
       </div>
 
