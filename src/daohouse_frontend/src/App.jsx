@@ -26,6 +26,7 @@ import MyProposals from "./pages/Proposals/myproposals/MyProposals";
 import SingleProposal from "./Components/Proposals/SingleProposal/SingleProposal";
 import Following from "./Components/MyProfile/Following/Following";
 import { ToastContainer, toast } from 'react-toastify';
+import ScrollToTop from "./Components/utils/ScrollToTop";
 
 
 const App = () => {
@@ -38,7 +39,7 @@ const App = () => {
           position="top-right"
           style={{ marginTop: '6rem' }}
         />
-
+        <ScrollToTop />
         <Routes>
           <Route path="/*" element={<Error404 />} />
           <Route path="/" element={<Dashboard />} />
