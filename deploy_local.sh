@@ -51,7 +51,7 @@ echo $RECIEVER
 # dfx canister create --all
 
 # NOT FOR MAINNET
-dfx deploy icp_ledger_canister --argument "
+dfx deploy --specified-id ryjl3-tyaaa-aaaaa-aaaba-cai icp_ledger_canister --argument "
   (variant {
     Init = record {
       minting_account = \"$MINTER_ACCOUNT_ID\";
