@@ -12,7 +12,6 @@ import MuiSkeleton from "../../Components/Skeleton/MuiSkeleton";
 import LoginModal from "../../Components/Auth/LoginModal";
 import { useNavigate } from "react-router-dom";
 
-
 const FeedPage = () => {
   const [active, setActive] = useState({ all: false, latest: true });
   const [showPopup, setShowPopup] = useState(false);
@@ -20,17 +19,16 @@ const FeedPage = () => {
   const { isAuthenticated, login, signInNFID } = useAuth();
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
-  const [uplodedPost, setUplodedPost] = useState('')
-  const [getLike, setGetLike] = useState(null)
-  const [isLiked, setIsLiked] = useState(false)
+  const [uplodedPost, setUplodedPost] = useState('');
+  const [getLike, setGetLike] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
   const { backendActor } = useAuth();
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const className = "FeedPage";
-  const [loading, setLoading] = useState(false)
-  console.log("--posts", posts)
+  const [loading, setLoading] = useState(false);
+  console.log("--posts", posts);
 
-  
   const setAllActive = () => {
     setActive({ all: true, latest: false });
   };
@@ -75,36 +73,36 @@ const FeedPage = () => {
       const start = (currentPage - 1) * itemsPerPage;
       const end = start + itemsPerPage;
       const paginationPayload = { start, end };
-  
+
       if (active.all) {
         response = await backendActor.get_all_posts(paginationPayload);
       } else if (active.latest) {
         response = await backendActor.get_latest_post(paginationPayload);
       }
-  
+
       if (response?.posts) {
         const cleanedPosts = response.posts.filter(post => {
           const timestamp = Number(post.post_created_at);
           return !isNaN(timestamp) && timestamp > 0; // Ensure valid timestamps
         });
-  
+
         const sortedPosts = cleanedPosts.sort((a, b) => {
           const timestampA = Number(a.post_created_at);
           const timestampB = Number(b.post_created_at);
-          
+
           // Convert nanoseconds to milliseconds
           const dateA = new Date(timestampA / 1_000_000);
           const dateB = new Date(timestampB / 1_000_000);
-          
+
           // Log dates for debugging
           console.log("Date A:", dateA, "Date B:", dateB);
-          
+
           return dateB - dateA;
         });
-  
+
         // Log sorted posts for debugging
         console.log("Sorted posts:", sortedPosts);
-        
+
         setPosts(sortedPosts);
         const dataLength = response.size || 0;
         setTotalItems(Math.ceil(dataLength / 4));
@@ -115,7 +113,6 @@ const FeedPage = () => {
       setLoading(false);
     }
   };
-  
 
   const handleGetResponse = (res) => {
     setUplodedPost(res);
@@ -152,7 +149,6 @@ const FeedPage = () => {
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundPosition: "center",
-
       }}>
         <Container classes={`__filter w-100 mobile:h-[25vh] h-[17vh] big_phone:p-20 small_phone:p-10 p-4 flex flex-col items-start justify-center ${className}`}>
           <h1 className="mobile:text-5xl text-3xl p-3 text-white">Social Feed</h1>
@@ -191,7 +187,7 @@ const FeedPage = () => {
           </p>
 
           <button
-            className="bg-white small_phone:gap-2 gap-1 mr-12 mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl rounded-full shadow-md flex items-center rounded-2xl hover:bg-[#ececec] hover:scale-105 transition"
+            className="bg-white small_phone:gap-2 gap-1 mr-12  small_phone:mr-12 mr-6  mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl rounded-full shadow-md flex items-center rounded-2xl hover:bg-[#ececec] hover:scale-105 transition"
             onClick={handleCreatePostClick}>
             <HiPlus />
             Create Post
@@ -199,10 +195,11 @@ const FeedPage = () => {
         </Container>
       </div>
 
-      <div 
+      {/* Post section  */}
+       <div 
         className={
           className +
-          "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col"
+          "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col ml-0 mr-0"
         }>
         {
           loading ?
@@ -210,7 +207,7 @@ const FeedPage = () => {
             :
             (
               posts.length === 0 ?
-                <Container classes="w-full flex flex-col items-center justify-center p-2">
+                <Container classes="w-full flex flex-col items-center justify-center p-2 ">
                   <img src={nodata} alt="No Data" className="mb-1 " />
                   <p className="text-center text-gray-700 text-2xl">
                     There are no post availabel yet!
@@ -222,7 +219,7 @@ const FeedPage = () => {
                 </Container>
             )
         }
-      </div>
+      </div> 
 
       {showPopup && <CreatePostPopup handleGetResponse={handleGetResponse} onClose={() => setShowPopup(false)} />}
       {showLoginModal && <LoginModal isOpen={showLoginModal} onClose={handleModalClose} onLogin={handleLogin} 
