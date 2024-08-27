@@ -24,7 +24,6 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCaniste
       if (daoCanisterId) {
         setLoading(true);
         try {
-          
           const profileResponse = await backendActor.get_user_profile();
           if (profileResponse.Ok) {
             setUserProfile(profileResponse.Ok);
@@ -98,8 +97,8 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCaniste
   };
 
   return (
-    <div className="bg-[#F4F2EC] rounded-lg shadow-lg tablet:p-6 big_phone:p-3 small_phone:p-5 p-3 rounded-lg">
-      <div className="flex justify-start items-start mb-4 gap-4">
+    <div className="bg-[#F4F2EC] rounded-lg shadow-lg tablet:p-6 big_phone:p-3 small_phone:p-5 p-3 rounded-lg mr-12 ml-8">
+      <div className="flex justify-start items-start mb-4 gap-2">
         <div className="mobile:w-[207px] mobile:h-[120px] w-[150px] h-[70px] border border-black rounded">
           <img
             src={imageUrl}
@@ -118,17 +117,18 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCaniste
         </div>
       </div>
 
-      <div className="big_phone:grid hidden grid-cols-3 text-center mb-4 bg-white tablet:p-4 pb-4 p-2 rounded-lg">
-        {/* <div>
+      {/* Adjusted grid gaps for larger screens */}
+      <div className="big_phone:grid hidden grid-cols-4 text-center mb-4 bg-white tablet:p-4 pb-4 p-2 rounded-lg gap-1">
+        <div>
           <p className="font-bold text-dark-green">{funds}</p>
           <p className="text-sm text-dark-green">DAO Funds</p>
-        </div> */}
+        </div>
         <div>
           <p className="font-bold text-dark-green">{members}</p>
           <p className="text-sm text-dark-green">Members</p>
         </div>
         <div>
-          <p className="font-bold text-dark-green">{groups || '0'}</p>
+          <p className="font-bold text-dark-green">{groups}</p>
           <p className="text-sm text-dark-green">Groups</p>
         </div>
         <div>
@@ -137,17 +137,18 @@ const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCaniste
         </div>
       </div>
 
-      <div className="big_phone:hidden grid grid-cols-1 text-center my-4 small_phone:gap-4 gap-2">
-        {/* <div className="bg-white rounded-lg py-4">
+      {/* Adjusted grid gaps for smaller screens */}
+      <div className="big_phone:hidden grid grid-cols-2 text-center my-5 mx-5 small_phone:gap-2 gap-1">
+        <div className="bg-white rounded-lg py-4">
           <p className="font-bold text-dark-green">{funds}</p>
           <p className="text-sm text-dark-green">DAO Funds</p>
-        </div> */}
+        </div>
         <div className="bg-white rounded-lg py-4">
           <p className="font-bold text-dark-green">{members}</p>
           <p className="text-sm text-dark-green">Members</p>
         </div>
         <div className="bg-white rounded-lg py-4">
-          <p className="font-bold text-dark-green">{groups || '0'}</p>
+          <p className="font-bold text-dark-green">{groups}</p>
           <p className="text-sm text-dark-green">Groups</p>
         </div>
         <div className="bg-white rounded-lg py-4">
