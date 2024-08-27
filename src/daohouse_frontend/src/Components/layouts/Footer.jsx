@@ -7,11 +7,16 @@ import linkedin from "../../../assets/linkedin.png";
 import discord from "../../../assets/discord.png";
 
 const Footer = () => {
+
+  const handleLogoClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <React.Fragment>
       <footer className="bg-[#05212C] small_phone:py-12 py-8 text-center">
         <div className="w-full small_phone:mb-8 mb-4">
-          <Link to="/">
+          <Link to="/" onClick={handleLogoClick}>
             <img
               src={logo}
               alt="DAO HOuse"
