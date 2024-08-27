@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const FeedPage = () => {
-  const [active, setActive] = useState({ all: true, latest: false });
+  const [active, setActive] = useState({ all: false, latest: true });
   const [showPopup, setShowPopup] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { isAuthenticated, login, signInNFID } = useAuth();
@@ -69,35 +69,53 @@ const FeedPage = () => {
 
   const getDetails = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       let response;
       const itemsPerPage = 4;
       const start = (currentPage - 1) * itemsPerPage;
       const end = start + itemsPerPage;
-      const paginationPayload = {
-        start,
-        end,
-      }
-
+      const paginationPayload = { start, end };
+  
       if (active.all) {
         response = await backendActor.get_all_posts(paginationPayload);
-        const dataLength = response?.size || 0;
-        setTotalItems(Math.ceil(dataLength / 4));
-        setPosts(response?.posts);
-      }
-      else if (active.latest) {
+      } else if (active.latest) {
         response = await backendActor.get_latest_post(paginationPayload);
-        const dataLength = response?.size || 0;
+      }
+  
+      if (response?.posts) {
+        const cleanedPosts = response.posts.filter(post => {
+          const timestamp = Number(post.post_created_at);
+          return !isNaN(timestamp) && timestamp > 0; // Ensure valid timestamps
+        });
+  
+        const sortedPosts = cleanedPosts.sort((a, b) => {
+          const timestampA = Number(a.post_created_at);
+          const timestampB = Number(b.post_created_at);
+          
+          // Convert nanoseconds to milliseconds
+          const dateA = new Date(timestampA / 1_000_000);
+          const dateB = new Date(timestampB / 1_000_000);
+          
+          // Log dates for debugging
+          console.log("Date A:", dateA, "Date B:", dateB);
+          
+          return dateB - dateA;
+        });
+  
+        // Log sorted posts for debugging
+        console.log("Sorted posts:", sortedPosts);
+        
+        setPosts(sortedPosts);
+        const dataLength = response.size || 0;
         setTotalItems(Math.ceil(dataLength / 4));
-        setPosts(response?.posts);
       }
     } catch (error) {
       console.log("Error fetching posts:", error);
-    }
-    finally {
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
+  
 
   const handleGetResponse = (res) => {
     setUplodedPost(res);
@@ -200,7 +218,7 @@ const FeedPage = () => {
                 </Container>
                 :
                 <Container classes={'w-full'}>
-                  {posts?.reverse().map((posts, i) => <PostCard handleGetLikePost={handleGetLikePost} posts={posts} key={i} />)}
+                  {posts?.map((posts, i) => <PostCard handleGetLikePost={handleGetLikePost} posts={posts} key={i} />)}
                 </Container>
             )
         }
