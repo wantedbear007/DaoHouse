@@ -105,21 +105,20 @@ const DaoCard = ({ name,  members, groups, proposals, image_id, daoCanister, dao
             alt="DAO Image"
             className="w-full h-full object-cover rounded"
           />
-        </div>
+        </div> 
         <div>
-          <h2 className="mobile:text-2xl text-lg font-semibold truncate ... w-20 md:w-80">{name}</h2>
-          <button
+        <h2 className="mobile:text-2xl text-lg font-semibold truncate ... w-20 md:w-80">{name}</h2>
+          </div>
+      </div>
+      <div> <button
             onClick={toggleFollow}
             className={`flex-1 mt-2 text-blue-400 p-1 sm:text-sm md:text-lg`}
           >
             {isFollowing ? 'Unfollow' : '+ Follow'}
-          </button>
-        </div>
-      </div>
-
-      {/* Adjusted flexbox for larger screens */}
-<div className="big_phone:flex hidden justify-between text-center mb-4 bg-white tablet:p-4 pb-4 p-2 rounded-lg gap-1">
-  <div className="flex-1 ml-5 ">
+          </button></div>
+{/* Adjusted flexbox for larger screens */}
+<div className="big_phone:flex hidden justify-between text-center mb-4 bg-white tablet:p-4 pb-4 p-2 rounded-lg gap-0">
+  <div className="flex-1 ml-5">
     <p className="font-bold text-dark-green">{members}</p>
     <p className="text-sm text-dark-green">Members</p>
   </div>
@@ -127,29 +126,28 @@ const DaoCard = ({ name,  members, groups, proposals, image_id, daoCanister, dao
     <p className="font-bold text-dark-green">{groups || '0'}</p>
     <p className="text-sm text-dark-green">Groups</p>
   </div>
-  <div className="flex-1  mr-5">
+  <div className="flex-1 mr-5">
     <p className="font-bold text-dark-green">{proposals}</p>
     <p className="text-sm text-dark-green">Active Proposals</p>
   </div>
 </div>
 
+{/* Adjusted grid layout for smaller screens */}
+<div className="big_phone:hidden grid grid-cols-1 text-center my-5 mx-5 gap-1">
+  <div className="bg-white rounded-lg py-4">
+    <p className="font-bold text-dark-green">{members}</p>
+    <p className="text-sm text-dark-green">Members</p>
+  </div>
+  <div className="bg-white rounded-lg py-4">
+    <p className="font-bold text-dark-green">{groups || '0'}</p>
+    <p className="text-sm text-dark-green">Groups</p>
+  </div>
+  <div className="bg-white rounded-lg py-4">
+    <p className="font-bold text-dark-green">{proposals}</p>
+    <p className="text-sm text-dark-green">Active Proposals</p>
+  </div>
+</div>
 
-      {/* Adjusted grid gaps for smaller screens */}
-      <div className="big_phone:hidden grid grid-cols-2 text-center my-5 mx-5 small_phone:gap-2 gap-1">
-       
-        <div className="bg-white rounded-lg py-4">
-          <p className="font-bold text-dark-green">{members}</p>
-          <p className="text-sm text-dark-green">Members</p>
-        </div>
-        <div className="bg-white rounded-lg py-4">
-          <p className="font-bold text-dark-green">{groups || '0'}</p>
-          <p className="text-sm text-dark-green">Groups</p>
-        </div>
-        <div className="bg-white rounded-lg py-4">
-          <p className="font-bold text-dark-green">{proposals}</p>
-          <p className="text-sm text-dark-green">Active Proposals</p>
-        </div>
-      </div>
       <div className="flex justify-between gap-2">
         <button
           onClick={goToDaoProfile}

@@ -152,7 +152,7 @@ const Dao = () => {
             />
           </div>
           <Link to="/dao/create-dao">
-            <button className="bg-white small_phone:gap-2 gap-1 mr-12 mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl flex items-center rounded-full hover:bg-[#ececec] hover:scale-105 transition">
+            <button className="bg-white small_phone:gap-2 gap-1 mr-12 small_phone:mr-12 mr-6 mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl flex items-center rounded-full hover:bg-[#ececec] hover:scale-105 transition">
               <HiPlus />
               Create DAO
             </button>
