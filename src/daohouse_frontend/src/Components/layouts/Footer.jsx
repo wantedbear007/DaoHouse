@@ -42,14 +42,14 @@ const Footer = () => {
             >
               DAOs
             </Link>
-            <Link
+            {/* <Link
               to="/proposals"
 
               className="text-[#728288] small_phone:text-base text-sm font-inter font-normal hover:underline"
 
             >
               Proposals
-            </Link>
+            </Link> */}
           </div>
           <div className="flex justify-center mb-6 gap-6">
             <img
