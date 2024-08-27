@@ -199,7 +199,7 @@ const FeedPage = () => {
        <div 
         className={
           className +
-          "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col ml-0 mr-0"
+          "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col "
         }>
         {
           loading ?
@@ -214,7 +214,7 @@ const FeedPage = () => {
                   </p>
                 </Container>
                 :
-                <Container classes={'w-full'}>
+                <Container classes={'w-full '}>
                   {posts?.map((posts, i) => <PostCard handleGetLikePost={handleGetLikePost} posts={posts} key={i} />)}
                 </Container>
             )

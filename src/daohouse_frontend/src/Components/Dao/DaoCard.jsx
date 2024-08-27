@@ -107,7 +107,7 @@ const DaoCard = ({ name,  members, groups, proposals, image_id, daoCanister, dao
           />
         </div> 
         <div>
-          <h2 className="mobile:text-2xl text-lg font-semibold">{name}</h2>
+        <h2 className="mobile:text-2xl text-lg font-semibold truncate ... w-20 md:w-80">{name}</h2>
           </div>
       </div>
       <div> <button
