@@ -4,7 +4,7 @@ import { Principal } from "@dfinity/principal";
 import { useAuth } from "../utils/useAuthClient";
 import { toast } from 'react-toastify';
 
-const DaoCard = ({ name,  members, groups, proposals, image_id, daoCanister, daoCanisterId }) => {
+const DaoCard = ({ name, funds, members, groups, proposals, image_id, daoCanister, daoCanisterId }) => {
   const navigate = useNavigate();
   const { backendActor } = useAuth();
   const canisterId = process.env.CANISTER_ID_IC_ASSET_HANDLER;
@@ -117,32 +117,38 @@ const DaoCard = ({ name,  members, groups, proposals, image_id, daoCanister, dao
         </div>
       </div>
 
-      {/* Adjusted flexbox for larger screens */}
-<div className="big_phone:flex hidden justify-between text-center mb-4 bg-white tablet:p-4 pb-4 p-2 rounded-lg gap-1">
-  <div className="flex-1 ml-5 ">
-    <p className="font-bold text-dark-green">{members}</p>
-    <p className="text-sm text-dark-green">Members</p>
-  </div>
-  <div className="flex-1 text-center">
-    <p className="font-bold text-dark-green">{groups || '0'}</p>
-    <p className="text-sm text-dark-green">Groups</p>
-  </div>
-  <div className="flex-1  mr-5">
-    <p className="font-bold text-dark-green">{proposals}</p>
-    <p className="text-sm text-dark-green">Active Proposals</p>
-  </div>
-</div>
-
+      {/* Adjusted grid gaps for larger screens */}
+      <div className="big_phone:grid hidden grid-cols-4 text-center mb-4 bg-white tablet:p-4 pb-4 p-2 rounded-lg gap-1">
+        <div>
+          <p className="font-bold text-dark-green">{funds}</p>
+          <p className="text-sm text-dark-green">DAO Funds</p>
+        </div>
+        <div>
+          <p className="font-bold text-dark-green">{members}</p>
+          <p className="text-sm text-dark-green">Members</p>
+        </div>
+        <div>
+          <p className="font-bold text-dark-green">{groups}</p>
+          <p className="text-sm text-dark-green">Groups</p>
+        </div>
+        <div>
+          <p className="font-bold text-dark-green">{proposals}</p>
+          <p className="text-sm text-dark-green">Active Proposals</p>
+        </div>
+      </div>
 
       {/* Adjusted grid gaps for smaller screens */}
       <div className="big_phone:hidden grid grid-cols-2 text-center my-5 mx-5 small_phone:gap-2 gap-1">
-       
+        <div className="bg-white rounded-lg py-4">
+          <p className="font-bold text-dark-green">{funds}</p>
+          <p className="text-sm text-dark-green">DAO Funds</p>
+        </div>
         <div className="bg-white rounded-lg py-4">
           <p className="font-bold text-dark-green">{members}</p>
           <p className="text-sm text-dark-green">Members</p>
         </div>
         <div className="bg-white rounded-lg py-4">
-          <p className="font-bold text-dark-green">{groups || '0'}</p>
+          <p className="font-bold text-dark-green">{groups}</p>
           <p className="text-sm text-dark-green">Groups</p>
         </div>
         <div className="bg-white rounded-lg py-4">
