@@ -35,7 +35,7 @@ pub async fn create_ledger_canister(ledger_args: LedgerArg) -> Result<Principal,
         }
     };
 
-    let _add_cycles = deposit_cycles_in_canister(canister_id, 100_000_000_000)
+    let _add_cycles = deposit_cycles_in_canister(canister_id, 150_000_000_000)
         .await
         .unwrap();
 
