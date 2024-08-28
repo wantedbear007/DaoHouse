@@ -185,10 +185,10 @@ const MyProfile = ({ childComponent }) => {
             </div>
           </div>
           <div className={`${className}__rightSide w-full`}>
-            <div className="flex md:justify-between justify-around w-full gap-2 z-50 relative">
+            <div className="flex md:justify-between justify-around w-full gap-2 relative">
               <div className="flex items-start md:-ml-[10%] tablet:ml-[-90px] relative">
                 <div
-                  className="fixed-image-container w-[130px] h-[120px] rounded-md overflow-hidden"
+                  className="fixed-image-container w-[130px] h-[120px] rounded-md overflow-hidden z-50"
                   style={{
                     boxShadow: "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
                   }}

@@ -152,7 +152,7 @@ const Dao = () => {
             />
           </div>
           <Link to="/dao/create-dao">
-            <button className="bg-white small_phone:gap-2 gap-1 mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl flex items-center rounded-full hover:bg-[#ececec] hover:scale-105 transition">
+            <button className="bg-white small_phone:gap-2 gap-1 mr-12 small_phone:mr-12 mr-6 mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl flex items-center rounded-full hover:bg-[#ececec] hover:scale-105 transition">
               <HiPlus />
               Create DAO
             </button>
@@ -184,7 +184,7 @@ const Dao = () => {
                     name={daos.dao_name || 'No Name'}
                     followers={daos.followers_count || '0'}
                     members={daos.members_count ? Number(BigInt(daos.members_count)) : '0'}
-                    groups={daos.groups_count ? Number(BigInt(daos.groups_count)) : 'No Groups'}
+                    groups={daos.groups_count ? Number(BigInt(daos.groups_count)) : '0'}
                     proposals={daos.proposals_count || '0'}
                     image_id={daos.image_id || 'No Image'}
                     daoCanister={daos.daoCanister}

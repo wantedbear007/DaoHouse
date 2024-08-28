@@ -1,12 +1,10 @@
 use candid::{encode_one, Principal};
 use ic_cdk::api::{
     self,
-    management_canister::main::{create_canister, deposit_cycles},
 };
 
 use crate::{
-    CanisterInstallMode, CanisterSettings, CreateCanisterArgument, ICRC1LedgerInitArgs,
-    InstallCodeArgument, LedgerArg,
+    CanisterInstallMode, CanisterSettings, CreateCanisterArgument, InstallCodeArgument, LedgerArg,
 };
 
 use super::canister_factory::{
@@ -37,7 +35,7 @@ pub async fn create_ledger_canister(ledger_args: LedgerArg) -> Result<Principal,
         }
     };
 
-    let _add_cycles = deposit_cycles_in_canister(canister_id, 100_000_000_000)
+    let _add_cycles = deposit_cycles_in_canister(canister_id, 150_000_000_000)
         .await
         .unwrap();
 

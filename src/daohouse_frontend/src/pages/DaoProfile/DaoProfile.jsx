@@ -42,6 +42,7 @@ const DaoProfile = () => {
   const [isMember, setIsMember] = useState(false);
   const [daoFollowers, setDaoFollowers] = useState([])
   const [daoMembers, setDaoMembers] = useState([])
+  const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
 
   const [isFollowing, setIsFollowing] = useState(false);
@@ -107,6 +108,8 @@ const DaoProfile = () => {
   }, [daoCanisterId, backendActor, createDaoActor]);
 
   const handleJoinDao = async () => {
+    if (joinStatus === 'Joined') return;
+
     try {
       const daoActor = createDaoActor(daoCanisterId);
       console.log({daoActor});
@@ -306,29 +309,49 @@ const DaoProfile = () => {
 
 // =======  */}
         <div className="flex md:justify-between w-full md:gap-2 gap-10 z-50 relative flex-wrap">
-          <div className="flex items-center">
-          <div
-            className="w-[85px] h-[49px] lg:w-[207px] lg:h-[120px] bg-[#C2C2C2] md:w-[145px] md:h-[84px] rounded overflow-hidden"
-            style={{
-              boxShadow:
-                "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
-            }}
-          >
-            <img
-              className="w-full h-full object-cover"
-              src={getImageUrl(dao.image_id)}
-              alt="profile-pic"
-            />
-          </div>
+          <div className="flex items-start">
+            <div
+              className="w-[85px] h-[49px] lg:w-[207px] lg:h-[120px] bg-[#C2C2C2] md:w-[145px] md:h-[84px] rounded overflow-hidden flex-shrink-0"
+              style={{
+                boxShadow:
+                  "0px 0.26px 1.22px 0px #0000000A, 0px 1.14px 2.53px 0px #00000010, 0px 2.8px 5.04px 0px #00000014, 0px 5.39px 9.87px 0px #00000019, 0px 9.07px 18.16px 0px #0000001F, 0px 14px 31px 0px #00000029",
+              }}
+            >
+              <img
+                className="w-full h-full object-cover"
+                src={getImageUrl(dao.image_id)}
+                alt="profile-pic"
+              />
+            </div>
 
             <div className="lg:ml-10 ml-4">
-              <h2 className="lg:text-[40px] md:text-[24px] text-[16px] tablet:font-normal font-medium text-left text-[#05212C]">
-                {dao.dao_name || 'Dao Name'}
+              <h2 className="lg:text-[40px] md:text-[24px] text-[16px] tablet:font-normal font-medium text-left text-[#05212C] truncate ... w-[30vw] md:w-[50vw]">
+                  {dao.dao_name || 'Dao Name'}
               </h2>
-              <p className="text-[12px] tablet:text-[16px] font-normal text-left text-[#646464]">
-                {dao.purpose || 'Dao Purpose'}
-              </p>
-              <div className="md:flex justify-between mt-2 hidden">
+              <div className="relative w-[60vw] md:w-[65vw] lg:w-[50vw]">
+                <p className={`text-[12px] tablet:text-[16px] font-normal text-left text-[#646464] break-words ${isExpanded ? '' : 'line-clamp-2'}`}>
+                  {dao.purpose || 'Dao Purpose'}
+                  {isExpanded && (
+                    <button
+                      className=" text-[#0E3746] hover:underline"
+                      onClick={() => setIsExpanded(false)}
+                    >
+                      See less
+                    </button>
+                  )}
+                </p>
+                {!isExpanded && (
+                  <button
+                    className="md:absolute bottom-0 right-[-60px] lg:right-[-74px] text-sm lg:text-lg text-[#0E3746] hover:underline"
+                    onClick={() => setIsExpanded(true)}
+                  >
+                    See more
+                  </button>
+                )}
+                
+              </div>
+
+              <div className="md:flex justify-start mt-2 hidden">
                 <span className="tablet:mr-5 md:text-[24px] lg:text-[32px] font-normal text-[#05212C] user-acc-info">
 
 

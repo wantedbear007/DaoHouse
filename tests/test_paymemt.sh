@@ -20,25 +20,25 @@ function debug_print() {
     echo "Balance of user: $(dfx canister call icp_ledger_canister icrc1_balance_of "(record {owner = principal \"$USER\"})")"
     echo "Balance of reciever: $(dfx canister call icp_ledger_canister icrc1_balance_of "(record {owner = principal \"$RECIEVER\"})")"
     echo "Balance of reciever: $(dfx canister call icp_ledger_canister icrc1_balance_of "(record {owner = principal \"$RECIEVER\"})")"
-    echo "Balance of reciever: $(dfx canister call icp_ledger_canister icrc1_balance_of "(record {owner = principal \"$BHANU\"})")"
+    echo "Balance of bhanu: $(dfx canister call icp_ledger_canister icrc1_balance_of "(record {owner = principal \"$BHANU\"})")"
 
 
 }
 
 # # TRANSFER
 # TRANSFER=$(
-# dfx --identity minter canister call icp_ledger_canister icrc1_transfer "(record { to = record { owner = principal \"$USER\" }; amount = 1000000000 })")
+# dfx --identity default canister call icp_ledger_canister icrc1_transfer "(record { to = record { owner = principal \"$USER\" }; amount = 1000000000 })")
 # echo $TRANSFER
 
 
 # to approve 
-# APPROVE=$(dfx --identity minter canister call icp_ledger_canister icrc2_approve "(record { amount = 2000; spender = record { owner = principal \"$CANISTER\"} })")
+# APPROVE=$(dfx --identity minter canister call icp_ledger_canister icrc2_approve "(record { amount = 20000000; spender = record { owner = principal \"$CANISTER\"} })")
 # echo $APPROVE
 
-# # 
-# # debug_print 1
-# # # TRANSFER TO USER
-# USER_TRANSFER=$(dfx canister call daohouse_backend make_payment "(1000, principal \"$USER\")")
+# # # 
+# # # debug_print 1
+# # # # TRANSFER TO USER
+# USER_TRANSFER=$(dfx --identity default canister call daohouse_backend make_payment "(1000, principal \"$USER\")")
 # echo $USER_TRANSFER
 
 debug_print 2
