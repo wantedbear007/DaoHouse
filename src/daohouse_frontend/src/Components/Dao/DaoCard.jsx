@@ -76,6 +76,11 @@ const DaoCard = ({ name, members, groups, proposals, image_id, daoCanister, daoC
   };
 
   const handleJoinDao = async () => {
+    if (joinStatus === 'Joined') {
+      toast.error(`You are already member of this dao`);
+      return;
+    };
+    
     try {
       const response = await daoCanister.ask_to_join_dao(daoCanisterId);
       if (response.Ok) {
