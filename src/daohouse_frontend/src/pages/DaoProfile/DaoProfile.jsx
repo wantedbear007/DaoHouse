@@ -108,6 +108,8 @@ const DaoProfile = () => {
   }, [daoCanisterId, backendActor, createDaoActor]);
 
   const handleJoinDao = async () => {
+    if (joinStatus === 'Joined') return;
+
     try {
       const daoActor = createDaoActor(daoCanisterId);
       console.log({daoActor});
