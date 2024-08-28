@@ -103,7 +103,8 @@ const DaoCard = ({ name, members, groups, proposals, image_id, daoCanister, daoC
   return (
     <div className="bg-[#F4F2EC] rounded-lg shadow-lg tablet:p-6 big_phone:p-3 small_phone:p-5 p-3 rounded-lg mr-12 ml-8">
       <div className="flex big_phone:flex-row small_phone:flex-col justify-start items-start mb-4 gap-2">
-        <div className="mobile:w-[207px] mobile:h-[120px] w-[150px] h-[70px] border border-black rounded">
+        {/* Image Container */}
+        <div className="w-full mobile:h-[120px] border border-black rounded">
           <img
             src={imageUrl}
             alt="DAO Image"
@@ -111,8 +112,9 @@ const DaoCard = ({ name, members, groups, proposals, image_id, daoCanister, daoC
           />
         </div>
         <div className="flex flex-col items-start big_phone:ml-4 small_phone:ml-0 small_phone:mt-4">
-          <h2 className="mobile:text-2xl text-lg font-semibold truncate ... w-20 md:w-80">{name}</h2>
-          
+          {/* Name for larger screens */}
+          <h2 className="text-lg font-semibold truncate big_phone:w-80 hidden big_phone:block">{name}</h2>
+
           {/* Follow button for larger screens (hidden on mobile) */}
           <button
             onClick={toggleFollow}
@@ -123,11 +125,12 @@ const DaoCard = ({ name, members, groups, proposals, image_id, daoCanister, daoC
         </div>
       </div>
 
-      {/* Follow button for mobile view (hidden on larger screens) */}
-      <div className="block big_phone:hidden mt-2">
+      {/* Follow button and username for mobile view (hidden on larger screens) */}
+      <div className="block big_phone:hidden mt-2 flex flex-col items-center">
+        <h2 className="text-center mobile:text-2xl text-lg font-semibold truncate w-full">{name}</h2>
         <button
           onClick={toggleFollow}
-          className="text-blue-400 p-1 text-left sm:text-sm md:text-lg"
+          className="text-blue-400 p-1 mt-2 text-left sm:text-sm md:text-lg"
         >
           {isFollowing ? 'Unfollow' : '+ Follow'}
         </button>
