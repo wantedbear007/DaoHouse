@@ -38,7 +38,7 @@ function debug_print() {
 # # # 
 # # # debug_print 1
 # # # # TRANSFER TO USER
-USER_TRANSFER=$(dfx --identity default canister call daohouse_backend make_payment "(1000, principal \"$USER\")")
-echo $USER_TRANSFER
+# USER_TRANSFER=$(dfx --identity default canister call daohouse_backend make_payment "(1000, principal \"$USER\")")
+# echo $USER_TRANSFER
 
 debug_print 2

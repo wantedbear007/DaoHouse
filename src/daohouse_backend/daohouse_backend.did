@@ -96,6 +96,7 @@ type Result_4 = variant { Ok : GetAllPostsResponse; Err : text };
 type Result_5 = variant { Ok : PostInfo; Err : text };
 type Result_6 = variant { Ok : UserProfile; Err : text };
 type Result_7 = variant { Ok : blob; Err : text };
+type Result_8 = variant { Ok : nat; Err : text };
 type UserProfile = record {
   post_id : vec text;
   username : text;
@@ -140,7 +141,7 @@ service : (PaymentRecipientAccount) -> {
   get_wasm : () -> (Result_7) query;
   is_user_registered : (principal) -> (bool);
   like_post : (text) -> (Result);
-  make_payment : (nat64, principal) -> (text);
+  make_payment : (nat64, principal) -> (Result_8);
   reply_comment : (ReplyCommentData) -> (Result);
   search_dao : (text) -> (vec DaoDetails) query;
   unfollow_user : (principal) -> (Result);
