@@ -7,7 +7,7 @@ use crate::types::{Comment, PostInfo, PostInput};
 use crate::{
     with_state, Analytics, DaoDetails, GetAllPostsResponse, ImageData, Pagination, ReplyCommentData,
 };
-use candid::Principal;
+use candid::{Nat, Principal};
 use ic_cdk::api;
 
 use crate::guards::*;
@@ -496,12 +496,12 @@ async fn transfer(tokens: u64, user_principal: Principal) -> Result<BlockIndex, 
 
 // make payment
 #[update(guard = prevent_anonymous)]
-async fn make_payment(tokens: u64, user: Principal) -> String {
+async fn make_payment(tokens: u64, user: Principal) -> Result<Nat, String> {
     // add check for admin
-    let response = transfer(tokens, user).await;
-    ic_cdk::println!("response is {:?}", response);
-    // response
-    format!("response is {:?}", response)
+    transfer(tokens, user).await
+    // ic_cdk::println!("response is {:?}", response);
+    // // response
+    // format!("response is {:?}", response)
 }
 
 // increase proposals count

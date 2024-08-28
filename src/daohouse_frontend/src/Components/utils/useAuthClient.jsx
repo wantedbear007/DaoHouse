@@ -6,7 +6,8 @@ import { Principal } from "@dfinity/principal";
 import { HttpAgent, Actor, AnonymousIdentity } from "@dfinity/agent";
 
 import { NFID } from "@nfid/embed";
-import { idlFactory as DaoFactory } from "../../../../declarations/dao_canister/index";
+import { idlFactory as DaoFactory } from "../../../../declarations/dao_canister/index"
+import { idlFactory as ledgerIDL } from "./ledger.did";
 
 const AuthContext = createContext();
 
@@ -74,7 +75,7 @@ export const useAuthClient = (options = defaultOptions) => {
     
 
     if (isAuthenticated && identity && principal && principal.isAnonymous() === false) {
-      const backendActor = createActor(backendCanisterId, { agentOptions: { identity: identity } });
+      const backendActor = createActor(backendCanisterId, { agentOptions: { identity, verifyQuerySignatures: false } });
       setBackendActor(backendActor);
     }
 
@@ -95,7 +96,7 @@ export const useAuthClient = (options = defaultOptions) => {
       //     const principal = await window.ic.plug.agent.getPrincipal();
       //     const backendActor = await window.ic.plug.createActor({
       //       canisterId: backendCanisterId,
-      //       interfaceFactory: BackendidlFactory,
+      //       interfaceFactory: BackendidlFactbackendCanisterIdory,
       //     });
       //     setBackendActor(backendActor);
       //     setIdentity(window.ic.plug.agent);
@@ -205,6 +206,35 @@ export const useAuthClient = (options = defaultOptions) => {
     initNFID();
   }, []);
 
+
+  // const host = "http://127.0.0.1:4943"
+  const host = "http://127.0.0.1:40335"
+
+  // temp
+  const LEDGER_CANISTER_ID = "ryjl3-tyaaa-aaaaa-aaaba-cai";
+   const createTokenActor = async (canisterId) => {
+
+    //     console.log("identity : ",identity)
+    // const authClient = await AuthClient.create();
+    // const identity = await authClient.getIdentity();
+    // console.log("identity : ", identity);
+    // const principal = identity.getPrincipal();
+    // console.log("ankur :", principal.toText());
+
+    // const authClient = window.auth.client;
+    const agent = new HttpAgent({
+      identity,
+      host,
+    });
+    let tokenActor = Actor.createActor(ledgerIDL, {
+      agent,
+      canisterId,
+    });
+
+    return tokenActor
+  };
+  // temp
+
   const signInNFID = async () => {
     if (!nfid) {
       console.error("NFID is not initialized.");
@@ -311,6 +341,7 @@ export const useAuthClient = (options = defaultOptions) => {
     backendActor,
     stringPrincipal,
     createDaoActor,
+    createTokenActor
   };
 };
 
