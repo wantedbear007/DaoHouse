@@ -11,7 +11,7 @@ const Step2 = ({ setData, setActiveStep ,data}) => {
     setLocalData(data); // Update local data when data prop changes
   }, [data]);
   const [inputData, setInputData] = useState({
-    setUpPeriod: data?.step2?.setUpPeriod || 1,
+    setUpPeriod: data?.step2?.setUpPeriod || 7,
   });
 
   console.log("inputData",inputData)
