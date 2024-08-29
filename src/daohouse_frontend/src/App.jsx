@@ -18,7 +18,7 @@ import CreateProposal from "./pages/Proposals/CreateProposal";
 import MyPosts from "./Components/MyProfile/MyPosts/MyPosts";
 import AboutMe from "./Components/MyProfile/AboutMe/AboutMe";
 import Followers from "./Components/MyProfile/Followers/Followers";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import DaoProfile from "./pages/DaoProfile/DaoProfile";
 import "react-toastify/dist/ReactToastify.css";
 import "react-quill/dist/quill.snow.css";
@@ -31,13 +31,16 @@ import ScrollToTop from "./Components/utils/ScrollToTop";
 
 const App = () => {
 
+  const location = useLocation();
+  
+  const marginTop = location.pathname === '/' ? '4rem' : '0';
+
   return (
     <PostProvider>
-      <Router>
         <Navbar />
         <ToastContainer
           position="top-right"
-          style={{ marginTop: '6rem' }}
+          style={{ marginTop }}
         />
         <ScrollToTop />
         <Routes>
@@ -72,10 +75,13 @@ const App = () => {
         </Routes>
         <Footer />
  
-      </Router>
       {/* <ToastContainer /> */}
     </PostProvider>
   );
 };
 
-export default App;
+export default () => (
+  <Router>
+    <App />
+  </Router>
+);
