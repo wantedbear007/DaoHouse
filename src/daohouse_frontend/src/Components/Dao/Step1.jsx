@@ -16,6 +16,7 @@ const Step1 = ({ setData, setActiveStep, data }) => {
 
   const className = "DAO__Step1";
 
+
   useEffect(() => {
     const savedData = localStorage.getItem("step1Data");
     if (savedData) {
@@ -84,7 +85,7 @@ const Step1 = ({ setData, setActiveStep, data }) => {
             htmlFor="name"
             className="font-semibold mobile:text-base text-sm"
           >
-            DAO Identifier
+            DAO Identifier <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -101,7 +102,7 @@ const Step1 = ({ setData, setActiveStep, data }) => {
             htmlFor="purpose"
             className="font-semibold mobile:text-base text-sm"
           >
-            Purpose of DAO
+            Purpose of DAO<span className="text-red-500">*</span>
           </label>
           <textarea
             type="text"
@@ -117,7 +118,7 @@ const Step1 = ({ setData, setActiveStep, data }) => {
             htmlFor="type"
             className="font-semibold mobile:text-base text-sm"
           >
-            DAO Type
+            DAO Type<span className="text-red-500">*</span>
           </label>
           <input
             onChange={handleChange}
@@ -129,13 +130,13 @@ const Step1 = ({ setData, setActiveStep, data }) => {
 
           {/** DAO Token */}
           <div className="flex mobile:flex-row flex-col mobile:gap-4 gap-2 mobile:items-center items-start">
-            <p
+            {/* <p
               htmlFor="type"
               className="font-semibold mobile:text-base text-sm"
             >
               DAO Token*
-            </p>
-
+            </p> */}
+{/* 
             <div className="flex flex-row gap-2">
               <button
                 className={
@@ -145,7 +146,7 @@ const Step1 = ({ setData, setActiveStep, data }) => {
               >
                 New Token
               </button>
-            </div>
+            </div> */}
           </div>
 
           <div className="flex mobile:flex-row flex-col mobile:gap-4 gap-2">
@@ -154,7 +155,7 @@ const Step1 = ({ setData, setActiveStep, data }) => {
                 htmlFor="tokenName"
                 className="font-semibold mobile:text-base text-xs"
               >
-                Token Name
+                Token Name<span className="text-red-500">*</span>
               </label>
 
               <input
@@ -171,7 +172,7 @@ const Step1 = ({ setData, setActiveStep, data }) => {
                 htmlFor="tokenSymbol"
                 className="font-semibold mobile:text-base text-xs"
               >
-                Token Symbol
+                Token Symbol<span className="text-red-500">*</span>
               </label>
 
               <input
@@ -185,7 +186,9 @@ const Step1 = ({ setData, setActiveStep, data }) => {
             </div>
           </div>
 
-          <label htmlFor="tokens_required_to_vote">Tokens Required to Vote:</label>
+          <label className="font-semibold" htmlFor="tokens_required_to_vote">Tokens Required to Vote:
+          <span className="text-red-500">*</span>
+          </label>
           <input
             type="number"
             id="tokens_required_to_vote"

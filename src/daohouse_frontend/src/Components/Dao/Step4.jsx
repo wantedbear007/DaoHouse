@@ -72,11 +72,11 @@ const Step4 = ({ data, setData, setActiveStep }) => {
     "ChangeDAOConfig",
     "ChangeDAOPolicy",
     "Transfer",
-    "Polls",
+    // "Polls",
     "AddMembers",
-    "FunctionCalls",
-    "UpgradeSelf",
-    "UpgradeRemote",
+    // "FunctionCalls",
+    // "UpgradeSelf",
+    // "UpgradeRemote",
     "setVoteToken",
   ];
 
