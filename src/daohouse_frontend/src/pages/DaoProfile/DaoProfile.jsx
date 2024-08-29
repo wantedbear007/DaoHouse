@@ -43,12 +43,32 @@ const DaoProfile = () => {
   const [daoFollowers, setDaoFollowers] = useState([])
   const [daoMembers, setDaoMembers] = useState([])
   const [isExpanded, setIsExpanded] = useState(false);
+  const maxWords = 250;
+  
+  const toggleExpanded = () => setIsExpanded(!isExpanded);
   const navigate = useNavigate();
 
   const [isFollowing, setIsFollowing] = useState(false);
   const [followersCount, setFollowersCount] = useState(0);
   const [userProfile, setUserProfile] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const truncateText = (text, wordLimit) => {
+    const words = text.split('');
+    console.log('Word count:', words.length);
+    if (words.length > wordLimit) {
+      return {
+        truncated: words.slice(0, wordLimit).join('') + '...',
+        isTruncated: true,
+      };
+    }
+    return {
+      truncated: text,
+      isTruncated: false,
+    };
+  };
+  
+  const { truncated, isTruncated } = truncateText(dao?.purpose || 'Dao Purpose', maxWords);
  
   useEffect(() => {
     const fetchDaoDetails = async () => {
@@ -329,26 +349,17 @@ const DaoProfile = () => {
                   {dao.dao_name || 'Dao Name'}
               </h2>
               <div className="relative w-[60vw] md:w-[65vw] lg:w-[50vw]">
-                <p className={`text-[12px] tablet:text-[16px] font-normal text-left text-[#646464] break-words ${isExpanded ? '' : 'line-clamp-2'}`}>
-                  {dao.purpose || 'Dao Purpose'}
-                  {isExpanded && (
-                    <button
-                      className=" text-[#0E3746] hover:underline"
-                      onClick={() => setIsExpanded(false)}
-                    >
-                      See less
-                    </button>
-                  )}
-                </p>
-                {!isExpanded && (
+                <p className="text-[12px] tablet:text-[16px] font-normal text-left text-[#646464] break-words">
+                {isExpanded ? dao?.purpose : truncated}
+                {isTruncated && (
                   <button
-                    className="md:absolute bottom-0 right-[-60px] lg:right-[-74px] text-sm lg:text-lg text-[#0E3746] hover:underline"
-                    onClick={() => setIsExpanded(true)}
+                    onClick={toggleExpanded}
+                    className="text-[#0E3746] text-[12px] tablet:text-[16px] underline"
                   >
-                    See more
+                    {isExpanded ? 'See less' : 'See more'}
                   </button>
                 )}
-                
+                </p>
               </div>
 
               <div className="md:flex justify-start mt-2 hidden">

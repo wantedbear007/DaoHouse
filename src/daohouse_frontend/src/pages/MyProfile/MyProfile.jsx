@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaArrowRightLong } from "react-icons/fa6";
 
 import EditPen from "../../../assets/edit_pen.png";
-import MyProfileImage from "../../../assets/Avatar.png"; // Default profile image
+import MyProfileImage from "../../../assets/Avatar.png";
 import BigCircle from "../../../assets/BigCircle.png";
 import MediumCircle from "../../../assets/MediumCircle.png";
 import SmallestCircle from "../../../assets/SmallestCircle.png";

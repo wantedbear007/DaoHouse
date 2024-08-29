@@ -188,35 +188,6 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick, loadingNext, setL
     } finally {
     }
   };
-  
-  // async function paymentTest() {
-
-  //   console.log("owner principal is ", stringPrincipal )
-  //   console.log("printing payment");
-
-  //   const backendCanisterId = process.env.CANISTER_ID_DAOHOUSE_BACKEND;
-
-  //   const actor = await createTokenActor(Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai"))
-
-  //   console.log("backend canister id: ", backendCanisterId)
-  //   console.log("actor is ", actor)
-
-  //   const name = await actor.icrc1_name()
-  //   console.log("balance is ", name)
-
-  //   const { metadata, balance }  = await fetchMetadataAndBalance(actor, Principal.fromText(stringPrincipal))
-    
-  //   const formattedMetadata = formatTokenMetaData(metadata);
-
-  //   const parsedBalance = parseInt(balance, 10);
-  //     console.log("Balance:", parsedBalance);
-
-  //     transferApprove(parsedBalance, formattedMetadata, actor);
-    
-
-
-  // }
-
   async function paymentTest() {
     console.log("owner principal is ", stringPrincipal);
     console.log("printing payment");
@@ -245,44 +216,6 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick, loadingNext, setL
       setLoadingPayment(false);
     }
   }
-  
-
-  // const createDAO = async () => {
-  //   if (!file) {
-  //     toast.error("Please insert an image");
-  //     return;
-  //   }
-
-  //   setLoadingNext(true);
-  //   setTimeout(async () => {
-  //     if (file) {
-  //       const fileContent = await readFileContent(file);
-  //       setData((prevData) => ({
-  //         ...prevData,
-  //         step6: {
-  //           imageURI: fileURL,
-  //           image_content: new Uint8Array(fileContent),
-  //           image_content_type: file.type,
-  //           image_title: file.name,
-  //           image_id: '12',
-  //         },
-  //       }));
-  //     } else {
-  //       setData((prevData) => ({
-  //         ...prevData,
-  //         step6: {
-  //           imageURI: defaultImage,
-  //           image_content: undefined,
-  //           image_content_type: undefined,
-  //           image_title: undefined,
-  //           image_id: '12',
-  //         },
-  //       }));
-  //     }
-  //     // setLoadingNext(false);
-  //     setShouldCreateDAO(true);
-  //   }, 2000);
-  // };
 
   const createDAO = async () => {
     if (!file) {
@@ -328,10 +261,19 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick, loadingNext, setL
           },
         }));
       }
-      // setShouldCreateDAO(true);
-      handleDaoClick();
+      if(isModalOpen) {
+        setShouldCreateDAO(true);
+      }
+      // handleDaoClick();
     }, 2000);
   }
+  };
+
+  const handleCancel = () => {
+    setLoadingPayment(false); 
+    setIsModalOpen(false); 
+    setLoadingNext(false);
+    setShouldCreateDAO(false);
   };
 
   useEffect(() => {
@@ -450,7 +392,7 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick, loadingNext, setL
     </Container>
     <PaymentModal
         open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={handleCancel}
         onPay={async () => {
           await paymentTest();
         }}
