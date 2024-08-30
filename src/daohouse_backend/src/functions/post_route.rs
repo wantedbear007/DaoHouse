@@ -5,7 +5,8 @@ use std::borrow::{Borrow, BorrowMut};
 use crate::routes::upload_image;
 use crate::types::{Comment, PostInfo, PostInput};
 use crate::{
-    with_state, Analytics, DaoDetails, GetAllPostsResponse, ImageData, Pagination, ReplyCommentData,
+    with_state, Analytics, DaoDetails, GetAllPostsResponse, Icrc28TrustedOriginsResponse,
+    ImageData, Pagination, ReplyCommentData,
 };
 use candid::{Nat, Principal};
 use ic_cdk::api;
@@ -543,15 +544,24 @@ fn search_dao(dao_name: String) -> Vec<DaoDetails> {
 }
 
 #[update]
-fn get_trusted_origins() -> Vec<String> {
-    vec![
-        String::from("http://127.0.0.1:4943"),
-        String::from("http://localhost:4943"),
-        String::from("http://fkqof-vqaaa-aaaak-qirwq-cai.icp0.io"),
+fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
+    let trusted_origins = vec![
+        String::from("https://standards.identitykit.xyz"),
+        String::from("https://dev.standards.identitykit.xyz"),
+        String::from("https://demo.identitykit.xyz"),
+        String::from("https://dev.demo.identitykit.xyz"),
+        String::from("http://localhost:3001"),
+        String::from("http://localhost:3002"),
         String::from("http://localhost:3000"),
-        String::from("http://127.0.0.1:4943/>canisterId=bd3sg-teaaa-aaaaa-qaaba-cai"),
-        String::from("http://bd3sg-teaaa-aaaaa-qaaba-cai.localhost:4943"),
-    ]
+
+        String::from("https://nfid.one"),
+        String::from("https://dev.nfid.one"),
+        String::from("https://wkgia-lyaaa-aaaag-qkgya-cai.icp0.io"), // frontend canister id
+        String::from("http://bw4dl-smaaa-aaaaa-qaacq-cai.localhost:4943"),
+        String::from("http://127.0.0.1:4943/?canisterId=bw4dl-smaaa-aaaaa-qaacq-cai"),
+    ];
+
+    return Icrc28TrustedOriginsResponse { trusted_origins };
 }
 
 // #[update]

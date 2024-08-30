@@ -807,6 +807,12 @@ pub enum ChangeFeeCollector {
 }
 
 
+#[derive(Clone, Debug, CandidType, Deserialize)]
+pub struct Icrc28TrustedOriginsResponse {
+    pub trusted_origins: Vec<String>
+}
+
+
 #[derive(CandidType, Serialize, Deserialize, Debug)]
 pub struct UpgradeArgs {
     pub metadata: Option<Vec<Metadata>>,
