@@ -372,14 +372,14 @@ const Navbar = () => {
                 </div>
               ) : (
                 <div className="relative">
-                {/* <button
+                <button
                     onClick={async () => {
                       await paymentTest();
                     }}
                     className=""
                   >
                     Pay To Bhanu
-                  </button> */}
+                  </button>
                   {/* Updated flex container to align profile image and username */}
                   <div
                     className="flex items-center space-x-0.9 bg-white rounded-full px-4 py-2 cursor-pointer shadow-lg"
