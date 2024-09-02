@@ -105,7 +105,7 @@ pub struct Dao {
     pub linksandsocials: Vec<String>,
     pub required_votes: u32,
     pub groups_count: u64,
-    pub group_name: Vec<String>,
+    // pub group_name: Vec<String>,
     pub image_id: String,
     pub members: Vec<Principal>,
     pub members_count: u32,

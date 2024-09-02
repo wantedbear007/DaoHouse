@@ -40,7 +40,7 @@ async fn init(dao_input: DaoInput) {
         cool_down_period: dao_input.cool_down_period,
         // tokenissuer: dao_input.tokenissuer,
         linksandsocials: dao_input.linksandsocials,
-        group_name: vec!["council".to_string()],
+        // group_name: vec!["council".to_string()],
         groups_count: dao_input.dao_groups.len() as u64,
         required_votes: dao_input.required_votes,
         members: dao_input.members.clone(),

@@ -28,7 +28,7 @@ impl State {
                 linksandsocials: Vec::new(),
                 required_votes: 0,
                 groups_count: 0,
-                group_name: Vec::new(),
+                // group_name: Vec::new(),
                 members: Vec::new(),
                 image_id: "1".to_string(),
                 members_count: 0,
