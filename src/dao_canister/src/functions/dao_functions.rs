@@ -1,5 +1,7 @@
-use crate::{guards::*, DaoGroup, LedgerCanisterId, ProposalInput, UpdateDaoSettings};
+use crate::proposal_route::proposal_to_add_member_to_group;
+use crate::utils::ADD_MEMBER_TO_GROUP;
 use crate::with_state;
+use crate::{guards::*, DaoGroup, LedgerCanisterId, ProposalInput, UpdateDaoSettings};
 use candid::Principal;
 use ic_cdk::api;
 use ic_cdk::{query, update};
@@ -14,40 +16,44 @@ async fn get_members_of_group(group: String) -> Result<Vec<Principal>, String> {
     })
 }
 
-// #[query]
-// async fn get_members_of_group(group: String) -> Result<GroupList, String> {
-//     // with_state(|state| match state.groups.get(&group) {
-//     //     Some(group_list) => Ok(group_list.clone()),
-//     //     None => Err(format!("Group {} not found", group)),
-//     // })
-// }
+// proposal to add member to a group
+#[update]
+fn add_member_to_group(group_name: String, new_member: Principal) -> Result<String, String> {
+    check_group_member_permission(&group_name, ADD_MEMBER_TO_GROUP.to_string())?;
+    check_user_in_group(&group_name)?;
+
+    proposal_to_add_member_to_group(&group_name, new_member)?;
+
+    Ok(format!("User successfully added to group {}", group_name))
+}
 
 // #[update]
 // async fn add_member_to_group(group: String, principal: Principal) -> String {
-//     let principal_id = api::caller();
-//     if principal_id == Principal::anonymous() {
-//         return "Anonymous principal not allowed to make calls.".to_string();
-//     }
+//     // let principal_id = api::caller();
+//     // if principal_id == Principal::anonymous() {
+//     //     return "Anonymous principal not allowed to make calls.".to_string();
+//     // }
 
-//     let council_group = "council".to_string();
+//     // let council_group = "council".to_string();
 
-//     let is_allowed = with_state(|state| {
-//         state
-//             .groups
-//             .get(&council_group)
-//             .map_or(false, |group_list| group_list.users.contains(&principal_id))
-//     });
+//     // let is_allowed = with_state(|state| {
+//     //     state
+//     //         .dao_groups
+//     //         .get(&council_group)
+//     //         .map_or(false, |group_list| group_list.users.contains(&principal_id))
+//     // });
 
-//     if !is_allowed {
-//         return format!(
-//             "Caller with principal {:?} is not allowed to add members to group {}",
-//             principal_id, group
-//         );
-//     }
+//     // if !is_allowed {
+//     //     return format!(
+//     //         "Caller with principal {:?} is not allowed to add members to group {}",
+//     //         principal_id, group
+//     //     );
+//     // }
 
-//     let result =
-//         with_state(|state| proposal_route::add_member_to_group(state, group.clone(), principal));
-//     result
+//     // let result =
+//     //     with_state(|state| proposal_route::add_member_to_group(state, group.clone(), principal));
+//     // result
+//     "to".to_string()
 // }
 
 //
@@ -183,12 +189,9 @@ fn add_ledger_canister_id(id: LedgerCanisterId) -> Result<String, String> {
     Ok("Canister id Updated".to_string())
 }
 
-
-
-// get dao groups 
+// get dao groups
 #[query]
 fn get_dao_groups() -> Vec<DaoGroup> {
-
     let mut groups: Vec<DaoGroup> = Vec::new();
 
     with_state(|state| {
@@ -196,7 +199,6 @@ fn get_dao_groups() -> Vec<DaoGroup> {
             groups.push(x.1)
         }
     });
-
 
     groups
 }

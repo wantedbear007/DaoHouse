@@ -57,3 +57,39 @@ pub fn check_voting_right(proposal_id: &String) -> Result<(), String> {
         None => Err(String::from("Proposal ID is invalid !")),
     })
 }
+
+// check group member permission
+pub fn check_group_member_permission(group_name: &String, permission: String) -> Result<(), String> {
+    prevent_anonymous()?;
+    with_state(|state| match state.dao_groups.get(&group_name) {
+        Some(val) => {
+            if val.group_permissions.contains(&permission) {
+                Ok(())
+            } else {
+                Err(String::from("You don't have proper permissions"))
+            }
+        }
+        None => Err(format!(
+            "No group is available with the name {}",
+            group_name
+        )),
+    })
+}
+
+// check user in a group
+pub fn check_user_in_group(group_name: &String) -> Result<(), String> {
+    prevent_anonymous()?;
+    with_state(|state| match state.dao_groups.get(&group_name) {
+        Some(val) => {
+            if val.group_members.contains(&api::caller()) {
+                Ok(())
+            } else {
+                Err(format!("You are not part of the group {}", group_name))
+            }
+        }
+        None => Err(format!(
+            "DAO dosen't have any group named with {}",
+            group_name
+        )),
+    })
+}

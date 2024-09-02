@@ -15,7 +15,7 @@ use types::*;
 use icrc_ledger_types::icrc1::transfer::BlockIndex;
 use candid::Nat;
 use crate::api::call::CallResult;
-
+mod utils;
 
 thread_local! {
     static STATE: RefCell<State> = RefCell::new(State::new());

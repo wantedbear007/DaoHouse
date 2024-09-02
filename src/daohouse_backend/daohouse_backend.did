@@ -38,7 +38,6 @@ type DaoInput = record {
   link_of_document : text;
   image_content_type : text;
   total_tokens : nat;
-  tokenissuer : text;
   cool_down_period : nat32;
   token_name : text;
   purpose : text;

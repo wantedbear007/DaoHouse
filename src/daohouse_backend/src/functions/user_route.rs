@@ -39,9 +39,9 @@ async fn create_profile(// asset_handler_canister_id: String,
     let principal_id = api::caller();
 
     // Check if the caller is anonymous
-    if principal_id == Principal::anonymous() {
-        return Err("Anonymous principal not allowed to make calls.".to_string());
-    }
+    // if principal_id == Principal::anonymous() {
+    //     return Err("Anonymous principal not allowed to make calls.".to_string());
+    // }
     // Check if the user is already registered
     // let is_registered = with_state(|state| {
     //     if state.user_profile.contains_key(&principal_id) {

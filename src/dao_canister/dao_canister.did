@@ -16,7 +16,6 @@ type Dao = record {
   members_count : nat32;
   followers : vec principal;
   followers_count : nat32;
-  group_name : vec text;
   cool_down_period : nat32;
   purpose : text;
   required_votes : nat32;

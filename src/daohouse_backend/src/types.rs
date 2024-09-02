@@ -613,7 +613,7 @@ pub struct DaoInput {
     pub link_of_document: String,
     pub cool_down_period: u32,
     pub members: Vec<Principal>,
-    pub tokenissuer: String,
+    // pub tokenissuer: String,
     pub linksandsocials: Vec<String>,
     pub required_votes: u32,
     pub dao_groups: Vec<DaoGroup>,
