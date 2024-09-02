@@ -124,16 +124,21 @@ dfx deploy dao_canister --argument '(record {
             group_name = "Example Group";
             group_members = vec { principal "yxtej-lmfuu-rp3yv-xzu2h-6q43c-7iast-yiwff-z552q-6ugas-pyd6b-fae" };
             group_permissions = vec { "example_permission" };
+            quorem = 75;
         };
         record {
             group_name = "Example Group2";
             group_members = vec { principal "yxtej-lmfuu-rp3yv-xzu2h-6q43c-7iast-yiwff-z552q-6ugas-pyd6b-fae" };
             group_permissions = vec { "example_permission" };
+            quorem = 85;
+
         };
         record {
             group_name = "Example Group3";
             group_members = vec { principal "aaaaa-aa" };
             group_permissions = vec { "example_permission" };
+            quorem = 65;
+
         }
     };
 })'
@@ -152,8 +157,8 @@ chmod 777 ./assets_upload.sh
 #  dfx deploy internet_identity
 #  dfx deploy daohouse_frontend
 
-dfx deploy
+# dfx deploy
 
 
 # dfx generate
-
+  

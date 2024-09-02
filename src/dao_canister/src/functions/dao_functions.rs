@@ -3,6 +3,7 @@ use crate::{proposal_route, with_state, GroupList};
 use candid::Principal;
 use ic_cdk::api;
 use ic_cdk::{query, update};
+use ic_stable_structures::vec;
 
 use super::create_proposal;
 
@@ -184,3 +185,19 @@ fn add_ledger_canister_id(id: LedgerCanisterId) -> Result<String, String> {
 }
 
 
+
+// get dao groups 
+#[query]
+fn get_dao_groups() -> Vec<DaoGroup> {
+
+    let mut groups: Vec<DaoGroup> = Vec::new();
+
+    with_state(|state| {
+        for x in state.dao_groups.iter() {
+            groups.push(x.1)
+        }
+    });
+
+
+    groups
+}

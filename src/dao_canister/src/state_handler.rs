@@ -24,7 +24,7 @@ impl State {
                 daotype: String::from("Example Type"),
                 link_of_document: String::from("Example Document"),
                 cool_down_period: 7,
-                tokenissuer: String::from("Example Token Issuer"),
+                // tokenissuer: String::from("Example Token Issuer"),
                 linksandsocials: Vec::new(),
                 required_votes: 0,
                 groups_count: 0,

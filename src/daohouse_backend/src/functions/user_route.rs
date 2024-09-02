@@ -280,7 +280,7 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         link_of_document: dao_detail.link_of_document,
         cool_down_period: dao_detail.cool_down_period,
         members: updated_members,
-        tokenissuer: dao_detail.tokenissuer,
+        // tokenissuer: dao_detail.tokenissuer,
         linksandsocials: dao_detail.linksandsocials,
         required_votes: dao_detail.required_votes,
         followers: vec![api::caller()],

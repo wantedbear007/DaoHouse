@@ -19,6 +19,7 @@ type DaoDetails = record {
 };
 type DaoGroup = record {
   group_members : vec principal;
+  quorem : nat8;
   group_name : text;
   group_permissions : vec text;
 };

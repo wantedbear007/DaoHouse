@@ -42,16 +42,19 @@ for ((i = 1; i <= COUNT; i++)); do
             group_name = "Example Group";
             group_members = vec { principal "aaaaa-aa" };
             group_permissions = vec { "example_permission" };
+            quorem = 65;
         };
         record {
             group_name = "Example Group2";
             group_members = vec { principal "aaaaa-aa" };
             group_permissions = vec { "example_permission" };
+            quorem = 65;
         };
         record {
             group_name = "Example Group3";
             group_members = vec { principal "aaaaa-aa" };
             group_permissions = vec { "example_permission" };
+            quorem = 65;
         }
     };
       

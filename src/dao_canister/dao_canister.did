@@ -16,7 +16,6 @@ type Dao = record {
   members_count : nat32;
   followers : vec principal;
   followers_count : nat32;
-  tokenissuer : text;
   group_name : vec text;
   cool_down_period : nat32;
   purpose : text;
@@ -24,6 +23,7 @@ type Dao = record {
 };
 type DaoGroup = record {
   group_members : vec principal;
+  quorem : nat8;
   group_name : text;
   group_permissions : vec text;
 };
@@ -38,7 +38,6 @@ type DaoInput = record {
   members_permissions : vec text;
   link_of_document : text;
   followers : vec principal;
-  tokenissuer : text;
   cool_down_period : nat32;
   purpose : text;
   required_votes : nat32;
@@ -117,6 +116,7 @@ service : (DaoInput) -> {
   get_all_proposals : (Pagination) -> (vec Proposals) query;
   get_dao_detail : () -> (Dao) query;
   get_dao_followers : () -> (vec principal) query;
+  get_dao_groups : () -> (vec DaoGroup) query;
   get_dao_members : () -> (vec principal) query;
   get_members_of_group : (text) -> (Result_1) query;
   get_my_proposal : () -> (Result_2);
