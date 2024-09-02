@@ -1,9 +1,8 @@
 use crate::{guards::*, DaoGroup, LedgerCanisterId, ProposalInput, UpdateDaoSettings};
-use crate::{proposal_route, with_state, GroupList};
+use crate::with_state;
 use candid::Principal;
 use ic_cdk::api;
 use ic_cdk::{query, update};
-use ic_stable_structures::vec;
 
 use super::create_proposal;
 
@@ -23,63 +22,63 @@ async fn get_members_of_group(group: String) -> Result<Vec<Principal>, String> {
 //     // })
 // }
 
-#[update]
-async fn add_member_to_group(group: String, principal: Principal) -> String {
-    let principal_id = api::caller();
-    if principal_id == Principal::anonymous() {
-        return "Anonymous principal not allowed to make calls.".to_string();
-    }
+// #[update]
+// async fn add_member_to_group(group: String, principal: Principal) -> String {
+//     let principal_id = api::caller();
+//     if principal_id == Principal::anonymous() {
+//         return "Anonymous principal not allowed to make calls.".to_string();
+//     }
 
-    let council_group = "council".to_string();
+//     let council_group = "council".to_string();
 
-    let is_allowed = with_state(|state| {
-        state
-            .groups
-            .get(&council_group)
-            .map_or(false, |group_list| group_list.users.contains(&principal_id))
-    });
+//     let is_allowed = with_state(|state| {
+//         state
+//             .groups
+//             .get(&council_group)
+//             .map_or(false, |group_list| group_list.users.contains(&principal_id))
+//     });
 
-    if !is_allowed {
-        return format!(
-            "Caller with principal {:?} is not allowed to add members to group {}",
-            principal_id, group
-        );
-    }
+//     if !is_allowed {
+//         return format!(
+//             "Caller with principal {:?} is not allowed to add members to group {}",
+//             principal_id, group
+//         );
+//     }
 
-    let result =
-        with_state(|state| proposal_route::add_member_to_group(state, group.clone(), principal));
-    result
-}
+//     let result =
+//         with_state(|state| proposal_route::add_member_to_group(state, group.clone(), principal));
+//     result
+// }
 
 //
-#[update]
-async fn remove_member_from_group(group: String, principal: Principal) -> String {
-    let principal_id = api::caller();
-    if principal_id == Principal::anonymous() {
-        return "Anonymous principal not allowed to make calls.".to_string();
-    }
+// #[update]
+// async fn remove_member_from_group(group: String, principal: Principal) -> String {
+//     let principal_id = api::caller();
+//     if principal_id == Principal::anonymous() {
+//         return "Anonymous principal not allowed to make calls.".to_string();
+//     }
 
-    let council_group = "council".to_string();
+//     let council_group = "council".to_string();
 
-    let is_allowed = with_state(|state| {
-        state
-            .groups
-            .get(&council_group)
-            .map_or(false, |group_list| group_list.users.contains(&principal_id))
-    });
+//     let is_allowed = with_state(|state| {
+//         state
+//             .groups
+//             .get(&council_group)
+//             .map_or(false, |group_list| group_list.users.contains(&principal_id))
+//     });
 
-    if !is_allowed {
-        return format!(
-            "Caller with principal {:?} is not allowed to remove members from group {}",
-            principal_id, group
-        );
-    }
+//     if !is_allowed {
+//         return format!(
+//             "Caller with principal {:?} is not allowed to remove members from group {}",
+//             principal_id, group
+//         );
+//     }
 
-    let result = with_state(|state| {
-        proposal_route::remove_member_from_group(state, group.clone(), principal)
-    });
-    result
-}
+//     let result = with_state(|state| {
+//         proposal_route::remove_member_from_group(state, group.clone(), principal)
+//     });
+//     result
+// }
 
 // #[update(guard = prevent_anonymous)]
 // fn join_dao() -> Result<String, String> {

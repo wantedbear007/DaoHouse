@@ -57,25 +57,25 @@ async fn init(dao_input: DaoInput) {
         tokens_required_to_vote: dao_input.tokens_required_to_vote
     };
 
-    let permission = Votingandpermissions {
-        changedao_config: "council".to_string(),
-        changedao_policy: "council".to_string(),
-        bounty: "council".to_string(),
-        bountydone: "council".to_string(),
-        transfer: "council".to_string(),
-        polls: "council".to_string(),
-        removemembers: "council".to_string(),
-        addmembers: "council".to_string(),
-        functioncall: "council".to_string(),
-        upgradeself: "council".to_string(),
-        upgraderemote: "council".to_string(),
-        setvotetoken: "council".to_string(),
-        votingpermision: "council".to_string(),
-    };
+    // let permission = Votingandpermissions {
+    //     changedao_config: "council".to_string(),
+    //     changedao_policy: "council".to_string(),
+    //     bounty: "council".to_string(),
+    //     bountydone: "council".to_string(),
+    //     transfer: "council".to_string(),
+    //     polls: "council".to_string(),
+    //     removemembers: "council".to_string(),
+    //     addmembers: "council".to_string(),
+    //     functioncall: "council".to_string(),
+    //     upgradeself: "council".to_string(),
+    //     upgraderemote: "council".to_string(),
+    //     setvotetoken: "council".to_string(),
+    //     votingpermision: "council".to_string(),
+    // };
 
-    let council_list = GroupList {
-        users: dao_input.members,
-    };
+    // let council_list = GroupList {
+    //     users: dao_input.members,
+    // };
 
     with_state(|state| {
         state.dao = new_dao.clone();
@@ -85,8 +85,8 @@ async fn init(dao_input: DaoInput) {
         }
         // state.dao_groups.insert(dao_input.dao_groups., value)
         // for x in dao_i
-        state.permision = permission.clone();
-        state.groups.insert("council".to_string(), council_list);
+        // state.permision = permission.clone();
+        // state.groups.insert("council".to_string(), council_list);
     });
 }
 

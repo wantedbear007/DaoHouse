@@ -157,27 +157,27 @@ pub struct UpdateDaoSettings {
     pub followers: Vec<Principal>,
 }
 
-#[derive(Clone, CandidType, Serialize, Deserialize)]
-pub struct GroupList {
-    pub users: Vec<Principal>,
-}
+// #[derive(Clone, CandidType, Serialize, Deserialize)]
+// pub struct GroupList {
+//     pub users: Vec<Principal>,
+// }
 
-#[derive(Clone, CandidType, Serialize, Deserialize)]
-pub struct Votingandpermissions {
-    pub changedao_config: String,
-    pub changedao_policy: String,
-    pub bounty: String,
-    pub bountydone: String,
-    pub transfer: String,
-    pub polls: String,
-    pub removemembers: String,
-    pub addmembers: String,
-    pub functioncall: String,
-    pub upgradeself: String,
-    pub upgraderemote: String,
-    pub setvotetoken: String,
-    pub votingpermision: String,
-}
+// #[derive(Clone, CandidType, Serialize, Deserialize)]
+// pub struct Votingandpermissions {
+//     pub changedao_config: String,
+//     pub changedao_policy: String,
+//     pub bounty: String,
+//     pub bountydone: String,
+//     pub transfer: String,
+//     pub polls: String,
+//     pub removemembers: String,
+//     pub addmembers: String,
+//     pub functioncall: String,
+//     pub upgradeself: String,
+//     pub upgraderemote: String,
+//     pub setvotetoken: String,
+//     pub votingpermision: String,
+// }
 
 #[derive(Clone, CandidType, Serialize, Deserialize, PartialEq)]
 pub enum VoteParam {
@@ -221,20 +221,20 @@ impl Storable for Proposals {
     };
 }
 
-impl Storable for GroupList {
-    fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
-        Cow::Owned(Encode!(self).unwrap())
-    }
+// impl Storable for GroupList {
+//     fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
+//         Cow::Owned(Encode!(self).unwrap())
+//     }
 
-    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
-        Decode!(bytes.as_ref(), Self).unwrap()
-    }
+//     fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+//         Decode!(bytes.as_ref(), Self).unwrap()
+//     }
 
-    const BOUND: Bound = Bound::Bounded {
-        max_size: MAX_VALUE_SIZE,
-        is_fixed_size: false,
-    };
-}
+//     const BOUND: Bound = Bound::Bounded {
+//         max_size: MAX_VALUE_SIZE,
+//         is_fixed_size: false,
+//     };
+// }
 
 impl Storable for DaoGroup {
     fn to_bytes(&self) -> std::borrow::Cow<[u8]> {

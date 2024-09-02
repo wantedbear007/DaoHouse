@@ -105,7 +105,6 @@ type UpdateDaoSettings = record {
 type VoteParam = variant { No; Yes };
 service : (DaoInput) -> {
   add_ledger_canister_id : (LedgerCanisterId) -> (Result);
-  add_member_to_group : (text, principal) -> (text);
   ask_to_join_dao : (text) -> (Result);
   change_proposal_state : (text, ProposalState) -> (Result);
   comment_on_proposal : (text, text) -> (Result);
@@ -123,7 +122,6 @@ service : (DaoInput) -> {
   get_proposal_by_id : (text) -> (Proposals) query;
   icrc_transfer : (TokenTransferArgs) -> (Result_3);
   proposal_refresh : () -> (Result);
-  remove_member_from_group : (text, principal) -> (text);
   search_proposal : (text) -> (vec Proposals) query;
   unfollow_dao : () -> (Result);
   update_dao_settings : (UpdateDaoSettings) -> (Result);
