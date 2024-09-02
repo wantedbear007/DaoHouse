@@ -391,6 +391,7 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick, loadingNext, setL
     </div>
     </Container>
     <PaymentModal
+         data={data}
         open={isModalOpen}
         onClose={handleCancel}
         onPay={async () => {
