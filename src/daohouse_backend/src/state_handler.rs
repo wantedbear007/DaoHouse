@@ -53,8 +53,10 @@ impl State {
     }
 
     // to get canister ids
-    pub fn get_canister_ids(&self) -> Result<CanisterIDs, String> {
-        self.canister_data.ok_or_else(|| "Canister data not found".to_string())
+    pub fn get_canister_ids(&self) -> CanisterIDs {
+        // self.canister_data.ok_or_else(|| "Canister data not found".to_string())
+        self.canister_data.unwrap()
+
     }
     
 }

@@ -15,7 +15,7 @@ pub enum ProposalState {
     Expired,
 }
 
-#[derive(Debug, Clone, CandidType, Deserialize, Serialize)]
+#[derive(Debug, Clone, CandidType, Deserialize, Serialize, PartialEq, Eq)]
 pub enum ProposalType {
     AddMemberProposal,
     RemoveMemberPrposal,

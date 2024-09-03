@@ -45,9 +45,10 @@ pub async fn upload_image(image_data: ImageData) -> Result<String, String> {
 
     // dao canister id
     // with_state(|state|)
-    let canister_id = with_state(|state| {
-        state.get_canister_ids()
-    })?;
+    // let canister_id = with_state(|state| {
+    //     state.get_canister_ids()
+    // })?;
+    let canister_id = with_state(|state| state.borrow_mut().get_canister_ids());
 
     let response: CallResult<(ReturnResult,)> = ic_cdk::call(
         canister_id.ic_asset_canister,

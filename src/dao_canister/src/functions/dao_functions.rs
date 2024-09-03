@@ -1,5 +1,5 @@
 use crate::utils::ADD_MEMBER_TO_GROUP;
-use crate::with_state;
+use crate::{with_state, ProposalType};
 use crate::{guards::*, DaoGroup, LedgerCanisterId, ProposalInput, UpdateDaoSettings};
 use candid::Principal;
 use ic_cdk::api;
@@ -109,6 +109,9 @@ fn proposal_to_add_member_to_group(group_name: String, new_member: Principal) ->
 
 #[update (guard = prevent_anonymous)]
 async fn ask_to_join_dao(daohouse_backend_id: String) -> Result<String, String> {
+
+    check_if_proposal_exists(api::caller(), ProposalType::AddMemberProposal)?;
+
     let proposal = ProposalInput {
         proposal_description: String::from("Request to join DAO as a member"),
         proposal_title: String::from("Add member to DAO"),

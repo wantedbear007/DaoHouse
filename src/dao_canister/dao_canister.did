@@ -44,6 +44,7 @@ type DaoInput = record {
 type LedgerCanisterId = record { id : principal };
 type Pagination = record { end : nat32; start : nat32 };
 type ProposalInput = record {
+  principal_of_action : opt principal;
   proposal_title : text;
   proposal_description : text;
   proposal_type : ProposalType;
@@ -66,6 +67,7 @@ type ProposalType = variant {
   RemoveMemberPrposal;
 };
 type Proposals = record {
+  principal_of_action : principal;
   share_count : nat64;
   proposal_expired_at : nat64;
   proposal_submitted_at : nat64;

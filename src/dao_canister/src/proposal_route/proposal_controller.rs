@@ -1,4 +1,4 @@
-use crate::{with_state, ProposalState, State};
+use crate::{ProposalState, State};
 
 use crate::types::{ProposalInput, Proposals};
 use ic_cdk::api;
@@ -37,8 +37,8 @@ pub fn create_new_proposal(
         comments: 0,
         comments_list: Vec::new(),
         share_count: 0,
-        proposal_type: proposal.proposal_type,  
-        principal_of_action: proposal.principal_of_action.unwrap_or(api::caller())
+        proposal_type: proposal.proposal_type,
+        principal_of_action: proposal.principal_of_action.unwrap_or(api::caller()),
     };
     let mut updated_dao = state.dao.clone();
     updated_dao.proposals_count += 1;
@@ -47,7 +47,7 @@ pub fn create_new_proposal(
 
     state.proposals.insert(proposal_id, new_proposal);
 
-    return String::from("proposal added successfully");
+    return String::from("proposal created successfully");
 }
 
 // pub fn get_all_proposals(state:&State)-> HashMap<String, Proposals>{

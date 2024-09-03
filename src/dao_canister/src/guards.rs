@@ -1,9 +1,9 @@
 use candid::Principal;
 use ic_cdk::api;
 
-use crate::with_state;
+use crate::{with_state, ProposalType};
 
-// middleware guard to prevent anonymous user
+//  prevent anonymous user
 pub fn prevent_anonymous() -> Result<(), String> {
     if api::caller() == Principal::anonymous() {
         return Err(String::from("Anonymous principal not allowed !"));
@@ -59,7 +59,10 @@ pub fn check_voting_right(proposal_id: &String) -> Result<(), String> {
 }
 
 // check group member permission
-pub fn check_group_member_permission(group_name: &String, permission: String) -> Result<(), String> {
+pub fn check_group_member_permission(
+    group_name: &String,
+    permission: String,
+) -> Result<(), String> {
     prevent_anonymous()?;
     with_state(|state| match state.dao_groups.get(&group_name) {
         Some(val) => {
@@ -91,5 +94,28 @@ pub fn check_user_in_group(group_name: &String) -> Result<(), String> {
             "DAO dosen't have any group named with {}",
             group_name
         )),
+    })
+}
+
+// check if proposal exists
+// pub fn check_if_proposal_exists(action_principal: Principal, proposal_type: ProposalType) -> bool {
+//     with_state(|state| {
+//         state.proposals.iter().any(|(_key, val)| {
+//             val.proposal_type == proposal_type && val.principal_of_action == action_principal
+//         })
+//     })
+// }
+
+pub fn check_if_proposal_exists(
+    action_principal: Principal,
+    proposal_type: ProposalType,
+) -> Result<(), String> {
+    with_state(|state| {
+        for (_key, val) in state.proposals.iter() {
+            if val.proposal_type == proposal_type && val.principal_of_action == action_principal {
+                return Err(String::from("Proposal already exists with same request."));
+            }
+        }
+        Ok(())
     })
 }

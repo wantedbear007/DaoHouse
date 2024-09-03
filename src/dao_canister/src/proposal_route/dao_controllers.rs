@@ -1,11 +1,8 @@
-use crate::{with_state, State};
+use crate::with_state;
 
 use candid::Principal;
 
-pub fn add_member_to_group(
-    group_name: &String,
-    new_member: Principal,
-) -> Result<(), String> {
+pub fn add_member_to_group(group_name: &String, new_member: Principal) -> Result<(), String> {
     with_state(|state| match &mut state.dao_groups.get(&group_name) {
         Some(val) => {
             val.group_members.push(new_member);

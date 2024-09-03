@@ -4,8 +4,8 @@ use std::cell::RefCell;
 
 const POST_DATA: MemoryId = MemoryId::new(0);
 // const POOL_DATA: MemoryId = MemoryId::new(1);
-const GROUP_MEMORY: MemoryId = MemoryId::new(2);
-const PROPOSAL_DATA: MemoryId = MemoryId::new(3);
+const GROUP_MEMORY: MemoryId = MemoryId::new(1);
+const PROPOSAL_DATA: MemoryId = MemoryId::new(2);
 
 pub type Memory = VirtualMemory<DefaultMemoryImpl>;
 
