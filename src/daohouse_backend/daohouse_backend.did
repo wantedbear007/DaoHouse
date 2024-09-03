@@ -44,6 +44,7 @@ type DaoInput = record {
   required_votes : nat32;
 };
 type GetAllPostsResponse = record { size : nat32; posts : vec PostInfo };
+type Icrc28TrustedOriginsResponse = record { trusted_origins : vec text };
 type ImageData = record { content : blob; name : text; content_type : text };
 type Pagination = record { end : nat32; start : nat32 };
 type PaymentRecipientAccount = record { payment_recipient : principal };
@@ -136,9 +137,9 @@ service : (PaymentRecipientAccount) -> {
   get_my_post : (Pagination) -> (Result_4) query;
   get_post_byid : (text) -> (Result_5) query;
   get_profile_by_id : (principal) -> (Result_6);
-  get_trusted_origins : () -> (vec text);
   get_user_profile : () -> (Result_6) query;
   get_wasm : () -> (Result_7) query;
+  icrc28_trusted_origins : () -> (Icrc28TrustedOriginsResponse);
   is_user_registered : (principal) -> (bool);
   like_post : (text) -> (Result);
   make_payment : (nat64, principal) -> (Result_8);

@@ -12,12 +12,17 @@ import { useAuth } from "../../Components/utils/useAuthClient";
 import { Principal } from "@dfinity/principal";
 import { toast } from "react-toastify";
 import Container from "../../Components/Container/Container";
+import LoginModal from "../../Components/Auth/LoginModal";
+import { useNavigate } from "react-router-dom";
 
 const CreateDao = () => {
   const className = "CreateDAO";
   const [activeStep, setActiveStep] = useState(0);
-  const { backendActor, frontendCanisterId, identity } = useAuth();
+  const { backendActor, isAuthenticated, login, signInNFID } = useAuth();
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [loadingNext, setLoadingNext] = useState(false)
+  const navigate = useNavigate();
   const [data, setData] = useState({
     step1: {},
     step2: {},
@@ -28,6 +33,44 @@ const CreateDao = () => {
       imageURI: "",
     },
   });
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setShowLoginModal(true);
+    }
+  }, [isAuthenticated]);
+
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      await login("Icp");
+      window.location.reload(); // Reload after successful login
+    } catch (error) {
+      console.error('Login failed:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNFIDLogin = async () => {
+    setLoading(true);
+    try {
+      await signInNFID();
+      window.location.reload(); // Reload after successful NFID login
+    } catch (error) {
+      console.error('NFID login failed:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleModalClose = () => {
+    setShowLoginModal(false);
+    if (!isAuthenticated) {
+      navigate("/"); // Redirect to home page if not authenticated
+    }
+  };
+
 
   useEffect(() => {
     return () => {
@@ -157,7 +200,7 @@ const CreateDao = () => {
       case 3:
         return <Step4 data={data} setData={setData} setActiveStep={setActiveStep} />;
       case 4:
-        return <Step5 data={data.step5} setData={setData} setActiveStep={setActiveStep} />;
+        return <Step5 data={data} setData={setData} setActiveStep={setActiveStep} />;
       case 5:
         return <Step6 data={data} setData={setData} setActiveStep={setActiveStep} handleDaoClick={handleDaoClick} loadingNext={loadingNext} setLoadingNext={setLoadingNext} />;
       default:
@@ -180,6 +223,8 @@ const CreateDao = () => {
             </div>
           </div>
         </Container>
+        {showLoginModal && <LoginModal isOpen={showLoginModal} onClose={handleModalClose} onLogin={handleLogin} 
+          onNFIDLogin={handleNFIDLogin} loading={loading} />}
         <Container>
           <div className={className + "__steps overflow-x-scroll mobile:py-4 py-2 mobile:gap-20 gap-6 flex flex-row w-full mobile:items-center justify-between"}>
             {steps.map(({ step, name }, index) => (
