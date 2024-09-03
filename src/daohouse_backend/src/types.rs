@@ -783,7 +783,7 @@ pub struct Account {
     pub subaccount: Option<Vec<u8>>,
 }
 
-#[derive(CandidType, Serialize, Deserialize, Clone)]
+#[derive(CandidType, Serialize, Deserialize, Clone, Copy)]
 pub struct CanisterIDs {
     pub ic_asset_canister: Principal,
     pub dao_canister: Principal

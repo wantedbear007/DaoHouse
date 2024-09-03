@@ -1,9 +1,11 @@
+use std::borrow::{Borrow, BorrowMut};
+
 use candid::Principal;
 use ic_cdk::api::call::{CallResult, RejectionCode};
 use ic_cdk::update;
 
 use crate::types::{PostInfo, PostInput};
-use crate::{ImageData, State};
+use crate::{with_state, CanisterIDs, ImageData, State};
 
 // pub async fn create_new_post(state: &mut State, canister_id: String, post_id: String, postdetail: PostInput) -> Result<String, String> {
 
@@ -40,8 +42,16 @@ type ReturnResult = Result<u32, String>;
 // upload image
 #[update] // temp
 pub async fn upload_image(canister_id: String, image_data: ImageData) -> Result<String, String> {
+
+    // dao canister id
+    // with_state(|state|)
+    let canister_id = with_state(|state| {
+        state.get_canister_ids()
+    })?;
+
     let response: CallResult<(ReturnResult,)> = ic_cdk::call(
-        Principal::from_text(canister_id).unwrap(),
+        canister_id.ic_asset_canister,
+        // Principal::from_text(canister_id.ic_asset_canister).unwrap(),
         "create_file",
         (image_data,),
     )

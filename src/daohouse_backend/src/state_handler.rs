@@ -1,3 +1,4 @@
+
 // use std::collections::HashMap;
 use crate::types::{PostInfo, UserProfile};
 use crate::{Analytics, CanisterIDs, DaoDetails, Memory, WasmArgs};
@@ -50,6 +51,12 @@ impl State {
     pub fn set_canister_ids(&mut self, args: CanisterIDs) {
         self.canister_data = Some(args)
     }
+
+    // to get canister ids
+    pub fn get_canister_ids(&self) -> Result<CanisterIDs, String> {
+        self.canister_data.ok_or_else(|| "Canister data not found".to_string())
+    }
+    
 }
 
 fn init_file_contents() -> StableBTreeMap<Principal, UserProfile, Memory> {
