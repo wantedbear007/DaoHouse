@@ -147,6 +147,7 @@ const Step1 = ({ setData, setActiveStep, data }) => {
             htmlFor="type"
             className="font-semibold mobile:text-base text-sm"
           >
+           
             Setup Period(in days)
             {/* <span className="text-red-500">*</span> */}
           </label>
@@ -161,14 +162,14 @@ const Step1 = ({ setData, setActiveStep, data }) => {
 
 
           {/** DAO Token */}
-          <div className="flex mobile:flex-row flex-col mobile:gap-4 gap-2 mobile:items-center items-start">
-            {/* <p
+          {/* <div className="flex mobile:flex-row flex-col mobile:gap-4 gap-2 mobile:items-center items-start">
+            <p
               htmlFor="type"
               className="font-semibold mobile:text-base text-sm"
             >
               DAO Token*
-            </p> */}
-            {/* 
+            </p>
+            
             <div className="flex flex-row gap-2">
               <button
                 className={
@@ -178,8 +179,8 @@ const Step1 = ({ setData, setActiveStep, data }) => {
               >
                 New Token
               </button>
-            </div> */}
-          </div>
+            </div>
+          </div> */}
 
           {/* <div className="flex mobile:flex-row flex-col mobile:gap-4 gap-2">
             <div className="flex flex-col mobile:w-1/2 mobile:gap-4 gap-2">
