@@ -58,9 +58,9 @@ function ViewModal({ open, onClose, users = [] }) {
                                     alt={`{img}'s profile`}
                                     className="w-12 h-12 mr-4 rounded-full"
                                 />
-                               {/*<div>
-                                    <p className="m-0 font-bold text-left">{user.name}</p>
-                                </div>*/}
+                               <div>
+                                    <p className="m-0 font-bold text-left">UserName.user</p>
+                                </div>
                             </div>
                             <p className="m-0 text-right">{principalId}</p>
                         </div>
