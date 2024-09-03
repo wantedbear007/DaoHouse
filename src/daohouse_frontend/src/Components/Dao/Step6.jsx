@@ -182,6 +182,7 @@ const Step6 = ({ data, setData, setActiveStep, handleDaoClick, loadingNext, setL
         toast.error(
           `Insufficient balance. Balance : ${currentBalance / 10 ** 8}`
         );
+        setLoadingPayment(false)
       }
     } catch (err) {
       console.error("Error in transfer approve", err);
