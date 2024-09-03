@@ -200,7 +200,7 @@ const CreateDao = () => {
       case 3:
         return <Step4 data={data} setData={setData} setActiveStep={setActiveStep} />;
       case 4:
-        return <Step5 data={data.step5} setData={setData} setActiveStep={setActiveStep} />;
+        return <Step5 data={data} setData={setData} setActiveStep={setActiveStep} />;
       case 5:
         return <Step6 data={data} setData={setData} setActiveStep={setActiveStep} handleDaoClick={handleDaoClick} loadingNext={loadingNext} setLoadingNext={setLoadingNext} />;
       default:
