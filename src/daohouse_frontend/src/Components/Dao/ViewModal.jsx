@@ -26,68 +26,55 @@ const users = [
 function ViewModal({ open, onClose, users = [] }) {
     // Find the user based on the selectedUserId
    // const user = users.find(user => user.principalId === selectedUserId);
- console.log(users)
 
-    return (
-        <Modal
-            open={open}
-            onClose={onClose}
-            aria-labelledby="user-modal-title"
-            className="flex items-center justify-center backdrop-blur-md bg-black/50"
-            closeAfterTransition
+ return (
+    <Modal
+        open={open}
+        onClose={onClose}
+        aria-labelledby="user-modal-title"
+        className="flex items-center justify-center backdrop-blur-md bg-black/50"
+        closeAfterTransition
+    >
+        <Box
+            className="relative p-4 bg-white rounded-lg shadow-2xl max-w-3xl w-full"
         >
-            <Box
-                className="relative p-4 bg-white rounded-lg shadow-2xl max-w-3xl w-full"
+            <IconButton
+                onClick={onClose}
+                className="absolute top-2 right-2 text-gray-500 hover:text-black"
             >
-                <IconButton
-                    onClick={onClose}
-                    className="absolute top-2 right-2 text-gray-500 hover:text-black"
-                >
-                    <CloseIcon />
-                </IconButton>
-                <div className="mb-4">
-                    {users.map(principalId => (
+                <CloseIcon />
+            </IconButton>
+            <div className="mb-4">
+                {users.length > 0 ? (
+                    users.map((principalId) => (
                         <div
                             key={principalId}
-                            className={`flex items-center mb-4 justify-between cursor-pointer  'bg-gray-100' : 'bg-transparent'} p-2 rounded-md`}
+                            className={`flex items-center mb-4 justify-between cursor-pointer p-2 rounded-md bg-gray-100`}
                             onClick={() => onClose(principalId)}
                         >
                             <div className="flex items-center">
                                 <img
-                                    src={avatar}
-                                    alt={`{img}'s profile`}
+                                    src={ avatar}
+                                    alt={`user's profile`}
                                     className="w-12 h-12 mr-4 rounded-full"
                                 />
-                               <div>
-                                    <p className="m-0 font-bold text-left">UserName.user</p>
+                                <div>
+                                    <p className="m-0 font-bold text-left">Username.user</p>
                                 </div>
                             </div>
                             <p className="m-0 text-right">{principalId}</p>
                         </div>
-                    ))}
-                    
-                </div>
-               {/* {users && (
-                    <Box
-                        className="pt-2 border-t border-gray-300 mt-4"
-                    >
-                        <h2 className="text-xl font-semibold">Selected User</h2>
-                        <div className="flex items-center mt-2">
-                            <img
-                                src={user.profileImage}
-                                alt={`${user.name}'s profile`}
-                                className="w-24 h-24 mr-4 rounded-full"
-                            />
-                            <div>
-                                <p className="m-0 font-bold">{user.name}</p>
-                                <p className="m-0">{user.principalId}</p>
-                            </div>
-                        </div>
-                    </Box>
-                )} */}
-            </Box>
-        </Modal>
-    );
+                    ))
+                ) : (
+                    <p className="text-center text-gray-700">No voters have registered for this DAO yet. Be the first to participate and make your voice heard!</p>
+                )}
+            </div>
+        </Box>
+    </Modal>
+);
 }
 
 export default ViewModal;
+
+
+
