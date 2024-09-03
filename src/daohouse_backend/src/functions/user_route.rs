@@ -669,7 +669,6 @@ fn get_profile_by_id(id: Principal) -> Result<UserProfile, String> {
 
 // #[update]
 pub async fn create_ledger(
-    dao_canister_id: String,
     total_tokens: Nat,
     token_name: String,
     token_symbol: String,

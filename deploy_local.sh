@@ -19,7 +19,9 @@ dfx identity new Bhanu --storage-mode=plaintext || true
 dfx canister create dao_canister
 dfx canister create ic_asset_handler
 
+
 dfx build dao_canister
+dfx build ic_asset_handler
 
 
 dfx canister create icrc1_ledger_canister

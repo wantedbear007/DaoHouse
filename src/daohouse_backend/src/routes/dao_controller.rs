@@ -27,7 +27,7 @@ use ic_cdk::api::call::RejectionCode;
 use ic_cdk::println;
 use ic_cdk::{query, update};
 
-// recording and encoding dao details
+// to create dao canister
 pub async fn create_dao_canister(dao_detail: crate::DaoInput) -> Result<String, String> {
     let principal_id = ic_cdk::api::caller();
     let user_profile_detail = with_state(|state| state.user_profile.get(&principal_id).clone());
@@ -94,13 +94,13 @@ pub async fn create_dao_canister(dao_detail: crate::DaoInput) -> Result<String, 
     };
 
     // adding controllers of new canister
-    let conttt = CanisterSettings {
+    let all_controllers = CanisterSettings {
         controllers: Some(vec![ic_cdk::api::caller(), ic_cdk::api::id()]),
         ..Default::default()
     };
 
     let arg = CreateCanisterArgument {
-        settings: Some(conttt),
+        settings: Some(all_controllers),
     };
 
     // creating empty new canister
@@ -139,9 +139,9 @@ pub async fn create_dao_canister(dao_detail: crate::DaoInput) -> Result<String, 
     // installing wasm to new canister to replicate DAO canister
     let _installcode = install_code_in_canister(arg1, wasm_module).await.unwrap();
 
-    // creating ledger account associated with dao
+    // creating ledger canister associated with dao
     let ledger_canister_id = create_ledger(
-        canister_id_principal.to_string().clone(),
+        // canister_id_principal.to_string().clone(),
         dao_detail.total_tokens,
         dao_detail.token_name,
         dao_detail.token_symbol,
@@ -193,4 +193,17 @@ pub async fn create_dao_canister(dao_detail: crate::DaoInput) -> Result<String, 
         "Dao created, canister id: {}",
         canister_id_principal.to_string()
     ))
+}
+
+// create ledger canister
+pub async fn create_ledger_canister(dao_detail: crate::DaoInput) -> Result<Principal, String> {
+    create_ledger(
+        // canister_id_principal.to_string().clone(), // TODO : add dao canister as controller
+        dao_detail.total_tokens,
+        dao_detail.token_name,
+        dao_detail.token_symbol,
+        dao_detail.members,
+    )
+    .await
+    .map_err(|er| format!("Error while creating ledger canister {}", String::from(er)))
 }
