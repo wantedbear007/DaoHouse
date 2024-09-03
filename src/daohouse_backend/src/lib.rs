@@ -10,6 +10,7 @@ mod memory;
 use candid::Nat;
 use candid::Principal;
 use memory::Memory;
+pub use functions::*;
 
 pub mod utils;
 // mod user_route;
