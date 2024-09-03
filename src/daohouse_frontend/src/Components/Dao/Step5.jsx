@@ -6,11 +6,13 @@ import { IoPersonOutline } from "react-icons/io5";
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import Container from "../Container/Container";
-
+import ViewModal from "./ViewModal";
 
 
 const Step5 = ({ setData, setActiveStep }) => {
   const [loadingNext, setLoadingNext] = useState(false);
+
+  const [isModalOpen,setIsModalOpen]=useState(false)
  
   // const [quorum, setQuorum] = useState([
   //   { name: "Council", index: 0, vote: 50 },
@@ -46,7 +48,18 @@ const Step5 = ({ setData, setActiveStep }) => {
   useEffect(() => {
     // Save quorum data to local storage whenever it changes
     localStorage.setItem('step5Quorum', JSON.stringify(quorum));
-  }, [quorum]);
+  }, [quorum]); 
+
+
+   function handleViewClickModal (){
+    setIsModalOpen(true)
+
+   
+  }
+
+  function handleOnClose(){
+    setIsModalOpen(false)
+  }
   return (
     <React.Fragment>
     <Container>
@@ -82,7 +95,7 @@ const Step5 = ({ setData, setActiveStep }) => {
 
               <p className="w-1/3 flex flex-row gap-4">
                 <span>{index}</span>
-                <button className="text-cyan-800 bg-slate-200 px-5 py-1 rounded-md">
+                <button onClick={handleViewClickModal} className="text-cyan-800 bg-slate-200 px-5 py-1 rounded-md">
                   View
                 </button>
               </p>
@@ -156,7 +169,9 @@ const Step5 = ({ setData, setActiveStep }) => {
           )}
         </div>
       </div>
+
       </Container>
+      <ViewModal open={isModalOpen } onClose={handleOnClose}/>
     </React.Fragment>
   );
 };
