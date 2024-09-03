@@ -1,17 +1,11 @@
-use crate::{ImageData, State};
+use crate::State;
 
-use ic_cdk::api;
-use candid:: Principal;
 use crate::types::{Profileinput, UserProfile};
-
+use candid::Principal;
+use ic_cdk::api;
 
 pub fn create_new_profile(state: &mut State, profile: Profileinput) -> Result<(), String> {
     let principal_id = api::caller();
-    
-    // Check if the caller is anonymous
-    if principal_id == Principal::anonymous() {
-        return Err("Anonymous principal not allowed to make calls.".to_string());
-    }
 
     // Check if the user is already registered
     if state.user_profile.contains_key(&principal_id) {
@@ -22,7 +16,7 @@ pub fn create_new_profile(state: &mut State, profile: Profileinput) -> Result<()
     if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
         return Err("Enter correct Email ID".to_string());
     }
-    
+
     // Construct a new UserProfile object
     let new_profile = UserProfile {
         user_id: principal_id,
@@ -50,26 +44,21 @@ pub fn create_new_profile(state: &mut State, profile: Profileinput) -> Result<()
     Ok(())
 }
 
-
-
-
-
 pub fn get_user_profile(state: &State) -> Result<UserProfile, String> {
     let principal_id = api::caller();
 
     if principal_id == Principal::anonymous() {
         Err("Anonymous principal not allowed to make calls.".to_string())
     } else if let Some(profile) = state.user_profile.get(&principal_id) {
-        Ok(profile.clone()) 
+        Ok(profile.clone())
     } else {
         Err("User profile not found".to_string())
     }
 }
 
-
 pub fn update_profile(state: &mut State, profile: Profileinput) -> Result<(), String> {
     let principal_id = api::caller();
-    
+
     // Check if the caller is anonymous
     if principal_id == Principal::anonymous() {
         return Err("Anonymous principal not allowed to make calls.".to_string());
@@ -79,8 +68,6 @@ pub fn update_profile(state: &mut State, profile: Profileinput) -> Result<(), St
     if !state.user_profile.contains_key(&principal_id) {
         return Err("User not registered".to_string());
     }
-
-   
 
     // Validate email format
     if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
@@ -104,11 +91,9 @@ pub fn update_profile(state: &mut State, profile: Profileinput) -> Result<(), St
     Ok(())
 }
 
-
 pub fn delete_profile(state: &mut State) -> Result<(), String> {
     let principal_id = api::caller();
-    
-    
+
     // Check if the user is registered
     if !state.user_profile.contains_key(&principal_id) {
         return Err("User not registered".to_string());
@@ -119,5 +104,3 @@ pub fn delete_profile(state: &mut State) -> Result<(), String> {
 
     Ok(())
 }
-
-

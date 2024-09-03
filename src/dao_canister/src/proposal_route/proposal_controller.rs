@@ -38,6 +38,7 @@ pub fn create_new_proposal(
         comments_list: Vec::new(),
         share_count: 0,
         proposal_type: proposal.proposal_type,
+        
     };
     let mut updated_dao = state.dao.clone();
     updated_dao.proposals_count += 1;

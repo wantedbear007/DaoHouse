@@ -57,6 +57,7 @@ pub struct Proposals {
     pub comments_list: Vec<String>,
     pub proposal_type: ProposalType,
     pub share_count: u64,
+    pub principal_of_action: Principal // principal id of user who is to be added, removed, transfered funds
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
@@ -65,6 +66,8 @@ pub struct ProposalInput {
     pub proposal_description: String,
     // pub required_votes: u32,
     pub proposal_type: ProposalType,
+    pub principal_of_action: Option<Principal> // principal id of user who is to be added, removed, transfered funds
+
     // pub proposal_expired_at: u64,
     // pub proposal_amount:String,
     // pub proposal_receiver_id:String,

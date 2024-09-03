@@ -20,7 +20,7 @@ use icrc_ledger_types::icrc2::transfer_from::{TransferFromArgs, TransferFromErro
 use sha2::{Digest, Sha256};
 
 #[update(guard = prevent_anonymous)]
-async fn create_new_post(canister_id: String, post_details: PostInput) -> Result<String, String> {
+async fn create_new_post(post_details: PostInput) -> Result<String, String> {
     let principal_id = api::caller();
 
     let uuids = match raw_rand().await {
@@ -33,7 +33,7 @@ async fn create_new_post(canister_id: String, post_details: PostInput) -> Result
 
     // upload image
     let image_id: Result<String, String> = upload_image(
-        canister_id,
+        // canister_id,
         ImageData {
             content: post_details.image_content,
             name: post_details.image_title,

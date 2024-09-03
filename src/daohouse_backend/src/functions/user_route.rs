@@ -117,7 +117,7 @@ async fn get_user_profile() -> Result<UserProfile, String> {
 
 #[update(guard = prevent_anonymous)]
 async fn update_profile(
-    asset_handler_canister_id: String,
+    // asset_handler_canister_id: String,
     profile: Profileinput,
 ) -> Result<(), String> {
     if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
@@ -154,7 +154,7 @@ async fn update_profile(
 
     if profile.image_title != "na".to_string() {
         image_id = upload_image(
-            asset_handler_canister_id,
+            // asset_handler_canister_id,
             ImageData {
                 content: profile.image_content,
                 name: profile.image_title.clone(),
@@ -237,7 +237,7 @@ fn follow_user(user_id: Principal) -> Result<String, String> {
 }
 
 #[update(guard = prevent_anonymous)]
-pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<String, String> {
+pub async fn create_dao(dao_detail: DaoInput) -> Result<String, String> {
     ic_cdk::println!("value is {:?}", dao_detail);
     let principal_id = api::caller();
 
@@ -247,7 +247,7 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
     // image upload
 
     let image_id: Result<String, String> = upload_image(
-        canister_id,
+        // canister_id,
         ImageData {
             content: dao_detail.image_content,
             name: dao_detail.image_title,

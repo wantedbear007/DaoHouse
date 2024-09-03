@@ -40,15 +40,23 @@ async fn init(args: InitialArgs) {
             .borrow_mut()
             .set_payment_recipient(args.payment_recipient); // adding payment recipient id
 
-        state.set_canister_ids(CanisterIDs {
-            dao_canister: args.dao_canister_id,
-            ic_asset_canister: args.ic_asset_canister_id,
-        });
+
+        // uploading canister ids
+        if let Some(_) = state.canister_data {
+            ic_cdk::println!("Canister ids are present");
+        } else {
+            state.set_canister_ids(CanisterIDs {
+                dao_canister: args.dao_canister_id,
+                ic_asset_canister: args.ic_asset_canister_id,
+            });
+        }
+
         // storing canister id
         // state.canister_data = CanisterIDs {
         //     dao_canister: args.dao_canister_id,
         //     ic_asset_canister: args.ic_asset_canister_id,
         // };
+        // uploading analytics
         if let Some(_) = state.analytics_content.get(&0) {
             ic_cdk::println!("Analytics already available.");
         } else {

@@ -41,7 +41,7 @@ type ReturnResult = Result<u32, String>;
 
 // upload image
 #[update] // temp
-pub async fn upload_image(canister_id: String, image_data: ImageData) -> Result<String, String> {
+pub async fn upload_image(image_data: ImageData) -> Result<String, String> {
 
     // dao canister id
     // with_state(|state|)

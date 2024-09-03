@@ -128,8 +128,8 @@ type UserProfile = record {
 service : (InitialArgs) -> {
   check_user_existance : () -> (Result) query;
   comment_post : (text, text) -> (Result);
-  create_dao : (text, DaoInput) -> (Result);
-  create_new_post : (text, PostInput) -> (Result);
+  create_dao : (DaoInput) -> (Result);
+  create_new_post : (PostInput) -> (Result);
   create_profile : () -> (Result_1);
   delete_profile : () -> (Result_1);
   follow_user : (principal) -> (Result);
@@ -155,7 +155,7 @@ service : (InitialArgs) -> {
   reply_comment : (ReplyCommentData) -> (Result);
   search_dao : (text) -> (vec DaoDetails) query;
   unfollow_user : (principal) -> (Result);
-  update_profile : (text, Profileinput) -> (Result_1);
+  update_profile : (Profileinput) -> (Result_1);
   update_proposal_count : () -> (text);
-  upload_image : (text, ImageData) -> (Result);
+  upload_image : (ImageData) -> (Result);
 }
