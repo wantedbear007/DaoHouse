@@ -36,15 +36,17 @@ function ViewModal({ open, onClose, users = [] }) {
             className="flex items-center justify-center backdrop-blur-md bg-black/50"
             closeAfterTransition
         >
+            
             <Box
-                className="relative p-4 bg-white rounded-lg shadow-2xl max-w-3xl w-full"
+                className="relative p-4 bg-white rounded-lg  shadow-2xl max-w-3xl w-full"
             >
-                <IconButton
+                  <IconButton
                     onClick={onClose}
-                    className="absolute top-2 right-2 text-gray-500 hover:text-black"
+                    className="absolute top-1 left-2 text-gray-500 hover:text-black"
                 >
                     <CloseIcon />
                 </IconButton>
+                
                 <div className="mb-4">
                     {users.map(principalId => (
                         <div
