@@ -7,9 +7,9 @@ pub mod routes;
 mod state_handler;
 use state_handler::State;
 mod memory;
+use candid::Nat;
 use candid::Principal;
 use memory::Memory;
-use candid::Nat;
 
 pub mod utils;
 // mod user_route;
@@ -28,7 +28,7 @@ pub fn with_state<R>(f: impl FnOnce(&mut State) -> R) -> R {
 }
 
 #[init]
-async fn init(args: PaymentRecipientAccount) {
+async fn init(args: InitialArgs) {
     ic_cdk::println!("values are {:?}", args.payment_recipient.to_string());
 
     let analytics = Analytics::default();
@@ -39,11 +39,22 @@ async fn init(args: PaymentRecipientAccount) {
         state
             .borrow_mut()
             .set_payment_recipient(args.payment_recipient); // adding payment recipient id
+
+        state.set_canister_ids(CanisterIDs {
+            dao_canister: args.dao_canister_id,
+            ic_asset_canister: args.ic_asset_canister_id,
+        });
+        // storing canister id
+        // state.canister_data = CanisterIDs {
+        //     dao_canister: args.dao_canister_id,
+        //     ic_asset_canister: args.ic_asset_canister_id,
+        // };
         if let Some(_) = state.analytics_content.get(&0) {
             ic_cdk::println!("Analytics already available.");
         } else {
             state.analytics_content.insert(0, analytics.clone());
         }
+
         ()
     });
 

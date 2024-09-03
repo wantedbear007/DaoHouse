@@ -763,8 +763,10 @@ pub struct WasmArgs {
 }
 
 #[derive(CandidType, Deserialize, Debug)]
-pub struct PaymentRecipientAccount {
+pub struct InitialArgs {
     pub payment_recipient: Principal, // payment recipient principal address
+    pub ic_asset_canister_id: Principal,
+    pub dao_canister_id: Principal
 }
 
 
@@ -779,6 +781,12 @@ pub enum LedgerArg {
 pub struct Account {
     pub owner: Principal,
     pub subaccount: Option<Vec<u8>>,
+}
+
+#[derive(CandidType, Serialize, Deserialize, Clone)]
+pub struct CanisterIDs {
+    pub ic_asset_canister: Principal,
+    pub dao_canister: Principal
 }
 
 
@@ -831,6 +839,7 @@ pub struct UpgradeArgs {
 const MAX_VALUE_SIZE: u32 = 800;
 const MAX_VALUE_SIZE_ANALYTICS: u32 = 300;
 const MAX_VALUE_SIZE_DAO: u32 = 400;
+const MAX_VALUE_SIZE_CANISTER_DATA: u32 = 600;
 // const MAX_VALUE_SIZE: u32 = 600;
 
 impl Storable for UserProfile {
@@ -908,4 +917,22 @@ impl Storable for WasmArgs {
     }
 
     const BOUND: Bound = Bound::Unbounded;
+}
+
+
+impl Storable for CanisterIDs {
+    fn to_bytes(&self) -> Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    // const BOUND: Bound = Bound::Unbounded;
+
+    const BOUND: Bound = Bound::Bounded {
+        max_size: MAX_VALUE_SIZE_CANISTER_DATA,
+        is_fixed_size: false,
+    };
 }

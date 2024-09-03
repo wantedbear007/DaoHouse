@@ -11,8 +11,8 @@ use crate::types::{
 
 use crate::types::{DaoInput, Profileinput, UserProfile};
 use crate::{
-    guards::*, Account, ArchiveOptions, CanisterSettings, DaoCanisterInput, FeatureFlags,
-    ICRC1LedgerInitArgs, InitArgs, LedgerArg, LedgerCanisterId,
+    guards::*, Account, ArchiveOptions, CanisterIDs, CanisterSettings, DaoCanisterInput,
+    FeatureFlags, ICRC1LedgerInitArgs, InitArgs, LedgerArg, LedgerCanisterId,
 };
 use crate::{routes, with_state, DaoDetails, DaoResponse, ImageData};
 use candid::{encode_one, Encode, Nat, Principal};
@@ -389,7 +389,6 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         "add_ledger_canister_id",
         LedgerCanisterId {
             id: ledger_canister_id,
-
         },
         canister_id_principal,
     )
@@ -733,6 +732,12 @@ pub async fn create_ledger(
     create_ledger_canister(ledger_args).await
 
     // Ok("()".to_string())
+}
+
+// TODO REMOVE THIS
+#[query]
+fn get_canister_ids() -> Option<CanisterIDs> {
+    with_state(|state| state.canister_data.clone())
 }
 
 // BACKUP

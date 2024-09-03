@@ -17,6 +17,8 @@ dfx identity new Bhanu --storage-mode=plaintext || true
 # to generate wasm
 # cargo build --target wasm32-unknown-unknown -p dao_canister
 dfx canister create dao_canister
+dfx canister create ic_asset_handler
+
 dfx build dao_canister
 
 
@@ -27,6 +29,11 @@ dfx build icrc1_ledger_canister
 # FOR ICP LEDGER
 MINTER_ACCOUNT_ID=$(dfx --identity anonymous ledger account-id)
 DEFAULT_ACCOUNT_ID=$(dfx --identity default ledger account-id)
+
+# CANISTER IDS
+ASSET_CANISTER_ID=$(dfx canister id ic_asset_handler)
+DAO_CANISTER_ID=$(dfx canister id dao_canister)
+
 
 
 # cargo install candid-extractor
@@ -145,7 +152,7 @@ dfx deploy dao_canister --argument '(record {
 
 
 
-dfx deploy daohouse_backend --argument "(record { payment_recipient = principal \"${RECIEVER}\"; })"
+dfx deploy daohouse_backend --argument "(record { payment_recipient = principal \"${RECIEVER}\"; ic_asset_canister_id = principal \"${ASSET_CANISTER_ID}\"; dao_canister_id = principal \"${DAO_CANISTER_ID}\"; })"
 dfx deploy ic_asset_handler
 # to upload first image
 chmod 777 ./assets_upload.sh

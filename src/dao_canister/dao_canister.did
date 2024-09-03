@@ -121,6 +121,7 @@ service : (DaoInput) -> {
   get_proposal_by_id : (text) -> (Proposals) query;
   icrc_transfer : (TokenTransferArgs) -> (Result_3);
   proposal_refresh : () -> (Result);
+  proposal_to_add_member_to_group : (text, principal) -> (Result);
   search_proposal : (text) -> (vec Proposals) query;
   unfollow_dao : () -> (Result);
   update_dao_settings : (UpdateDaoSettings) -> (Result);
