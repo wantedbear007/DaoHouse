@@ -11,7 +11,7 @@ test10=$(dfx canister call bw4dl-smaaa-aaaaa-qaacq-cai create_proposal '(
   }
 )')
 
-# echo $test10
+echo $test10
 
 # ./refresh_proposals.sh
 

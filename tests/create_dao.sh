@@ -9,7 +9,6 @@ COUNT=1
 
 for ((i = 1; i <= COUNT; i++)); do
   dao_test=$(dfx canister call daohouse_backend create_dao '(
-    "'$ASSET_HANDLER_ID'", 
     record {
       dao_name = "first dao";
       purpose = "test krne ke liye ke chota sa sentence";
