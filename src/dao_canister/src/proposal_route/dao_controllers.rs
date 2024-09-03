@@ -2,7 +2,7 @@ use crate::{with_state, State};
 
 use candid::Principal;
 
-pub fn proposal_to_add_member_to_group(
+pub fn add_member_to_group(
     group_name: &String,
     new_member: Principal,
 ) -> Result<(), String> {

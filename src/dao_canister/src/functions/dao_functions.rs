@@ -1,4 +1,3 @@
-use crate::proposal_route::proposal_to_add_member_to_group;
 use crate::utils::ADD_MEMBER_TO_GROUP;
 use crate::with_state;
 use crate::{guards::*, DaoGroup, LedgerCanisterId, ProposalInput, UpdateDaoSettings};
@@ -18,11 +17,15 @@ async fn get_members_of_group(group: String) -> Result<Vec<Principal>, String> {
 
 // proposal to add member to a group
 #[update]
-fn add_member_to_group(group_name: String, new_member: Principal) -> Result<String, String> {
+fn proposal_to_add_member_to_group(group_name: String, new_member: Principal) -> Result<String, String> {
     check_group_member_permission(&group_name, ADD_MEMBER_TO_GROUP.to_string())?;
     check_user_in_group(&group_name)?;
 
-    proposal_to_add_member_to_group(&group_name, new_member)?;
+    // creating proposal
+    
+
+    // proposal_to_add_member_to_group(&group_name, new_member)?;
+    // create_proposal(daohouse_backend_id, proposal)
 
     Ok(format!("User successfully added to group {}", group_name))
 }
