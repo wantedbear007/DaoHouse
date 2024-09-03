@@ -114,6 +114,7 @@ async fn ask_to_join_dao(daohouse_backend_id: String) -> Result<String, String> 
         proposal_title: String::from("Add member to DAO"),
         // required_votes: with_state(|state| state.dao.required_votes),
         proposal_type: crate::ProposalType::AddMemberProposal,
+        principal_of_action: Some(api::caller())
         // proposal_expired_at: ic_cdk::api::time() + (20 * 86_400 * 1_000_000_000),
         // proposal_expired_at: ic_cdk::api::time()
         // + (with_state(|state| state.dao.cool_down_period) as u64 * 86_400 * 1_000_000_000),
