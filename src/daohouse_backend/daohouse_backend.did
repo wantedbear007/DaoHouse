@@ -4,9 +4,52 @@ type Analytics = record {
   post_count : nat64;
   members_count : nat64;
 };
+type CanisterChange = record {
+  timestamp_nanos : nat64;
+  canister_version : nat64;
+  origin : CanisterChangeOrigin;
+  details : CanisterChangeDetails;
+};
+type CanisterChangeDetails = variant {
+  creation : CreationRecord;
+  code_deployment : CodeDeploymentRecord;
+  controllers_change : CreationRecord;
+  code_uninstall;
+};
+type CanisterChangeOrigin = variant {
+  from_user : FromUserRecord;
+  from_canister : FromCanisterRecord;
+};
 type CanisterIDs = record {
   ic_asset_canister : principal;
   dao_canister : principal;
+};
+type CanisterIdRecord = record { canister_id : principal };
+type CanisterInfoRequest = record {
+  canister_id : principal;
+  num_requested_changes : opt nat64;
+};
+type CanisterInfoResponse = record {
+  controllers : vec principal;
+  module_hash : opt blob;
+  recent_changes : vec CanisterChange;
+  total_num_changes : nat64;
+};
+type CanisterStatusResponse = record {
+  status : CanisterStatusType;
+  memory_size : nat;
+  cycles : nat;
+  settings : DefiniteCanisterSettings;
+  query_stats : QueryStats;
+  idle_cycles_burned_per_day : nat;
+  module_hash : opt blob;
+  reserved_cycles : nat;
+};
+type CanisterStatusType = variant { stopped; stopping; running };
+type CodeDeploymentMode = variant { reinstall; upgrade; install };
+type CodeDeploymentRecord = record {
+  mode : CodeDeploymentMode;
+  module_hash : blob;
 };
 type Comment = record {
   author_principal : principal;
@@ -14,12 +57,12 @@ type Comment = record {
   comment_text : text;
   comment_id : opt text;
 };
+type CreationRecord = record { controllers : vec principal };
 type DaoDetails = record {
-  dao_id : principal;
-  dao_associated_ledger : text;
+  dao_associated_ledger : principal;
   dao_desc : text;
   dao_name : text;
-  dao_canister_id : text;
+  dao_canister_id : principal;
 };
 type DaoGroup = record {
   group_members : vec principal;
@@ -47,6 +90,18 @@ type DaoInput = record {
   purpose : text;
   required_votes : nat32;
 };
+type DefiniteCanisterSettings = record {
+  freezing_threshold : nat;
+  controllers : vec principal;
+  reserved_cycles_limit : nat;
+  memory_allocation : nat;
+  compute_allocation : nat;
+};
+type FromCanisterRecord = record {
+  canister_version : opt nat64;
+  canister_id : principal;
+};
+type FromUserRecord = record { user_id : principal };
 type GetAllPostsResponse = record { size : nat32; posts : vec PostInfo };
 type Icrc28TrustedOriginsResponse = record { trusted_origins : vec text };
 type ImageData = record { content : blob; name : text; content_type : text };
@@ -92,24 +147,52 @@ type Profileinput = record {
   telegram : text;
   tag_defines : vec text;
 };
+type QueryStats = record {
+  response_payload_bytes_total : nat;
+  num_instructions_total : nat;
+  num_calls_total : nat;
+  request_payload_bytes_total : nat;
+};
+type RejectionCode = variant {
+  NoError;
+  CanisterError;
+  SysTransient;
+  DestinationInvalid;
+  Unknown;
+  SysFatal;
+  CanisterReject;
+};
 type ReplyCommentData = record {
   post_id : text;
   comment : text;
   comment_id : text;
 };
-type Result = variant { Ok : text; Err : text };
-type Result_1 = variant { Ok; Err : text };
-type Result_2 = variant { Ok : Analytics; Err : text };
-type Result_3 = variant { Ok : vec principal; Err : text };
-type Result_4 = variant { Ok : GetAllPostsResponse; Err : text };
-type Result_5 = variant { Ok : PostInfo; Err : text };
-type Result_6 = variant { Ok : UserProfile; Err : text };
-type Result_7 = variant { Ok : blob; Err : text };
-type Result_8 = variant { Ok : nat; Err : text };
+type Result = variant {
+  Ok : record { CanisterInfoResponse };
+  Err : record { RejectionCode; text };
+};
+type Result_1 = variant {
+  Ok : record { CanisterStatusResponse };
+  Err : record { RejectionCode; text };
+};
+type Result_10 = variant { Ok : blob; Err : text };
+type Result_11 = variant { Ok : nat; Err : text };
+type Result_12 = variant {
+  Ok : record { blob };
+  Err : record { RejectionCode; text };
+};
+type Result_2 = variant { Ok : text; Err : text };
+type Result_3 = variant { Ok; Err : text };
+type Result_4 = variant { Ok; Err : record { RejectionCode; text } };
+type Result_5 = variant { Ok : Analytics; Err : text };
+type Result_6 = variant { Ok : vec principal; Err : text };
+type Result_7 = variant { Ok : GetAllPostsResponse; Err : text };
+type Result_8 = variant { Ok : PostInfo; Err : text };
+type Result_9 = variant { Ok : UserProfile; Err : text };
 type UserProfile = record {
   post_id : vec text;
   username : text;
-  dao_ids : vec text;
+  dao_ids : vec principal;
   twitter_id : text;
   description : text;
   followers_list : vec principal;
@@ -126,36 +209,44 @@ type UserProfile = record {
   followings_list : vec principal;
 };
 service : (InitialArgs) -> {
-  check_user_existance : () -> (Result) query;
-  comment_post : (text, text) -> (Result);
-  create_dao : (DaoInput) -> (Result);
-  create_new_post : (PostInput) -> (Result);
-  create_profile : () -> (Result_1);
-  delete_profile : () -> (Result_1);
-  follow_user : (principal) -> (Result);
+  canister_info : (CanisterInfoRequest) -> (Result);
+  canister_status : (CanisterIdRecord) -> (Result_1);
+  check_user_existance : () -> (Result_2) query;
+  comment_post : (text, text) -> (Result_2);
+  create_dao : (DaoInput) -> (Result_2);
+  create_new_post : (PostInput) -> (Result_2);
+  create_profile : () -> (Result_3);
+  delete_canister : (CanisterIdRecord) -> (Result_4);
+  delete_profile : () -> (Result_3);
+  deposit_cycles : (CanisterIdRecord, nat) -> (Result_4);
+  follow_user : (principal) -> (Result_2);
   get_all_dao : (Pagination) -> (vec DaoDetails) query;
   get_all_posts : (Pagination) -> (GetAllPostsResponse) query;
-  get_analytics : () -> (Result_2) query;
+  get_analytics : () -> (Result_5) query;
   get_caller : () -> (principal) query;
   get_canister_ids : () -> (opt CanisterIDs) query;
   get_cycles : () -> (nat64) query;
   get_dao_details : (text) -> (text);
   get_latest_post : (Pagination) -> (GetAllPostsResponse) query;
-  get_my_follower : () -> (Result_3) query;
-  get_my_following : () -> (Result_3) query;
-  get_my_post : (Pagination) -> (Result_4) query;
-  get_post_byid : (text) -> (Result_5) query;
-  get_profile_by_id : (principal) -> (Result_6);
-  get_user_profile : () -> (Result_6) query;
-  get_wasm : () -> (Result_7) query;
+  get_my_follower : () -> (Result_6) query;
+  get_my_following : () -> (Result_6) query;
+  get_my_post : (Pagination) -> (Result_7) query;
+  get_post_byid : (text) -> (Result_8) query;
+  get_profile_by_id : (principal) -> (Result_9);
+  get_user_profile : () -> (Result_9) query;
+  get_wasm : () -> (Result_10) query;
   icrc28_trusted_origins : () -> (Icrc28TrustedOriginsResponse);
   is_user_registered : (principal) -> (bool);
-  like_post : (text) -> (Result);
-  make_payment : (nat64, principal) -> (Result_8);
-  reply_comment : (ReplyCommentData) -> (Result);
+  like_post : (text) -> (Result_2);
+  make_payment : (nat64, principal) -> (Result_11);
+  raw_rand : () -> (Result_12);
+  reply_comment : (ReplyCommentData) -> (Result_2);
   search_dao : (text) -> (vec DaoDetails) query;
-  unfollow_user : (principal) -> (Result);
-  update_profile : (Profileinput) -> (Result_1);
+  start_canister : (CanisterIdRecord) -> (Result_4);
+  stop_canister : (CanisterIdRecord) -> (Result_4);
+  unfollow_user : (principal) -> (Result_2);
+  uninstall_code : (CanisterIdRecord) -> (Result_4);
+  update_profile : (Profileinput) -> (Result_3);
   update_proposal_count : () -> (text);
-  upload_image : (ImageData) -> (Result);
+  upload_image : (ImageData) -> (Result_2);
 }

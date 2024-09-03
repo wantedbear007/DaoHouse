@@ -16,7 +16,9 @@ pub mod utils;
 // mod user_route;
 // mod post_route;
 
-// pub mod testing;
+pub mod testing;
+use crate::api::call::{call, call_with_payment128, CallResult};
+
 
 use types::*;
 

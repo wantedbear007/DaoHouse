@@ -11,7 +11,7 @@ pub struct State {
 
     pub post_detail: StableBTreeMap<String, PostInfo, Memory>,
 
-    pub dao_details: StableBTreeMap<String, DaoDetails, Memory>,
+    pub dao_details: StableBTreeMap<Principal, DaoDetails, Memory>,
 
     pub analytics_content: StableBTreeMap<u64, Analytics, Memory>,
 
@@ -69,7 +69,7 @@ fn post_file_contents() -> StableBTreeMap<String, PostInfo, Memory> {
     StableBTreeMap::init(crate::memory::get_user_memory())
 }
 
-fn dao_file_contents() -> StableBTreeMap<String, DaoDetails, Memory> {
+fn dao_file_contents() -> StableBTreeMap<Principal, DaoDetails, Memory> {
     StableBTreeMap::init(crate::memory::get_dao_memory())
 }
 fn analytics_content() -> StableBTreeMap<u64, Analytics, Memory> {

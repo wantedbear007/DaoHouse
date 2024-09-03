@@ -514,7 +514,7 @@ pub struct UserProfile {
     pub email_id: String,
     pub profile_img: String,
     pub username: String,
-    pub dao_ids: Vec<String>,
+    pub dao_ids: Vec<Principal>,
     pub post_count: u32,
     pub post_id: Vec<String>,
     pub followers_count: u32,
@@ -652,12 +652,12 @@ pub struct DaoCanisterInput {
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
 pub struct DaoDetails {
-    pub dao_id: Principal,
+    // pub dao_id: Principal,
     pub dao_name: String,
     // pub image_id: String,
     pub dao_desc: String,
-    pub dao_canister_id: String,
-    pub dao_associated_ledger: String
+    pub dao_canister_id: Principal,
+    pub dao_associated_ledger: Principal
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
