@@ -9,10 +9,14 @@ import Container from "../Container/Container";
 import ViewModal from "./ViewModal";
 
 
-const Step5 = ({ setData, setActiveStep }) => {
+const Step5 = ({ setData, setActiveStep,data }) => {
+  console.log("step5",data)
   const [loadingNext, setLoadingNext] = useState(false);
 
   const [isModalOpen,setIsModalOpen]=useState(false)
+  
+  const user =data.step3.members
+  console.log(user)
  
   // const [quorum, setQuorum] = useState([
   //   { name: "Council", index: 0, vote: 50 },
@@ -171,7 +175,7 @@ const Step5 = ({ setData, setActiveStep }) => {
       </div>
 
       </Container>
-      <ViewModal open={isModalOpen } onClose={handleOnClose}/>
+      <ViewModal open={isModalOpen } onClose={handleOnClose} users={user}/>
     </React.Fragment>
   );
 };
