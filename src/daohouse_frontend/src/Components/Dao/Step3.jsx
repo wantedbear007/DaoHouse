@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../Components/utils/useAuthClient";
 import Container from "../Container/Container";
 import EditPen from "../../../assets/edit_pen.png";
+import { RiGroupFill } from "react-icons/ri";
 
 const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
   const [count, setCount] = useState(1);
@@ -57,17 +58,17 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
   const handleSaveAndNext = () => {
     // Validation: Ensure at least one member in Council
     const council = list.find(group => group.name === "Council");
-    if (!council || council.members.length === 0) {
-      toast.error("Please add at least one member to the Council.");
-      return;
-    }
+    // if (!council || council.members.length === 0) {
+    //   toast.error("Please add at least one member to the Council.");
+    //   return;
+    // }
 
     // Validation: Ensure all groups have at least one member
     const invalidGroup = list.slice(1).find(group => group.members.length === 0);
-    if (invalidGroup) {
-      toast.error(`Please add at least one member to ${invalidGroup.name}.`);
-      return;
-    }
+    // if (invalidGroup) {
+    //   toast.error(`Please add at least one member to ${invalidGroup.name}.`);
+    //   return;
+    // }
 
     // Save data to local storage
     localStorage.setItem('step3Data', JSON.stringify(list));
@@ -294,9 +295,11 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
 
             <button
               onClick={handleGroupAdding}
-              className="bg-white  lg:mr-7 w-[200px] h-[50px] small_phone:gap-2 gap-1  small_phone:  mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl flex items-center rounded-full hover:bg-[#ececec] hover:scale-105 transition">
-              <HiPlus />
-              Create Group
+              className="bg-white  lg:mr-7 md:w-[200px] md:h-[50px] small_phone:gap-2 gap-1  small_phone:  mobile:px-5 p-2 small_phone:text-base text-sm shadow-xl flex items-center rounded-full hover:bg-[#ececec] hover:scale-105 transition">
+              <span className="flex"><HiPlus /></span>
+              <span className="flex lg:hidden items-center"><RiGroupFill /></span>
+              <span className=" hidden lg:flex">Create</span>
+              <span className=""> Group</span>
             </button>
           </div>
 
@@ -364,7 +367,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
                 <div className="flex flex-col sm:flex-row gap-2 items-center w-full">
                   <input
                     type="text"
-                    className="w-full sm:w-auto  lg:w-[849px] md:w-[1500px] h-[48px] sm:h-[40px] md:h-[48px] p-2 text-sm sm:text-base rounded-md border border-slate-500"
+                    className="w-full sm:w-auto md:w-[1500px] h-[48px] sm:h-[40px] md:h-[48px] p-2 text-sm sm:text-base rounded-md border border-slate-500"
                     placeholder="Enter Member Principal Id"
                     value={memberName}
                     onChange={(e) => setMemberName(e.target.value)}
@@ -405,16 +408,27 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
                     <div className="flex items-center gap-2">
                     <input
                       type="text"
-                      className="p-1 rounded-md border border-slate-500 text-sm"
+                      className="p-1 w-24 md:w-60 rounded-md border border-slate-500 text-sm"
                       placeholder="Group Name"
                       value={updatedGroupName}
                       onChange={(e) => setUpdatedGroupName(e.target.value)}
                     />
                     <button
                       onClick={handleUpdateGroupName}
-                      className="text-blue-500 truncate ... w-30"
+                      className="text-blue-500 truncate ... w-30 bg-slate-200 p-1 rounded-md"
                     >
-                      Update
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M20 6L9 17l-5-5" />
+                      </svg>
                     </button>
                   </div>
                   ) : (
@@ -447,12 +461,12 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
                   <div className="flex flex-row small_phone:gap-4 gap-2">
                     <button
                       onClick={() => handleMemberAdding(item.index)}
-                      className="flex flex-row items-center gap-1 text-[#229ED9] bg-slate-200 mobile:p-2 p-1 rounded-md"
+                      className="flex flex-row items-center gap-1 text-[#229ED9] bg-slate-200 mobile:p-1 p-1 rounded-md"
                     >
                       Add Member
                     </button>
                     <button onClick={() => deleteGroup(item.index)}>
-                      <MdOutlineDeleteOutline className="text-red-500 mr-7 mobile:text-2xl text-lg" />
+                      <MdOutlineDeleteOutline className="text-red-500 mr-1 md:mr-7 mobile:text-2xl text-lg" />
                     </button>
                   </div>
                 </section>
@@ -463,7 +477,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
                         <input
                           type="text"
                           // className="mobile:p-2 p-1 mobile:text-base text-sm rounded-md border border-slate-500"
-                          className="w-full sm:w-auto  lg:w-[849px] md:w-[1500px] h-[48px] sm:h-[40px] md:h-[48px] p-2 text-sm sm:text-base rounded-md border border-slate-500"
+                          className="w-full sm:w-auto md:w-[500px] big_phone:w-[560px] tablet:w-[650px]  laptop:w-[900px] desktop:w-[1096px] h-[48px] sm:h-[40px] md:h-[48px] p-2 text-sm sm:text-base rounded-md border border-slate-500"
                           placeholder="Enter Member Principal Id"
                           onChange={(e) => setMemberName(e.target.value)}
                         // onKeyDown={(e) => handleNameEnter(e.target.value, e)}
@@ -471,7 +485,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
                         <button
                           onClick={handleAddMember}
                           // className="bg-[#229ED9] text-white p-2 rounded-md"
-                          className="w-full sm:w-auto lg:w-[155px] h-[48px] sm:h-[40px] md:h-[48px]  bg-black text-white p-2 rounded-md"
+                          className="w-full sm:w-auto md:w-[100px] lg:w-[155px] h-[48px] sm:h-[40px] md:h-[48px]  bg-black text-white p-2 rounded-md"
                         >
                           Add
                         </button>

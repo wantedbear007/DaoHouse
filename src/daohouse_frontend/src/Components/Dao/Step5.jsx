@@ -200,7 +200,7 @@ const RangeInput = ({ index, handleVoteChange }) => {
       type="range"
       min={0}
       max={100}
-      className="mobile:w-10/12 mobile:h-[8px] h-[5px] custom-range"
+      className="mobile:w-10/12 mobile:h-[8px] h-[5px] custom-range border-2 border-[#061c24]"
       step={1}
       value={value}
       onChange={handleChange}

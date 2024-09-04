@@ -275,11 +275,9 @@ const FeedPage = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { isAuthenticated, login, signInNFID, backendActor, createDaoActor } = useAuth();
   const navigate = useNavigate();
-  const [posts, setPosts] = useState([]);
-  const [searchedProposals, setSearchedProposals] = useState([]);
+  const [searchedProposal, setSearchedProposal] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [hasMore, setHasMore] = useState(true);
-  const [uplodedPost, setUplodedPost] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [proposals, setProposals] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
@@ -357,7 +355,8 @@ const FeedPage = () => {
             }))
           );
         }
-        setProposals(allProposals);
+        setHasMore(allProposals.length > itemsPerPage);
+        setProposals(allProposals.slice(0, itemsPerPage));
         setTotalItems(allProposals.length);
       } else {
         // Search proposals across all DAOs
@@ -367,18 +366,18 @@ const FeedPage = () => {
           const daoActor = await createDaoActor(dao.dao_canister_id);
           try {
             const response = await daoActor.search_proposal(searchTerm.trim());
-            if (response) {
-              searchResults.push({
-                ...response,
-                daoCanisterId: dao.dao_canister_id,
-              });
-            }
+            console.log("proposals", response);
+            
+            setSearchedProposal(response)
+            console.log(searchedProposal);
+            
           } catch (error) {
             console.error(`Error searching proposals in DAO ${dao.dao_canister_id}:`, error);
           }
         }
-        setSearchedProposals(searchResults);
+        // setSearchedProposals(searchResults.slice(0, itemsPerPage));
         setTotalItems(searchResults.length);
+        setProposals([]);
       }
     } catch (error) {
       console.error("Error fetching proposals:", error);
@@ -395,13 +394,9 @@ const FeedPage = () => {
     }
     setShowLoginModal(false);
     getAllProposalsFromAllDaos();
-  }, [isAuthenticated, backendActor, currentPage, , searchTerm]);
+  }, [isAuthenticated, backendActor, currentPage, searchTerm]);
 
-  // useEffect(() => {
-  //   console.log('Updated Proposals:', proposals);
-  // }, [proposals]);
-
-  const displayedProposals = searchTerm.trim() === "" ? proposals : searchedProposals;
+  
 
   const handleModalClose = () => {
     setShowLoginModal(false);
@@ -438,15 +433,16 @@ const FeedPage = () => {
               <div className="mobile:w-14 w-8 small_phone:mt-2 mt-1 border-t-2 border-black"></div>
             </div>
           </p>
-          <div className="flex flex-grow lg:flex justify-center px-6 mx-2">
-            <SearchProposals
-              onChange={handleSearchChange}
-              width="80%"
-              bgColor="transparent"
-              placeholder="Search by proposal ID"
-              className="border-2 border-[#AAC8D6] w-full max-w-lg"
-            />
-        </div>
+          <div className="flex flex-grow justify-center px-6 mx-2">
+              <SearchProposals
+                onChange={handleSearchChange} 
+                value={searchTerm}
+                width="100%"
+                bgColor="transparent"
+                placeholder="Search by proposal ID"
+                className="border-2 border-[#AAC8D6] w-full max-w-lg"
+              />
+            </div>
 
         </Container>
       </div>
@@ -462,7 +458,7 @@ const FeedPage = () => {
           loading ?
             <MuiSkeleton />
             :
-            proposals.length === 0 ?
+            (isSearching ? searchedProposal : proposals).length === 0 ?
               <Container classes="w-full flex flex-col items-center justify-center ">
                 <img src={nodata} alt="No Data" className="mb-1 " />
                 <p className="text-center text-gray-700 text-2xl">
@@ -471,7 +467,7 @@ const FeedPage = () => {
               </Container>
               :
                 <Container classes={'w-full'} key={proposals.proposal_id}>
-                  <ProposalsContent proposals={proposals} isMember={true} />
+                  <ProposalsContent proposals={isSearching ? searchedProposal : proposals} isMember={true} showActions={false} />
                 </Container>
         }
       </div>
@@ -485,7 +481,7 @@ const FeedPage = () => {
           "__postCards mobile:px-10 px-6 pb-10 bg-[#c8ced3] gap-8 flex flex-col"
         }>
         {/* <Pagignation totalItems={proposals.length} currentPage={1} itemsPerPage={itemsPerPage} setCurrentPage={() => {}} /> */}
-        <Pagignation  totalItems={totalItems} currentPage={currentPage}
+        <Pagignation  totalItems={totalItems} currentPage={currentPage} itemsPerPage={itemsPerPage}
           setCurrentPage={setCurrentPage} />
       
       </div>

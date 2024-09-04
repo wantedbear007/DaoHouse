@@ -134,7 +134,7 @@ const Dao = () => {
   return (
     <div className="bg-zinc-200">
       <TopComponent showAll={showAll} setShowAll={setShowAll} showButtons={true} />
-      <div className={"bg-[#c8ced3]"}>
+      <div className={"bg-gray"}>
         <Container classes={`__label small_phone:py-8 py-5 mobile:px-10 px-5 flex flex-row w-full justify-between items-center`}>
           <div onClick={() => getDaos()} className="small_phone:text-4xl text-3xl big_phone:px-8 flex flex-row items-center gap-4">
             {showAll ? "All" : "Joined"}
@@ -175,7 +175,7 @@ const Dao = () => {
             </p>
           </div>
         ) : (searchTerm && fetchedDAOs.length > 0 ? (
-          <div className={"bg-[#c8ced3]"}>
+          <div className={"bg-gray"}>
             <Container classes={`__cards tablet:px-10 px-4 pb-10 grid grid-cols-1 big_phone:grid-cols-1 tablet:gap-6 gap-4`}>
               {fetchedDAOs.map((daos, index) => {
                 const daoCanisterId = daos.dao_canister_id ? daos.dao_canister_id : 'No ID';
@@ -200,7 +200,7 @@ const Dao = () => {
               hasMore={hasMore}/>
           </div>
         ) : dao && dao.length > 0 ? (
-          <div className={"bg-[#c8ced3]"}>
+          <div className={"bg-gray"}>
             <Container classes={`__cards tablet:px-10 px-4 pb-10 grid grid-cols-1 big_phone:grid-cols-2 tablet:gap-6 gap-4`}>
               {dao.map((daos, index) => {
                 const daoCanisterId = daos.dao_canister_id ? daos.dao_canister_id : 'No ID';
@@ -229,7 +229,7 @@ const Dao = () => {
           <NoDataComponent />
         ))
       ) : joinedDAO && joinedDAO.length > 0 ? (
-        <div className={"bg-[#c8ced3]"}>
+        <div className={"bg-gray"}>
           <Container classes={`__cards tablet:px-10 px-4 pb-10 grid grid-cols-1 big_phone:grid-cols-2 tablet:gap-6 gap-4`}>
             {joinedDAO.map((a, index) => {
               const daoCanisterId = a.dao_canister_id ? a.dao_canister_id : 'No ID';
