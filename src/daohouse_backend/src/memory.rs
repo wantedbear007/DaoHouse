@@ -9,6 +9,7 @@ const ANALYTICS_DATA: MemoryId = MemoryId::new(3);
 const WASM_DATA: MemoryId = MemoryId::new(4);
 const LEDGER_WASM: MemoryId = MemoryId::new(5);
 const CANISTER_IDS: MemoryId = MemoryId::new(6);
+const PROPOSAL_STATE: MemoryId = MemoryId::new(7);
 
 pub type Memory = VirtualMemory<DefaultMemoryImpl>;
 
@@ -42,4 +43,7 @@ pub fn get_ledger_wasm_memory() -> Memory {
 
 pub fn get_canister_data_memory() -> Memory {
     MEMORY_MANAGER.with(|m| m.borrow().get(CANISTER_IDS))
+}
+pub fn get_proposal_memory() -> Memory {
+    MEMORY_MANAGER.with(|m| m.borrow().get(PROPOSAL_STATE))
 }

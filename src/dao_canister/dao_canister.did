@@ -1,4 +1,12 @@
 type AccountBalance = record { id : principal; staked : nat32 };
+type Comment = record {
+  created_at : nat64;
+  author_principal : principal;
+  likes : nat16;
+  replies : vec text;
+  comment_text : text;
+  comment_id : text;
+};
 type Dao = record {
   image_canister : principal;
   members : vec principal;
@@ -79,6 +87,7 @@ type Proposals = record {
   proposal_submitted_at : nat64;
   proposal_approved_votes : nat64;
   created_by : principal;
+  likes : nat32;
   proposal_rejected_votes : nat64;
   proposal_title : text;
   rejected_votes_list : vec principal;
@@ -86,10 +95,15 @@ type Proposals = record {
   proposal_id : text;
   proposal_status : ProposalState;
   approved_votes_list : vec principal;
-  comments : nat64;
-  comments_list : vec text;
+  comments : nat32;
+  comments_list : vec Comment;
   proposal_type : ProposalType;
   required_votes : nat32;
+};
+type ReplyCommentArgs = record {
+  comment : text;
+  proposal_id : text;
+  comment_id : text;
 };
 type Result = variant { Ok : text; Err : text };
 type Result_1 = variant { Ok : vec principal; Err : text };
@@ -130,6 +144,7 @@ service : (DaoInput) -> {
   icrc_transfer : (TokenTransferArgs) -> (Result_3);
   proposal_refresh : () -> (Result);
   proposal_to_add_member_to_group : (text, principal) -> (Result);
+  reply_comment : (ReplyCommentArgs) -> (Result);
   search_proposal : (text) -> (vec Proposals) query;
   unfollow_dao : () -> (Result);
   update_dao_settings : (UpdateDaoSettings) -> (Result);

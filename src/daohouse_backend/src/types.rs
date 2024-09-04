@@ -5,7 +5,7 @@ use ic_stable_structures::{storable::Bound, Storable};
 // use icrc_ledger_types::icrc1::account::Account;
 use serde::{Deserialize, Serialize};
 use serde_bytes::{self, ByteBuf};
-use std::{borrow::Cow, default};
+use std::borrow::Cow;
 
 pub type CanisterId = Principal;
 
@@ -830,6 +830,35 @@ pub struct UpgradeArgs {
     pub accounts_overflow_trim_quantity: Option<u64>,
 }
 
+// ligher proposal instance
+#[derive(CandidType, Serialize, Deserialize, Debug, Clone)]
+pub struct ProposalKeyStore {
+    pub associated_dao_canister_id: Principal,
+    pub proposal_id: String
+}
+
+#[derive(CandidType, Serialize, Deserialize, Debug, Clone)]
+pub struct ProposalValueStore {
+    pub associated_dao_canister_id: Principal,
+    pub proposal_id: String,
+    pub title: String,
+    pub description: String,
+    pub submitted_at: u64,
+    pub expiring_on: u64,
+    pub required_votes: u32,
+    pub created_by: Principal,
+    pub proposal_type: ProposalType,
+    pub action_principal: Principal
+}
+
+#[derive(Debug, Clone, CandidType, Deserialize, Serialize, PartialEq, Eq)]
+pub enum ProposalType {
+    AddMemberProposal,
+    RemoveMemberPrposal,
+    VotingProposal,
+}
+
+
 const MAX_VALUE_SIZE: u32 = 800;
 const MAX_VALUE_SIZE_ANALYTICS: u32 = 300;
 const MAX_VALUE_SIZE_DAO: u32 = 400;
@@ -903,6 +932,17 @@ impl Storable for Analytics {
 }
 
 impl Storable for WasmArgs {
+    fn to_bytes(&self) -> Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    const BOUND: Bound = Bound::Unbounded;
+}
+
+impl Storable for ProposalValueStore {
     fn to_bytes(&self) -> Cow<[u8]> {
         Cow::Owned(Encode!(self).unwrap())
     }

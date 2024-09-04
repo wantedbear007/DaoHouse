@@ -1,6 +1,5 @@
 use candid::{CandidType, Decode, Encode, Principal};
 use ic_stable_structures::{storable::Bound, Storable};
-use icrc_ledger_types::icrc1::account::Subaccount;
 // use serde::Deserialize;
 use serde::{Deserialize, Serialize};
 use std::borrow::Cow;

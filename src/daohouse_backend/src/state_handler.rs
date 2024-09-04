@@ -1,6 +1,8 @@
 // use std::collections::HashMap;
 use crate::types::{PostInfo, UserProfile};
-use crate::{Analytics, CanisterData, DaoDetails, Memory, WasmArgs};
+use crate::{
+    Analytics, CanisterData, DaoDetails, Memory, ProposalValueStore, WasmArgs,
+};
 use candid::Principal;
 use ic_stable_structures::StableBTreeMap;
 // use std::collections::BTreeMap;
@@ -17,6 +19,7 @@ pub struct State {
     pub wasm_module: StableBTreeMap<u64, WasmArgs, Memory>,
 
     // payment_recipient: Option<Principal>,
+    pub proposal_store: StableBTreeMap<u32, ProposalValueStore, Memory>,
 
     pub ledger_wasm: Vec<u8>,
 
@@ -34,6 +37,7 @@ impl State {
             // payment_recipient: None,
             ledger_wasm: vec![],
             canister_data: init_canister_data(), // ..Default::default()
+            proposal_store: init_proposal_state(),
         }
     }
 
@@ -78,6 +82,10 @@ fn init_wasm_module() -> StableBTreeMap<u64, WasmArgs, Memory> {
 
 fn init_canister_data() -> StableBTreeMap<u8, CanisterData, Memory> {
     StableBTreeMap::init(crate::memory::get_canister_data_memory())
+}
+
+fn init_proposal_state() -> StableBTreeMap<u32, ProposalValueStore, Memory> {
+    StableBTreeMap::init(crate::memory::get_proposal_memory())
 }
 
 // fn ledger_wasm_module() ->
