@@ -465,7 +465,13 @@ fn get_caller() -> Principal {
 
 // ledger handlers
 async fn transfer(tokens: u64, user_principal: Principal) -> Result<BlockIndex, String> {
-    let payment_recipient = with_state(|state| state.borrow_mut().get_payment_recipient());
+    // let payment_recipient = with_state(|state| state.borrow_mut().get_payment_recipient());
+    let canister_meta_data = with_state(|state| state.canister_data.get(&0));
+
+    let payment_recipient = match canister_meta_data {
+        Some(val) => val.paymeny_recipient,
+        None => return Err(String::from("Canister Meta data not found.")),
+    };
 
     let transfer_args = TransferFromArgs {
         amount: tokens.into(),
@@ -553,7 +559,6 @@ fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
         String::from("http://localhost:3001"),
         String::from("http://localhost:3002"),
         String::from("http://localhost:3000"),
-
         String::from("https://nfid.one"),
         String::from("https://dev.nfid.one"),
         String::from("https://wkgia-lyaaa-aaaag-qkgya-cai.icp0.io"), // frontend canister id

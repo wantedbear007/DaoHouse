@@ -2,7 +2,7 @@ use crate::functions::{
     create_ledger, create_new_canister, deposit_cycles_in_canister, install_code_in_canister,
 };
 use crate::{
-    call_inter_canister, guards::*, Account, ArchiveOptions, CanisterIDs, CanisterSettings,
+    call_inter_canister, guards::*, Account, ArchiveOptions, CanisterSettings,
     DaoCanisterInput, FeatureFlags, ICRC1LedgerInitArgs, InitArgs, LedgerArg, LedgerCanisterId,
 };
 use candid::encode_one;
@@ -32,7 +32,7 @@ pub async fn create_dao_canister(dao_detail: crate::DaoInput) -> Result<Principa
     let principal_id = ic_cdk::api::caller();
     let user_profile_detail = with_state(|state| state.user_profile.get(&principal_id).clone());
 
-    let mut user_profile_detail = match user_profile_detail {
+    let _user_profile_detail = match user_profile_detail {
         Some(data) => data,
         None => panic!("User profile doesn't exist !"),
     };

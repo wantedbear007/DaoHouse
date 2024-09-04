@@ -12,8 +12,8 @@ use crate::types::{
 
 use crate::types::{DaoInput, Profileinput, UserProfile};
 use crate::{
-    guards::*, Account, ArchiveOptions, CanisterIDs, CanisterSettings, DaoCanisterInput,
-    FeatureFlags, ICRC1LedgerInitArgs, InitArgs, LedgerArg, LedgerCanisterId,
+    guards::*, Account, ArchiveOptions, CanisterData, CanisterSettings,
+    DaoCanisterInput, FeatureFlags, ICRC1LedgerInitArgs, InitArgs, LedgerArg, LedgerCanisterId,
 };
 use crate::{routes, with_state, DaoDetails, DaoResponse, ImageData};
 use candid::{arc, encode_one, Encode, Nat, Principal};
@@ -615,8 +615,12 @@ pub async fn create_ledger(
 
 // TODO REMOVE THIS
 #[query]
-fn get_canister_ids() -> Option<CanisterIDs> {
-    with_state(|state| state.canister_data.clone())
+fn get_canister_meta_data() -> Result<CanisterData, String> {
+    with_state(|state| match state.canister_data.get(&0) {
+        Some(val) => Ok(val),
+        None => return Err(String::from("Data not found")),
+    })
+    // with_state(|state| state.canister_data)
 }
 
 // TODO delete canister

@@ -9,16 +9,15 @@ use state_handler::State;
 mod memory;
 use candid::Nat;
 use candid::Principal;
-use memory::Memory;
 pub use functions::*;
+use memory::Memory;
 
 pub mod utils;
 // mod user_route;
 // mod post_route;
 
-pub mod testing;
-use crate::api::call::{call, call_with_payment128, CallResult};
-
+// pub mod testing;
+// use crate::api::call::{call, call_with_payment128, CallResult};
 
 use types::*;
 
@@ -33,32 +32,63 @@ pub fn with_state<R>(f: impl FnOnce(&mut State) -> R) -> R {
 #[init]
 async fn init(args: InitialArgs) {
     ic_cdk::println!("values are {:?}", args.payment_recipient.to_string());
+    ic_cdk::println!("values are: {:?}", args);
 
     let analytics = Analytics::default();
 
     with_state(|state| {
         // state.borrow_mut().set_payment_recipient(Principal::from_text("aewmz-wl3z4-dzfeh-7j2ub-ah46w-iltzd-xt77x-v7got-zrvqk-ybk22-xae").expect("")); // adding payment recipient id
 
-        state
-            .borrow_mut()
-            .set_payment_recipient(args.payment_recipient); // adding payment recipient id
+        // state
+        //     .borrow_mut()
+        //     .set_payment_recipient(args.payment_recipient); // adding payment recipient id
 
-
-        // uploading canister ids
-        if let Some(_) = state.canister_data {
-            ic_cdk::println!("Canister ids are present");
-        } else {
-            state.set_canister_ids(CanisterIDs {
-                dao_canister: args.dao_canister_id,
-                ic_asset_canister: args.ic_asset_canister_id,
-            });
-        }
-
-        // storing canister id
-        // state.canister_data = CanisterIDs {
+        // state.borrow_mut().set_canister_ids(CanisterIDs {
         //     dao_canister: args.dao_canister_id,
         //     ic_asset_canister: args.ic_asset_canister_id,
-        // };
+        // });
+
+        // state.canister_data = CanisterIDs {
+        //         dao_canister: args.dao_canister_id,
+        //         ic_asset_canister: args.ic_asset_canister_id,
+        //     };
+
+        // state.set_canister_ids(CanisterIDs {
+        //         dao_canister: args.dao_canister_id,
+        //         ic_asset_canister: args.ic_asset_canister_id,
+        //     });
+
+        // uploading canister ids
+        // if let Some(_) = state.canister_data {
+        //     ic_cdk::println!("Canister ids are present");
+        // } else {
+        //     state.set_canister_ids(CanisterIDs {
+        //         dao_canister: args.dao_canister_id,
+        //         ic_asset_canister: args.ic_asset_canister_id,
+        //     });
+        // }
+
+        if let Some(_) = state.canister_data.get(&0) {
+            ic_cdk::println!("Analytics already available.");
+        } else {
+            state.canister_data.insert(
+                0,
+                CanisterData {
+                    ic_asset_canister: args.ic_asset_canister_id,
+                    dao_canister: args.dao_canister_id,
+                    paymeny_recipient: args.payment_recipient,
+                },
+            );
+        }
+        // state.canister_data.insert(
+        //     0,
+        //     CanisterData {
+        //         ic_asset_canister: args.ic_asset_canister_id,
+        //         dao_canister: args.dao_canister_id,
+        //         paymeny_recipient: args.payment_recipient,
+        //     },
+        // );
+
         // uploading analytics
         if let Some(_) = state.analytics_content.get(&0) {
             ic_cdk::println!("Analytics already available.");

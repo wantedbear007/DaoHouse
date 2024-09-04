@@ -602,9 +602,6 @@ pub struct ICRC1LedgerInitArgs {
     pub archive_options: ArchiveOptions,
 }
 
-
-
-
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
 pub struct DaoInput {
     pub dao_name: String,
@@ -647,7 +644,7 @@ pub struct DaoCanisterInput {
     pub image_id: String,
     pub members_permissions: Vec<String>,
     pub dao_groups: Vec<DaoGroup>,
-    pub tokens_required_to_vote: u32
+    pub tokens_required_to_vote: u32,
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
@@ -657,7 +654,7 @@ pub struct DaoDetails {
     // pub image_id: String,
     pub dao_desc: String,
     pub dao_canister_id: Principal,
-    pub dao_associated_ledger: Principal
+    pub dao_associated_ledger: Principal,
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
@@ -724,7 +721,7 @@ pub struct ReplyCommentData {
 
 #[derive(CandidType, Serialize, Deserialize, Clone)]
 pub struct LedgerCanisterId {
-    pub id: Principal
+    pub id: Principal,
 }
 
 // dao response
@@ -766,9 +763,8 @@ pub struct WasmArgs {
 pub struct InitialArgs {
     pub payment_recipient: Principal, // payment recipient principal address
     pub ic_asset_canister_id: Principal,
-    pub dao_canister_id: Principal
+    pub dao_canister_id: Principal,
 }
-
 
 // LEDGER PARAMS
 #[derive(CandidType, Serialize, Deserialize, Debug)]
@@ -784,12 +780,11 @@ pub struct Account {
 }
 
 #[derive(CandidType, Serialize, Deserialize, Clone, Copy)]
-pub struct CanisterIDs {
+pub struct CanisterData {
     pub ic_asset_canister: Principal,
-    pub dao_canister: Principal
+    pub dao_canister: Principal,
+    pub paymeny_recipient: Principal
 }
-
-
 
 #[derive(CandidType, Serialize, Deserialize, Debug)]
 pub struct InitArgs {
@@ -808,19 +803,16 @@ pub struct InitArgs {
     pub archive_options: ArchiveOptions,
 }
 
-
 #[derive(CandidType, Serialize, Deserialize, Debug)]
 pub enum ChangeFeeCollector {
     Unset,
     SetTo(Account),
 }
 
-
 #[derive(Clone, Debug, CandidType, Deserialize)]
 pub struct Icrc28TrustedOriginsResponse {
-    pub trusted_origins: Vec<String>
+    pub trusted_origins: Vec<String>,
 }
-
 
 #[derive(CandidType, Serialize, Deserialize, Debug)]
 pub struct UpgradeArgs {
@@ -834,7 +826,6 @@ pub struct UpgradeArgs {
     pub maximum_number_of_accounts: Option<u64>,
     pub accounts_overflow_trim_quantity: Option<u64>,
 }
-
 
 const MAX_VALUE_SIZE: u32 = 800;
 const MAX_VALUE_SIZE_ANALYTICS: u32 = 300;
@@ -919,8 +910,7 @@ impl Storable for WasmArgs {
     const BOUND: Bound = Bound::Unbounded;
 }
 
-
-impl Storable for CanisterIDs {
+impl Storable for CanisterData {
     fn to_bytes(&self) -> Cow<[u8]> {
         Cow::Owned(Encode!(self).unwrap())
     }

@@ -40,6 +40,6 @@ pub fn get_ledger_wasm_memory() -> Memory {
     MEMORY_MANAGER.with(|m| m.borrow().get(LEDGER_WASM))
 }
 
-// pub fn get_canister_data_memory() -> Memory {
-//     MEMORY_MANAGER.with(|m| m.borrow().get(CANISTER_IDS))
-// }
+pub fn get_canister_data_memory() -> Memory {
+    MEMORY_MANAGER.with(|m| m.borrow().get(CANISTER_IDS))
+}
