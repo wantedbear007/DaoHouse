@@ -222,6 +222,20 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
     setGroupNameInputIndex(index);
   };
 
+  const handleGroupNameInput = (groupName, event) => {
+    // if (event.key === "Enter") {
+      setList(prevList =>
+        prevList.map(item => {
+          if (item.index === groupNameInputIndex) {
+            return { ...item, name: groupName };
+          }
+          return item;
+        })
+      );
+      setGroupNameInputIndex(null);
+    // }
+  };
+
   const handleUpdateGroupName = () => {
     setList(prevList =>
       prevList.map(item => {
@@ -232,7 +246,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
       })
     );
     setGroupNameInputIndex(null);
-    setUpdatedGroupName("");
+    setUpdatedGroupName(""); // Clear the input state
   };
   
 
@@ -380,7 +394,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
 
           {/* Groups */}
           <div className="DAO__Step3__container w-full flex flex-col gap-2">
-            {list.slice(1).map((item, index) => (
+          {list.filter(group => group.name !== "Council").map((item, index) => (
               <div
                 key={index}
                 className={`flex flex-col bg-white rounded-lg ${addMemberIndex === item.index ? "" : "cursor-pointer transition"}`}
