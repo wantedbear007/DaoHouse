@@ -40,14 +40,14 @@ const PaymentModal = ({ open, onClose, onPay, loading, data }) => {
             <Button
               onClick={onClose}
               variant="outlined"
-              class="text-black bg-white hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-16 py-2.5 me-2 mb-2 border border-gray-500 dark:bg-white dark:hover:bg-gray-200 dark:focus:ring-gray-300 dark:text-black"
+              class="text-black bg-white hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-10 py-2.5 me-2 mb-2 border border-gray-500 dark:bg-white dark:hover:bg-gray-200 dark:focus:ring-gray-300 dark:text-black"
             >
               Nah, Cancel
             </Button>
             <button
               onClick={onPay}
               variant="contained"
-              class="text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-16 py-2.5 me-2 mb-2 border border-gray-500 dark:bg-black dark:hover:bg-gray-800 dark:focus:ring-gray-700 dark:text-white"
+              class="text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-12 py-2.5 me-2 mb-2 border border-gray-500 dark:bg-black dark:hover:bg-gray-800 dark:focus:ring-gray-700 dark:text-white"
               disabled={loading}
             >
               {loading ? <CircularProgress size={30} color="inherit" /> : "Confirm"}

@@ -77,6 +77,3 @@ function ViewModal({ open, onClose, users = [] }) {
 }
 
 export default ViewModal;
-
-
-
