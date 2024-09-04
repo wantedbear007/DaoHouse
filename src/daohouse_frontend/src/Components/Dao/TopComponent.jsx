@@ -1,6 +1,6 @@
 import React from 'react'
 // import daobg from "../../../assets/daobg.png";
-import daobg from "../../../assets/daoBg.png";
+import daobg1 from "../../../assets/daobg1.png";
 import Container from '../Container/Container';
 
 const TopComponent = ({ showButtons, showAll, setShowAll }) => {
@@ -9,7 +9,7 @@ const TopComponent = ({ showButtons, showAll, setShowAll }) => {
     return (
         <div
             style={{
-                backgroundImage: `url("${daobg}")`,
+                backgroundImage: `url("${daobg1}")`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
