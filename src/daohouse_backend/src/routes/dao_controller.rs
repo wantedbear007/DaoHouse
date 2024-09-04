@@ -65,8 +65,16 @@ pub async fn create_dao_canister(dao_detail: crate::DaoInput) -> Result<Principa
     .is_err();
 
     if image_create_res {
-        return Err("Image upload failed".to_string());
+        return Err(String::from("Failed to upload image !."));
     }
+
+    let canister_id = with_state(|state| state.canister_data.get(&0));
+
+    let asset_canister_id = match canister_id {
+        Some(val) => val.ic_asset_canister,
+        None => return Err(String::from("Canister Meta data not found.")),
+    };
+
 
     let update_dao_detail = crate::DaoCanisterInput {
         dao_name: dao_detail.dao_name.clone(),
@@ -83,6 +91,9 @@ pub async fn create_dao_canister(dao_detail: crate::DaoInput) -> Result<Principa
         members_permissions: dao_detail.members_permissions,
         dao_groups: dao_detail.dao_groups,
         tokens_required_to_vote: dao_detail.tokens_required_to_vote,
+        image_canister: asset_canister_id,
+        token_symbol: dao_detail.token_symbol,
+        token_supply: dao_detail.token_supply
     };
 
     // encoding params that is to be passed to new canister
@@ -201,7 +212,7 @@ pub async fn create_dao_canister(dao_detail: crate::DaoInput) -> Result<Principa
 pub async fn create_new_ledger_canister(dao_detail: crate::DaoInput) -> Result<Principal, String> {
     create_ledger(
         // canister_id_principal.to_string().clone(), // TODO : add dao canister as controller
-        Nat::from(dao_detail.total_tokens),
+        Nat::from(dao_detail.token_supply),
         dao_detail.token_name,
         dao_detail.token_symbol,
         dao_detail.members,

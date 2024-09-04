@@ -16,7 +16,7 @@ for ((i = 1; i <= COUNT; i++)); do
       link_of_document = "https://example.com/charter.pdf";
       cool_down_period = 7;
       token_name = "DRAGONBALLZ";
-      total_tokens = 1000;
+      token_supply = 1000;
       token_symbol = "GOKU";
       members = vec{
         principal "m2zqz-pr5r2-ozayk-w5trf-mt6mw-7vuys-mitrw-4qdpb-dm5p7-77ey6-fae";
@@ -28,7 +28,7 @@ for ((i = 1; i <= COUNT; i++)); do
       linksandsocials = vec{
         "https://twitter.com/sampledao";
       };
-      required_votes = 100;
+    required_votes = 100;
       image_id = "1";
       image_content = vec {10};
       image_title = "sample.jpg";

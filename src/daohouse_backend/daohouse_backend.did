@@ -41,10 +41,10 @@ type DaoInput = record {
   members_permissions : vec text;
   link_of_document : text;
   image_content_type : text;
-  total_tokens : nat32;
   cool_down_period : nat32;
   token_name : text;
   purpose : text;
+  token_supply : nat32;
   required_votes : nat32;
 };
 type GetAllPostsResponse = record { size : nat32; posts : vec PostInfo };

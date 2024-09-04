@@ -109,6 +109,7 @@ pub struct Dao {
     pub required_votes: u32,
     pub groups_count: u64,
     // pub group_name: Vec<String>,
+    pub image_canister: Principal,
     pub image_id: String,
     pub members: Vec<Principal>,
     pub members_count: u32,
@@ -143,12 +144,13 @@ pub struct DaoInput {
     pub linksandsocials: Vec<String>,
     pub required_votes: u32,
     pub dao_groups: Vec<DaoGroup>,
+    pub image_canister: Principal,
     pub image_id: String,
     pub followers: Vec<Principal>,
     pub members_permissions: Vec<String>,
     pub tokens_required_to_vote: u32,
     pub token_symbol: String,
-    pub token_supply: u32
+    pub token_supply: u32,
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]

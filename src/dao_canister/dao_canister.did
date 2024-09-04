@@ -1,5 +1,6 @@
 type AccountBalance = record { id : principal; staked : nat32 };
 type Dao = record {
+  image_canister : principal;
   members : vec principal;
   dao_id : principal;
   proposals_count : nat32;
@@ -29,6 +30,7 @@ type DaoGroup = record {
   group_permissions : vec text;
 };
 type DaoInput = record {
+  image_canister : principal;
   members : vec principal;
   token_symbol : text;
   linksandsocials : vec text;

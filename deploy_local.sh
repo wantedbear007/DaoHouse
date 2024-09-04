@@ -127,6 +127,7 @@ dfx deploy dao_canister --argument '(record {
     followers = vec {
         principal "aaaaa-aa";
     };
+    image_canister = principal "aaaaa-aa";
     members_permissions = vec {
         "mai hi permission hai";
     };

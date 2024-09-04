@@ -616,7 +616,7 @@ pub struct DaoInput {
     pub dao_groups: Vec<DaoGroup>,
     pub token_name: String,
     pub token_symbol: String,
-    pub total_tokens: u32,
+    pub token_supply: u32,
     pub tokens_required_to_vote: u32,
     // pub followers: Vec<Principal>,
 
@@ -640,11 +640,14 @@ pub struct DaoCanisterInput {
     // pub tokenissuer: String,
     pub linksandsocials: Vec<String>,
     pub required_votes: u32,
+    pub token_symbol: String,
+    pub token_supply: u32,
     pub followers: Vec<Principal>,
     pub image_id: String,
     pub members_permissions: Vec<String>,
     pub dao_groups: Vec<DaoGroup>,
     pub tokens_required_to_vote: u32,
+    pub image_canister: Principal,
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]

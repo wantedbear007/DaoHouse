@@ -35,6 +35,7 @@ async fn init(dao_input: DaoInput) {
         dao_name: dao_input.dao_name,
         purpose: dao_input.purpose,
         daotype: dao_input.daotype,
+        image_canister: dao_input.image_canister,
         link_of_document: dao_input.link_of_document,
         cool_down_period: dao_input.cool_down_period,
         // tokenissuer: dao_input.tokenissuer,

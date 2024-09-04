@@ -43,6 +43,7 @@ impl State {
                 tokens_required_to_vote: 0,
                 total_tokens: 0,
                 token_symbol: String::new(),
+                image_canister: Principal::anonymous()
             },
 
             // permision: Votingandpermissions {
