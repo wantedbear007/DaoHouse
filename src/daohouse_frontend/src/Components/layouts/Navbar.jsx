@@ -325,9 +325,17 @@ const Navbar = () => {
 
   return (
     <nav>
-      <div className="bg-bg-color shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50">
+      <div className="bg-white shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50">
         <Container>
           <div className="tablet:px-20 small_phone:px-8 px-4 small_phone:py-5 py-3 flex justify-between items-center w-full">
+            {/* Logo */}
+            <Link className="w-[33%]" to="/">
+              <img
+                src={logo}
+                alt="DAO House"
+                className="mobile:h-10 small_phone:w-30 w-25 h-8 lg:ml-6"
+              />
+            </Link>
             {/* Navigation menu */}
             <div className="big_phone:flex items-center tablet:space-x-8 space-x-4 hidden lg:w-[33%]">
               {menuItems.map((item, index) => (
@@ -348,14 +356,7 @@ const Navbar = () => {
                 </div>
               ))}
             </div>
-            {/* Logo */}
-            <Link className="w-[33%]" to="/">
-              <img
-                src={logo}
-                alt="DAO House"
-                className="mobile:h-10 small_phone:w-30 w-25 h-8 lg:ml-6"
-              />
-            </Link>
+            
             {/* User profile or login */}
             <div>
               {!isAuthenticated ? (
@@ -364,9 +365,9 @@ const Navbar = () => {
                  
                   <button
                     onClick={handleLoginModalOpen}
-                    className="mobile:px-8 px-4 py-2 rounded-[27.5px] bg-[#FFFFFF] big_phone:text-base small_phone:text-sm text-xs"
+                    className="mobile:px-8 px-4 py-2 rounded-[27.5px] bg-[#0E3746] shadow-md text-white big_phone:text-base small_phone:text-sm text-xs"
                   >
-                    {isModalOpen && isLoading ? "Connecting" : "Connect"}
+                    {isModalOpen && isLoading ? "Connecting" : "Connect Wallet"}
                   </button>
                   
                 </div>
@@ -382,7 +383,7 @@ const Navbar = () => {
                   </button> */}
                   {/* Updated flex container to align profile image and username */}
                   <div
-                    className="flex items-center space-x-0.9 bg-white rounded-full px-4 py-2 cursor-pointer shadow-lg"
+                    className="flex items-center space-x-0.9 bg-white border border-[#0F3746] rounded-full px-4 py-2 cursor-pointer shadow-lg"
                     onClick={() => setDropdownVisible(!dropdownVisible)}
                   >
                  

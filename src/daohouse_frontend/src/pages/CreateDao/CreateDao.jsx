@@ -38,6 +38,7 @@ const CreateDao = () => {
     if (!isAuthenticated) {
       setShowLoginModal(true);
     }
+    setShowLoginModal(false)
   }, [isAuthenticated]);
 
   const handleLogin = async () => {
@@ -150,7 +151,7 @@ const CreateDao = () => {
       tokens_required_to_vote: step1.tokensRequiredToVote || 1,
       linksandsocials: [],
       required_votes: 10,
-      image_content: step6.image_content || '',
+      image_content: step6.image_content ? step6.image_content : [],
       image_title: step6.image_title || '',
       image_content_type: step6.image_content_type || '',
       image_id: '12',
@@ -161,8 +162,12 @@ const CreateDao = () => {
 
     try {
       const response = await backendActor.create_dao(process.env.CANISTER_ID_IC_ASSET_HANDLER, daoPayload);
+      console.log("response",response);
+      
       if (response.Err) {
         toast.error(`${response.Err}`);
+        toast.error(`Failed to create Dao`);
+        setLoadingNext(false)
       } else {
         setLoadingNext(false);
         toast.success("DAO created successfully");

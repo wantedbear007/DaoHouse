@@ -115,7 +115,7 @@ export default function Card({ proposal }) {
   return (
         <div className="bg-white rounded-xl shadow-md flex flex-col md:flex-row">
       {/* Left Section */}
-      <div className="w-full md:w-1/4 flex flex-col items-center bg-[#0E3746] px-4 py-8 md:py-12 rounded-t-xl md:rounded-l-lg md:rounded-t-none">
+      <div className="w-full md:w-1/4 flex flex-col items-center bg-[#0E3746] px-4 py-8 md:py-12 rounded-xl md:rounded-lg md:rounded-r-none">
         <img src={avatar} alt="user avatar" className="w-16 h-16 rounded-full mb-4" />
         <h4 className="text-white text-xl font-semibold">{principalString}</h4>
         <div>
