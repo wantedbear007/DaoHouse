@@ -164,7 +164,7 @@ chmod 777 ./assets_upload.sh
 ./assets_upload.sh
 
 
-dfx deploy proposal_canister
+# dfx deploy proposal_canister
 
 
 

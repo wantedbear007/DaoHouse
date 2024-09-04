@@ -848,7 +848,10 @@ pub struct ProposalValueStore {
     pub required_votes: u32,
     pub created_by: Principal,
     pub proposal_type: ProposalType,
-    pub action_principal: Principal
+    pub action_principal: Principal,
+    // pub total_tokens: u32,
+    pub dao_members: Vec<Principal>
+    // pub votes: 
 }
 
 #[derive(Debug, Clone, CandidType, Deserialize, Serialize, PartialEq, Eq)]

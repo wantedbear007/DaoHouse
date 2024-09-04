@@ -1,7 +1,10 @@
 // Proposal routes
 
 use crate::{
-    routes::{add_proposal_controller, delete_proposal_controller, get_proposal_controller},
+    routes::{
+        add_proposal_controller, delete_proposal_controller, get_latest_proposal_controller,
+        get_proposal_controller,
+    },
     with_state, ProposalValueStore,
 };
 
@@ -26,16 +29,21 @@ pub fn add_proposal(args: crate::ProposalValueStore) -> Result<String, String> {
             None => return Err(String::from("Error in retrieving app analytics.")),
         }
     })
-
-    // Ok("()".to_string())
 }
 
 #[ic_cdk::query]
-pub fn get_proposal(args: crate::Pagination) -> Vec<ProposalValueStore> {
+pub fn get_proposals(args: crate::Pagination) -> Vec<ProposalValueStore> {
     with_state(|state| get_proposal_controller(state, args))
+}
+
+// get latest proposals
+#[ic_cdk::query]
+pub fn get_latest_proposals(args: crate::Pagination) -> Vec<ProposalValueStore> {
+    with_state(|state| get_latest_proposal_controller(state, args))
 }
 
 #[ic_cdk::update]
 pub fn delete_proposal(proposal_id: String) -> Result<String, String> {
     with_state(|state| delete_proposal_controller(state, &proposal_id))
 }
+

@@ -9,12 +9,6 @@ type CanisterData = record {
   ic_asset_canister : principal;
   dao_canister : principal;
 };
-type Comment = record {
-  author_principal : principal;
-  replies : vec text;
-  comment_text : text;
-  comment_id : opt text;
-};
 type DaoDetails = record {
   dao_associated_ledger : principal;
   dao_desc : text;
@@ -47,7 +41,6 @@ type DaoInput = record {
   token_supply : nat32;
   required_votes : nat32;
 };
-type GetAllPostsResponse = record { size : nat32; posts : vec PostInfo };
 type Icrc28TrustedOriginsResponse = record { trusted_origins : vec text };
 type ImageData = record { content : blob; name : text; content_type : text };
 type InitialArgs = record {
@@ -56,28 +49,6 @@ type InitialArgs = record {
   payment_recipient : principal;
 };
 type Pagination = record { end : nat32; start : nat32 };
-type PostInfo = record {
-  post_img : text;
-  post_id : text;
-  username : text;
-  comment_count : nat32;
-  like_count : nat32;
-  like_id_list : vec principal;
-  post_description : text;
-  is_liked : nat32;
-  user_image_id : text;
-  principal_id : principal;
-  comment_list : vec Comment;
-  post_created_at : nat64;
-};
-type PostInput = record {
-  image_title : text;
-  username : text;
-  image_content : blob;
-  post_description : text;
-  user_image_id : text;
-  image_content_type : text;
-};
 type Profileinput = record {
   image_title : text;
   username : text;
@@ -108,22 +79,15 @@ type ProposalValueStore = record {
   submitted_at : nat64;
   required_votes : nat32;
   associated_dao_canister_id : principal;
-};
-type ReplyCommentData = record {
-  post_id : text;
-  comment : text;
-  comment_id : text;
+  dao_members : vec principal;
 };
 type Result = variant { Ok : text; Err : text };
 type Result_1 = variant { Ok; Err : text };
 type Result_2 = variant { Ok : Analytics; Err : text };
 type Result_3 = variant { Ok : CanisterData; Err : text };
-type Result_4 = variant { Ok : vec principal; Err : text };
-type Result_5 = variant { Ok : GetAllPostsResponse; Err : text };
-type Result_6 = variant { Ok : PostInfo; Err : text };
-type Result_7 = variant { Ok : UserProfile; Err : text };
-type Result_8 = variant { Ok : blob; Err : text };
-type Result_9 = variant { Ok : nat; Err : text };
+type Result_4 = variant { Ok : UserProfile; Err : text };
+type Result_5 = variant { Ok : blob; Err : text };
+type Result_6 = variant { Ok : nat; Err : text };
 type UserProfile = record {
   post_id : vec text;
   username : text;
@@ -146,36 +110,25 @@ type UserProfile = record {
 service : (InitialArgs) -> {
   add_proposal : (ProposalValueStore) -> (Result);
   check_user_existance : () -> (Result) query;
-  comment_post : (text, text) -> (Result);
   create_dao : (DaoInput) -> (Result);
-  create_new_post : (PostInput) -> (Result);
   create_profile : () -> (Result_1);
   delete_profile : () -> (Result_1);
   delete_proposal : (text) -> (Result);
-  follow_user : (principal) -> (Result);
   get_all_dao : (Pagination) -> (vec DaoDetails) query;
-  get_all_posts : (Pagination) -> (GetAllPostsResponse) query;
   get_analytics : () -> (Result_2) query;
   get_caller : () -> (principal) query;
   get_canister_meta_data : () -> (Result_3) query;
   get_cycles : () -> (nat64) query;
   get_dao_details : (text) -> (text);
-  get_latest_post : (Pagination) -> (GetAllPostsResponse) query;
-  get_my_follower : () -> (Result_4) query;
-  get_my_following : () -> (Result_4) query;
-  get_my_post : (Pagination) -> (Result_5) query;
-  get_post_byid : (text) -> (Result_6) query;
-  get_profile_by_id : (principal) -> (Result_7);
-  get_proposal : (Pagination) -> (vec ProposalValueStore) query;
-  get_user_profile : () -> (Result_7) query;
-  get_wasm : () -> (Result_8) query;
+  get_latest_proposals : (Pagination) -> (vec ProposalValueStore) query;
+  get_profile_by_id : (principal) -> (Result_4);
+  get_proposals : (Pagination) -> (vec ProposalValueStore) query;
+  get_user_profile : () -> (Result_4) query;
+  get_wasm : () -> (Result_5) query;
   icrc28_trusted_origins : () -> (Icrc28TrustedOriginsResponse);
   is_user_registered : (principal) -> (bool);
-  like_post : (text) -> (Result);
-  make_payment : (nat64, principal) -> (Result_9);
-  reply_comment : (ReplyCommentData) -> (Result);
+  make_payment : (nat64, principal) -> (Result_6);
   search_dao : (text) -> (vec DaoDetails) query;
-  unfollow_user : (principal) -> (Result);
   update_profile : (Profileinput) -> (Result_1);
   update_proposal_count : () -> (text);
   upload_image : (ImageData) -> (Result);

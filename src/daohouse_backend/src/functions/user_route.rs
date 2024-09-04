@@ -95,23 +95,23 @@ async fn create_profile(// asset_handler_canister_id: String,
     })
 }
 
-#[query(guard = prevent_anonymous)]
-fn get_my_follower() -> Result<Vec<Principal>, String> {
-    // let principal_id = api::caller();
+// #[query(guard = prevent_anonymous)]
+// fn get_my_follower() -> Result<Vec<Principal>, String> {
+//     // let principal_id = api::caller();
 
-    let followers =
-        with_state(|state| state.user_profile.get(&api::caller()).clone()).expect("User not found");
-    Ok(followers.followers_list)
-}
+//     let followers =
+//         with_state(|state| state.user_profile.get(&api::caller()).clone()).expect("User not found");
+//     Ok(followers.followers_list)
+// }
 
-#[query(guard = prevent_anonymous)]
-fn get_my_following() -> Result<Vec<Principal>, String> {
-    // let principal_id = api::caller();
+// #[query(guard = prevent_anonymous)]
+// fn get_my_following() -> Result<Vec<Principal>, String> {
+//     // let principal_id = api::caller();
 
-    let following: UserProfile =
-        with_state(|state| state.user_profile.get(&api::caller()).clone()).expect("User not found");
-    Ok(following.followings_list)
-}
+//     let following: UserProfile =
+//         with_state(|state| state.user_profile.get(&api::caller()).clone()).expect("User not found");
+//     Ok(following.followings_list)
+// }
 
 #[query(guard = prevent_anonymous)]
 async fn get_user_profile() -> Result<UserProfile, String> {
@@ -197,47 +197,47 @@ async fn delete_profile() -> Result<(), String> {
     with_state(|state| routes::delete_profile(state))
 }
 
-#[update(guard = prevent_anonymous)]
-fn follow_user(user_id: Principal) -> Result<String, String> {
-    let my_principal_id = api::caller();
+// #[update(guard = prevent_anonymous)]
+// fn follow_user(user_id: Principal) -> Result<String, String> {
+//     let my_principal_id = api::caller();
 
-    with_state(|state| {
-        let my_profile_response = match &mut state.user_profile.get(&api::caller()) {
-            Some(profile) => {
-                if !profile.followings_list.contains(&user_id) {
-                    profile.followings_list.push(user_id);
-                    profile.followings_count += 1;
-                    state
-                        .user_profile
-                        .insert(my_principal_id, profile.to_owned());
+//     with_state(|state| {
+//         let my_profile_response = match &mut state.user_profile.get(&api::caller()) {
+//             Some(profile) => {
+//                 if !profile.followings_list.contains(&user_id) {
+//                     profile.followings_list.push(user_id);
+//                     profile.followings_count += 1;
+//                     state
+//                         .user_profile
+//                         .insert(my_principal_id, profile.to_owned());
 
-                    Ok(())
-                } else {
-                    Err(String::from("You are already following the user"))
-                }
-            }
-            None => Err(String::from("user does not exist")),
-        };
+//                     Ok(())
+//                 } else {
+//                     Err(String::from("You are already following the user"))
+//                 }
+//             }
+//             None => Err(String::from("user does not exist")),
+//         };
 
-        let other_person_response = match &mut state.user_profile.get(&user_id) {
-            Some(profile) => {
-                profile.followers_list.push(my_principal_id);
-                profile.followers_count += 1;
-                state.user_profile.insert(user_id, profile.to_owned());
+//         let other_person_response = match &mut state.user_profile.get(&user_id) {
+//             Some(profile) => {
+//                 profile.followers_list.push(my_principal_id);
+//                 profile.followers_count += 1;
+//                 state.user_profile.insert(user_id, profile.to_owned());
 
-                Ok(())
-            }
-            None => Err(String::from("Operation failed")),
-        };
+//                 Ok(())
+//             }
+//             None => Err(String::from("Operation failed")),
+//         };
 
-        match (my_profile_response, other_person_response) {
-            (Ok(()), Ok(())) => Ok(String::from("Successfully followed")),
-            (Err(e), _) | (_, Err(e)) => Err(e),
-        }
-    })
+//         match (my_profile_response, other_person_response) {
+//             (Ok(()), Ok(())) => Ok(String::from("Successfully followed")),
+//             (Err(e), _) | (_, Err(e)) => Err(e),
+//         }
+//     })
 
-    // Ok("()".to_string())
-}
+//     // Ok("()".to_string())
+// }
 
 #[update(guard = prevent_anonymous)]
 pub async fn create_dao(dao_detail: DaoInput) -> Result<String, String> {
@@ -481,7 +481,7 @@ fn is_user_registered(id: Principal) -> bool {
     with_state(|state| state.user_profile.contains_key(&id))
 }
 
-#[update(guard = prevent_anonymous)]
+// #[update(guard = prevent_anonymous)]
 // fn unfollow_user(user_principal: Principal) -> Result<String, String> {
 //     let principal_id = api::caller();
 
@@ -497,41 +497,41 @@ fn is_user_registered(id: Principal) -> bool {
 //     })
 // }
 
-fn unfollow_user(user_principal: Principal) -> Result<String, String> {
-    let principal_id = api::caller();
+// fn unfollow_user(user_principal: Principal) -> Result<String, String> {
+//     let principal_id = api::caller();
 
-    with_state(|state| {
-        // Retrieve the caller's profile
-        let mut my_profile = match state.user_profile.get(&principal_id) {
-            Some(profile) => profile.clone(),
-            None => return Err(String::from("User does not exist")),
-        };
+//     with_state(|state| {
+//         // Retrieve the caller's profile
+//         let mut my_profile = match state.user_profile.get(&principal_id) {
+//             Some(profile) => profile.clone(),
+//             None => return Err(String::from("User does not exist")),
+//         };
 
-        if my_profile.followings_list.contains(&user_principal) {
-            my_profile.followings_list.retain(|s| s != &user_principal);
-            my_profile.followings_count -= 1;
-        } else {
-            return Err(String::from("You are not following this user"));
-        }
+//         if my_profile.followings_list.contains(&user_principal) {
+//             my_profile.followings_list.retain(|s| s != &user_principal);
+//             my_profile.followings_count -= 1;
+//         } else {
+//             return Err(String::from("You are not following this user"));
+//         }
 
-        // Update the caller's profile in the state
-        state.user_profile.insert(principal_id, my_profile);
+//         // Update the caller's profile in the state
+//         state.user_profile.insert(principal_id, my_profile);
 
-        // Retrieve the profile of the user being unfollowed
-        let mut other_profile = match state.user_profile.get(&user_principal) {
-            Some(profile) => profile.clone(),
-            None => return Err(String::from("Other user does not exist")),
-        };
+//         // Retrieve the profile of the user being unfollowed
+//         let mut other_profile = match state.user_profile.get(&user_principal) {
+//             Some(profile) => profile.clone(),
+//             None => return Err(String::from("Other user does not exist")),
+//         };
 
-        other_profile.followers_list.retain(|s| s != &principal_id);
-        other_profile.followers_count -= 1;
+//         other_profile.followers_list.retain(|s| s != &principal_id);
+//         other_profile.followers_count -= 1;
 
-        // Update the profile of the user being unfollowed in the state
-        state.user_profile.insert(user_principal, other_profile);
+//         // Update the profile of the user being unfollowed in the state
+//         state.user_profile.insert(user_principal, other_profile);
 
-        Ok(String::from("Successfully unfollowed"))
-    })
-}
+//         Ok(String::from("Successfully unfollowed"))
+//     })
+// }
 
 #[update(guard = prevent_anonymous)]
 fn get_profile_by_id(id: Principal) -> Result<UserProfile, String> {

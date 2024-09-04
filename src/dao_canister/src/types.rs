@@ -25,7 +25,7 @@ pub enum ProposalType {
 pub struct AccountBalance {
     pub id: Principal,
     // pub balance: u32,
-    pub staked: u32
+    pub staked: u32,
 }
 
 #[derive(Clone, CandidType, Deserialize, Serialize)]
@@ -57,7 +57,7 @@ pub struct Proposals {
     pub comments_list: Vec<Comment>,
     pub proposal_type: ProposalType,
     pub share_count: u64,
-    pub principal_of_action: Principal // principal id of user who is to be added, removed, transfered funds
+    pub principal_of_action: Principal, // principal id of user who is to be added, removed, transfered funds
 }
 
 // for proposal comments
@@ -68,7 +68,7 @@ pub struct Comment {
     pub comment_id: String,
     pub replies: Vec<String>,
     pub likes: u16,
-    pub created_at: u64
+    pub created_at: u64,
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
@@ -77,12 +77,12 @@ pub struct ProposalInput {
     pub proposal_description: String,
     // pub required_votes: u32,
     pub proposal_type: ProposalType,
-    pub principal_of_action: Option<Principal> // principal id of user who is to be added, removed, transfered funds
+    pub principal_of_action: Option<Principal>, // principal id of user who is to be added, removed, transfered funds
 
-    // pub proposal_expired_at: u64,
-    // pub proposal_amount:String,
-    // pub proposal_receiver_id:String,
-    // pub created_by: Principal,
+                                                // pub proposal_expired_at: u64,
+                                                // pub proposal_amount:String,
+                                                // pub proposal_receiver_id:String,
+                                                // pub created_by: Principal,
 }
 
 // #[derive(Clone, CandidType, Serialize, Deserialize)]
@@ -106,15 +106,14 @@ pub struct Pagination {
 #[derive(CandidType, Serialize, Deserialize)]
 pub struct CommentLikeArgs {
     pub proposal_id: String,
-    pub comment_id: String    
+    pub comment_id: String,
 }
-
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
 pub struct ReplyCommentArgs {
     pub proposal_id: String,
-    pub comment_id: String ,
-    pub comment: String  
+    pub comment_id: String,
+    pub comment: String,
 }
 
 #[derive(CandidType, Serialize, Deserialize, Clone, Debug)]
@@ -230,7 +229,8 @@ pub struct ProposalInstance {
     pub required_votes: u32,
     pub created_by: Principal,
     pub proposal_type: ProposalType,
-    pub action_principal: Principal
+    pub action_principal: Principal,
+    pub dao_members: Vec<Principal>,
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]

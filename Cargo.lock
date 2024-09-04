@@ -1687,15 +1687,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "proposal_canister"
-version = "0.1.0"
-dependencies = [
- "candid",
- "ic-cdk 0.13.3",
- "ic-cdk-timers 0.7.0",
-]
-
-[[package]]
 name = "psm"
 version = "0.1.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"

@@ -1,7 +1,5 @@
 use candid::{encode_one, Principal};
-use ic_cdk::api::{
-    self,
-};
+use ic_cdk::api::{self};
 
 use crate::{
     CanisterInstallMode, CanisterSettings, CreateCanisterArgument, InstallCodeArgument, LedgerArg,
@@ -82,7 +80,6 @@ pub async fn create_ledger_canister(ledger_args: LedgerArg) -> Result<Principal,
 }
 
 // get recipient
-
 
 // get canister details
 

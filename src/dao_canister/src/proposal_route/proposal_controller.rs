@@ -1,14 +1,15 @@
 use crate::functions::call_inter_canister;
-use crate::{with_state, ProposalInstance, ProposalState, State};
+use crate::{with_state, ProposalInstance, ProposalState};
 
 use crate::types::{ProposalInput, Proposals};
+use candid::Principal;
 use ic_cdk::api;
 use ic_cdk::api::management_canister::main::raw_rand;
 use sha2::{Digest, Sha256};
 
 // to create new canister
 // #[ic_cdk::update(guard=check_members)]
-// TODO add guards 
+// TODO add guards
 #[ic_cdk::update]
 pub async fn create_proposal(
     // state: &mut State,
@@ -23,11 +24,13 @@ pub async fn create_proposal(
 
     let mut proposal_expire_time: u64 = 0;
     let mut required_votes = 0;
+    let mut dao_members: Vec<Principal> = Vec::new();
 
     with_state(|state| {
         proposal_expire_time =
             ic_cdk::api::time() + (state.dao.cool_down_period as u64 * 86_400 * 1_000_000_000);
         required_votes = state.dao.required_votes;
+        dao_members = state.dao.members.clone();
     });
 
     // let proposal_expire_time =
@@ -66,14 +69,16 @@ pub async fn create_proposal(
         required_votes: required_votes,
         submitted_at: ic_cdk::api::time(),
         title: proposal.proposal_title,
+        dao_members,
     };
 
-    call_inter_canister::<ProposalInstance, Result<String, String>>(
+    let _ = call_inter_canister::<ProposalInstance, Result<String, String>>(
         "add_proposal",
         proposal_copy,
         daohouse_backend_id,
     )
-    .await.unwrap();
+    .await
+    .map_err(|err| return format!("Error in inter canister: {}", err));
 
     with_state(|state| {
         let mut updated_dao = state.dao.clone();
