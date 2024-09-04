@@ -152,7 +152,7 @@ const Step1 = ({ setData, setActiveStep, data }) => {
             {/* <span className="text-red-500">*</span> */}
           </label>
           <input
-            type="text"
+            type="number"
             value={inputData.SetUpPeriod}
             onChange={(e) => changePeriod(e.target.value)}
             name="SetUpPeriod"
