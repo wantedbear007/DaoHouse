@@ -19,7 +19,7 @@ pub struct State {
     pub wasm_module: StableBTreeMap<u64, WasmArgs, Memory>,
 
     // payment_recipient: Option<Principal>,
-    pub proposal_store: StableBTreeMap<u32, ProposalValueStore, Memory>,
+    pub proposal_store: StableBTreeMap<String, ProposalValueStore, Memory>,
 
     pub ledger_wasm: Vec<u8>,
 
@@ -84,7 +84,7 @@ fn init_canister_data() -> StableBTreeMap<u8, CanisterData, Memory> {
     StableBTreeMap::init(crate::memory::get_canister_data_memory())
 }
 
-fn init_proposal_state() -> StableBTreeMap<u32, ProposalValueStore, Memory> {
+fn init_proposal_state() -> StableBTreeMap<String, ProposalValueStore, Memory> {
     StableBTreeMap::init(crate::memory::get_proposal_memory())
 }
 

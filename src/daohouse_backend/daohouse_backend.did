@@ -92,6 +92,23 @@ type Profileinput = record {
   telegram : text;
   tag_defines : vec text;
 };
+type ProposalType = variant {
+  AddMemberProposal;
+  VotingProposal;
+  RemoveMemberPrposal;
+};
+type ProposalValueStore = record {
+  title : text;
+  action_principal : principal;
+  description : text;
+  created_by : principal;
+  proposal_id : text;
+  expiring_on : nat64;
+  proposal_type : ProposalType;
+  submitted_at : nat64;
+  required_votes : nat32;
+  associated_dao_canister_id : principal;
+};
 type ReplyCommentData = record {
   post_id : text;
   comment : text;
@@ -127,12 +144,14 @@ type UserProfile = record {
   followings_list : vec principal;
 };
 service : (InitialArgs) -> {
+  add_proposal : (ProposalValueStore) -> (Result);
   check_user_existance : () -> (Result) query;
   comment_post : (text, text) -> (Result);
   create_dao : (DaoInput) -> (Result);
   create_new_post : (PostInput) -> (Result);
   create_profile : () -> (Result_1);
   delete_profile : () -> (Result_1);
+  delete_proposal : (text) -> (Result);
   follow_user : (principal) -> (Result);
   get_all_dao : (Pagination) -> (vec DaoDetails) query;
   get_all_posts : (Pagination) -> (GetAllPostsResponse) query;
@@ -147,6 +166,7 @@ service : (InitialArgs) -> {
   get_my_post : (Pagination) -> (Result_5) query;
   get_post_byid : (text) -> (Result_6) query;
   get_profile_by_id : (principal) -> (Result_7);
+  get_proposal : (Pagination) -> (vec ProposalValueStore) query;
   get_user_profile : () -> (Result_7) query;
   get_wasm : () -> (Result_8) query;
   icrc28_trusted_origins : () -> (Icrc28TrustedOriginsResponse);
