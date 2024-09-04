@@ -107,6 +107,8 @@ record {
 
 dfx deploy dao_canister --argument '(record {
     dao_name = "Sample DAO";
+    token_symbol = "BUNNU";
+    token_supply = 12;
     purpose = "To manage community projects";
     daotype = "Non-profit";
     link_of_document = "https://example.com/charter.pdf";

@@ -118,6 +118,8 @@ pub struct Dao {
     pub proposals_count: u32,
     pub proposal_ids: Vec<String>,
     pub token_ledger_id: LedgerCanisterId,
+    pub total_tokens: u32,
+    pub token_symbol: String,
     pub tokens_required_to_vote: u32, // pub dao_groups: Vec<DaoGroup>,
 }
 
@@ -145,6 +147,8 @@ pub struct DaoInput {
     pub followers: Vec<Principal>,
     pub members_permissions: Vec<String>,
     pub tokens_required_to_vote: u32,
+    pub token_symbol: String,
+    pub token_supply: u32
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]

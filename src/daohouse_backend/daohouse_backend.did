@@ -41,7 +41,7 @@ type DaoInput = record {
   members_permissions : vec text;
   link_of_document : text;
   image_content_type : text;
-  total_tokens : nat;
+  total_tokens : nat32;
   cool_down_period : nat32;
   token_name : text;
   purpose : text;

@@ -4,6 +4,7 @@ type Dao = record {
   dao_id : principal;
   proposals_count : nat32;
   token_ledger_id : LedgerCanisterId;
+  token_symbol : text;
   linksandsocials : vec text;
   daotype : text;
   tokens_required_to_vote : nat32;
@@ -16,6 +17,7 @@ type Dao = record {
   members_count : nat32;
   followers : vec principal;
   followers_count : nat32;
+  total_tokens : nat32;
   cool_down_period : nat32;
   purpose : text;
   required_votes : nat32;
@@ -28,6 +30,7 @@ type DaoGroup = record {
 };
 type DaoInput = record {
   members : vec principal;
+  token_symbol : text;
   linksandsocials : vec text;
   daotype : text;
   tokens_required_to_vote : nat32;
@@ -39,6 +42,7 @@ type DaoInput = record {
   followers : vec principal;
   cool_down_period : nat32;
   purpose : text;
+  token_supply : nat32;
   required_votes : nat32;
 };
 type LedgerCanisterId = record { id : principal };

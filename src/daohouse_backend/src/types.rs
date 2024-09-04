@@ -616,7 +616,7 @@ pub struct DaoInput {
     pub dao_groups: Vec<DaoGroup>,
     pub token_name: String,
     pub token_symbol: String,
-    pub total_tokens: Nat,
+    pub total_tokens: u32,
     pub tokens_required_to_vote: u32,
     // pub followers: Vec<Principal>,
 

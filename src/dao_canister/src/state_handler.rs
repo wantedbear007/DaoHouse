@@ -41,6 +41,8 @@ impl State {
                     id: Principal::anonymous(),
                 },
                 tokens_required_to_vote: 0,
+                total_tokens: 0,
+                token_symbol: String::new(),
             },
 
             // permision: Votingandpermissions {

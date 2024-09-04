@@ -37,39 +37,9 @@ async fn init(args: InitialArgs) {
     let analytics = Analytics::default();
 
     with_state(|state| {
-        // state.borrow_mut().set_payment_recipient(Principal::from_text("aewmz-wl3z4-dzfeh-7j2ub-ah46w-iltzd-xt77x-v7got-zrvqk-ybk22-xae").expect("")); // adding payment recipient id
-
-        // state
-        //     .borrow_mut()
-        //     .set_payment_recipient(args.payment_recipient); // adding payment recipient id
-
-        // state.borrow_mut().set_canister_ids(CanisterIDs {
-        //     dao_canister: args.dao_canister_id,
-        //     ic_asset_canister: args.ic_asset_canister_id,
-        // });
-
-        // state.canister_data = CanisterIDs {
-        //         dao_canister: args.dao_canister_id,
-        //         ic_asset_canister: args.ic_asset_canister_id,
-        //     };
-
-        // state.set_canister_ids(CanisterIDs {
-        //         dao_canister: args.dao_canister_id,
-        //         ic_asset_canister: args.ic_asset_canister_id,
-        //     });
-
-        // uploading canister ids
-        // if let Some(_) = state.canister_data {
-        //     ic_cdk::println!("Canister ids are present");
-        // } else {
-        //     state.set_canister_ids(CanisterIDs {
-        //         dao_canister: args.dao_canister_id,
-        //         ic_asset_canister: args.ic_asset_canister_id,
-        //     });
-        // }
-
+        // storing canister data in stable memory
         if let Some(_) = state.canister_data.get(&0) {
-            ic_cdk::println!("Analytics already available.");
+            ic_cdk::println!("Canister metaData already available.");
         } else {
             state.canister_data.insert(
                 0,
@@ -80,14 +50,6 @@ async fn init(args: InitialArgs) {
                 },
             );
         }
-        // state.canister_data.insert(
-        //     0,
-        //     CanisterData {
-        //         ic_asset_canister: args.ic_asset_canister_id,
-        //         dao_canister: args.dao_canister_id,
-        //         paymeny_recipient: args.payment_recipient,
-        //     },
-        // );
 
         // uploading analytics
         if let Some(_) = state.analytics_content.get(&0) {

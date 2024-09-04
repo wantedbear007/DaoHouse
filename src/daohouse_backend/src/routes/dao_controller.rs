@@ -201,7 +201,7 @@ pub async fn create_dao_canister(dao_detail: crate::DaoInput) -> Result<Principa
 pub async fn create_new_ledger_canister(dao_detail: crate::DaoInput) -> Result<Principal, String> {
     create_ledger(
         // canister_id_principal.to_string().clone(), // TODO : add dao canister as controller
-        dao_detail.total_tokens,
+        Nat::from(dao_detail.total_tokens),
         dao_detail.token_name,
         dao_detail.token_symbol,
         dao_detail.members,
