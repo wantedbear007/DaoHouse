@@ -138,10 +138,10 @@ const Dao = () => {
         <Container classes={`__label small_phone:py-8 py-5 mobile:px-10 px-5 flex flex-row w-full justify-between items-center`}>
           <div onClick={() => getDaos()} className="small_phone:text-4xl text-3xl big_phone:px-8 flex flex-row items-center gap-4">
             {showAll ? "All" : "Joined"}
-            <div className="flex flex-col items-start">
+            {/* <div className="flex flex-col items-start">
               <div className="mobile:w-32 w-12 border-t-2 border-black"></div>
               <div className="mobile:w-14 w-8 small_phone:mt-2 mt-1 border-t-2 border-black"></div>
-            </div>
+            </div> */}
           </div>
           <div className="flex-grow lg:flex justify-center px-6 mx-2 hidden">
             <SearchProposals

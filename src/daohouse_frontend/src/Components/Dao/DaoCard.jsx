@@ -126,7 +126,7 @@ const DaoCard = ({ name, members, groups, proposals, image_id, daoCanister, daoC
       </div>
 
       {/* Follow button and username for mobile view (hidden on larger screens) */}
-      <div className="block big_phone:hidden mt-2 flex flex-col items-center">
+      {/* <div className="block big_phone:hidden mt-2 flex flex-col items-center">
         <h2 className="text-center mobile:text-2xl text-lg font-semibold truncate w-full">{name}</h2>
         <button
           onClick={toggleFollow}
@@ -134,7 +134,7 @@ const DaoCard = ({ name, members, groups, proposals, image_id, daoCanister, daoC
         >
           {isFollowing ? 'Unfollow' : '+ Follow'}
         </button>
-      </div>
+      </div> */}
 
       {/* Adjusted flexbox for larger screens */}
       <div className="big_phone:flex hidden justify-between text-center mb-4 bg-white tablet:p-4 pb-4 p-2 rounded-lg gap-0">
