@@ -1,10 +1,10 @@
 import React from "react";
-import nodata from "../../../assets/nodata.png";
+import nodata1 from "../../../assets/nodata1.png";
 
 const NoDataComponent = ({ setJoinedDAO  }) => {
   return (
     <div className="w-full flex flex-col items-center justify-center p-20">
-      <img src={nodata} alt="No Data" className="mb-4" />
+      <img src={nodata1} alt="No Data" className="mb-4" />
       <p className="text-center text-gray-700 mb-4 text-[16px]">
         You have not created any DAO
       </p>

@@ -9,7 +9,8 @@ import { useAuth } from "../../Components/utils/useAuthClient";
 import MuiSkeleton from "../../Components/Skeleton/MuiSkeleton";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import LoginModal from "../../Components/Auth/LoginModal";
-import nodata from "../../../assets/nodata.png";
+import nodata1 from "../../../assets/nodata.png";
+
 
 
 const Dao = () => {
@@ -169,7 +170,7 @@ const Dao = () => {
           <div className="flex justify-center items-center h-full">
             <p className="text-lg font-bold">
               {/* No DAOsss found */}
-              <img src={nodata} alt="No Data" className=" mb-1 mx-auto block" />
+              <img src={nodata1} alt="No Data" className=" mb-1 mx-auto block" />
 
             </p>
           </div>
