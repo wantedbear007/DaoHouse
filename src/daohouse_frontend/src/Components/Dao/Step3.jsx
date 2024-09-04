@@ -14,6 +14,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
   const [showMemberNameInput, setShowMemberNameInput] = useState(false);
   const [addMemberIndex, setAddMemberIndex] = useState(null);
   const [groupNameInputIndex, setGroupNameInputIndex] = useState(null);
+  const [updatedGroupName, setUpdatedGroupName] = useState("");
   const [memberName, setMemberName] = useState("");
   const { backendActor } = useAuth();
 
@@ -222,7 +223,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
   };
 
   const handleGroupNameInput = (groupName, event) => {
-    if (event.key === "Enter") {
+    // if (event.key === "Enter") {
       setList(prevList =>
         prevList.map(item => {
           if (item.index === groupNameInputIndex) {
@@ -232,8 +233,22 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
         })
       );
       setGroupNameInputIndex(null);
-    }
+    // }
   };
+
+  const handleUpdateGroupName = () => {
+    setList(prevList =>
+      prevList.map(item => {
+        if (item.index === groupNameInputIndex) {
+          return { ...item, name: updatedGroupName };
+        }
+        return item;
+      })
+    );
+    setGroupNameInputIndex(null);
+    setUpdatedGroupName(""); // Clear the input state
+  };
+  
 
   const councilMembers = list.find(group => group.name === "Council")?.members || [];
 
@@ -254,8 +269,10 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
 
   const handleEditGroup = (index) => {
     setGroupNameInputIndex(index);
-
+    const groupName = list.find(item => item.index === index)?.name || "";
+    setUpdatedGroupName(groupName); // Set the current name to the input state
   };
+  
   return (
     <React.Fragment>
       <Container>
@@ -377,7 +394,7 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
 
           {/* Groups */}
           <div className="DAO__Step3__container w-full flex flex-col gap-2">
-            {list.slice(1).map((item, index) => (
+          {list.filter(group => group.name !== "Council").map((item, index) => (
               <div
                 key={index}
                 className={`flex flex-col bg-white rounded-lg ${addMemberIndex === item.index ? "" : "cursor-pointer transition"}`}
@@ -385,12 +402,21 @@ const Step3 = ({ setData, setActiveStep, Step4Ref, Step1Ref, data }) => {
               >
                 <section className={`w-full py-2 p-2 pl-4 flex ${addMemberIndex === item.index ? "border-b-2 border-[#b4b4b4]" : "rounded-lg"} items-center justify-between`}>
                   {groupNameInputIndex === item.index ? (
+                    <div className="flex items-center gap-2">
                     <input
                       type="text"
                       className="p-1 rounded-md border border-slate-500 text-sm"
                       placeholder="Group Name"
-                      onKeyDown={(e) => handleGroupNameInput(e.target.value, e)}
+                      value={updatedGroupName}
+                      onChange={(e) => setUpdatedGroupName(e.target.value)}
                     />
+                    <button
+                      onClick={handleUpdateGroupName}
+                      className="text-blue-500 truncate ... w-30"
+                    >
+                      Update
+                    </button>
+                  </div>
                   ) : (
                     // <p
                     //   className="font-semibold py-1 cursor-pointer mobile:text-base text-sm"
