@@ -293,15 +293,36 @@ pub async fn create_dao(dao_detail: DaoInput) -> Result<String, String> {
     user_profile_detail.dao_ids.push(dao_canister_id);
 
     // adding ledger canister in newly created DAO canister
-    let _ = call_inter_canister::<LedgerCanisterId, String>(
+    let response_inter_canister = call_inter_canister::<LedgerCanisterId, String>(
         "add_ledger_canister_id",
         LedgerCanisterId {
             id: ledger_canister_id,
         },
         dao_canister_id,
     )
-    .await
-    .map_err(|err| format!("Error occurred {}", err.to_string()));
+    .await;
+
+    let _re = match response_inter_canister {
+        Ok(val) => Ok(val),
+
+        Err(_err) => {
+            // delete created canisters
+            let _ = reverse_canister_creation(CanisterIdRecord {
+                canister_id: dao_canister_id,
+            })
+            .await;
+
+            let _ = reverse_canister_creation(CanisterIdRecord {
+                canister_id: ledger_canister_id,
+            })
+            .await;
+
+            Err(format!(
+                "Failed to update ledger canister id in DAO canister"
+            ))
+        }
+    }
+    .map_err(|err| format!("Error {} ", err));
 
     // updating analytics
     with_state(|state| {
