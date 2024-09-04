@@ -126,10 +126,10 @@ type UpdateDaoSettings = record {
 type VoteParam = variant { No; Yes };
 service : (DaoInput) -> {
   add_ledger_canister_id : (LedgerCanisterId) -> (Result);
-  ask_to_join_dao : (text) -> (Result);
+  ask_to_join_dao : (principal) -> (Result);
   change_proposal_state : (text, ProposalState) -> (Result);
   comment_on_proposal : (text, text) -> (Result);
-  create_proposal : (text, ProposalInput) -> (text);
+  create_proposal : (principal, ProposalInput) -> (text);
   follow_dao : () -> (Result);
   get_all_balances : (text) -> (ProposalStakes) query;
   get_all_groups : () -> (vec DaoGroup);

@@ -5,12 +5,9 @@ pub fn add_proposal_controller(
     state: &mut State,
     args: ProposalValueStore,
 ) -> Result<String, String> {
-    let res = state.proposal_store.insert(args.proposal_id.clone(), args);
+    state.proposal_store.insert(args.proposal_id.clone(), args);
 
-    match res {
-        Some(_val) => Ok(String::from("Proposal added succussfully")),
-        None => return Err(String::from("Failed to add proposal")),
-    }
+    Ok(String::from("Proposal added"))
 }
 
 // to get all proposals
@@ -48,8 +45,10 @@ pub fn delete_proposal_controller(
 ) -> Result<String, String> {
     let res = state.proposal_store.remove(proposal_id);
 
-    match res {
-        Some(_val) => Ok(String::from("Proposal deleted successfully")),
-        None => return Err(String::from("Failed to delete proposal")),
-    }
+    // match res {
+    //     Some(_val) => Ok(String::from("Proposal deleted successfully")),
+    //     None => return Err(String::from("Failed to delete proposal")),
+    // }
+
+    Ok(String::from("Propsal deleted"))
 }

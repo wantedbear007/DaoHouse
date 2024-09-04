@@ -14,23 +14,24 @@ use sha2::{Digest, Sha256};
 
 use super::{icrc_get_balance, icrc_transfer};
 
-#[update(guard=check_members)]
-pub async fn create_proposal(daohouse_backend_id: String, proposal: ProposalInput) -> String {
-    let uuids = raw_rand().await.unwrap().0;
-    let proposal_id = format!("{:x}", Sha256::digest(&uuids));
-    let response = with_state(|state| {
-        proposal_route::create_new_proposal(state, proposal.clone(), proposal_id.clone())
-    });
+// #[update(guard=check_members)]
+// pub async fn create_proposal(daohouse_backend_id: Principal, proposal: ProposalInput) -> String {
+//     let uuids = raw_rand().await.unwrap().0;
+//     with_state(  move | state| async {
+//         let proposal_id = format!("{:x}", Sha256::digest(&uuids));
+//         proposal_route::create_new_proposal(state, proposal.clone(), proposal_id.clone(), daohouse_backend_id.clone());
+//     }).await;
 
-    let _res: CallResult<(String,)> = ic_cdk::call(
-        Principal::from_text(daohouse_backend_id).unwrap(),
-        "update_proposal_count",
-        (),
-    )
-    .await;
+//     // let _res: CallResult<(String,)> = ic_cdk::call(
+//     //     daohouse_backend_id,
+//     //     "update_proposal_count",
+//     //     (),
+//     // )
+//     // .await;
 
-    response
-}
+//     String::from("value")
+//     // response
+// }
 
 // get all proposals
 #[query]

@@ -11,7 +11,7 @@ pub use ledger_functions::*;
 
 use serde::Serialize;
 
-// inter canister call
+// execute methods of other canisters
 pub async fn call_inter_canister<T, U>(
     function: &str,
     args: T,

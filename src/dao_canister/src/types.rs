@@ -219,6 +219,20 @@ pub enum VoteParam {
     No,
 }
 
+#[derive(CandidType, Serialize, Deserialize, Debug, Clone)]
+pub struct ProposalInstance {
+    pub associated_dao_canister_id: Principal,
+    pub proposal_id: String,
+    pub title: String,
+    pub description: String,
+    pub submitted_at: u64,
+    pub expiring_on: u64,
+    pub required_votes: u32,
+    pub created_by: Principal,
+    pub proposal_type: ProposalType,
+    pub action_principal: Principal
+}
+
 #[derive(Clone, CandidType, Serialize, Deserialize)]
 pub struct TokenTransferArgs {
     pub tokens: u64,

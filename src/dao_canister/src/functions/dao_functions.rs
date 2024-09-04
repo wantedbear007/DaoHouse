@@ -1,11 +1,10 @@
+use crate::proposal_route::create_proposal;
 use crate::utils::ADD_MEMBER_TO_GROUP;
-use crate::{with_state, ProposalType};
 use crate::{guards::*, DaoGroup, LedgerCanisterId, ProposalInput, UpdateDaoSettings};
+use crate::{with_state, ProposalType};
 use candid::Principal;
 use ic_cdk::api;
 use ic_cdk::{query, update};
-
-use super::create_proposal;
 
 #[query]
 async fn get_members_of_group(group: String) -> Result<Vec<Principal>, String> {
@@ -17,12 +16,14 @@ async fn get_members_of_group(group: String) -> Result<Vec<Principal>, String> {
 
 // proposal to add member to a group
 #[update]
-fn proposal_to_add_member_to_group(group_name: String, new_member: Principal) -> Result<String, String> {
+fn proposal_to_add_member_to_group(
+    group_name: String,
+    new_member: Principal,
+) -> Result<String, String> {
     check_group_member_permission(&group_name, ADD_MEMBER_TO_GROUP.to_string())?;
     check_user_in_group(&group_name)?;
 
     // creating proposal
-    
 
     // proposal_to_add_member_to_group(&group_name, new_member)?;
     // create_proposal(daohouse_backend_id, proposal)
@@ -108,8 +109,7 @@ fn proposal_to_add_member_to_group(group_name: String, new_member: Principal) ->
 // }
 
 #[update (guard = prevent_anonymous)]
-async fn ask_to_join_dao(daohouse_backend_id: String) -> Result<String, String> {
-
+async fn ask_to_join_dao(daohouse_backend_id: Principal) -> Result<String, String> {
     check_if_proposal_exists(api::caller(), ProposalType::AddMemberProposal)?;
 
     let proposal = ProposalInput {
@@ -117,10 +117,9 @@ async fn ask_to_join_dao(daohouse_backend_id: String) -> Result<String, String> 
         proposal_title: String::from("Add member to DAO"),
         // required_votes: with_state(|state| state.dao.required_votes),
         proposal_type: crate::ProposalType::AddMemberProposal,
-        principal_of_action: Some(api::caller())
-        // proposal_expired_at: ic_cdk::api::time() + (20 * 86_400 * 1_000_000_000),
-        // proposal_expired_at: ic_cdk::api::time()
-        // + (with_state(|state| state.dao.cool_down_period) as u64 * 86_400 * 1_000_000_000),
+        principal_of_action: Some(api::caller()), // proposal_expired_at: ic_cdk::api::time() + (20 * 86_400 * 1_000_000_000),
+                                                  // proposal_expired_at: ic_cdk::api::time()
+                                                  // + (with_state(|state| state.dao.cool_down_period) as u64 * 86_400 * 1_000_000_000),
     };
 
     let res = create_proposal(daohouse_backend_id, proposal).await;
