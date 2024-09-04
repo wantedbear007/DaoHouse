@@ -38,12 +38,14 @@ function ViewModal({ open, onClose, users = [] }) {
         <Box
             className="relative p-4 bg-white rounded-lg shadow-2xl max-w-3xl w-full"
         >
-            <IconButton
-                onClick={onClose}
-                className="absolute top-2 right-2 text-gray-500 hover:text-black"
-            >
-                <CloseIcon />
-            </IconButton>
+            <div className="absolute top-0 right-2">
+                    <IconButton
+                        onClick={onClose}
+                        className="text-gray-500 hover:text-black"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </div>
             <div className="mb-4">
                 {users.length > 0 ? (
                     users.map((principalId) => (
