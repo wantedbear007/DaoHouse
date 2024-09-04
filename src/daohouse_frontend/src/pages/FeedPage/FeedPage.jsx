@@ -250,7 +250,11 @@
 
 import React, { useState, useEffect } from "react";
 import { HiPlus } from "react-icons/hi";
-import image from "../../../assets/bg_image.png";
+
+import PostCard from "../../Components/FeedPage/PostCard";
+
+import bg_image1 from "../../../assets/bg_image1.png";
+
 import CreatePostPopup from "../../Components/FeedPage/CreatePostPopup";
 import { useAuth } from "../../Components/utils/useAuthClient";
 import Container from "../../Components/Container/Container";
@@ -413,7 +417,7 @@ const FeedPage = () => {
       )}
 
       <div style={{
-        backgroundImage: `url("${image}")`,
+        backgroundImage: `url("${bg_image1}")`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundPosition: "center",
