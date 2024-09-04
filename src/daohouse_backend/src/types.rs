@@ -706,7 +706,7 @@ pub struct ImageData {
 }
 
 // comment
-#[derive(Clone, CandidType, Serialize, Deserialize)]
+#[derive(Clone, CandidType, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Comment {
     pub author_principal: Principal,
     pub comment_text: String,

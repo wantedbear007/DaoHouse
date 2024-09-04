@@ -52,12 +52,24 @@ pub struct Proposals {
     pub rejected_votes_list: Vec<Principal>,
     pub required_votes: u32,
     pub created_by: Principal,
-    pub comments: u64,
+    pub comments: u32,
+    pub likes: u32,
     // pub comments_list:Vec<Comment>,
-    pub comments_list: Vec<String>,
+    pub comments_list: Vec<Comment>,
     pub proposal_type: ProposalType,
     pub share_count: u64,
     pub principal_of_action: Principal // principal id of user who is to be added, removed, transfered funds
+}
+
+// for proposal comments
+#[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
+pub struct Comment {
+    pub author_principal: Principal,
+    pub comment_text: String,
+    pub comment_id: String,
+    pub replies: Vec<String>,
+    pub likes: u16,
+    pub created_at: u64
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
@@ -90,6 +102,20 @@ pub struct ProposalInput {
 pub struct Pagination {
     pub start: u32,
     pub end: u32,
+}
+
+#[derive(CandidType, Serialize, Deserialize)]
+pub struct CommentLikeArgs {
+    pub proposal_id: String,
+    pub comment_id: String    
+}
+
+
+#[derive(Clone, CandidType, Serialize, Deserialize)]
+pub struct ReplyCommentArgs {
+    pub proposal_id: String,
+    pub comment_id: String ,
+    pub comment: String  
 }
 
 #[derive(CandidType, Serialize, Deserialize, Clone, Debug)]

@@ -1,6 +1,9 @@
 use crate::proposal_route::check_proposal_state;
 use crate::types::{Dao, ProposalInput, Proposals};
-use crate::{guards::*, AccountBalance, DaoGroup, Pagination, ProposalStakes, TokenTransferArgs};
+use crate::{
+    guards::*, AccountBalance, Comment, CommentLikeArgs, DaoGroup, Pagination, ProposalStakes,
+    ReplyCommentArgs, TokenTransferArgs,
+};
 use crate::{proposal_route, with_state, ProposalState, VoteParam};
 use candid::Principal;
 use ic_cdk::api;
@@ -100,10 +103,20 @@ fn change_proposal_state(
 }
 
 #[update(guard = prevent_anonymous)]
-fn comment_on_proposal(comment: String, proposal_id: String) -> Result<String, String> {
+async fn comment_on_proposal(comment: String, proposal_id: String) -> Result<String, String> {
+    let uuids = raw_rand().await.unwrap().0;
+    let comment_id = format!("{:x}", Sha256::digest(&uuids));
+
     with_state(|state| match &mut state.proposals.get(&proposal_id) {
         Some(pro) => {
-            pro.comments_list.push(comment);
+            pro.comments_list.push(Comment {
+                author_principal: ic_cdk::api::caller(),
+                comment_id,
+                comment_text: comment,
+                created_at: ic_cdk::api::time(),
+                likes: 0,
+                replies: vec![],
+            });
             pro.comments += 1;
             state.proposals.insert(proposal_id, pro.to_owned());
             Ok(String::from("Comment was sucessfully added"))
@@ -111,6 +124,56 @@ fn comment_on_proposal(comment: String, proposal_id: String) -> Result<String, S
         None => Err(String::from("Proposal does not exist.")),
     })
 }
+
+#[update(guard = prevent_anonymous)]
+async fn reply_comment(args: ReplyCommentArgs) -> Result<String, String> {
+    let proposal = match with_state(|state| state.proposals.get(&args.proposal_id)) {
+        Some(val) => val,
+        None => {
+            return Err(String::from(
+                "No proposal associated with the following proposal ID",
+            ))
+        }
+    };
+
+    let mut updated_comment_list = proposal.comments_list.clone();
+
+    for com in updated_comment_list.iter_mut() {
+        if com.comment_id == args.comment_id.clone() {
+            com.replies.push(args.comment.clone());
+            break;
+        }
+    }
+
+    let updated_proposal = Proposals {
+        comments: proposal.comments + 1,
+        comments_list: updated_comment_list,
+        ..proposal
+    };
+
+    with_state(|state| {
+        state
+            .proposals
+            .insert(updated_proposal.proposal_id.clone(), updated_proposal)
+    });
+
+    Ok(String::from("Successfully commented on post"))
+}
+
+// #[update(guard=prevent_anonymous)]
+// async fn like_comment(args: CommentLikeArgs) {
+//     with_state(|state| match state.proposals.get(&args.proposal_id) {
+//         Some(val) => {
+//             for comment in val.comments_list.iter() {
+//                 if comment == args.comment_id {
+
+//                 }
+//             }
+//         },
+//         None => Err(String::from("No proposal found with following ID")),
+
+//     })
+// }
 
 fn refresh_proposals(id: &String) {
     with_state(|state| match &mut state.proposals.get(&id) {
