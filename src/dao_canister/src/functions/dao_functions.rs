@@ -1,6 +1,6 @@
-use crate::proposal_route::create_proposal;
-use crate::utils::ADD_MEMBER_TO_GROUP;
-use crate::{guards::*, DaoGroup, LedgerCanisterId, ProposalInput, UpdateDaoSettings};
+use crate::{
+    guards::*, AddMemberArgs, DaoGroup, LedgerCanisterId, ProposalInput, UpdateDaoSettings,
+};
 use crate::{with_state, ProposalType};
 use candid::Principal;
 use ic_cdk::api;
@@ -16,19 +16,28 @@ async fn get_members_of_group(group: String) -> Result<Vec<Principal>, String> {
 
 // proposal to add member to a group
 #[update]
-fn proposal_to_add_member_to_group(
-    group_name: String,
-    new_member: Principal,
-) -> Result<String, String> {
-    check_group_member_permission(&group_name, ADD_MEMBER_TO_GROUP.to_string())?;
-    check_user_in_group(&group_name)?;
+async fn proposal_to_add_member_to_group(args: AddMemberArgs) -> Result<String, String> {
+    check_group_member_permission(
+        &args.group_name,
+        crate::utils::ADD_MEMBER_TO_GROUP.to_string(),
+    )?;
+    check_user_in_group(&args.group_name)?;
 
-    // creating proposal
+    // create proposal
+    let proposal = ProposalInput {
+        principal_of_action: Some(args.new_member),
+        proposal_description: args.description,
+        proposal_title: String::from("Add new member to group"),
+        proposal_type: ProposalType::AddMemberProposal,
+        group_to_join: Some(args.group_name.clone()),
+    };
 
-    // proposal_to_add_member_to_group(&group_name, new_member)?;
-    // create_proposal(daohouse_backend_id, proposal)
+    crate::proposal_route::create_proposal_controller(args.daohouse_canister, proposal).await;
 
-    Ok(format!("User successfully added to group {}", group_name))
+    Ok(format!(
+        "User successfully added to group {}",
+        args.group_name
+    ))
 }
 
 // #[update]
@@ -114,6 +123,7 @@ async fn ask_to_join_dao(daohouse_backend_id: Principal) -> Result<String, Strin
 
     let proposal = ProposalInput {
         proposal_description: String::from("Request to join DAO as a member"),
+        group_to_join: None,
         proposal_title: String::from("Add member to DAO"),
         // required_votes: with_state(|state| state.dao.required_votes),
         proposal_type: crate::ProposalType::AddMemberProposal,
@@ -122,7 +132,8 @@ async fn ask_to_join_dao(daohouse_backend_id: Principal) -> Result<String, Strin
                                                   // + (with_state(|state| state.dao.cool_down_period) as u64 * 86_400 * 1_000_000_000),
     };
 
-    let res = create_proposal(daohouse_backend_id, proposal).await;
+    let res =
+        crate::proposal_route::create_proposal_controller(daohouse_backend_id, proposal).await;
 
     Ok(res)
 }

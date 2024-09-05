@@ -1,4 +1,10 @@
 type AccountBalance = record { id : principal; staked : nat32 };
+type AddMemberArgs = record {
+  daohouse_canister : principal;
+  description : text;
+  group_name : text;
+  new_member : principal;
+};
 type Comment = record {
   created_at : nat64;
   author_principal : principal;
@@ -61,6 +67,7 @@ type ProposalInput = record {
   principal_of_action : opt principal;
   proposal_title : text;
   proposal_description : text;
+  group_to_join : opt text;
   proposal_type : ProposalType;
 };
 type ProposalStakes = record {
@@ -96,6 +103,7 @@ type Proposals = record {
   proposal_status : ProposalState;
   approved_votes_list : vec principal;
   comments : nat32;
+  group_to_join : opt text;
   comments_list : vec Comment;
   proposal_type : ProposalType;
   required_votes : nat32;
@@ -129,7 +137,7 @@ service : (DaoInput) -> {
   ask_to_join_dao : (principal) -> (Result);
   change_proposal_state : (text, ProposalState) -> (Result);
   comment_on_proposal : (text, text) -> (Result);
-  create_proposal : (principal, ProposalInput) -> (text);
+  create_proposal_controller : (principal, ProposalInput) -> (text);
   follow_dao : () -> (Result);
   get_all_balances : (text) -> (ProposalStakes) query;
   get_all_groups : () -> (vec DaoGroup);
@@ -143,7 +151,7 @@ service : (DaoInput) -> {
   get_proposal_by_id : (text) -> (Proposals) query;
   icrc_transfer : (TokenTransferArgs) -> (Result_3);
   proposal_refresh : () -> (Result);
-  proposal_to_add_member_to_group : (text, principal) -> (Result);
+  proposal_to_add_member_to_group : (AddMemberArgs) -> (Result);
   reply_comment : (ReplyCommentArgs) -> (Result);
   search_proposal : (text) -> (vec Proposals) query;
   unfollow_dao : () -> (Result);

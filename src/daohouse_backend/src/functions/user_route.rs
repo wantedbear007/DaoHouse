@@ -34,20 +34,20 @@ use super::reverse_canister_creation;
 async fn create_profile(profile: MinimalProfileinput) -> Result<String, String> {
     // Validate email format
     if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
-        return Err("Enter correct Email ID".to_string());
+        return Err(String::from(crate::utils::INVALID_EMAIL));
     }
     let principal_id = api::caller();
 
     // Check if the user is already registered
     let is_registered = with_state(|state| {
         if state.user_profile.contains_key(&principal_id) {
-            return Err("User already registered".to_string());
+            return Err(crate::utils::USER_REGISTERED);
         }
         Ok(())
     })
     .is_err();
     if is_registered {
-        return Err("User already exist".to_string());
+        return Err(String::from(crate::utils::USER_REGISTERED));
     }
 
     // to upload image
@@ -57,13 +57,13 @@ async fn create_profile(profile: MinimalProfileinput) -> Result<String, String> 
         content_type: profile.image_content_type.clone(),
     })
     .await
-    .map_err(|err| format!("Image upload failed: {}", err))?;
+    .map_err(|err| format!("{}{}", crate::utils::IMAGE_UPLOAD_FAILED, err))?;
 
     // getting image canister id
     let asset_canister_id = with_state(|state| {
         Ok(match state.canister_data.get(&0) {
             Some(val) => val.ic_asset_canister,
-            None => return Err(String::from("Canister Meta data not found.")),
+            None => return Err(String::from(crate::utils::CANISTER_DATA_NOT_FOUND)),
         })
     })
     .map_err(|err| format!("Error: {}", err))
@@ -97,7 +97,7 @@ async fn create_profile(profile: MinimalProfileinput) -> Result<String, String> 
         analytics.members_count += 1;
         state.analytics_content.insert(0, analytics);
         state.user_profile.insert(principal_id, new_profile);
-        Ok(String::from("User profile created successfully"))
+        Ok(String::from(crate::utils::PROFILE_UPDATE_SUCCESS))
     })
 }
 
@@ -130,7 +130,7 @@ async fn update_profile(
     profile: Profileinput,
 ) -> Result<(), String> {
     if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
-        return Err("Enter correct Email ID".to_string());
+        return Err(String::from(crate::utils::INVALID_EMAIL));
     }
 
     let principal_id = api::caller();
@@ -138,14 +138,14 @@ async fn update_profile(
     // Check if the user is already registered
     let is_registered = with_state(|state| {
         if !state.user_profile.contains_key(&principal_id) {
-            return Err("User is not registered".to_string());
+            return Err(String::from(crate::utils::USER_REGISTERED));
         }
         Ok(())
     })
     .is_err();
 
     if is_registered {
-        return Err("User dosen't exist ".to_string());
+        return Err(String::from(crate::utils::USER_DOES_NOT_EXIST));
     }
     // let is_registered = with_state(|state| {
     //     if !state.user_profile.contains_key(&principal_id) {
@@ -171,7 +171,7 @@ async fn update_profile(
             },
         )
         .await
-        .map_err(|err| format!("Image upload failed: {}", err))?;
+        .map_err(|_err| crate::utils::IMAGE_UPLOAD_FAILED)?;
     }
 
     // image upload
@@ -255,13 +255,13 @@ pub async fn create_dao(dao_detail: DaoInput) -> Result<String, String> {
 
     let mut user_profile_detail = match user_profile_detail {
         Some(data) => data,
-        None => panic!("User profile doesn't exist !"),
+        None => return Err(String::from(crate::utils::USER_DOES_NOT_EXIST)),
     };
 
     // to create dao canister
     let dao_canister_id = create_dao_canister(dao_detail.clone())
         .await
-        .map_err(|err| format!("Failed to create DAO canister {}", err))?;
+        .map_err(|err| format!("{} {}", crate::utils::CREATE_DAO_CANISTER_FAIL, err))?;
 
     // to create ledger canister
     let ledger_canister_id = create_new_ledger_canister(dao_detail.clone()).await;
@@ -269,13 +269,13 @@ pub async fn create_dao(dao_detail: DaoInput) -> Result<String, String> {
     let res = match ledger_canister_id {
         Ok(val) => Ok(val),
 
-        Err(_err) => {
+        Err(err) => {
             let _ = reverse_canister_creation(CanisterIdRecord {
                 canister_id: dao_canister_id,
             })
             .await;
 
-            Err(format!("Failed to create DAO ledger canister"))
+            Err(format!("{} {}", crate::utils::CREATE_LEDGER_FAILURE, err))
         }
     }
     .map_err(|err| format!("Error {}", err));
@@ -311,7 +311,7 @@ pub async fn create_dao(dao_detail: DaoInput) -> Result<String, String> {
     let _re = match response_inter_canister {
         Ok(val) => Ok(val),
 
-        Err(_err) => {
+        Err(err) => {
             // delete created canisters
             let _ = reverse_canister_creation(CanisterIdRecord {
                 canister_id: dao_canister_id,
@@ -323,9 +323,7 @@ pub async fn create_dao(dao_detail: DaoInput) -> Result<String, String> {
             })
             .await;
 
-            Err(format!(
-                "Failed to update ledger canister id in DAO canister"
-            ))
+            Err(format!("{}{}", crate::utils::INTER_CANISTER_FAILED, err))
         }
     }
     .map_err(|err| format!("Error {} ", err));
@@ -430,62 +428,57 @@ pub async fn create_dao(dao_detail: DaoInput) -> Result<String, String> {
 // check user existance
 #[query(guard = prevent_anonymous)]
 fn check_user_existance() -> Result<String, String> {
-    let principal_id = api::caller();
-    if principal_id == Principal::anonymous() {
-        return Err("Anonymous user not allowed".to_string());
-    }
-
     with_state(|state| {
-        let user = state.user_profile.contains_key(&principal_id);
+        let user = state.user_profile.contains_key(&ic_cdk::api::caller());
         if user {
             Ok("User exist ".to_string())
         } else {
-            Err("User does not exist".to_string())
+            Err(String::from(crate::utils::USER_DOES_NOT_EXIST))
         }
     })
 }
 
-#[update]
-pub async fn get_dao_details(dao_canister_id: String) -> String {
-    ic_cdk::println!("inside this function: {}", &dao_canister_id);
+// #[update]
+// pub async fn get_dao_details(dao_canister_id: String) -> String {
+//     ic_cdk::println!("inside this function: {}", &dao_canister_id);
 
-    type ReturnResult = DaoResponse;
+//     type ReturnResult = DaoResponse;
 
-    // let principal = match Principal::from_text(&dao_canister_id) {
-    //     Ok(p) => p,
-    //     Err(e) => {
-    //         ic_cdk::println!("Invalid principal: {}", e);
-    //         return "Invalid principal".to_string();
-    //     }
-    // };
+//     // let principal = match Principal::from_text(&dao_canister_id) {
+//     //     Ok(p) => p,
+//     //     Err(e) => {
+//     //         ic_cdk::println!("Invalid principal: {}", e);
+//     //         return "Invalid principal".to_string();
+//     //     }
+//     // };
 
-    let principal = Principal::from_text(&dao_canister_id).unwrap();
+//     let principal = Principal::from_text(&dao_canister_id).unwrap();
 
-    ic_cdk::println!("principal id is {:?} ", &principal);
+//     ic_cdk::println!("principal id is {:?} ", &principal);
 
-    let response: CallResult<(ReturnResult,)> = ic_cdk::call(principal, "get_dao_detail", ()).await;
+//     let response: CallResult<(ReturnResult,)> = ic_cdk::call(principal, "get_dao_detail", ()).await;
 
-    match response {
-        Ok((dao_response,)) => {
-            ic_cdk::println!("DAO response: {:?}", dao_response);
-            // Return the DAO response or any other appropriate data
-            "DAO details fetched successfully".to_string()
-        }
-        Err((rejection_code, message)) => {
-            ic_cdk::println!(
-                "Call failed with code {:?} and message {:?}",
-                rejection_code,
-                message
-            );
-            "Call failed".to_string()
-        }
-    }
-}
+//     match response {
+//         Ok((dao_response,)) => {
+//             ic_cdk::println!("DAO response: {:?}", dao_response);
+//             // Return the DAO response or any other appropriate data
+//             "DAO details fetched successfully".to_string()
+//         }
+//         Err((rejection_code, message)) => {
+//             ic_cdk::println!(
+//                 "Call failed with code {:?} and message {:?}",
+//                 rejection_code,
+//                 message
+//             );
+//             "Call failed".to_string()
+//         }
+//     }
+// }
 
-#[update(guard = prevent_anonymous)]
-fn is_user_registered(id: Principal) -> bool {
-    with_state(|state| state.user_profile.contains_key(&id))
-}
+// #[update(guard = prevent_anonymous)]
+// fn is_user_registered(id: Principal) -> bool {
+//     with_state(|state| state.user_profile.contains_key(&id))
+// }
 
 // #[update(guard = prevent_anonymous)]
 // fn unfollow_user(user_principal: Principal) -> Result<String, String> {
@@ -543,7 +536,7 @@ fn is_user_registered(id: Principal) -> bool {
 fn get_profile_by_id(id: Principal) -> Result<UserProfile, String> {
     with_state(|state| match state.user_profile.get(&id) {
         Some(profile) => Ok(profile),
-        None => Err(String::from("User does not exist")),
+        None => Err(String::from(crate::utils::USER_DOES_NOT_EXIST)),
     })
 }
 
@@ -624,7 +617,7 @@ pub async fn create_ledger(
 fn get_canister_meta_data() -> Result<CanisterData, String> {
     with_state(|state| match state.canister_data.get(&0) {
         Some(val) => Ok(val),
-        None => return Err(String::from("Data not found")),
+        None => return Err(String::from(crate::utils::CANISTER_DATA_NOT_FOUND)),
     })
     // with_state(|state| state.canister_data)
 }

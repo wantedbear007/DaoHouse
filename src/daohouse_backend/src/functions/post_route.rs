@@ -454,7 +454,7 @@ async fn transfer(tokens: u64, user_principal: Principal) -> Result<BlockIndex, 
 
     let payment_recipient = match canister_meta_data {
         Some(val) => val.paymeny_recipient,
-        None => return Err(String::from("Canister Meta data not found.")),
+        None => return Err(String::from(crate::utils::CANISTER_DATA_NOT_FOUND)),
     };
 
     let transfer_args = TransferFromArgs {
@@ -496,19 +496,19 @@ async fn make_payment(tokens: u64, user: Principal) -> Result<Nat, String> {
 }
 
 // increase proposals count
-#[update]
-fn update_proposal_count() -> String {
-    with_state(|state| match state.analytics_content.borrow().get(&0) {
-        Some(mut val) => {
-            val.proposals_count += 1;
-            state.analytics_content.insert(0, val);
-        }
-        None => {
-            "Failed to update count".to_string();
-        }
-    });
-    "success".to_string()
-}
+// #[update]
+// fn update_proposal_count() -> String {
+//     with_state(|state| match state.analytics_content.borrow().get(&0) {
+//         Some(mut val) => {
+//             val.proposals_count += 1;
+//             state.analytics_content.insert(0, val);
+//         }
+//         None => {
+//             "Failed to update count".to_string();
+//         }
+//     });
+//     "success".to_string()
+// }
 
 #[query]
 fn get_wasm() -> Result<Vec<u8>, String> {

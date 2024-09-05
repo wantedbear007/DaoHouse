@@ -58,6 +58,7 @@ pub struct Proposals {
     pub proposal_type: ProposalType,
     pub share_count: u64,
     pub principal_of_action: Principal, // principal id of user who is to be added, removed, transfered funds
+    pub group_to_join: Option<String>
 }
 
 // for proposal comments
@@ -76,6 +77,7 @@ pub struct ProposalInput {
     pub proposal_title: String,
     pub proposal_description: String,
     // pub required_votes: u32,
+    pub group_to_join: Option<String>,
     pub proposal_type: ProposalType,
     pub principal_of_action: Option<Principal>, // principal id of user who is to be added, removed, transfered funds
 
@@ -190,6 +192,13 @@ pub struct UpdateDaoSettings {
     pub followers: Vec<Principal>,
 }
 
+#[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
+pub struct AddMemberArgs {
+    pub group_name: String,
+    pub new_member: Principal,
+    pub daohouse_canister: Principal,
+    pub description: String,
+}
 // #[derive(Clone, CandidType, Serialize, Deserialize)]
 // pub struct GroupList {
 //     pub users: Vec<Principal>,

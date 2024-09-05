@@ -11,7 +11,7 @@ use sha2::{Digest, Sha256};
 // #[ic_cdk::update(guard=check_members)]
 // TODO add guards
 #[ic_cdk::update]
-pub async fn create_proposal(
+pub async fn create_proposal_controller(
     // state: &mut State,
     daohouse_backend_id: candid::Principal,
     proposal: ProposalInput,
@@ -55,6 +55,7 @@ pub async fn create_proposal(
         proposal_type: proposal.proposal_type.clone(),
         principal_of_action: proposal.principal_of_action.unwrap_or(api::caller()),
         likes: 0,
+        group_to_join: proposal.group_to_join,
     };
 
     // to record proposals on Parent canister

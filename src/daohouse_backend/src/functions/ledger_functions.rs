@@ -29,7 +29,11 @@ pub async fn create_ledger_canister(ledger_args: LedgerArg) -> Result<Principal,
     let (canister_id,) = match create_new_canister(arg).await {
         Ok(id) => id,
         Err((_, err_string)) => {
-            return Err(format!("Error while creating canister {}", err_string));
+            return Err(format!(
+                "{} {}",
+                crate::utils::CREATE_CANISTER_FAIL,
+                err_string
+            ));
         }
     };
 

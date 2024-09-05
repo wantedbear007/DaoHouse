@@ -1,13 +1,11 @@
 use crate::proposal_route::check_proposal_state;
-use crate::types::{Dao, ProposalInput, Proposals};
+use crate::types::{Dao, Proposals};
 use crate::{
-    guards::*, AccountBalance, Comment, CommentLikeArgs, DaoGroup, Pagination, ProposalStakes,
+    guards::*, AccountBalance, Comment, DaoGroup, Pagination, ProposalStakes,
     ReplyCommentArgs, TokenTransferArgs,
 };
-use crate::{proposal_route, with_state, ProposalState, VoteParam};
-use candid::Principal;
+use crate::{with_state, ProposalState, VoteParam};
 use ic_cdk::api;
-use ic_cdk::api::call::CallResult;
 use ic_cdk::api::management_canister::main::raw_rand;
 use ic_cdk::{query, update};
 use sha2::{Digest, Sha256};

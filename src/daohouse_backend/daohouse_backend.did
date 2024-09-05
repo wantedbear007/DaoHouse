@@ -119,7 +119,7 @@ service : (InitialArgs) -> {
   add_proposal : (ProposalValueStore) -> (Result);
   check_user_existance : () -> (Result) query;
   create_dao : (DaoInput) -> (Result);
-  create_profile : (MinimalProfileinput) -> (Result_1);
+  create_profile : (MinimalProfileinput) -> (Result);
   delete_profile : () -> (Result_1);
   delete_proposal : (text) -> (Result);
   get_all_dao : (Pagination) -> (vec DaoDetails) query;
@@ -127,14 +127,12 @@ service : (InitialArgs) -> {
   get_caller : () -> (principal) query;
   get_canister_meta_data : () -> (Result_3) query;
   get_cycles : () -> (nat64) query;
-  get_dao_details : (text) -> (text);
   get_latest_proposals : (Pagination) -> (vec ProposalValueStore) query;
   get_profile_by_id : (principal) -> (Result_4);
   get_proposals : (Pagination) -> (vec ProposalValueStore) query;
   get_user_profile : () -> (Result_4) query;
   get_wasm : () -> (Result_5) query;
   icrc28_trusted_origins : () -> (Icrc28TrustedOriginsResponse);
-  is_user_registered : (principal) -> (bool);
   make_payment : (nat64, principal) -> (Result_6);
   search_dao : (text) -> (vec DaoDetails) query;
   update_profile : (Profileinput) -> (Result_1);
