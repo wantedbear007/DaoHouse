@@ -1,25 +1,9 @@
 type AccountBalance = record { id : principal; staked : nat32 };
-type AddMemberArgs = record {
-  description : text;
-  group_name : text;
-  new_member : principal;
-};
-type Comment = record {
-  created_at : nat64;
-  author_principal : principal;
-  likes : nat16;
-  replies : vec text;
-  comment_text : text;
-  comment_id : text;
-};
 type Dao = record {
-  image_canister : principal;
   members : vec principal;
   dao_id : principal;
   proposals_count : nat32;
   token_ledger_id : LedgerCanisterId;
-  token_symbol : text;
-  daohouse_canister_id : principal;
   linksandsocials : vec text;
   daotype : text;
   tokens_required_to_vote : nat32;
@@ -32,22 +16,19 @@ type Dao = record {
   members_count : nat32;
   followers : vec principal;
   followers_count : nat32;
-  total_tokens : nat32;
+  tokenissuer : text;
+  group_name : vec text;
   cool_down_period : nat32;
   purpose : text;
   required_votes : nat32;
 };
 type DaoGroup = record {
   group_members : vec principal;
-  quorem : nat8;
   group_name : text;
   group_permissions : vec text;
 };
 type DaoInput = record {
-  image_canister : principal;
   members : vec principal;
-  token_symbol : text;
-  daohouse_canister_id : principal;
   linksandsocials : vec text;
   daotype : text;
   tokens_required_to_vote : nat32;
@@ -57,18 +38,16 @@ type DaoInput = record {
   members_permissions : vec text;
   link_of_document : text;
   followers : vec principal;
+  tokenissuer : text;
   cool_down_period : nat32;
   purpose : text;
-  token_supply : nat32;
   required_votes : nat32;
 };
 type LedgerCanisterId = record { id : principal };
 type Pagination = record { end : nat32; start : nat32 };
 type ProposalInput = record {
-  principal_of_action : opt principal;
   proposal_title : text;
   proposal_description : text;
-  group_to_join : opt text;
   proposal_type : ProposalType;
 };
 type ProposalStakes = record {
@@ -89,13 +68,11 @@ type ProposalType = variant {
   RemoveMemberPrposal;
 };
 type Proposals = record {
-  principal_of_action : principal;
   share_count : nat64;
   proposal_expired_at : nat64;
   proposal_submitted_at : nat64;
   proposal_approved_votes : nat64;
   created_by : principal;
-  likes : nat32;
   proposal_rejected_votes : nat64;
   proposal_title : text;
   rejected_votes_list : vec principal;
@@ -103,22 +80,15 @@ type Proposals = record {
   proposal_id : text;
   proposal_status : ProposalState;
   approved_votes_list : vec principal;
-  comments : nat32;
-  group_to_join : opt text;
-  comments_list : vec Comment;
+  comments : nat64;
+  comments_list : vec text;
   proposal_type : ProposalType;
   required_votes : nat32;
 };
-type ReplyCommentArgs = record {
-  comment : text;
-  proposal_id : text;
-  comment_id : text;
-};
-type Result = variant { Ok; Err : text };
-type Result_1 = variant { Ok : text; Err : text };
-type Result_2 = variant { Ok : vec principal; Err : text };
-type Result_3 = variant { Ok : vec Proposals; Err : text };
-type Result_4 = variant { Ok : nat; Err : text };
+type Result = variant { Ok : text; Err : text };
+type Result_1 = variant { Ok : vec principal; Err : text };
+type Result_2 = variant { Ok : vec Proposals; Err : text };
+type Result_3 = variant { Ok : nat; Err : text };
 type TokenTransferArgs = record {
   to : principal;
   from : principal;
@@ -136,27 +106,26 @@ type UpdateDaoSettings = record {
 type VoteParam = variant { No; Yes };
 service : (DaoInput) -> {
   add_ledger_canister_id : (LedgerCanisterId) -> (Result);
-  ask_to_join_dao : (principal) -> (Result_1);
-  change_proposal_state : (text, ProposalState) -> (Result_1);
-  comment_on_proposal : (text, text) -> (Result_1);
-  create_proposal_controller : (principal, ProposalInput) -> (text);
-  follow_dao : () -> (Result_1);
+  add_member_to_group : (text, principal) -> (text);
+  ask_to_join_dao : (text) -> (Result);
+  change_proposal_state : (text, ProposalState) -> (Result);
+  comment_on_proposal : (text, text) -> (Result);
+  create_proposal : (text, ProposalInput) -> (text);
+  follow_dao : () -> (Result);
   get_all_balances : (text) -> (ProposalStakes) query;
   get_all_groups : () -> (vec DaoGroup);
   get_all_proposals : (Pagination) -> (vec Proposals) query;
   get_dao_detail : () -> (Dao) query;
   get_dao_followers : () -> (vec principal) query;
-  get_dao_groups : () -> (vec DaoGroup) query;
   get_dao_members : () -> (vec principal) query;
-  get_members_of_group : (text) -> (Result_2) query;
-  get_my_proposal : () -> (Result_3);
+  get_members_of_group : (text) -> (Result_1) query;
+  get_my_proposal : () -> (Result_2);
   get_proposal_by_id : (text) -> (Proposals) query;
-  icrc_transfer : (TokenTransferArgs) -> (Result_4);
-  proposal_refresh : () -> (Result_1);
-  proposal_to_add_member_to_group : (AddMemberArgs) -> (Result_1);
-  reply_comment : (ReplyCommentArgs) -> (Result_1);
+  icrc_transfer : (TokenTransferArgs) -> (Result_3);
+  proposal_refresh : () -> (Result);
+  remove_member_from_group : (text, principal) -> (text);
   search_proposal : (text) -> (vec Proposals) query;
-  unfollow_dao : () -> (Result_1);
-  update_dao_settings : (UpdateDaoSettings) -> (Result_1);
-  vote : (text, VoteParam) -> (Result_1);
+  unfollow_dao : () -> (Result);
+  update_dao_settings : (UpdateDaoSettings) -> (Result);
+  vote : (text, VoteParam) -> (Result);
 }

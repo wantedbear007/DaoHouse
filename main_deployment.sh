@@ -46,47 +46,54 @@ DIFFERENT=20000000
 dfx deploy daohouse_backend --argument "(record { payment_recipient = principal \"${RECIEVER}\"; })" --network ic
 
 
-# dfx deploy dao_canister --argument '(record {
-#     dao_name = "Sample DAO";
-#     purpose = "To manage community projects";
-#     daotype = "Non-profit";
-#     link_of_document = "https://example.com/charter.pdf";
-#     cool_down_period = 7;
-#     members = vec {
-#         principal "aaaaa-aa";
-#     };
-#     tokenissuer = "sample_token_issuer";
-#     linksandsocials = vec {
-#         "https://twitter.com/sampledao";
-#         "https://discord.gg/sampledao";
-#     };
-#     required_votes = 100;
-#     image_id = "1";
-#     tokens_required_to_vote = 1;
-#     followers = vec {
-#         principal "aaaaa-aa";
-#     };
-#     members_permissions = vec {
-#         "mai hi permission hai";
-#     };
-#     dao_groups = vec {
-#         record {
-#             group_name = "Example Group";
-#             group_members = vec { principal "yxtej-lmfuu-rp3yv-xzu2h-6q43c-7iast-yiwff-z552q-6ugas-pyd6b-fae" };
-#             group_permissions = vec { "example_permission" };
-#         };
-#         record {
-#             group_name = "Example Group2";
-#             group_members = vec { principal "yxtej-lmfuu-rp3yv-xzu2h-6q43c-7iast-yiwff-z552q-6ugas-pyd6b-fae" };
-#             group_permissions = vec { "example_permission" };
-#         };
-#         record {
-#             group_name = "Example Group3";
-#             group_members = vec { principal "aaaaa-aa" };
-#             group_permissions = vec { "example_permission" };
-#         }
-#     };
-# })' --network ic
+dfx deploy dao_canister --argument '(record {
+    dao_name = "Sample DAO";
+    purpose = "To manage community projects";
+    daotype = "Non-profit";
+    link_of_document = "https://example.com/charter.pdf";
+    cool_down_period = 7;
+    members = vec {
+        principal "aaaaa-aa";
+    };
+    tokenissuer = "sample_token_issuer";
+    linksandsocials = vec {
+        "https://twitter.com/sampledao";
+        "https://discord.gg/sampledao";
+    };
+    required_votes = 100;
+    image_id = "1";
+    tokens_required_to_vote = 1;
+    followers = vec {
+        principal "aaaaa-aa";
+    };
+    members_permissions = vec {
+        "mai hi permission hai";
+    };
+    dao_groups = vec {
+        record {
+            group_name = "Example Group";
+            group_members = vec { principal "yxtej-lmfuu-rp3yv-xzu2h-6q43c-7iast-yiwff-z552q-6ugas-pyd6b-fae" };
+            group_permissions = vec { "example_permission" };
+            quorem = 75;
+        };
+        record {
+            group_name = "Example Group2";
+            group_members = vec { principal "yxtej-lmfuu-rp3yv-xzu2h-6q43c-7iast-yiwff-z552q-6ugas-pyd6b-fae" };
+            group_permissions = vec { "example_permission" };
+            quorem = 85;
+
+        };
+        record {
+            group_name = "Example Group3";
+            group_members = vec { principal "aaaaa-aa" };
+            group_permissions = vec { "example_permission" };
+            quorem = 65;
+
+        }
+    };
+})'
+
+ --network ic
 
 # # ./assets_upload.sh
 # dfx deploy daohouse_frontend --network ic

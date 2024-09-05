@@ -5,7 +5,7 @@ use ic_stable_structures::{storable::Bound, Storable};
 // use icrc_ledger_types::icrc1::account::Account;
 use serde::{Deserialize, Serialize};
 use serde_bytes::{self, ByteBuf};
-use std::{borrow::Cow, default};
+use std::borrow::Cow;
 
 pub type CanisterId = Principal;
 
@@ -513,8 +513,9 @@ pub struct UserProfile {
     pub user_id: Principal,
     pub email_id: String,
     pub profile_img: String,
+    pub image_canister: Principal,
     pub username: String,
-    pub dao_ids: Vec<String>,
+    pub dao_ids: Vec<Principal>,
     pub post_count: u32,
     pub post_id: Vec<String>,
     pub followers_count: u32,
@@ -547,11 +548,25 @@ pub struct Profileinput {
     pub image_content_type: String,
 }
 
+// basic profile
+#[derive(Clone, CandidType, Serialize, Deserialize)]
+pub struct MinimalProfileinput {
+    pub email_id: String,
+    // pub profile_img: String,
+    pub name: String,
+
+    // image data
+    pub image_content: ByteBuf,
+    pub image_title: String,
+    pub image_content_type: String,
+}
+
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
 pub struct DaoGroup {
     pub group_name: String,
     pub group_members: Vec<Principal>,
     pub group_permissions: Vec<String>,
+    pub quorem: u8,
 }
 
 #[derive(CandidType, Serialize, Deserialize, Debug, Clone)]
@@ -601,9 +616,6 @@ pub struct ICRC1LedgerInitArgs {
     pub archive_options: ArchiveOptions,
 }
 
-
-
-
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
 pub struct DaoInput {
     pub dao_name: String,
@@ -612,13 +624,13 @@ pub struct DaoInput {
     pub link_of_document: String,
     pub cool_down_period: u32,
     pub members: Vec<Principal>,
-    pub tokenissuer: String,
+    // pub tokenissuer: String,
     pub linksandsocials: Vec<String>,
     pub required_votes: u32,
     pub dao_groups: Vec<DaoGroup>,
     pub token_name: String,
     pub token_symbol: String,
-    pub total_tokens: Nat,
+    pub token_supply: u32,
     pub tokens_required_to_vote: u32,
     // pub followers: Vec<Principal>,
 
@@ -639,24 +651,29 @@ pub struct DaoCanisterInput {
     pub link_of_document: String,
     pub cool_down_period: u32,
     pub members: Vec<Principal>,
-    pub tokenissuer: String,
+    // pub tokenissuer: String,
     pub linksandsocials: Vec<String>,
     pub required_votes: u32,
+    pub token_symbol: String,
+    pub token_supply: u32,
     pub followers: Vec<Principal>,
     pub image_id: String,
     pub members_permissions: Vec<String>,
     pub dao_groups: Vec<DaoGroup>,
-    pub tokens_required_to_vote: u32
+    pub tokens_required_to_vote: u32,
+    pub image_canister: Principal,
+    pub daohouse_canister_id: Principal,
+
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
 pub struct DaoDetails {
-    pub dao_id: Principal,
+    // pub dao_id: Principal,
     pub dao_name: String,
     // pub image_id: String,
     pub dao_desc: String,
-    pub dao_canister_id: String,
-    pub dao_associated_ledger: String
+    pub dao_canister_id: Principal,
+    pub dao_associated_ledger: Principal,
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]
@@ -705,7 +722,7 @@ pub struct ImageData {
 }
 
 // comment
-#[derive(Clone, CandidType, Serialize, Deserialize)]
+#[derive(Clone, CandidType, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Comment {
     pub author_principal: Principal,
     pub comment_text: String,
@@ -723,7 +740,7 @@ pub struct ReplyCommentData {
 
 #[derive(CandidType, Serialize, Deserialize, Clone)]
 pub struct LedgerCanisterId {
-    pub id: Principal
+    pub id: Principal,
 }
 
 // dao response
@@ -762,10 +779,11 @@ pub struct WasmArgs {
 }
 
 #[derive(CandidType, Deserialize, Debug)]
-pub struct PaymentRecipientAccount {
+pub struct InitialArgs {
     pub payment_recipient: Principal, // payment recipient principal address
+    pub ic_asset_canister_id: Principal,
+    pub dao_canister_id: Principal,
 }
-
 
 // LEDGER PARAMS
 #[derive(CandidType, Serialize, Deserialize, Debug)]
@@ -780,7 +798,12 @@ pub struct Account {
     pub subaccount: Option<Vec<u8>>,
 }
 
-
+#[derive(CandidType, Serialize, Deserialize, Clone, Copy)]
+pub struct CanisterData {
+    pub ic_asset_canister: Principal,
+    pub dao_canister: Principal,
+    pub paymeny_recipient: Principal,
+}
 
 #[derive(CandidType, Serialize, Deserialize, Debug)]
 pub struct InitArgs {
@@ -799,19 +822,16 @@ pub struct InitArgs {
     pub archive_options: ArchiveOptions,
 }
 
-
 #[derive(CandidType, Serialize, Deserialize, Debug)]
 pub enum ChangeFeeCollector {
     Unset,
     SetTo(Account),
 }
 
-
 #[derive(Clone, Debug, CandidType, Deserialize)]
 pub struct Icrc28TrustedOriginsResponse {
-    pub trusted_origins: Vec<String>
+    pub trusted_origins: Vec<String>,
 }
-
 
 #[derive(CandidType, Serialize, Deserialize, Debug)]
 pub struct UpgradeArgs {
@@ -826,10 +846,40 @@ pub struct UpgradeArgs {
     pub accounts_overflow_trim_quantity: Option<u64>,
 }
 
+// ligher proposal instance
+#[derive(CandidType, Serialize, Deserialize, Debug, Clone)]
+pub struct ProposalKeyStore {
+    pub associated_dao_canister_id: Principal,
+    pub proposal_id: String,
+}
+
+#[derive(CandidType, Serialize, Deserialize, Debug, Clone)]
+pub struct ProposalValueStore {
+    pub associated_dao_canister_id: Principal,
+    pub proposal_id: String,
+    pub title: String,
+    pub description: String,
+    pub submitted_at: u64,
+    pub expiring_on: u64,
+    pub required_votes: u32,
+    pub created_by: Principal,
+    pub proposal_type: ProposalType,
+    pub action_principal: Principal,
+    // pub total_tokens: u32,
+    pub dao_members: Vec<Principal>, // pub votes:
+}
+
+#[derive(Debug, Clone, CandidType, Deserialize, Serialize, PartialEq, Eq)]
+pub enum ProposalType {
+    AddMemberProposal,
+    RemoveMemberPrposal,
+    VotingProposal,
+}
 
 const MAX_VALUE_SIZE: u32 = 800;
 const MAX_VALUE_SIZE_ANALYTICS: u32 = 300;
 const MAX_VALUE_SIZE_DAO: u32 = 400;
+const MAX_VALUE_SIZE_CANISTER_DATA: u32 = 600;
 // const MAX_VALUE_SIZE: u32 = 600;
 
 impl Storable for UserProfile {
@@ -907,4 +957,32 @@ impl Storable for WasmArgs {
     }
 
     const BOUND: Bound = Bound::Unbounded;
+}
+
+impl Storable for ProposalValueStore {
+    fn to_bytes(&self) -> Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    const BOUND: Bound = Bound::Unbounded;
+}
+
+impl Storable for CanisterData {
+    fn to_bytes(&self) -> Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: std::borrow::Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    // const BOUND: Bound = Bound::Unbounded;
+
+    const BOUND: Bound = Bound::Bounded {
+        max_size: MAX_VALUE_SIZE_CANISTER_DATA,
+        is_fixed_size: false,
+    };
 }

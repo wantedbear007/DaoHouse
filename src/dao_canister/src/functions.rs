@@ -1,17 +1,17 @@
 mod proposal_functions;
 use candid::{CandidType, Principal};
 use ic_cdk::api::call::{CallResult, RejectionCode};
-pub use proposal_functions::*;
+// pub use proposal_functions::*;
 
 mod dao_functions;
-pub use dao_functions::*;
+// pub use dao_functions::*;
 
 mod ledger_functions;
 pub use ledger_functions::*;
 
 use serde::Serialize;
 
-// inter canister call
+// execute methods of other canisters
 pub async fn call_inter_canister<T, U>(
     function: &str,
     args: T,

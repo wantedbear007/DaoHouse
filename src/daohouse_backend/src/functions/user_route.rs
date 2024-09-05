@@ -1,9 +1,10 @@
-use std::borrow::Borrow;
-
-use crate::api::call::{call_with_payment128, CallResult};
+use crate::api::call::{call, call_with_payment128, CallResult};
 use crate::api::canister_version;
+use std::borrow::Borrow;
+use std::sync::mpsc;
+use std::thread;
 
-use crate::routes::upload_image;
+use crate::routes::{create_dao_canister, create_new_ledger_canister, upload_image};
 use crate::types::{
     CanisterIdRecord, CanisterInstallMode, CreateCanisterArgument, CreateCanisterArgumentExtended,
     InstallCodeArgument, InstallCodeArgumentExtended,
@@ -11,13 +12,13 @@ use crate::types::{
 
 use crate::types::{DaoInput, Profileinput, UserProfile};
 use crate::{
-    guards::*, Account, ArchiveOptions, CanisterSettings, DaoCanisterInput, FeatureFlags,
-    ICRC1LedgerInitArgs, InitArgs, LedgerArg, LedgerCanisterId,
+    guards::*, Account, ArchiveOptions, CanisterData, CanisterSettings, DaoCanisterInput,
+    FeatureFlags, ICRC1LedgerInitArgs, InitArgs, LedgerArg, LedgerCanisterId, MinimalProfileinput,
 };
 use crate::{routes, with_state, DaoDetails, DaoResponse, ImageData};
-use candid::{encode_one, Encode, Nat, Principal};
+use candid::{arc, encode_one, Encode, Nat, Principal};
 use ic_cdk::api;
-use ic_cdk::api::call::RejectionCode;
+use ic_cdk::api::call::{self, RejectionCode};
 // use ic_cdk::api::management_canister::main::CanisterSettings;
 use ic_cdk::println;
 use ic_cdk::{query, update};
@@ -26,46 +27,53 @@ use ic_cdk::{query, update};
 
 use super::canister_functions::call_inter_canister;
 use super::ledger_functions::create_ledger_canister;
+use super::reverse_canister_creation;
 // use ic_cdk::trap;
 
 #[update(guard=prevent_anonymous)]
-async fn create_profile(// asset_handler_canister_id: String,
-    // profile: Profileinput
-) -> Result<(), String> {
+async fn create_profile(profile: MinimalProfileinput) -> Result<String, String> {
     // Validate email format
-    // if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
-    //     return Err("Enter correct Email ID".to_string());
-    // }
+    if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
+        return Err(String::from(crate::utils::INVALID_EMAIL));
+    }
     let principal_id = api::caller();
 
-    // Check if the caller is anonymous
-    if principal_id == Principal::anonymous() {
-        return Err("Anonymous principal not allowed to make calls.".to_string());
-    }
     // Check if the user is already registered
-    // let is_registered = with_state(|state| {
-    //     if state.user_profile.contains_key(&principal_id) {
-    //         return Err("User already registered".to_string());
-    //     }
-    //     Ok(())
-    // }).is_err();
+    let is_registered = with_state(|state| {
+        if state.user_profile.contains_key(&principal_id) {
+            return Err(crate::utils::USER_REGISTERED);
+        }
+        Ok(())
+    })
+    .is_err();
+    if is_registered {
+        return Err(String::from(crate::utils::USER_REGISTERED));
+    }
 
-    // if is_registered {
-    //     return Err("User already exist".to_string());
-    // }
+    // to upload image
+    let image_id = upload_image(ImageData {
+        content: profile.image_content,
+        name: profile.image_title.clone(),
+        content_type: profile.image_content_type.clone(),
+    })
+    .await
+    .map_err(|err| format!("{}{}", crate::utils::IMAGE_UPLOAD_FAILED, err))?;
 
-    // image upload
-    // let image_id = upload_image(asset_handler_canister_id, ImageData {
-    //     content: profile.image_content,
-    //     name: profile.image_title.clone(),
-    //     content_type: profile.image_content_type.clone(),
-    // }).await.map_err(|err| format!("Image upload failed: {}", err))?;
+    // getting image canister id
+    let asset_canister_id = with_state(|state| {
+        Ok(match state.canister_data.get(&0) {
+            Some(val) => val.ic_asset_canister,
+            None => return Err(String::from(crate::utils::CANISTER_DATA_NOT_FOUND)),
+        })
+    })
+    .map_err(|err| format!("Error: {}", err))
+    .unwrap();
 
     let new_profile = UserProfile {
         user_id: principal_id,
-        email_id: "".to_string(),
-        profile_img: "1".to_string(),
-        username: "".to_string(),
+        email_id: profile.email_id,
+        profile_img: image_id,
+        username: profile.name,
         dao_ids: Vec::new(),
         post_count: 0,
         post_id: Vec::new(),
@@ -79,36 +87,37 @@ async fn create_profile(// asset_handler_canister_id: String,
         twitter_id: "".to_string(),
         telegram: "".to_string(),
         website: "".to_string(),
+        image_canister: asset_canister_id,
     };
 
     // with_state(|state| routes::create_new_profile(state, profile.clone()))
 
-    with_state(|state| -> Result<(), String> {
+    with_state(|state| -> Result<String, String> {
         let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
         analytics.members_count += 1;
         state.analytics_content.insert(0, analytics);
         state.user_profile.insert(principal_id, new_profile);
-        Ok(())
+        Ok(String::from(crate::utils::PROFILE_UPDATE_SUCCESS))
     })
 }
 
-#[query(guard = prevent_anonymous)]
-fn get_my_follower() -> Result<Vec<Principal>, String> {
-    // let principal_id = api::caller();
+// #[query(guard = prevent_anonymous)]
+// fn get_my_follower() -> Result<Vec<Principal>, String> {
+//     // let principal_id = api::caller();
 
-    let followers =
-        with_state(|state| state.user_profile.get(&api::caller()).clone()).expect("User not found");
-    Ok(followers.followers_list)
-}
+//     let followers =
+//         with_state(|state| state.user_profile.get(&api::caller()).clone()).expect("User not found");
+//     Ok(followers.followers_list)
+// }
 
-#[query(guard = prevent_anonymous)]
-fn get_my_following() -> Result<Vec<Principal>, String> {
-    // let principal_id = api::caller();
+// #[query(guard = prevent_anonymous)]
+// fn get_my_following() -> Result<Vec<Principal>, String> {
+//     // let principal_id = api::caller();
 
-    let following: UserProfile =
-        with_state(|state| state.user_profile.get(&api::caller()).clone()).expect("User not found");
-    Ok(following.followings_list)
-}
+//     let following: UserProfile =
+//         with_state(|state| state.user_profile.get(&api::caller()).clone()).expect("User not found");
+//     Ok(following.followings_list)
+// }
 
 #[query(guard = prevent_anonymous)]
 async fn get_user_profile() -> Result<UserProfile, String> {
@@ -117,11 +126,11 @@ async fn get_user_profile() -> Result<UserProfile, String> {
 
 #[update(guard = prevent_anonymous)]
 async fn update_profile(
-    asset_handler_canister_id: String,
+    // asset_handler_canister_id: String,
     profile: Profileinput,
 ) -> Result<(), String> {
     if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
-        return Err("Enter correct Email ID".to_string());
+        return Err(String::from(crate::utils::INVALID_EMAIL));
     }
 
     let principal_id = api::caller();
@@ -129,14 +138,14 @@ async fn update_profile(
     // Check if the user is already registered
     let is_registered = with_state(|state| {
         if !state.user_profile.contains_key(&principal_id) {
-            return Err("User is not registered".to_string());
+            return Err(String::from(crate::utils::USER_REGISTERED));
         }
         Ok(())
     })
     .is_err();
 
     if is_registered {
-        return Err("User dosen't exist ".to_string());
+        return Err(String::from(crate::utils::USER_DOES_NOT_EXIST));
     }
     // let is_registered = with_state(|state| {
     //     if !state.user_profile.contains_key(&principal_id) {
@@ -154,7 +163,7 @@ async fn update_profile(
 
     if profile.image_title != "na".to_string() {
         image_id = upload_image(
-            asset_handler_canister_id,
+            // asset_handler_canister_id,
             ImageData {
                 content: profile.image_content,
                 name: profile.image_title.clone(),
@@ -162,7 +171,7 @@ async fn update_profile(
             },
         )
         .await
-        .map_err(|err| format!("Image upload failed: {}", err))?;
+        .map_err(|_err| crate::utils::IMAGE_UPLOAD_FAILED)?;
     }
 
     // image upload
@@ -194,242 +203,132 @@ async fn delete_profile() -> Result<(), String> {
     with_state(|state| routes::delete_profile(state))
 }
 
+// #[update(guard = prevent_anonymous)]
+// fn follow_user(user_id: Principal) -> Result<String, String> {
+//     let my_principal_id = api::caller();
+
+//     with_state(|state| {
+//         let my_profile_response = match &mut state.user_profile.get(&api::caller()) {
+//             Some(profile) => {
+//                 if !profile.followings_list.contains(&user_id) {
+//                     profile.followings_list.push(user_id);
+//                     profile.followings_count += 1;
+//                     state
+//                         .user_profile
+//                         .insert(my_principal_id, profile.to_owned());
+
+//                     Ok(())
+//                 } else {
+//                     Err(String::from("You are already following the user"))
+//                 }
+//             }
+//             None => Err(String::from("user does not exist")),
+//         };
+
+//         let other_person_response = match &mut state.user_profile.get(&user_id) {
+//             Some(profile) => {
+//                 profile.followers_list.push(my_principal_id);
+//                 profile.followers_count += 1;
+//                 state.user_profile.insert(user_id, profile.to_owned());
+
+//                 Ok(())
+//             }
+//             None => Err(String::from("Operation failed")),
+//         };
+
+//         match (my_profile_response, other_person_response) {
+//             (Ok(()), Ok(())) => Ok(String::from("Successfully followed")),
+//             (Err(e), _) | (_, Err(e)) => Err(e),
+//         }
+//     })
+
+//     // Ok("()".to_string())
+// }
+
 #[update(guard = prevent_anonymous)]
-fn follow_user(user_id: Principal) -> Result<String, String> {
-    let my_principal_id = api::caller();
+pub async fn create_dao(dao_detail: DaoInput) -> Result<String, String> {
+    // Note: This method follows approach of transaction.
 
-    with_state(|state| {
-        let my_profile_response = match &mut state.user_profile.get(&api::caller()) {
-            Some(profile) => {
-                if !profile.followings_list.contains(&user_id) {
-                    profile.followings_list.push(user_id);
-                    profile.followings_count += 1;
-                    state
-                        .user_profile
-                        .insert(my_principal_id, profile.to_owned());
-
-                    Ok(())
-                } else {
-                    Err(String::from("You are already following the user"))
-                }
-            }
-            None => Err(String::from("user does not exist")),
-        };
-
-        let other_person_response = match &mut state.user_profile.get(&user_id) {
-            Some(profile) => {
-                profile.followers_list.push(my_principal_id);
-                profile.followers_count += 1;
-                state.user_profile.insert(user_id, profile.to_owned());
-
-                Ok(())
-            }
-            None => Err(String::from("Operation failed")),
-        };
-
-        match (my_profile_response, other_person_response) {
-            (Ok(()), Ok(())) => Ok(String::from("Successfully followed")),
-            (Err(e), _) | (_, Err(e)) => Err(e),
-        }
-    })
-
-    // Ok("()".to_string())
-}
-
-#[update(guard = prevent_anonymous)]
-pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<String, String> {
-    ic_cdk::println!("value is {:?}", dao_detail);
-    let principal_id = api::caller();
-
-    let mut updated_members = dao_detail.members.clone();
-    updated_members.push(principal_id.clone());
-
-    // image upload
-
-    let image_id: Result<String, String> = upload_image(
-        canister_id,
-        ImageData {
-            content: dao_detail.image_content,
-            name: dao_detail.image_title,
-            content_type: dao_detail.image_content_type,
-        },
-    )
-    .await;
-
-    let mut id = String::new();
-    let image_create_res: bool = (match image_id {
-        Ok(value) => {
-            id = value;
-            Ok(())
-        }
-        Err(er) => {
-            ic_cdk::println!("error {}", er.to_string());
-            Err(())
-        }
-    })
-    .is_err();
-
-    if image_create_res {
-        return Err("Image upload failed".to_string());
-    }
-
-    let update_dau_detail = DaoCanisterInput {
-        dao_name: dao_detail.dao_name.clone(),
-        purpose: dao_detail.purpose.clone(),
-        daotype: dao_detail.daotype,
-        link_of_document: dao_detail.link_of_document,
-        cool_down_period: dao_detail.cool_down_period,
-        members: updated_members,
-        tokenissuer: dao_detail.tokenissuer,
-        linksandsocials: dao_detail.linksandsocials,
-        required_votes: dao_detail.required_votes,
-        followers: vec![api::caller()],
-        image_id: id.clone(),
-        members_permissions: dao_detail.members_permissions,
-        dao_groups: dao_detail.dao_groups,
-        tokens_required_to_vote: dao_detail.tokens_required_to_vote,
-    };
-
-    let dao_detail_bytes: Vec<u8> = match encode_one(&update_dau_detail) {
-        Ok(bytes) => bytes,
-        Err(e) => {
-            return Err(format!("Failed to serialize DaoInput: {}", e));
-        }
-    };
-
+    // getting user account
+    let principal_id = ic_cdk::api::caller();
     let user_profile_detail = with_state(|state| state.user_profile.get(&principal_id).clone());
 
     let mut user_profile_detail = match user_profile_detail {
         Some(data) => data,
-        None => panic!("User profile doesn't exist !"),
+        None => return Err(String::from(crate::utils::USER_DOES_NOT_EXIST)),
     };
 
-    // let mut veccc: Vec<Principal> = Vec::new();
-    // let veccc: Vec<Principal> = vec![api::caller(), ic_cdk::api::id()];
-    // veccc.push(api::caller());
-    // veccc.push(ic_cdk::api::id());
+    // to create dao canister
+    let dao_canister_id = create_dao_canister(dao_detail.clone())
+        .await
+        .map_err(|err| format!("{} {}", crate::utils::CREATE_DAO_CANISTER_FAIL, err))?;
 
-    let conttt = CanisterSettings {
-        controllers: Some(vec![api::caller(), ic_cdk::api::id()]),
-        ..Default::default()
-    };
+    // to create ledger canister
+    let ledger_canister_id = create_new_ledger_canister(dao_detail.clone()).await;
 
-    let arg = CreateCanisterArgument {
-        settings: Some(conttt),
-    };
-    let (canister_id,) = match create_canister(arg).await {
-        Ok(id) => id,
-        Err((_, err_string)) => {
-            return Err(err_string);
+    let res = match ledger_canister_id {
+        Ok(val) => Ok(val),
+
+        Err(err) => {
+            let _ = reverse_canister_creation(CanisterIdRecord {
+                canister_id: dao_canister_id,
+            })
+            .await;
+
+            Err(format!("{} {}", crate::utils::CREATE_LEDGER_FAILURE, err))
         }
-    };
-    // let (id,)=canister_id;
-    let _addcycles = deposit_cycles(canister_id, 300_000_000_000).await.unwrap();
-    ic_cdk::println!("errrrrr in deposit {:?}", _addcycles);
+    }
+    .map_err(|err| format!("Error {}", err));
 
-    let canister_id_principal = canister_id.canister_id;
-
-    println!("Canister ID: {}", canister_id_principal.to_string());
-    let wasm_dao: Vec<u8> = Vec::new();
-    with_state(|state| match state.wasm_module.get(&0) {
-        Some(val) => val.wasm,
-        None => panic!("nhi mila"),
-    });
-
-    let arg1 = InstallCodeArgument {
-        mode: CanisterInstallMode::Install,
-        canister_id: canister_id_principal,
-        // wasm_module: vec![],
-        wasm_module: wasm_dao,
-        arg: dao_detail_bytes,
-    };
-    let _installcode = install_code(arg1).await.unwrap();
-    // ic_cdk::println!("errrrrr in installing {:?}", _installcode);
-    println!("Canister ID: {:?}", canister_id);
-
-    // creating ledger account associated with dao
-    let ledger_canister_id = create_ledger(
-        canister_id_principal.to_string().clone(),
-        dao_detail.total_tokens,
-        dao_detail.token_name,
-        dao_detail.token_symbol,
-        dao_detail.members,
-    )
-    .await
-    .map_err(|er| format!("Error while creating ledger canister {}", String::from(er)))?;
+    let ledger_canister_id = res.map_err(|err| format!("Error in ledger canister id: {}", err))?;
 
     let dao_details: DaoDetails = DaoDetails {
-        dao_canister_id: canister_id_principal.to_string().clone(),
+        dao_canister_id: dao_canister_id.clone(),
         dao_name: dao_detail.dao_name,
         dao_desc: dao_detail.purpose,
-        // image_id: id,
-        dao_id: canister_id_principal.clone(),
-        dao_associated_ledger: ledger_canister_id.to_string().clone(),
-        // dao_associated_ledger: String::from("abc")
+        dao_associated_ledger: ledger_canister_id,
     };
 
-    // ic_cdk::println!(
-    //     "ledger canister created successfully {}",
-    //     ledger_canister_id
-    // );
-
+    // storing dao details for DAO listings
     with_state(|state| {
         state
             .dao_details
-            .insert(canister_id_principal.to_string().clone(), dao_details)
+            .insert(dao_canister_id.clone(), dao_details)
     });
 
-    user_profile_detail
-        .dao_ids
-        .push(canister_id_principal.to_string());
+    user_profile_detail.dao_ids.push(dao_canister_id);
 
-    // updating ledger canister id in newely created canister id
-
-    let _ = call_inter_canister::<LedgerCanisterId, String>(
+    // adding ledger canister in newly created DAO canister
+    let response_inter_canister = call_inter_canister::<LedgerCanisterId, String>(
         "add_ledger_canister_id",
         LedgerCanisterId {
             id: ledger_canister_id,
-
         },
-        canister_id_principal,
+        dao_canister_id,
     )
-    .await
-    .map_err(|err| format!("Error occurred {}", err.to_string()));
+    .await;
 
-    // let response: CallResult<(Result<String, String>,)> = ic_cdk::call(
-    //     canister_id_principal,
-    //     "add_ledger_canister_id",
-    //     (LedgerCanisterId {
-    //         id: ledger_canister_id,
-    //     },),
-    // )
-    // .await;
+    let _re = match response_inter_canister {
+        Ok(val) => Ok(val),
 
-    // ic_cdk::println!("ye hai bhai canister id of ledger: {:?}", response);
+        Err(err) => {
+            // delete created canisters
+            let _ = reverse_canister_creation(CanisterIdRecord {
+                canister_id: dao_canister_id,
+            })
+            .await;
 
-    //     let res0: Result<(Result<String, String>,), (RejectionCode, String)> = response;
+            let _ = reverse_canister_creation(CanisterIdRecord {
+                canister_id: ledger_canister_id,
+            })
+            .await;
 
-    //     let formatted_value = match res0 {
-    //       Ok((Ok(value),)) => {
-    //           format!("{}", value);
-    //           Ok(format!("{}", value))
-    //           // value
-    //       }
-    //       Ok((Err(err),)) => Err(err),
-    //       Err((code, message)) => {
-    //           match code {
-    //               RejectionCode::NoError => Err("NoError".to_string()),
-    //               RejectionCode::SysFatal => Err("SysFatal".to_string()),
-    //               RejectionCode::SysTransient => Err("SysTransient".to_string()),
-    //               RejectionCode::DestinationInvalid => Err("DestinationInvalid".to_string()),
-    //               RejectionCode::CanisterReject => Err("CanisterReject".to_string()),
-    //               // Handle other rejection codes here
-    //               _ => Err(format!("Unknown rejection code: {:?}: {}", code, message)),
-    //               // _ => Err(format!("Unknown rejection code: {:?}", code)),
-    //           }
-    //       }
-    //   };
+            Err(format!("{}{}", crate::utils::INTER_CANISTER_FAILED, err))
+        }
+    }
+    .map_err(|err| format!("Error {} ", err));
 
+    // updating analytics
     with_state(|state| {
         let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
         analytics.dao_counts += 1;
@@ -437,92 +336,76 @@ pub async fn create_dao(canister_id: String, dao_detail: DaoInput) -> Result<Str
         state.user_profile.insert(principal_id, user_profile_detail)
     });
 
-    // let wasm_dao: Vec<u8> = Vec::new();
-    // with_state(|state| match state.wasm_module.get(&0) {
-    //     Some(val) => val.wasm,
-    //     None => panic!("nhi mila"),
-    // });
-
-    // let arg1 = InstallCodeArgument {
-    //     mode: CanisterInstallMode::Install,
-    //     canister_id: canister_id_principal,
-    //     // wasm_module: vec![],
-    //     wasm_module: wasm_dao,
-    //     arg: dao_detail_bytes,
-    // };
-    // let _installcode = install_code(arg1).await.unwrap();
-    // // ic_cdk::println!("errrrrr in installing {:?}", _installcode);
-    // println!("Canister ID: {:?}", canister_id);
-    // Ok("DAO created successfully".to_string())
     Ok(format!(
-        "Dao created, canister id: {}",
-        canister_id_principal.to_string()
+        "Dao created, canister id: {} ledger id: {}",
+        dao_canister_id.to_string(),
+        ledger_canister_id.to_string()
     ))
 }
 
-async fn create_canister(
-    arg: CreateCanisterArgument, // cycles: u128,
-) -> CallResult<(CanisterIdRecord,)> {
-    let extended_arg = CreateCanisterArgumentExtended {
-        settings: arg.settings,
-        sender_canister_version: Some(canister_version()),
-    };
-    let cycles: u128 = 100_000_000_000;
-    call_with_payment128(
-        Principal::management_canister(),
-        "create_canister",
-        (extended_arg,),
-        cycles,
-    )
-    .await
-}
+// async fn create_canister(
+//     arg: CreateCanisterArgument, // cycles: u128,
+// ) -> CallResult<(CanisterIdRecord,)> {
+//     let extended_arg = CreateCanisterArgumentExtended {
+//         settings: arg.settings,
+//         sender_canister_version: Some(canister_version()),
+//     };
+//     let cycles: u128 = 100_000_000_000;
+//     call_with_payment128(
+//         Principal::management_canister(),
+//         "create_canister",
+//         (extended_arg,),
+//         cycles,
+//     )
+//     .await
+// }
 
-async fn deposit_cycles(arg: CanisterIdRecord, cycles: u128) -> CallResult<()> {
-    call_with_payment128(
-        Principal::management_canister(),
-        "deposit_cycles",
-        (arg,),
-        cycles,
-    )
-    .await
-}
+// async fn deposit_cycles(arg: CanisterIdRecord, cycles: u128) -> CallResult<()> {
+//     call_with_payment128(
+//         Principal::management_canister(),
+//         "deposit_cycles",
+//         (arg,),
+//         cycles,
+//     )
+//     .await
+// }
 
-async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
-    // let wasm_base64: &str = "3831fb07143cd43c3c51f770342d2b7d0a594311529f5503587bf1544ccd44be";
-    // let wasm_module_sample: Vec<u8> = base64::decode(wasm_base64).expect("Decoding failed");
+// async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
+//     // let wasm_base64: &str = "3831fb07143cd43c3c51f770342d2b7d0a594311529f5503587bf1544ccd44be";
+//     // let wasm_module_sample: Vec<u8> = base64::decode(wasm_base64).expect("Decoding failed");
 
-    // let wasm_module_sample: Vec<u8> = include_bytes!("../../../../target/wasm32-unknown-unknown/debug/dao_canister.wasm").to_vec();
+//     // let wasm_module_sample: Vec<u8> = include_bytes!("../../../../target/wasm32-unknown-unknown/debug/dao_canister.wasm").to_vec();
 
-    // let wasm_module_sample: Vec<u8> =
-    //     include_bytes!("../../../../.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
+//     // let wasm_module_sample: Vec<u8> =
+//     //     include_bytes!("../../../../.dfx/local/canisters/dao_canister/dao_canister.wasm").to_vec();
 
-    let mut wasm_module_sample: Vec<u8> = Vec::new();
+//     let mut wasm_module_sample: Vec<u8> = Vec::new();
 
-    with_state(|state| match state.wasm_module.get(&0) {
-        Some(val) => {
-            wasm_module_sample = val.wasm;
-        }
-        None => panic!("WASM error"),
-    });
+//     with_state(|state| match state.wasm_module.get(&0) {
+//         Some(val) => {
+//             wasm_module_sample = val.wasm;
+//         }
+//         None => panic!("WASM error"),
+//     });
 
-    let cycles: u128 = 100_000_000_000;
+//     let cycles: u128 = 100_000_000_000;
 
-    let extended_arg = InstallCodeArgumentExtended {
-        mode: arg.mode,
-        canister_id: arg.canister_id,
-        wasm_module: wasm_module_sample,
-        arg: arg.arg,
-        sender_canister_version: Some(canister_version()),
-    };
+//     let extended_arg = InstallCodeArgumentExtended {
+//         mode: arg.mode,
+//         canister_id: arg.canister_id,
+//         wasm_module: wasm_module_sample,
+//         arg: arg.arg,
+//         sender_canister_version: Some(canister_version()),
+//     };
 
-    call_with_payment128(
-        Principal::management_canister(),
-        "install_code",
-        (extended_arg,),
-        cycles,
-    )
-    .await
-}
+//     call_with_payment128(
+//         Principal::management_canister(),
+//         "install_code",
+//         (extended_arg,),
+//         cycles,
+//     )
+//     .await
+// }
 
 // get dao details (intercanister)
 // #[query]
@@ -545,64 +428,59 @@ async fn install_code(arg: InstallCodeArgument) -> CallResult<()> {
 // check user existance
 #[query(guard = prevent_anonymous)]
 fn check_user_existance() -> Result<String, String> {
-    let principal_id = api::caller();
-    if principal_id == Principal::anonymous() {
-        return Err("Anonymous user not allowed".to_string());
-    }
-
     with_state(|state| {
-        let user = state.user_profile.contains_key(&principal_id);
+        let user = state.user_profile.contains_key(&ic_cdk::api::caller());
         if user {
             Ok("User exist ".to_string())
         } else {
-            Err("User does not exist".to_string())
+            Err(String::from(crate::utils::USER_DOES_NOT_EXIST))
         }
     })
 }
 
-#[update]
-pub async fn get_dao_details(dao_canister_id: String) -> String {
-    ic_cdk::println!("inside this function: {}", &dao_canister_id);
+// #[update]
+// pub async fn get_dao_details(dao_canister_id: String) -> String {
+//     ic_cdk::println!("inside this function: {}", &dao_canister_id);
 
-    type ReturnResult = DaoResponse;
+//     type ReturnResult = DaoResponse;
 
-    // let principal = match Principal::from_text(&dao_canister_id) {
-    //     Ok(p) => p,
-    //     Err(e) => {
-    //         ic_cdk::println!("Invalid principal: {}", e);
-    //         return "Invalid principal".to_string();
-    //     }
-    // };
+//     // let principal = match Principal::from_text(&dao_canister_id) {
+//     //     Ok(p) => p,
+//     //     Err(e) => {
+//     //         ic_cdk::println!("Invalid principal: {}", e);
+//     //         return "Invalid principal".to_string();
+//     //     }
+//     // };
 
-    let principal = Principal::from_text(&dao_canister_id).unwrap();
+//     let principal = Principal::from_text(&dao_canister_id).unwrap();
 
-    ic_cdk::println!("principal id is {:?} ", &principal);
+//     ic_cdk::println!("principal id is {:?} ", &principal);
 
-    let response: CallResult<(ReturnResult,)> = ic_cdk::call(principal, "get_dao_detail", ()).await;
+//     let response: CallResult<(ReturnResult,)> = ic_cdk::call(principal, "get_dao_detail", ()).await;
 
-    match response {
-        Ok((dao_response,)) => {
-            ic_cdk::println!("DAO response: {:?}", dao_response);
-            // Return the DAO response or any other appropriate data
-            "DAO details fetched successfully".to_string()
-        }
-        Err((rejection_code, message)) => {
-            ic_cdk::println!(
-                "Call failed with code {:?} and message {:?}",
-                rejection_code,
-                message
-            );
-            "Call failed".to_string()
-        }
-    }
-}
+//     match response {
+//         Ok((dao_response,)) => {
+//             ic_cdk::println!("DAO response: {:?}", dao_response);
+//             // Return the DAO response or any other appropriate data
+//             "DAO details fetched successfully".to_string()
+//         }
+//         Err((rejection_code, message)) => {
+//             ic_cdk::println!(
+//                 "Call failed with code {:?} and message {:?}",
+//                 rejection_code,
+//                 message
+//             );
+//             "Call failed".to_string()
+//         }
+//     }
+// }
 
-#[update(guard = prevent_anonymous)]
-fn is_user_registered(id: Principal) -> bool {
-    with_state(|state| state.user_profile.contains_key(&id))
-}
+// #[update(guard = prevent_anonymous)]
+// fn is_user_registered(id: Principal) -> bool {
+//     with_state(|state| state.user_profile.contains_key(&id))
+// }
 
-#[update(guard = prevent_anonymous)]
+// #[update(guard = prevent_anonymous)]
 // fn unfollow_user(user_principal: Principal) -> Result<String, String> {
 //     let principal_id = api::caller();
 
@@ -618,53 +496,52 @@ fn is_user_registered(id: Principal) -> bool {
 //     })
 // }
 
-fn unfollow_user(user_principal: Principal) -> Result<String, String> {
-    let principal_id = api::caller();
+// fn unfollow_user(user_principal: Principal) -> Result<String, String> {
+//     let principal_id = api::caller();
 
-    with_state(|state| {
-        // Retrieve the caller's profile
-        let mut my_profile = match state.user_profile.get(&principal_id) {
-            Some(profile) => profile.clone(),
-            None => return Err(String::from("User does not exist")),
-        };
+//     with_state(|state| {
+//         // Retrieve the caller's profile
+//         let mut my_profile = match state.user_profile.get(&principal_id) {
+//             Some(profile) => profile.clone(),
+//             None => return Err(String::from("User does not exist")),
+//         };
 
-        if my_profile.followings_list.contains(&user_principal) {
-            my_profile.followings_list.retain(|s| s != &user_principal);
-            my_profile.followings_count -= 1;
-        } else {
-            return Err(String::from("You are not following this user"));
-        }
+//         if my_profile.followings_list.contains(&user_principal) {
+//             my_profile.followings_list.retain(|s| s != &user_principal);
+//             my_profile.followings_count -= 1;
+//         } else {
+//             return Err(String::from("You are not following this user"));
+//         }
 
-        // Update the caller's profile in the state
-        state.user_profile.insert(principal_id, my_profile);
+//         // Update the caller's profile in the state
+//         state.user_profile.insert(principal_id, my_profile);
 
-        // Retrieve the profile of the user being unfollowed
-        let mut other_profile = match state.user_profile.get(&user_principal) {
-            Some(profile) => profile.clone(),
-            None => return Err(String::from("Other user does not exist")),
-        };
+//         // Retrieve the profile of the user being unfollowed
+//         let mut other_profile = match state.user_profile.get(&user_principal) {
+//             Some(profile) => profile.clone(),
+//             None => return Err(String::from("Other user does not exist")),
+//         };
 
-        other_profile.followers_list.retain(|s| s != &principal_id);
-        other_profile.followers_count -= 1;
+//         other_profile.followers_list.retain(|s| s != &principal_id);
+//         other_profile.followers_count -= 1;
 
-        // Update the profile of the user being unfollowed in the state
-        state.user_profile.insert(user_principal, other_profile);
+//         // Update the profile of the user being unfollowed in the state
+//         state.user_profile.insert(user_principal, other_profile);
 
-        Ok(String::from("Successfully unfollowed"))
-    })
-}
+//         Ok(String::from("Successfully unfollowed"))
+//     })
+// }
 
 #[update(guard = prevent_anonymous)]
 fn get_profile_by_id(id: Principal) -> Result<UserProfile, String> {
     with_state(|state| match state.user_profile.get(&id) {
         Some(profile) => Ok(profile),
-        None => Err(String::from("User does not exist")),
+        None => Err(String::from(crate::utils::USER_DOES_NOT_EXIST)),
     })
 }
 
 // #[update]
 pub async fn create_ledger(
-    dao_canister_id: String,
     total_tokens: Nat,
     token_name: String,
     token_symbol: String,
@@ -734,6 +611,29 @@ pub async fn create_ledger(
 
     // Ok("()".to_string())
 }
+
+// TODO REMOVE THIS
+#[query]
+fn get_canister_meta_data() -> Result<CanisterData, String> {
+    with_state(|state| match state.canister_data.get(&0) {
+        Some(val) => Ok(val),
+        None => return Err(String::from(crate::utils::CANISTER_DATA_NOT_FOUND)),
+    })
+    // with_state(|state| state.canister_data)
+}
+
+// TODO delete canister
+// #[update]
+// pub async fn delete(canister_id: Principal) -> Result<(), String>{
+
+//     let arg = CanisterIdRecord {
+//         canister_id: canister_id
+//     };
+
+//     call(Principal::management_canister(), "delete_canister", (arg,)).await;
+
+//     Ok(())
+// }
 
 // BACKUP
 // async fn create_ledger(dao_canister_id: String, total_tokens: Nat, acc: Principal, token_name: String, token_symbol: String) -> Result<String, String> {
