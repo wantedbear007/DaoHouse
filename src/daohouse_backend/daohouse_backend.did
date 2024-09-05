@@ -136,6 +136,5 @@ service : (InitialArgs) -> {
   make_payment : (nat64, principal) -> (Result_6);
   search_dao : (text) -> (vec DaoDetails) query;
   update_profile : (Profileinput) -> (Result_1);
-  update_proposal_count : () -> (text);
   upload_image : (ImageData) -> (Result);
 }
