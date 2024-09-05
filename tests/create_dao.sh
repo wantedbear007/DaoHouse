@@ -1,9 +1,10 @@
 #!/bin/bash
 
-dfx canister call daohouse_backend create_profile
+chmod 777 ./create_profile.sh
+./create_profile.sh
 
-ASSET_HANDLER_ID=$(dfx canister id ic_asset_handler)
-echo "ASSET_HANDLER_ID: $ASSET_HANDLER_ID"
+# ASSET_HANDLER_ID=$(dfx canister id ic_asset_handler)
+# echo "ASSET_HANDLER_ID: $ASSET_HANDLER_ID"
 
 COUNT=1
 

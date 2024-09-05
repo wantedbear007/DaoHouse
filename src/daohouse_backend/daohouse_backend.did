@@ -48,6 +48,13 @@ type InitialArgs = record {
   ic_asset_canister_id : principal;
   payment_recipient : principal;
 };
+type MinimalProfileinput = record {
+  image_title : text;
+  name : text;
+  image_content : blob;
+  image_content_type : text;
+  email_id : text;
+};
 type Pagination = record { end : nat32; start : nat32 };
 type Profileinput = record {
   image_title : text;
@@ -89,6 +96,7 @@ type Result_4 = variant { Ok : UserProfile; Err : text };
 type Result_5 = variant { Ok : blob; Err : text };
 type Result_6 = variant { Ok : nat; Err : text };
 type UserProfile = record {
+  image_canister : principal;
   post_id : vec text;
   username : text;
   dao_ids : vec principal;
@@ -111,7 +119,7 @@ service : (InitialArgs) -> {
   add_proposal : (ProposalValueStore) -> (Result);
   check_user_existance : () -> (Result) query;
   create_dao : (DaoInput) -> (Result);
-  create_profile : () -> (Result_1);
+  create_profile : (MinimalProfileinput) -> (Result_1);
   delete_profile : () -> (Result_1);
   delete_proposal : (text) -> (Result);
   get_all_dao : (Pagination) -> (vec DaoDetails) query;

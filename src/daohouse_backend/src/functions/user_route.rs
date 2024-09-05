@@ -12,8 +12,8 @@ use crate::types::{
 
 use crate::types::{DaoInput, Profileinput, UserProfile};
 use crate::{
-    guards::*, Account, ArchiveOptions, CanisterData, CanisterSettings,
-    DaoCanisterInput, FeatureFlags, ICRC1LedgerInitArgs, InitArgs, LedgerArg, LedgerCanisterId,
+    guards::*, Account, ArchiveOptions, CanisterData, CanisterSettings, DaoCanisterInput,
+    FeatureFlags, ICRC1LedgerInitArgs, InitArgs, LedgerArg, LedgerCanisterId, MinimalProfileinput,
 };
 use crate::{routes, with_state, DaoDetails, DaoResponse, ImageData};
 use candid::{arc, encode_one, Encode, Nat, Principal};
@@ -31,19 +31,13 @@ use super::reverse_canister_creation;
 // use ic_cdk::trap;
 
 #[update(guard=prevent_anonymous)]
-async fn create_profile(// asset_handler_canister_id: String,
-    // profile: Profileinput
-) -> Result<(), String> {
+async fn create_profile(profile: MinimalProfileinput) -> Result<String, String> {
     // Validate email format
-    // if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
-    //     return Err("Enter correct Email ID".to_string());
-    // }
+    if !profile.email_id.contains('@') || !profile.email_id.contains('.') {
+        return Err("Enter correct Email ID".to_string());
+    }
     let principal_id = api::caller();
 
-    // Check if the caller is anonymous
-    // if principal_id == Principal::anonymous() {
-    //     return Err("Anonymous principal not allowed to make calls.".to_string());
-    // }
     // Check if the user is already registered
     let is_registered = with_state(|state| {
         if state.user_profile.contains_key(&principal_id) {
@@ -52,23 +46,34 @@ async fn create_profile(// asset_handler_canister_id: String,
         Ok(())
     })
     .is_err();
-
     if is_registered {
         return Err("User already exist".to_string());
     }
 
-    // image upload
-    // let image_id = upload_image(asset_handler_canister_id, ImageData {
-    //     content: profile.image_content,
-    //     name: profile.image_title.clone(),
-    //     content_type: profile.image_content_type.clone(),
-    // }).await.map_err(|err| format!("Image upload failed: {}", err))?;
+    // to upload image
+    let image_id = upload_image(ImageData {
+        content: profile.image_content,
+        name: profile.image_title.clone(),
+        content_type: profile.image_content_type.clone(),
+    })
+    .await
+    .map_err(|err| format!("Image upload failed: {}", err))?;
+
+    // getting image canister id
+    let asset_canister_id = with_state(|state| {
+        Ok(match state.canister_data.get(&0) {
+            Some(val) => val.ic_asset_canister,
+            None => return Err(String::from("Canister Meta data not found.")),
+        })
+    })
+    .map_err(|err| format!("Error: {}", err))
+    .unwrap();
 
     let new_profile = UserProfile {
         user_id: principal_id,
-        email_id: "".to_string(),
-        profile_img: "1".to_string(),
-        username: "".to_string(),
+        email_id: profile.email_id,
+        profile_img: image_id,
+        username: profile.name,
         dao_ids: Vec::new(),
         post_count: 0,
         post_id: Vec::new(),
@@ -82,16 +87,17 @@ async fn create_profile(// asset_handler_canister_id: String,
         twitter_id: "".to_string(),
         telegram: "".to_string(),
         website: "".to_string(),
+        image_canister: asset_canister_id,
     };
 
     // with_state(|state| routes::create_new_profile(state, profile.clone()))
 
-    with_state(|state| -> Result<(), String> {
+    with_state(|state| -> Result<String, String> {
         let mut analytics = state.analytics_content.borrow().get(&0).unwrap();
         analytics.members_count += 1;
         state.analytics_content.insert(0, analytics);
         state.user_profile.insert(principal_id, new_profile);
-        Ok(())
+        Ok(String::from("User profile created successfully"))
     })
 }
 

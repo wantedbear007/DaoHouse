@@ -513,6 +513,7 @@ pub struct UserProfile {
     pub user_id: Principal,
     pub email_id: String,
     pub profile_img: String,
+    pub image_canister: Principal,
     pub username: String,
     pub dao_ids: Vec<Principal>,
     pub post_count: u32,
@@ -540,6 +541,19 @@ pub struct Profileinput {
     pub telegram: String,
     pub website: String,
     pub tag_defines: Vec<String>,
+
+    // image data
+    pub image_content: ByteBuf,
+    pub image_title: String,
+    pub image_content_type: String,
+}
+
+// basic profile
+#[derive(Clone, CandidType, Serialize, Deserialize)]
+pub struct MinimalProfileinput {
+    pub email_id: String,
+    // pub profile_img: String,
+    pub name: String,
 
     // image data
     pub image_content: ByteBuf,
@@ -786,7 +800,7 @@ pub struct Account {
 pub struct CanisterData {
     pub ic_asset_canister: Principal,
     pub dao_canister: Principal,
-    pub paymeny_recipient: Principal
+    pub paymeny_recipient: Principal,
 }
 
 #[derive(CandidType, Serialize, Deserialize, Debug)]
@@ -834,7 +848,7 @@ pub struct UpgradeArgs {
 #[derive(CandidType, Serialize, Deserialize, Debug, Clone)]
 pub struct ProposalKeyStore {
     pub associated_dao_canister_id: Principal,
-    pub proposal_id: String
+    pub proposal_id: String,
 }
 
 #[derive(CandidType, Serialize, Deserialize, Debug, Clone)]
@@ -850,8 +864,7 @@ pub struct ProposalValueStore {
     pub proposal_type: ProposalType,
     pub action_principal: Principal,
     // pub total_tokens: u32,
-    pub dao_members: Vec<Principal>
-    // pub votes: 
+    pub dao_members: Vec<Principal>, // pub votes:
 }
 
 #[derive(Debug, Clone, CandidType, Deserialize, Serialize, PartialEq, Eq)]
@@ -860,7 +873,6 @@ pub enum ProposalType {
     RemoveMemberPrposal,
     VotingProposal,
 }
-
 
 const MAX_VALUE_SIZE: u32 = 800;
 const MAX_VALUE_SIZE_ANALYTICS: u32 = 300;
