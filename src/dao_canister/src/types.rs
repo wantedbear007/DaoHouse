@@ -58,7 +58,7 @@ pub struct Proposals {
     pub proposal_type: ProposalType,
     pub share_count: u64,
     pub principal_of_action: Principal, // principal id of user who is to be added, removed, transfered funds
-    pub group_to_join: Option<String>
+    pub group_to_join: Option<String>,
 }
 
 // for proposal comments
@@ -148,6 +148,7 @@ pub struct Dao {
     pub total_tokens: u32,
     pub token_symbol: String,
     pub tokens_required_to_vote: u32, // pub dao_groups: Vec<DaoGroup>,
+    pub daohouse_canister_id: Principal,
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]
@@ -177,6 +178,7 @@ pub struct DaoInput {
     pub tokens_required_to_vote: u32,
     pub token_symbol: String,
     pub token_supply: u32,
+    pub daohouse_canister_id: Principal,
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize, Debug)]

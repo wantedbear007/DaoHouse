@@ -662,6 +662,8 @@ pub struct DaoCanisterInput {
     pub dao_groups: Vec<DaoGroup>,
     pub tokens_required_to_vote: u32,
     pub image_canister: Principal,
+    pub daohouse_canister_id: Principal,
+
 }
 
 #[derive(Clone, CandidType, Serialize, Deserialize)]

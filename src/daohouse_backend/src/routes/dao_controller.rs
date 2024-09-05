@@ -2,8 +2,8 @@ use crate::functions::{
     create_ledger, create_new_canister, deposit_cycles_in_canister, install_code_in_canister,
 };
 use crate::{
-    call_inter_canister, guards::*, Account, ArchiveOptions, CanisterSettings,
-    DaoCanisterInput, FeatureFlags, ICRC1LedgerInitArgs, InitArgs, LedgerArg, LedgerCanisterId,
+    call_inter_canister, guards::*, Account, ArchiveOptions, CanisterSettings, DaoCanisterInput,
+    FeatureFlags, ICRC1LedgerInitArgs, InitArgs, LedgerArg, LedgerCanisterId,
 };
 use candid::encode_one;
 use std::borrow::Borrow;
@@ -75,7 +75,6 @@ pub async fn create_dao_canister(dao_detail: crate::DaoInput) -> Result<Principa
         None => return Err(String::from("Canister Meta data not found.")),
     };
 
-
     let update_dao_detail = crate::DaoCanisterInput {
         dao_name: dao_detail.dao_name.clone(),
         purpose: dao_detail.purpose.clone(),
@@ -93,7 +92,8 @@ pub async fn create_dao_canister(dao_detail: crate::DaoInput) -> Result<Principa
         tokens_required_to_vote: dao_detail.tokens_required_to_vote,
         image_canister: asset_canister_id,
         token_symbol: dao_detail.token_symbol,
-        token_supply: dao_detail.token_supply
+        token_supply: dao_detail.token_supply,
+        daohouse_canister_id: ic_cdk::api::id(),
     };
 
     // encoding params that is to be passed to new canister

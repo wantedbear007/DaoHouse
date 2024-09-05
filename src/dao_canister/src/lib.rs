@@ -56,6 +56,7 @@ async fn init(dao_input: DaoInput) {
         }, // dao_groups: dao_input.dao_groups.clone(), // to be removed (debug impl)
         tokens_required_to_vote: dao_input.tokens_required_to_vote,
         total_tokens: dao_input.token_supply,
+        daohouse_canister_id: dao_input.daohouse_canister_id,
         token_symbol: dao_input.token_symbol,
     };
 

@@ -44,6 +44,7 @@ impl State {
                 total_tokens: 0,
                 token_symbol: String::new(),
                 image_canister: Principal::anonymous(),
+                daohouse_canister_id: Principal::anonymous(),
             },
 
             // permision: Votingandpermissions {

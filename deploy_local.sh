@@ -18,14 +18,14 @@ dfx identity new Bhanu --storage-mode=plaintext || true
 # cargo build --target wasm32-unknown-unknown -p dao_canister
 dfx canister create dao_canister
 dfx canister create ic_asset_handler
-
-
-dfx build dao_canister
-dfx build ic_asset_handler
-
+dfx canister create daohouse_backend
 
 dfx canister create icrc1_ledger_canister
 dfx build icrc1_ledger_canister
+
+dfx build dao_canister
+dfx build ic_asset_handler
+dfx build daohouse_backend
 
 
 # FOR ICP LEDGER
@@ -104,56 +104,58 @@ record {
 }
 })"
 
+DAOHOUSE_BACKEND_ID=$(dfx canister id daohouse_backend)
 
-dfx deploy dao_canister --argument '(record {
-    dao_name = "Sample DAO";
-    token_symbol = "BUNNU";
+
+
+dfx deploy dao_canister --argument "(record {
+    daohouse_canister_id = principal \"${DAOHOUSE_BACKEND_ID}\";
+    dao_name = \"Sample DAO\";
+    token_symbol = \"BUNNU\";
     token_supply = 12;
-    purpose = "To manage community projects";
-    daotype = "Non-profit";
-    link_of_document = "https://example.com/charter.pdf";
+    purpose = \"To manage community projects\";
+    daotype = \"Non-profit\";
+    link_of_document = \"https://example.com/charter.pdf\";
     cool_down_period = 7;
     members = vec {
-        principal "aaaaa-aa";
+        principal \"aaaaa-aa\";
     };
-    tokenissuer = "sample_token_issuer";
+    tokenissuer = \"sample_token_issuer\";
     linksandsocials = vec {
-        "https://twitter.com/sampledao";
-        "https://discord.gg/sampledao";
+        \"https://twitter.com/sampledao\";
+        \"https://discord.gg/sampledao\";
     };
     required_votes = 100;
-    image_id = "1";
+    image_id = \"1\";
     tokens_required_to_vote = 1;
     followers = vec {
-        principal "aaaaa-aa";
+        principal \"aaaaa-aa\";
     };
-    image_canister = principal "aaaaa-aa";
+    image_canister = principal \"aaaaa-aa\";
     members_permissions = vec {
-        "mai hi permission hai";
+        \"mai hi permission hai\";
     };
     dao_groups = vec {
         record {
-            group_name = "Example Group";
-            group_members = vec { principal "yxtej-lmfuu-rp3yv-xzu2h-6q43c-7iast-yiwff-z552q-6ugas-pyd6b-fae" };
-            group_permissions = vec { "example_permission" };
+            group_name = \"Example Group\";
+            group_members = vec { principal \"yxtej-lmfuu-rp3yv-xzu2h-6q43c-7iast-yiwff-z552q-6ugas-pyd6b-fae\" };
+            group_permissions = vec { \"example_permission\" };
             quorem = 75;
         };
         record {
-            group_name = "Example Group2";
-            group_members = vec { principal "yxtej-lmfuu-rp3yv-xzu2h-6q43c-7iast-yiwff-z552q-6ugas-pyd6b-fae" };
-            group_permissions = vec { "example_permission" };
+            group_name = \"Example Group2\";
+            group_members = vec { principal \"yxtej-lmfuu-rp3yv-xzu2h-6q43c-7iast-yiwff-z552q-6ugas-pyd6b-fae\" };
+            group_permissions = vec { \"example_permission\" };
             quorem = 85;
-
         };
         record {
-            group_name = "Example Group3";
-            group_members = vec { principal "aaaaa-aa" };
-            group_permissions = vec { "example_permission" };
+            group_name = \"Example Group3\";
+            group_members = vec { principal \"aaaaa-aa\" };
+            group_permissions = vec { \"example_permission\" };
             quorem = 65;
-
         }
     };
-})'
+})"
 
 
 

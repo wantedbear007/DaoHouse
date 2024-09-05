@@ -1,5 +1,5 @@
 use crate::{
-    guards::*, AddMemberArgs, DaoGroup, LedgerCanisterId, ProposalInput, UpdateDaoSettings,
+    guards::*, utils, AddMemberArgs, DaoGroup, LedgerCanisterId, ProposalInput, UpdateDaoSettings,
 };
 use crate::{with_state, ProposalType};
 use candid::Principal;
@@ -10,7 +10,7 @@ use ic_cdk::{query, update};
 async fn get_members_of_group(group: String) -> Result<Vec<Principal>, String> {
     with_state(|state| match state.dao_groups.get(&group) {
         Some(val) => Ok(val.group_members),
-        None => Err(String::from("No group found with the given name")),
+        None => Err(String::from(crate::utils::NOTFOUND_GROUP)),
     })
 }
 
@@ -19,7 +19,7 @@ async fn get_members_of_group(group: String) -> Result<Vec<Principal>, String> {
 async fn proposal_to_add_member_to_group(args: AddMemberArgs) -> Result<String, String> {
     check_group_member_permission(
         &args.group_name,
-        crate::utils::ADD_MEMBER_TO_GROUP.to_string(),
+        crate::utils::PERMISSION_ADD_MEMBER_TO_GROUP.to_string(),
     )?;
     check_user_in_group(&args.group_name)?;
 
@@ -27,17 +27,14 @@ async fn proposal_to_add_member_to_group(args: AddMemberArgs) -> Result<String, 
     let proposal = ProposalInput {
         principal_of_action: Some(args.new_member),
         proposal_description: args.description,
-        proposal_title: String::from("Add new member to group"),
+        proposal_title: String::from(crate::utils::TITLE_ADD_MEMBER),
         proposal_type: ProposalType::AddMemberProposal,
-        group_to_join: Some(args.group_name.clone()),
+        group_to_join: Some(args.group_name),
     };
 
     crate::proposal_route::create_proposal_controller(args.daohouse_canister, proposal).await;
 
-    Ok(format!(
-        "User successfully added to group {}",
-        args.group_name
-    ))
+    Ok(String::from(crate::utils::REQUEST_ADD_MEMBER))
 }
 
 // #[update]
@@ -124,7 +121,7 @@ async fn ask_to_join_dao(daohouse_backend_id: Principal) -> Result<String, Strin
     let proposal = ProposalInput {
         proposal_description: String::from("Request to join DAO as a member"),
         group_to_join: None,
-        proposal_title: String::from("Add member to DAO"),
+        proposal_title: String::from(crate::utils::TITLE_ADD_MEMBER),
         // required_votes: with_state(|state| state.dao.required_votes),
         proposal_type: crate::ProposalType::AddMemberProposal,
         principal_of_action: Some(api::caller()), // proposal_expired_at: ic_cdk::api::time() + (20 * 86_400 * 1_000_000_000),
@@ -155,11 +152,11 @@ fn follow_dao() -> Result<String, String> {
     with_state(|state| {
         let dao = &mut state.dao;
         if dao.followers.contains(&principal_id) {
-            return Err(String::from("You are already following the user"));
+            return Err(String::from(crate::utils::WARNING_ALREADY_FOLLOW_DAO));
         }
         dao.followers.push(principal_id);
         dao.followers_count += 1;
-        return Ok(String::from("Successfully followed !"));
+        return Ok(String::from(crate::utils::SUCCESS_FOLLOW_DAO));
     })
 }
 
