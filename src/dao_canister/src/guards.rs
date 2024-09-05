@@ -12,7 +12,7 @@ pub fn prevent_anonymous() -> Result<(), String> {
 }
 
 // to check for dao owner / members
-pub fn check_members() -> Result<(), String> {
+pub fn guard_check_members() -> Result<(), String> {
     prevent_anonymous()?;
     with_state(|state| {
         if state.dao.members.contains(&api::caller()) {
@@ -26,7 +26,7 @@ pub fn check_members() -> Result<(), String> {
 // to check members permissions
 pub fn member_permission(permission: String) -> Result<(), String> {
     prevent_anonymous()?;
-    check_members()?;
+    guard_check_members()?;
 
     with_state(|state| {
         if state.dao.members_permissions.contains(&permission) {
@@ -39,7 +39,8 @@ pub fn member_permission(permission: String) -> Result<(), String> {
 
 // check for user who has already voted
 pub fn check_voting_right(proposal_id: &String) -> Result<(), String> {
-    prevent_anonymous()?;
+    guard_check_members()?;
+    // prevent_anonymous()?;
     let principal_id = api::caller();
 
     with_state(|state| match state.proposals.get(&proposal_id) {
@@ -117,3 +118,23 @@ pub fn guard_daohouse_exclusive_method() -> Result<(), String> {
         return Err(String::from(crate::utils::WARNING_NOT_ALLOWED));
     }
 }
+
+// check council member
+pub fn guard_council_members_only() -> Result<(), String> {
+    prevent_anonymous()?;
+
+    with_state(|state| {
+        match state
+            .dao_groups
+            .get(&String::from(crate::utils::COUNCIL_GROUP_NAME))
+        {
+            Some(_val) => Ok(()),
+            None => return Err(String::from(crate::utils::NOTFOUND_GROUP)),
+        }
+    })
+}
+
+// // get group permissions
+// pub fn guard_check_group_permission(group_name: &String, permission: &String) -> Result<(), String> {
+//     with_state(|state|)
+// }

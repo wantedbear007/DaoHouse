@@ -1,5 +1,9 @@
 // DAO permissions
 pub const PERMISSION_ADD_MEMBER_TO_GROUP: &str = "add_member";
+pub const PERMISSION_CHANGE_DAO_CONFIG: &str = "ChangeDAOConfig";
+
+// Essential members 
+pub const COUNCIL_GROUP_NAME: &str = "council";
 
 // General responses / errors / warninigs
 pub const TITLE_ADD_MEMBER: &str = "Add new memeber";
@@ -16,3 +20,5 @@ pub const WARNING_ALREADY_VOTED: &str = "You have already voted for the proposal
 pub const WARNING_DAO_MEMBER_ONLY: &str = "Only members of DAO can perform this action.";
 pub const WARNING_ANONYMOUS_CALL: &str = "Anonymous principal not allowed !";
 pub const WARNING_INTER_CANISTER: &str = "Intercanister call failed";
+pub const WARNING_DONT_FOLLOW: &str = "You don't follow";
+pub const SUCCESS_DAO_UPDATED: &str = "DAO successfully updated";

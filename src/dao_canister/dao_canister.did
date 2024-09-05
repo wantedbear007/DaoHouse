@@ -114,10 +114,11 @@ type ReplyCommentArgs = record {
   proposal_id : text;
   comment_id : text;
 };
-type Result = variant { Ok : text; Err : text };
-type Result_1 = variant { Ok : vec principal; Err : text };
-type Result_2 = variant { Ok : vec Proposals; Err : text };
-type Result_3 = variant { Ok : nat; Err : text };
+type Result = variant { Ok; Err : text };
+type Result_1 = variant { Ok : text; Err : text };
+type Result_2 = variant { Ok : vec principal; Err : text };
+type Result_3 = variant { Ok : vec Proposals; Err : text };
+type Result_4 = variant { Ok : nat; Err : text };
 type TokenTransferArgs = record {
   to : principal;
   from : principal;
@@ -135,11 +136,11 @@ type UpdateDaoSettings = record {
 type VoteParam = variant { No; Yes };
 service : (DaoInput) -> {
   add_ledger_canister_id : (LedgerCanisterId) -> (Result);
-  ask_to_join_dao : (principal) -> (Result);
-  change_proposal_state : (text, ProposalState) -> (Result);
-  comment_on_proposal : (text, text) -> (Result);
+  ask_to_join_dao : (principal) -> (Result_1);
+  change_proposal_state : (text, ProposalState) -> (Result_1);
+  comment_on_proposal : (text, text) -> (Result_1);
   create_proposal_controller : (principal, ProposalInput) -> (text);
-  follow_dao : () -> (Result);
+  follow_dao : () -> (Result_1);
   get_all_balances : (text) -> (ProposalStakes) query;
   get_all_groups : () -> (vec DaoGroup);
   get_all_proposals : (Pagination) -> (vec Proposals) query;
@@ -147,15 +148,15 @@ service : (DaoInput) -> {
   get_dao_followers : () -> (vec principal) query;
   get_dao_groups : () -> (vec DaoGroup) query;
   get_dao_members : () -> (vec principal) query;
-  get_members_of_group : (text) -> (Result_1) query;
-  get_my_proposal : () -> (Result_2);
+  get_members_of_group : (text) -> (Result_2) query;
+  get_my_proposal : () -> (Result_3);
   get_proposal_by_id : (text) -> (Proposals) query;
-  icrc_transfer : (TokenTransferArgs) -> (Result_3);
-  proposal_refresh : () -> (Result);
-  proposal_to_add_member_to_group : (AddMemberArgs) -> (Result);
-  reply_comment : (ReplyCommentArgs) -> (Result);
+  icrc_transfer : (TokenTransferArgs) -> (Result_4);
+  proposal_refresh : () -> (Result_1);
+  proposal_to_add_member_to_group : (AddMemberArgs) -> (Result_1);
+  reply_comment : (ReplyCommentArgs) -> (Result_1);
   search_proposal : (text) -> (vec Proposals) query;
-  unfollow_dao : () -> (Result);
-  update_dao_settings : (UpdateDaoSettings) -> (Result);
-  vote : (text, VoteParam) -> (Result);
+  unfollow_dao : () -> (Result_1);
+  update_dao_settings : (UpdateDaoSettings) -> (Result_1);
+  vote : (text, VoteParam) -> (Result_1);
 }

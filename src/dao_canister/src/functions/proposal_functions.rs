@@ -86,7 +86,7 @@ async fn get_dao_detail() -> Dao {
     with_state(|state| state.dao.clone())
 }
 
-#[update(guard = check_members)]
+#[update(guard = guard_check_members)]
 fn change_proposal_state(
     proposal_id: String,
     proposal_state: ProposalState,

@@ -1,5 +1,5 @@
 mod types;
-use ic_cdk::{api, export_candid, init};
+use ic_cdk::{export_candid, init};
 use std::cell::RefCell;
 pub mod proposal_route;
 mod state_handler;

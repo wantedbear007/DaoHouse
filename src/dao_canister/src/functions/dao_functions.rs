@@ -1,5 +1,5 @@
 use crate::{
-    guards::*, utils, AddMemberArgs, DaoGroup, LedgerCanisterId, ProposalInput, UpdateDaoSettings,
+    guards::*, AddMemberArgs, DaoGroup, LedgerCanisterId, ProposalInput, UpdateDaoSettings,
 };
 use crate::{with_state, ProposalType};
 use candid::Principal;
@@ -158,9 +158,11 @@ fn follow_dao() -> Result<String, String> {
     })
 }
 
-#[update(guard=check_members)]
+#[update(guard=guard_check_members)]
 fn update_dao_settings(update_dao_details: UpdateDaoSettings) -> Result<String, String> {
-    member_permission(String::from("ChangeDAOConfig"))?;
+    // member_permission(String::from("ChangeDAOConfig"))?;
+    member_permission(String::from(crate::utils::PERMISSION_CHANGE_DAO_CONFIG))?;
+
     with_state(|state| {
         let mut original_dao = state.dao.clone();
         original_dao.dao_name = update_dao_details.dao_name;
@@ -171,7 +173,7 @@ fn update_dao_settings(update_dao_details: UpdateDaoSettings) -> Result<String, 
 
         state.dao = original_dao;
 
-        Ok(String::from("DAO settings updated. "))
+        Ok(String::from(crate::utils::SUCCESS_DAO_UPDATED))
     })
 }
 
@@ -184,20 +186,19 @@ fn unfollow_dao() -> Result<String, String> {
             dao.followers.retain(|s| s != &api::caller());
             state.dao.followers_count -= 1;
 
-            Ok(String::from("Success"))
+            Ok(String::from(crate::utils::SUCCESS_FOLLOW_DAO))
         } else {
-            Err(String::from("You don't follow this dao."))
+            Err(String::from(crate::utils::WARNING_DONT_FOLLOW))
         }
     })
 }
 
 // add members guard
 #[update(guard=guard_daohouse_exclusive_method)]
-fn add_ledger_canister_id(id: LedgerCanisterId) -> Result<String, String> {
-
+fn add_ledger_canister_id(id: LedgerCanisterId) -> Result<(), String> {
     with_state(|state| state.dao.token_ledger_id = id);
 
-    Ok("Canister id Updated".to_string())
+    Ok(())
 }
 
 // get dao groups
