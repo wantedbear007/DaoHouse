@@ -10,8 +10,6 @@ mod functions;
 mod guards;
 // #[macro_use]
 extern crate ic_cdk_macros;
-use crate::api::call::CallResult;
-use candid::Nat;
 use candid::Principal;
 use icrc_ledger_types::icrc1::transfer::BlockIndex;
 use types::*;
@@ -27,11 +25,11 @@ pub fn with_state<R>(f: impl FnOnce(&mut State) -> R) -> R {
 
 #[init]
 async fn init(dao_input: DaoInput) {
-    ic_cdk::println!("data is {:?}", dao_input);
+    // ic_cdk::println!("data is {:?}", dao_input);
 
-    let principal_id = api::caller();
+    // let principal_id = api::caller();
     let new_dao = Dao {
-        dao_id: principal_id,
+        dao_id: ic_cdk::api::id(),
         dao_name: dao_input.dao_name,
         purpose: dao_input.purpose,
         daotype: dao_input.daotype,

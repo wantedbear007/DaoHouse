@@ -6,7 +6,7 @@ use crate::{with_state, ProposalType};
 //  prevent anonymous user
 pub fn prevent_anonymous() -> Result<(), String> {
     if api::caller() == Principal::anonymous() {
-        return Err(String::from("Anonymous principal not allowed !"));
+        return Err(String::from(crate::utils::WARNING_ANONYMOUS_CALL));
     }
     Ok(())
 }
@@ -18,7 +18,7 @@ pub fn check_members() -> Result<(), String> {
         if state.dao.members.contains(&api::caller()) {
             return Ok(());
         } else {
-            return Err(String::from("Only members of DAO can perform this action."));
+            return Err(String::from(crate::utils::WARNING_DAO_MEMBER_ONLY));
         }
     })
 }
@@ -32,9 +32,7 @@ pub fn member_permission(permission: String) -> Result<(), String> {
         if state.dao.members_permissions.contains(&permission) {
             return Ok(());
         } else {
-            return Err(String::from(
-                "You are not authorized to perform thia actions",
-            ));
+            return Err(String::from(crate::utils::WARNING_NOT_ALLOWED));
         }
     })
 }
@@ -51,10 +49,10 @@ pub fn check_voting_right(proposal_id: &String) -> Result<(), String> {
             {
                 Ok(())
             } else {
-                Err(String::from("You have already voted."))
+                Err(String::from(crate::utils::WARNING_ALREADY_VOTED))
             }
         }
-        None => Err(String::from("Proposal ID is invalid !")),
+        None => Err(String::from(crate::utils::WARNING_NO_PROPOSAL)),
     })
 }
 
@@ -69,13 +67,10 @@ pub fn check_group_member_permission(
             if val.group_permissions.contains(&permission) {
                 Ok(())
             } else {
-                Err(String::from("You don't have proper permissions"))
+                Err(String::from(crate::utils::WARNING_NOT_ALLOWED))
             }
         }
-        None => Err(format!(
-            "No group is available with the name {}",
-            group_name
-        )),
+        None => Err(format!("{} {}", crate::utils::NOTFOUND_GROUP, group_name)),
     })
 }
 
@@ -87,35 +82,38 @@ pub fn check_user_in_group(group_name: &String) -> Result<(), String> {
             if val.group_members.contains(&api::caller()) {
                 Ok(())
             } else {
-                Err(format!("You are not part of the group {}", group_name))
+                Err(format!(
+                    "{} {}",
+                    crate::utils::WARNING_NOT_IN_GROUP,
+                    group_name
+                ))
             }
         }
-        None => Err(format!(
-            "DAO dosen't have any group named with {}",
-            group_name
-        )),
+        None => Err(format!("{} {}", crate::utils::NOTFOUND_GROUP, group_name)),
     })
 }
 
 // check if proposal exists
-// pub fn check_if_proposal_exists(action_principal: Principal, proposal_type: ProposalType) -> bool {
-//     with_state(|state| {
-//         state.proposals.iter().any(|(_key, val)| {
-//             val.proposal_type == proposal_type && val.principal_of_action == action_principal
-//         })
-//     })
-// }
-
-pub fn check_if_proposal_exists(
+pub fn guard_check_if_proposal_exists(
     action_principal: Principal,
     proposal_type: ProposalType,
 ) -> Result<(), String> {
+    prevent_anonymous()?;
     with_state(|state| {
         for (_key, val) in state.proposals.iter() {
             if val.proposal_type == proposal_type && val.principal_of_action == action_principal {
-                return Err(String::from("Proposal already exists with same request."));
+                return Err(String::from(crate::utils::WARNING_PROPOSAL_EXISTS));
             }
         }
         Ok(())
     })
+}
+
+// guard to allow only daohouse backend to call
+pub fn guard_daohouse_exclusive_method() -> Result<(), String> {
+    if api::caller() == with_state(|state| state.dao.daohouse_canister_id) {
+        return Ok(());
+    } else {
+        return Err(String::from(crate::utils::WARNING_NOT_ALLOWED));
+    }
 }

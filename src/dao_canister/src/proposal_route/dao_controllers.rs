@@ -8,7 +8,7 @@ pub fn add_member_to_group(group_name: &String, new_member: Principal) -> Result
             val.group_members.push(new_member);
             Ok(())
         }
-        None => Err(format!("No group exists with the name {}", group_name)),
+        None => Err(format!("{}{} ",crate::utils::NOTFOUND_GROUP, group_name)),
     })
 }
 

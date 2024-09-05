@@ -32,7 +32,11 @@ async fn proposal_to_add_member_to_group(args: AddMemberArgs) -> Result<String, 
         group_to_join: Some(args.group_name),
     };
 
-    crate::proposal_route::create_proposal_controller(args.daohouse_canister, proposal).await;
+    crate::proposal_route::create_proposal_controller(
+        with_state(|state| state.dao.daohouse_canister_id),
+        proposal,
+    )
+    .await;
 
     Ok(String::from(crate::utils::REQUEST_ADD_MEMBER))
 }
@@ -116,23 +120,17 @@ async fn proposal_to_add_member_to_group(args: AddMemberArgs) -> Result<String, 
 
 #[update (guard = prevent_anonymous)]
 async fn ask_to_join_dao(daohouse_backend_id: Principal) -> Result<String, String> {
-    check_if_proposal_exists(api::caller(), ProposalType::AddMemberProposal)?;
+    crate::guards::guard_check_if_proposal_exists(api::caller(), ProposalType::AddMemberProposal)?;
 
     let proposal = ProposalInput {
-        proposal_description: String::from("Request to join DAO as a member"),
+        proposal_description: String::from(crate::utils::REQUEST_JOIN_DAO),
         group_to_join: None,
         proposal_title: String::from(crate::utils::TITLE_ADD_MEMBER),
-        // required_votes: with_state(|state| state.dao.required_votes),
         proposal_type: crate::ProposalType::AddMemberProposal,
-        principal_of_action: Some(api::caller()), // proposal_expired_at: ic_cdk::api::time() + (20 * 86_400 * 1_000_000_000),
-                                                  // proposal_expired_at: ic_cdk::api::time()
-                                                  // + (with_state(|state| state.dao.cool_down_period) as u64 * 86_400 * 1_000_000_000),
+        principal_of_action: Some(api::caller()),
     };
 
-    let res =
-        crate::proposal_route::create_proposal_controller(daohouse_backend_id, proposal).await;
-
-    Ok(res)
+    Ok(crate::proposal_route::create_proposal_controller(daohouse_backend_id, proposal).await)
 }
 
 #[query]
@@ -194,9 +192,8 @@ fn unfollow_dao() -> Result<String, String> {
 }
 
 // add members guard
-#[update]
+#[update(guard=guard_daohouse_exclusive_method)]
 fn add_ledger_canister_id(id: LedgerCanisterId) -> Result<String, String> {
-    ic_cdk::println!("ledger inter canister called");
 
     with_state(|state| state.dao.token_ledger_id = id);
 

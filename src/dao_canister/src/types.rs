@@ -198,7 +198,7 @@ pub struct UpdateDaoSettings {
 pub struct AddMemberArgs {
     pub group_name: String,
     pub new_member: Principal,
-    pub daohouse_canister: Principal,
+    // pub daohouse_canister: Principal,
     pub description: String,
 }
 // #[derive(Clone, CandidType, Serialize, Deserialize)]

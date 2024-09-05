@@ -1,8 +1,6 @@
 // use std::collections::HashMap;
 use crate::types::{PostInfo, UserProfile};
-use crate::{
-    Analytics, CanisterData, DaoDetails, Memory, ProposalValueStore, WasmArgs,
-};
+use crate::{Analytics, CanisterData, DaoDetails, Memory, ProposalValueStore, WasmArgs};
 use candid::Principal;
 use ic_stable_structures::StableBTreeMap;
 // use std::collections::BTreeMap;
@@ -40,25 +38,6 @@ impl State {
             proposal_store: init_proposal_state(),
         }
     }
-
-    // pub fn get_payment_recipient(&self) -> Principal {
-    //     self.payment_recipient.unwrap()
-    // }
-
-    // pub fn set_payment_recipient(&mut self, principal: Principal) {
-    //     self.payment_recipient = Some(principal);
-    // }
-
-    // // to set canister ids
-    // pub fn set_canister_ids(&mut self, args: CanisterIDs) {
-    //     self.canister_data = args
-    // }
-
-    // // to get canister ids
-    // pub fn get_canister_ids(&self) -> CanisterIDs {
-    //     // self.canister_data.ok_or_else(|| "Canister data not found".to_string())
-    //     self.canister_data
-    // }
 }
 
 fn init_file_contents() -> StableBTreeMap<Principal, UserProfile, Memory> {

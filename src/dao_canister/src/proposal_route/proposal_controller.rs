@@ -79,7 +79,7 @@ pub async fn create_proposal_controller(
         daohouse_backend_id,
     )
     .await
-    .map_err(|err| return format!("Error in inter canister: {}", err));
+    .map_err(|err| return format!("{}{}", crate::utils::WARNING_INTER_CANISTER, err));
 
     with_state(|state| {
         let mut updated_dao = state.dao.clone();
@@ -89,7 +89,7 @@ pub async fn create_proposal_controller(
         state.proposals.insert(proposal_id, new_proposal);
     });
 
-    return String::from("proposal created successfully");
+    return String::from(crate::utils::REQUEST_ADD_MEMBER);
 }
 
 // pub fn get_all_proposals(state:&State)-> HashMap<String, Proposals>{

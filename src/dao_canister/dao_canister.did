@@ -1,6 +1,5 @@
 type AccountBalance = record { id : principal; staked : nat32 };
 type AddMemberArgs = record {
-  daohouse_canister : principal;
   description : text;
   group_name : text;
   new_member : principal;
