@@ -1,9 +1,9 @@
 import React from "react";
-import herosectionleftbottomimg from "../../../assets/herosection.png";
-import herosectiongradient from "../../../assets/herosectiongradient.png";
+
+
 import circle from "../../../assets/circle.png";
 import bgLine from "../../../assets/bgLine.png"
-import bgVid from "../../../assets/bgVid.png"
+
 import HeroGif from "../../../assets/gif/hero.gif"
 import { useNavigate } from "react-router-dom";
 import Container from "../Container/Container";
