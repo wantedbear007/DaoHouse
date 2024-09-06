@@ -38,11 +38,10 @@ const Feature = () => {
         <div className="flex justify-center py-5 mobile:px-4 px-8">
           {/* Centered content */}
           <div className="text-center">
-          <h2 className="text-about-heading font-mulish text-[#0E3746] font-bold text-[20px] md:text-[16px] lg:text-[16px] leading-tight">
-  Our Features
-</h2>
-
-            <p className="text-about-subheading font-mulish text-[#0E3746] lg:text-5xl font-bold font-[500] text-2xl small_phone:text-2xl leading-tight mb-3 whitespace-nowrap">
+            <h2 className="text-about-heading font-mulish text-[#0E3746] font-normal text-[16px] md:text-[16px] lg:text-[16px] leading-tight">
+              Our Features
+            </h2>
+            <p className="text-about-subheading font-mulish text-[#0E3746] lg:text-5xl font-bold font-[500] text-3xl small_phone:text-4xl leading-tight mb-3 whitespace-nowrap">
               Engaging Management Suite
             </p>
           </div>
@@ -50,13 +49,13 @@ const Feature = () => {
 
         {/* Horizontal line with a thicker rectangular center */}
         <div className="relative w-full flex justify-center mb-10"> {/* Increased bottom margin */}
-          <hr className="border-t-2 border-[#0E3746] w-[95%] relative mb-4" /> {/* Adjusted bottom margin here */}
+          <hr className="border-t-2 border-[#0E3746] w-[86%] relative mb-4" /> {/* Adjusted bottom margin here */}
           {/* Thicker moving part as a rounded rectangle */}
           <div
-            className="absolute h-[8px] w-[60px] bg-[#0E3746] rounded-full transition-all duration-300 ease-in-out"
+            className="absolute h-[10px] w-[50px] bg-[#0E3746] rounded-full transition-all duration-300 ease-in-out"
             style={{
               left: getLinePosition(), // Adjust position dynamically
-              top: '-3px', // Slightly above the thin line
+              top: '-4px', // Slightly above the thin line
             }}
           />
         </div>
