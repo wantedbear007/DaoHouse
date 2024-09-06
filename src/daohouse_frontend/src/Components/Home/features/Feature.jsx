@@ -1,11 +1,10 @@
-import React from 'react';
-import Card from './Card';
-import feature1 from "../../../../assets/feature1.png";
-import feature2 from "../../../../assets/feature2.png";
-import feature3 from "../../../../assets/feature3.png";
+import React, { useState } from 'react';
+import feature1 from "../../../../assets/feature.png";
 import Container from '../../Container/Container';
 
 const Feature = () => {
+  const [hoveredCardIndex, setHoveredCardIndex] = useState(null);
+
   const cardData = [
     {
       title: "DAO Management",
@@ -15,50 +14,71 @@ const Feature = () => {
     {
       title: "Content Management",
       subtitle: "Our platform handles everything you post and share, like on social media. It stores and shows your content, comments, and likes.",
-      imageSrc: feature2
+      imageSrc: feature1
     },
     {
       title: "Token Management",
       subtitle: "Our platform manages special tokens to reward users for getting involved and active. These tokens are like digital rewards you earn for participating.",
-      imageSrc: feature3
+      imageSrc: feature1
     }
   ];
 
+  // Calculate the position of the thicker line
+  const getLinePosition = () => {
+    if (hoveredCardIndex === null) return '50%';
+    
+    // Calculate the position of the line based on the hovered card
+    const cardWidthPercentage = 100 / cardData.length;
+    return `calc(${hoveredCardIndex * cardWidthPercentage + cardWidthPercentage / 2}% - 25px)`;
+  };
+
   return (
-    <div className='bg-[#dadee4] mobile:py-16 py-6'>
+    <div className='bg-[#ffffff] mobile:py-16 py-6'>
       <Container className='w-full'>
-        <div className="flex justify-center py-5 mobile:px-4 px-8"> {/* Centered content */}
-          <div className="text-center"> {/* Text centered */}
-            <h2 className="text-about-heading font-mulish text-[#0E3746] font-normal text-[16px] md:text-[16px] lg:text-[16px] leading-tight">Our Features</h2>
-            <p className="text-about-subheading font-mulish text-[#0E3746] font-[500] text-xl small_phone:text-2xl leading-tight mb-3 whitespace-nowrap"> {/* Applied `whitespace-nowrap` */}
+        <div className="flex justify-center py-5 mobile:px-4 px-8">
+          {/* Centered content */}
+          <div className="text-center">
+          <h2 className="text-about-heading font-mulish text-[#0E3746] font-bold text-[20px] md:text-[16px] lg:text-[16px] leading-tight">
+  Our Features
+</h2>
+
+            <p className="text-about-subheading font-mulish text-[#0E3746] lg:text-5xl font-bold font-[500] text-2xl small_phone:text-2xl leading-tight mb-3 whitespace-nowrap">
               Engaging Management Suite
             </p>
           </div>
         </div>
 
-        {/* Increased gap between cards */}
-        <div className="flex flex-col big_phone:flex-row big_phone:justify-center justify-center items-center gap-10 md:gap-16 px-6">
-          <div className="flex justify-center w-full big_phone:w-auto mb-10 big_phone:mb-0">
-            <Card
-              title={cardData[0].title}
-              subtitle={cardData[0].subtitle}
-              imageSrc={cardData[0].imageSrc}
-            />
-          </div>
-          <div className="flex justify-center w-full big_phone:w-auto mb-10 big_phone:mb-0">
-            <Card
-              title={cardData[1].title}
-              subtitle={cardData[1].subtitle}
-              imageSrc={cardData[1].imageSrc}
-            />
-          </div>
-          <div className="flex justify-center w-full big_phone:w-auto">
-            <Card
-              title={cardData[2].title}
-              subtitle={cardData[2].subtitle}
-              imageSrc={cardData[2].imageSrc}
-            />
-          </div>
+        {/* Horizontal line with a thicker rectangular center */}
+        <div className="relative w-full flex justify-center mb-10"> {/* Increased bottom margin */}
+          <hr className="border-t-2 border-[#0E3746] w-[95%] relative mb-4" /> {/* Adjusted bottom margin here */}
+          {/* Thicker moving part as a rounded rectangle */}
+          <div
+            className="absolute h-[8px] w-[60px] bg-[#0E3746] rounded-full transition-all duration-300 ease-in-out"
+            style={{
+              left: getLinePosition(), // Adjust position dynamically
+              top: '-3px', // Slightly above the thin line
+            }}
+          />
+        </div>
+
+        {/* Card grid with hover effect */}
+        <div className="group flex flex-col big_phone:flex-row big_phone:justify-center justify-center items-center gap-6 px-4 mt-10 w-full"> {/* Increased top margin */}
+          {cardData.map((card, index) => (
+            <div
+              key={index}
+              className="relative bg-[#0E3746] text-white p-6 rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-4 w-full big_phone:w-[450px] big_phone:h-[270px] md:w-[550px] md:h-[400px] mb-6"
+              // Set the hovered card index on mouse enter and clear on mouse leave
+              onMouseEnter={() => setHoveredCardIndex(index)}
+              onMouseLeave={() => setHoveredCardIndex(null)}
+            >
+              {/* Icon and content */}
+              <div className="flex flex-col items-start mb-4">
+                <img src={card.imageSrc} alt={card.title} className="w-12 h-14 mb-4" /> {/* Adjusted to add margin at the bottom */}
+                <h3 className="text-3xl font-semibold text-left">{card.title}</h3> {/* Increased title text size */}
+              </div>
+              <p className="text-lg mb-4 text-left">{card.subtitle}</p> {/* Increased subtitle text size */}
+            </div>
+          ))}
         </div>
       </Container>
     </div>

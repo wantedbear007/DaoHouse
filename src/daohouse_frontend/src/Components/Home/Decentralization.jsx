@@ -1,53 +1,90 @@
 import React from "react";
 import "./Decentralization.scss";
-import decentralize from "../../../assets/gif/cropped.gif";
 import Container from "../Container/Container";
 import { useNavigate } from "react-router-dom";
+import smallcircle from "../../../assets/smallcircle.png";
+import mediumcircle from "../../../assets/mediumcircle.png";
+import bigcircle from "../../../assets/bigcircle.png";
 
 const Decentralization = () => {
   const className = "Decentralization";
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleJoinDaoClick = () => {
-    navigate("/dao")
-  }
+    navigate("/dao");
+  };
 
   return (
-    <div className={className + " w-full bg-image-background pb-28"}>
-      <Container classes={'flex flex-col items-center justify-center'}> 
-        <div className={className + "__movingTexts pointer-events-none select-none w-full py-6 flex flex-row overflow-auto"}>
-          <h1 className="text-white text-6xl  md:text-9xl font-semibold">DECENTRALIZATION.</h1>
-          <h1 className="text-white text-6xl md:text-9xl font-semibold">DECENTRALIZATION.</h1>
-          <h1 className="text-white text-6xl md:text-9xl font-semibold">DECENTRALIZATION.</h1>
-        </div>
+    <div
+      className={
+        className + " w-full bg-[#E0E0E0] min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-[#01273A]"
+      }
+    >
+    <Container classes={"flex flex-col translate-y-[6px]  max-w-[99%]  items-center justify-center relative"}> 
 
-        <div className="w-full laptop:px-20 tablet:px-16 mobile:px-20 px-10 flex flex-col big_phone:flex-row justify-between items-center">
+        {/* Main Section */}
+        <div className="relative w-full max-w-[95%] lg:mx-72 sm:max-w-[90%] md:max-w-[98%] h-auto sm:h-[60vh] px-4 sm:px-6 md:px-12 lg:px-40 tablet:px-32 mobile:px-4 flex flex-col items-center justify-center gap-8 bg-white rounded-xl shadow-lg p-8 sm:p-12 z-10">
+          {/* Circles as Background */}
+          <img
+            src={smallcircle}
+            alt="small circle"
+            className="absolute w-[36%] " // Smaller size for mobile, scales up
+          />
+          <img
+            src={mediumcircle}
+            alt="medium circle"
+            className="absolute w-[60%] md:h-[60vh] " // Medium size
+          />
+        
+
           {/* Text Section */}
-          <div className="w-full big_phone:w-1/2 md:pr-4 gap-6 flex flex-col items-center big_phone:items-start">
-            <h2 className="big_phone:text-[32px] mobile:text-3xl text-2xl font-medium text-white text-center big_phone:text-left">
-              Bringing Decentralization to Life: Empowering Communities through
-              Seamless DAO Management
-            </h2>
-            <p className="mobile:text-1xl text-sm text-white text-center big_phone:text-left">
-              Our platform provides the tools and infrastructure needed to
-              establish and manage your own decentralized autonomous
-              organizations.
-            </p>
+          <div className="w-full text-center flex flex-col items-center gap-6 z-10">
+          <h1 className="text-[20px] big_phone:text-[36px] mobile:text-4xl sm:text-3xl md:text-5xl lg:text-4xl text-[#0F3746] font-bold">
+          <span className="block">Bringing Decentralization to Life:</span>
+          <span className="block">Empowering Communities through</span>
+          <span className="block">Seamless DAO Management</span>
+          </h1>
 
-            <button 
+          <p className="text-base mobile:text-xl sm:text-lg md:text-2xl text-gray-700 mt-4">
+          <span className="block"> Our platform provides the tools and infrastructure needed to establish</span>
+          <span className="block"> and manage your own decentralized autonomous organizations.</span>
+           
+          </p>
+
+
+            <button
               onClick={handleJoinDaoClick}
-              className="mobile:px-8 px-6 mobile:py-3 py-2 mobile:text-base text-sm bg-white text-black font-normal rounded-[27.5px] shadow-md hover:bg-gray-200 hover:text-blue-900">
+              className="px-8 mobile:px-10 sm:px-8 md:px-10 py-3 mobile:py-3 sm:py-2 md:py-4 text-sm mobile:text-base sm:text-sm md:text-lg bg-white text-black font-normal rounded-[27.5px] shadow-lg border border-gray-300 hover:bg-gray-200"
+            >
               Join DAO
             </button>
           </div>
+        </div>
 
-          {/* Image Section */}
-          <div className="w-full big_phone:w-1/2 big_phone:h-full h-42 flex justify-center items-center rounded-full">
-            <img
-              src={decentralize}
-              alt="Right Image"
-              className="big_phone:w-3/4 mobile:w-2/4 w-3/4 rounded-full pointer-events-none select-none"
-            />
+        {/* Statistics Section */}
+        <div className="w-full bg-transparent  py-8 z-10">
+          <div className="w-full max-w-8xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4 sm:px-4 md:px-8 py-4 text-center text-white">
+            {/* Members */}
+            <div className="stat-card bg-transparent border border-white rounded-lg py-8 flex justify-start pl-4 relative overflow-hidden">
+              <div className="text-left">
+                <h2 className="text-lg md:text-2xl font-mulish translate-y-[42px]">Members</h2>
+                <p className="stat-number text-5xl md:text-7xl mt-2">150K+</p>
+              </div>
+            </div>
+            {/* Proposals */}
+            <div className="stat-card bg-transparent border border-white rounded-lg py-8 flex justify-start pl-4 relative overflow-hidden">
+              <div className="text-left">
+                <h2 className="text-lg md:text-2xl font-mulish translate-y-[42px]">Proposals</h2>
+                <p className="stat-number text-5xl md:text-7xl mt-2">100K+</p>
+              </div>
+            </div>
+            {/* DAOs */}
+            <div className="stat-card bg-transparent border border-white rounded-lg py-8 flex justify-start pl-4 relative overflow-hidden">
+              <div className="text-left">
+                <h2 className="text-lg md:text-2xl font-mulish translate-y-[42px]">DAOs</h2>
+                <p className="stat-number text-5xl md:text-7xl mt-2">800+</p>
+              </div>
+            </div>
           </div>
         </div>
       </Container>

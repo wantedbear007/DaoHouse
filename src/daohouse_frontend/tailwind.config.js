@@ -3,13 +3,17 @@ module.exports = {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      // Add Mulish font
+      fontFamily: {
+        mulish: ['Mulish', 'sans-serif'],
+      },
       translate: {
         full: "100%",
         "-full": "-100%",
       },
       colors: {
         'dark-green': "#0E3746",
-        'bg-color': '#DADEE4'
+        'bg-color': '#DADEE4',
       },
       scale: {
         90: "0.9",
@@ -31,7 +35,6 @@ module.exports = {
         laptop: "1280px",
         desktop: "1440px",
       },
-      // Add the blur utility here
       blur: {
         xs: '2px',
         sm: '4px',
