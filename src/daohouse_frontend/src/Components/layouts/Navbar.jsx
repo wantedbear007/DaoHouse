@@ -365,7 +365,7 @@ const Navbar = () => {
                  
                   <button
                     onClick={handleLoginModalOpen}
-                    className="mobile:px-8 px-4 py-2 rounded-[27.5px] bg-[#0E3746] shadow-md text-white big_phone:text-base small_phone:text-sm text-xs"
+                    className="mobile:px-8 px-4 py-2 rounded-[27.5px] bg-[#0E3746] shadow-md shadow-[#abaeaf] text-white big_phone:text-base small_phone:text-sm text-xs"
                   >
                     {isModalOpen && isLoading ? "Connecting" : "Connect Wallet"}
                   </button>

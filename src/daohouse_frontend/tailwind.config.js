@@ -24,6 +24,10 @@ module.exports = {
         wiggle: "wiggle 4s ease-in-out infinite",
       },
       screens: {
+        mini_phone: "360px",
+        iphone_SE: "375px",
+        iphone12_pro: "390px",
+        iphone14_pro_max: "430px",
         small_phone: "400px",
         mobile: "500px",
         big_phone: "800px",
