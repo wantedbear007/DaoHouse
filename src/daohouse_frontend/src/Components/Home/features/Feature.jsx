@@ -38,9 +38,10 @@ const Feature = () => {
         <div className="flex justify-center py-5 mobile:px-4 px-8">
           {/* Centered content */}
           <div className="text-center">
-            <h2 className="text-about-heading font-mulish text-[#0E3746] font-normal text-[16px] md:text-[16px] lg:text-[16px] leading-tight">
-              Our Features
-            </h2>
+          <h2 className="text-about-heading font-mulish text-[#0E3746] font-bold text-[20px] md:text-[16px] lg:text-[16px] leading-tight">
+  Our Features
+</h2>
+
             <p className="text-about-subheading font-mulish text-[#0E3746] lg:text-5xl font-bold font-[500] text-3xl small_phone:text-4xl leading-tight mb-3 whitespace-nowrap">
               Engaging Management Suite
             </p>
