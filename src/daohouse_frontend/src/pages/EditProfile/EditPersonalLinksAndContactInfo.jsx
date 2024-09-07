@@ -14,11 +14,11 @@ const EditPersonalLinksAndContactInfo = ({
           <div className="flex items-center">
             <label
               htmlFor="contactNo"
-              className="block md:text-[16px] text-[12px] font-semibold text-[#05212C] md:w-[100px] w-[80px]"
+              className="block md:text-[16px] text-[12px] font-semibold text-[#05212C] md:w-[100px] w-[70px]"
             >
               Contact No.<span className="text-red-500">*</span>
             </label>
-            <div className="flex-grow ml-10">
+            <div className="flex-grow ml-20">
               <input
                 id="contact_number"
                 name="contact_number"
@@ -26,7 +26,7 @@ const EditPersonalLinksAndContactInfo = ({
                 value={profileData.contact_number}
                 onChange={handleInputChange}
                 placeholder="0123456789"
-                className="py-2 px-3 w-full md:w-[80%] lg:w-[50%] border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm text-[12px]"
+                className="py-2 px-3 w-full md:w-full lg:w-[50%] border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm text-[12px]"
               />
             </div>
           </div>
@@ -40,11 +40,11 @@ const EditPersonalLinksAndContactInfo = ({
           <div className="flex items-center">
             <label
               htmlFor="email"
-              className="block md:text-[16px] text-[12px] font-semibold text-[#05212C] md:w-[100px] w-[80px]"
+              className="block md:text-[16px] text-[12px] font-semibold text-[#05212C] md:w-[100px] w-[70px]"
             >
               Email <span className="text-red-500">*</span>
             </label>
-            <div className="flex-grow ml-10">
+            <div className="flex-grow ml-20">
               <input
                 id="email"
                 name="email_id"
@@ -52,7 +52,7 @@ const EditPersonalLinksAndContactInfo = ({
                 value={profileData.email_id}
                 onChange={handleInputChange}
                 placeholder="Emailid.id@example.com"
-                className="py-2 px-3 w-full md:w-[80%] lg:w-[50%] border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm text-[12px]"
+                className="py-2 px-3 w-full md:w-full lg:w-[50%] border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm text-[12px]"
               />
             </div>
           </div>
@@ -65,11 +65,11 @@ const EditPersonalLinksAndContactInfo = ({
         <div className="flex items-center mb-4">
           <label
             htmlFor="twitter"
-            className="block md:text-[16px] text-[12px] font-semibold text-[#05212C] md:w-[100px] w-[80px]"
+            className="block md:text-[16px] text-[12px] font-semibold text-[#05212C] md:w-[100px] w-[70px]"
           >
             Twitter
           </label>
-          <div className="flex-grow ml-10">
+          <div className="flex-grow ml-20">
             <input
               id="twitter"
               name="twitter_id"
@@ -77,7 +77,7 @@ const EditPersonalLinksAndContactInfo = ({
               value={profileData.twitter_id}
               onChange={handleInputChange}
               placeholder="http://www.example.com"
-              className="py-2 px-3 w-full md:w-[80%] lg:w-[50%] border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm text-[12px]"
+              className="py-2 px-3 w-full md:w-full lg:w-[50%] border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm text-[12px]"
             />
           </div>
         </div>
@@ -86,11 +86,11 @@ const EditPersonalLinksAndContactInfo = ({
         <div className="flex items-center mb-4">
           <label
             htmlFor="telegram"
-            className="block md:text-[16px] text-[12px] font-semibold text-[#05212C] md:w-[100px] w-[80px]"
+            className="block md:text-[16px] text-[12px] font-semibold text-[#05212C] md:w-[100px] w-[70px]"
           >
             Telegram
           </label>
-          <div className="flex-grow ml-10">
+          <div className="flex-grow ml-20">
             <input
               id="telegram"
               name="telegram"
@@ -98,7 +98,7 @@ const EditPersonalLinksAndContactInfo = ({
               value={profileData.telegram}
               onChange={handleInputChange}
               placeholder="http://www.example.com"
-              className="py-2 px-3 w-full md:w-[80%] lg:w-[50%] border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm text-[12px]"
+              className="py-2 px-3 w-full md:w-full sm:w-full  md:w-[80%] lg:w-[50%] border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm text-[12px]"
             />
           </div>
         </div>
@@ -107,11 +107,11 @@ const EditPersonalLinksAndContactInfo = ({
         <div className="flex items-center mb-4">
           <label
             htmlFor="website"
-            className="block md:text-[16px] text-[12px] font-semibold text-[#05212C] md:w-[100px] w-[80px]"
+            className="block md:text-[16px] text-[12px] font-semibold text-[#05212C] md:w-[100px] w-[70px]"
           >
             Website
           </label>
-          <div className="flex-grow ml-10">
+          <div className="flex-grow ml-20">
             <input
               id="website"
               name="website"
@@ -119,13 +119,12 @@ const EditPersonalLinksAndContactInfo = ({
               value={profileData.website}
               onChange={handleInputChange}
               placeholder="http://www.example.com"
-              className="py-2 px-3 w-full md:w-[80%] lg:w-[50%] border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm text-[12px]"
+              className="py-2 px-3 w-full md:w-full  sm:w-full lg:w-[50%] border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#05212C] focus:border-[#05212C] sm:text-sm text-[12px]"
             />
           </div>
         </div>
       </div>
-
-      <div className="flex justify-center gap-5 mt-8 md:text-[16px] text-[12px]">
+      <div className="flex justify-center gap-5 mt-8 md:text-[16px] text-[12px] sm:hidden">
         <button className="py-2 w-[126px] border border-[#0E3746] hover:bg-[#0E3746] hover:text-white rounded-[27px] transition duration-200 ease-in-out">
           Discard
         </button>
