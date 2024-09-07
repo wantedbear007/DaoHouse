@@ -28,7 +28,7 @@ const Decentralization = () => {
           <img
             src={smallcircle}
             alt="small circle"
-            className="absolute w-[36%] " // Smaller size for mobile, scales up ;
+            className="absolute w-[38%]  md:h-[60vh] " // Smaller size for mobile, scales up ;
 
           />
           <img
@@ -40,17 +40,18 @@ const Decentralization = () => {
 
           {/* Text Section */}
           <div className="w-full text-center flex flex-col items-center gap-6 z-10">
-          <h1 className="text-[20px] big_phone:text-[36px] font-mulish mobile:text-4xl sm:text-3xl md:text-5xl lg:text-4xl text-[#0F3746] font-bold">
+          <h1 className="text-[20px] big_phone:text-[36px] font-mulish mobile:text-4xl sm:text-3xl md:text-6xl lg:text-4xl text-[#0F3746] font-bold">
           <span className="block">Bringing Decentralization to Life:</span>
           <span className="block">Empowering Communities through</span>
           <span className="block">Seamless DAO Management</span>
           </h1>
 
-          <p className="text-base mobile:text-xl sm:text-lg  font-mulish md:text-2xl text-gray-700 mt-4">
-          <span className="block"> Our platform provides the tools and infrastructure needed to establish</span>
-          <span className="block"> and manage your own decentralized autonomous organizations.</span>
-           
-          </p>
+          <p className="text-xs mobile:text-sm sm:text-sm font-mulish md:text-base text-gray-700 mt-2">
+  <span className="block"> Our platform provides the tools and infrastructure needed to establish</span>
+  <span className="block"> and manage your own decentralized autonomous organizations.</span>
+</p>
+
+
 
 
             <button

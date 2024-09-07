@@ -38,7 +38,7 @@ const Feature = () => {
         <div className="flex justify-center py-5 mobile:px-4 px-8">
           {/* Centered content */}
           <div className="text-center">
-            <h2 className="text-about-heading font-mulish text-[#0E3746] font-bold text-[20px] md:text-[16px] lg:text-[20px] leading-tight">
+            <h2 className="text-about-heading font-mulish text-[#0E3746] font-bold text-[20px] md:text-[12px] lg:text-[18px] leading-tight">
               OUR FEATURES
             </h2>
 
