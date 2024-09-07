@@ -176,8 +176,8 @@ const Step2 = ({ setData, setActiveStep, data }) => {
                 type="text"
                 name="VotesRequired"
                 value={inputData.VotesRequired}
-                // onChange={handleChange}
-                onChange={(e) => changePeriod(e.target.value)}
+                 onChange={handleChange}
+               // onChange={(e) => changePeriod(e.target.value)}
                 className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"
               />
             </div>
