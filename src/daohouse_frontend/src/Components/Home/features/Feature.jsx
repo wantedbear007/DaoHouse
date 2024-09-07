@@ -25,7 +25,7 @@ const Feature = () => {
 
   // Calculate the position of the thicker line
   const getLinePosition = () => {
-    if (hoveredCardIndex === null) return '50%';
+    if (hoveredCardIndex === null) return '-100px'; // Hide off-screen to the left
     
     // Calculate the position of the line based on the hovered card
     const cardWidthPercentage = 100 / cardData.length;
@@ -33,49 +33,50 @@ const Feature = () => {
   };
 
   return (
-    <div className='bg-[#ffffff] mobile:py-16 py-6'>
+    <div className='bg-[#F5F5F5] translate-y-[-30px]  mobile:py-16 py-6'>
       <Container className='w-full'>
         <div className="flex justify-center py-5 mobile:px-4 px-8">
           {/* Centered content */}
           <div className="text-center">
-            <h2 className="text-about-heading font-mulish text-[#0E3746] font-bold text-[20px] md:text-[16px] lg:text-[16px] leading-tight">
-              Our Features
+            <h2 className="text-about-heading font-mulish text-[#0E3746] font-bold text-[20px] md:text-[16px] lg:text-[20px] leading-tight">
+              OUR FEATURES
             </h2>
 
-            <p className="text-about-subheading font-mulish text-[#0E3746] lg:text-2xl font-bold font-[500] text-2xl small_phone:text-2xl leading-tight mb-3 whitespace-nowrap">
+            <p className="text-about-subheading font-mulish text-[#0E3746] lg:text-5xl font-bold font-[500] text-2xl small_phone:text-2xl leading-tight mb-3 whitespace-nowrap">
               Engaging Management Suite
             </p>
           </div>
         </div>
 
-        {/* Horizontal line with a thicker rectangular center */}
-        <div className="relative w-full flex justify-center mb-10"> {/* Increased bottom margin */}
-          <hr className="border-t-2 border-[#0E3746] w-[86%] relative mb-4" /> {/* Adjusted bottom margin here */}
-          {/* Thicker moving part as a rounded rectangle */}
+        {/* Horizontal line with a thicker rectangular center   */}
+        <div className="relative w-full flex justify-center mb-10">
+          <hr className="border-t-2 border-[#0E3746] w-[82%] relative mb-4" />
           <div
-            className="absolute h-[10px] w-[50px] bg-[#0E3746] rounded-full transition-all duration-300 ease-in-out"
+            className="absolute h-[5px] w-[50px] bg-[#0E3746] rounded-full transition-all duration-500 ease-in-out"
             style={{
-              left: getLinePosition(), // Adjust position dynamically
-              top: '-4px', // Slightly above the thin line
+              left: getLinePosition(),
+              top: '-1px',
+              opacity: hoveredCardIndex === null ? 0 : 1,
+              transform: hoveredCardIndex === null ? 'translateX(-100px)' : 'translateX(0)',
             }}
           />
         </div>
 
         {/* Card grid with hover effect */}
-        <div className="group flex flex-col big_phone:flex-row big_phone:justify-center justify-center items-center gap-6 px-4 mt-10 w-full">
+        <div className="group flex flex-col mobile:flex-row big_phone:flex-row justify-center items-center gap-6 px-4 mt-10 w-full">
           {cardData.map((card, index) => (
             <div
               key={index}
-              className="relative bg-[#0E3746] text-white p-6 rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-4 w-full mobile:w-[50%] big_phone:w-[420px] big_phone:h-[270px] md:w-[150px] md:h-[250px] mb-6"
+              className="relative bg-[#0E3746] text-white p-[20px] rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-4 w-full sm:w-[300px] md:w-[300px] lg:w-[390px] h-[265px] mb-6"
               onMouseEnter={() => setHoveredCardIndex(index)}
               onMouseLeave={() => setHoveredCardIndex(null)}
             >
               {/* Icon and content */}
               <div className="flex flex-col items-start mb-4">
-                <img src={card.imageSrc} alt={card.title} className="w-12 h-14 mb-4" />
-                <h3 className="text-3xl font-semibold text-left">{card.title}</h3>
+                <img src={card.imageSrc} alt={card.title} className="w-10 h-10 mb-4" />
+                <h3 className="text-lg md:text-xl font-mulish lg:text-2xl font-semibold text-left">{card.title}</h3>
               </div>
-              <p className="text-lg mb-4 text-left">{card.subtitle}</p>
+              <p className="text-sm md:text-base font-mulish lg:text-lg mb-4 text-left">{card.subtitle}</p>
             </div>
           ))}
         </div>
