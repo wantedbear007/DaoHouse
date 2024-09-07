@@ -75,15 +75,15 @@ const About = () => {
             />
           </div> */}
 
-          <div className="flex flex-col items-center md:items-start gap-4 md:w-[480px] lg:w-[650px] font-mulish font-normal text-[12px] md:text-[14px] lg:text-[16px] md:px-8 md:pb-8 md:mx-0 md:my-4 lg:mr-6 relative z-10 text-center md:text-left">
+          <div className="flex flex-col items-center md:items-start gap-4 md:w-[480px] lg:w-[670px] font-mulish font-normal text-[12px] md:text-[14px] lg:text-[16px] md:px-8 md:pb-8 md:mx-0 md:my-4 lg:mr-6 relative z-10 text-center md:text-left">
             <span className="block text-center">
               At our platform, decentralized autonomous organization meets
               cutting-edge technology to revolutionize the way communities govern
               themselves.
             </span>
             <span className="block text-center">
-              We believe in the power of collective intelligence and the potential
-              for blockchain technology to democratize decision-making processes.
+              We believe in the power of collective intelligence and the potential  for blockchain
+              technology to democratize decision-making processes.
               Our platform provides a seamless and transparent framework for
               organizations of all sizes to manage resources, vote on proposals,
               and drive impactful change.
