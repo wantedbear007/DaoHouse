@@ -33,7 +33,7 @@ const Feature = () => {
   };
 
   return (
-    <div className='bg-[#F5F5F5] mobile:py-16 py-6'>
+    <div className='bg-[#F5F5F5] translate-y-[-30px]  mobile:py-16 py-6'>
       <Container className='w-full'>
         <div className="flex justify-center py-5 mobile:px-4 px-8">
           {/* Centered content */}
@@ -52,10 +52,10 @@ const Feature = () => {
         <div className="relative w-full flex justify-center mb-10">
           <hr className="border-t-2 border-[#0E3746] w-[82%] relative mb-4" />
           <div
-            className="absolute h-[6px] w-[50px] bg-[#0E3746] rounded-full transition-all duration-500 ease-in-out"
+            className="absolute h-[5px] w-[50px] bg-[#0E3746] rounded-full transition-all duration-500 ease-in-out"
             style={{
               left: getLinePosition(),
-              top: '-3px',
+              top: '-1px',
               opacity: hoveredCardIndex === null ? 0 : 1,
               transform: hoveredCardIndex === null ? 'translateX(-100px)' : 'translateX(0)',
             }}

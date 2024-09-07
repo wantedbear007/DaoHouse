@@ -20,7 +20,7 @@ const Decentralization = () => {
         className + " w-full bg-[#E0E0E0] min-h-screen flex items-center justify-center bg-gradient-to-b from-[#F5F5F5] to-[#01273A]"
       }
     >
-    <Container classes={"flex flex-col translate-y-[-20px]  max-w-[99%]  items-center justify-center relative"}> 
+    <Container classes={"flex flex-col translate-y-[-28px]  max-w-[99%]  items-center justify-center relative"}> 
 
         {/* Main Section */}
         <div className="relative w-full max-w-[95%] lg:mx-72 sm:max-w-[90%] md:max-w-[98%] h-auto sm:h-[60vh] px-4 sm:px-6 md:px-12 lg:px-40 tablet:px-32 mobile:px-4 flex flex-col items-center justify-center gap-8 bg-white rounded-xl shadow-lg p-8 sm:p-12">
@@ -63,7 +63,7 @@ const Decentralization = () => {
         </div>
 
         {/* Statistics Section */}
-        <div className="w-full bg-transparent  translate-y-[-20px] py-8 z-10">
+        <div className="w-full bg-transparent  translate-y-[4px] py-8 z-10">
           <div className="w-full max-w-8xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4 sm:px-4 md:px-8 py-4 text-center text-white">
             {/* Members */}
             <div className="stat-card bg-transparent border border-white rounded-lg py-2 flex justify-start pl-4 relative overflow-hidden">
