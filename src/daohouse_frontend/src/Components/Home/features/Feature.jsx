@@ -48,7 +48,7 @@ const Feature = () => {
           </div>
         </div>
 
-        {/* Horizontal line with a thicker rectangular center */}
+        {/* Horizontal line with a thicker rectangular center  */}
         <div className="relative w-full flex justify-center mb-10">
           <hr className="border-t-2 border-[#0E3746] w-[82%] relative mb-4" />
           <div
