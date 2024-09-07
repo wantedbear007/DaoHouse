@@ -19,7 +19,7 @@ const EditPersonalLinksAndContactInfo = ({
             >
               Contact No.<span className="text-red-500">*</span>
             </label>
-            <div className="flex-grow ml-2">
+            <div className="flex-grow ml-20">
               <input
                 id="contact_number"
                 name="contact_number"
@@ -45,7 +45,7 @@ const EditPersonalLinksAndContactInfo = ({
             >
               Email <span className="text-red-500">*</span>
             </label>
-            <div className="flex-grow ml-2">
+            <div className="flex-grow ml-20">
               <input
                 id="email"
                 name="email_id"
@@ -70,7 +70,7 @@ const EditPersonalLinksAndContactInfo = ({
           >
             Twitter
           </label>
-          <div className="flex-grow ml-2">
+          <div className="flex-grow ml-20">
             <input
               id="twitter"
               name="twitter_id"
@@ -91,7 +91,7 @@ const EditPersonalLinksAndContactInfo = ({
           >
             Telegram
           </label>
-          <div className="flex-grow ml-2">
+          <div className="flex-grow ml-20">
             <input
               id="telegram"
               name="telegram"
@@ -112,7 +112,7 @@ const EditPersonalLinksAndContactInfo = ({
           >
             Website
           </label>
-          <div className="flex-grow ml-2">
+          <div className="flex-grow ml-20">
             <input
               id="website"
               name="website"
