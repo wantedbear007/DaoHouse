@@ -49,7 +49,7 @@ const Footer = () => {
           </div>
 
           {/* Social Icons */}
-          <div className="flex  items-center translate-y-[26px] gap-6 my-4 lg:mr-20">
+          <div className="flex  items-center translate-y-[22px] gap-6 my-4 lg:mr-20">
             <img
               src={telegram1}
               alt="Telegram"
