@@ -54,7 +54,7 @@ const About = () => {
           />
         </div> */}
 
-        <div className="md:w-60% w-full lg:p-8 text-white lg:mx-16 md:mx-4 mx-10 flex flex-col items-center relative z-10">
+        <div className="md:w-50% w-full lg:p-8 text-white lg:mx-16 md:mx-6 mx-10 flex flex-col items-center relative ">
           <div className="lg:px-8 md:px-8 md:ml-0 relative z-50 md:z-0 mb-2 text-center md:text-left">
           <h2 className="text-about-heading text-center font-mulish font-normal text-[16px] md:text-[16px] lg:text-[16px] leading-tight mt-4 mb-1 mx-auto">
   ABOUT PLATFORM
@@ -76,18 +76,18 @@ const About = () => {
           </div> */}
 
           <div className="flex flex-col items-center md:items-start gap-4 md:w-[480px] lg:w-[620px] font-mulish font-normal text-[12px] md:text-[14px] lg:text-[16px] md:px-8 md:pb-8 md:mx-0 md:my-4 lg:mr-6 relative z-10 text-center md:text-left">
-            <p className="pr-4 text-center">
+            <span className="block text-center">
               At our platform, decentralized autonomous organization meets
               cutting-edge technology to revolutionize the way communities govern
               themselves.
-            </p>
-            <p className="pr-4 text-center">
+            </span>
+            <span className="block text-center">
               We believe in the power of collective intelligence and the potential
               for blockchain technology to democratize decision-making processes.
               Our platform provides a seamless and transparent framework for
               organizations of all sizes to manage resources, vote on proposals,
               and drive impactful change.
-            </p>
+            </span>
             <div className="flex mt-5 justify-center items-center w-full">
             <button
               onClick={handleJoinDaoClick}

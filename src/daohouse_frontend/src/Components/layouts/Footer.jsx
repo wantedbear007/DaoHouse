@@ -13,7 +13,7 @@ const Footer = () => {
 
   return (
     <React.Fragment>
-      <footer className="bg-[#ffffff]  h-auto small_phone:py-12 py-5 text-center ">
+      <footer className="bg-[#ffffff]  h-auto small_phone:py-12  py-5 text-center ">
         {/* Main Content */}
         {/* <div className="w-full flex flex-col md:flex-row items-center justify-between small_phone:mb-8 lg:gap-[270px] md:gap-[200px] gap-8 border border-red-300"> */}
         <div className="w-full flex flex-col md:flex-row items-center justify-between small_phone:mb-8 lg:gap-[200px] md:gap-[80px] gap-8 ">
@@ -22,12 +22,12 @@ const Footer = () => {
             <img
               src={BlackLogo}
               alt="DAO House"
-              className="small_phone:w-32 w-20 mx-auto small_phone:mb-10 mb-6 lg:ml-14 lg:mx-0 md:justify-center md:mx-auto"
+              className="small_phone:w-32 w-20 mx-auto translate-y-[40px] small_phone:mb-10 mb-6 lg:ml-20 lg:mx-0 md:justify-center md:mx-auto"
             />
           </Link>
 
           {/* Navigation Links */}
-          <div className=" flex flex-col md:flex-row justify-center lg:mt-3 md:ml-14 md:mb-12 my-1 gap-6">
+          <div className=" flex flex-col md:flex-row translate-y-[40px] justify-center lg:mt-3 md:ml-14 md:mb-12 my-1 gap-6">
             <Link
               to="/"
               className="text-[#3D3D3D] small_phone:text-base text-sm font-inter font-normal hover:underline"
@@ -49,7 +49,7 @@ const Footer = () => {
           </div>
 
           {/* Social Icons */}
-          <div className="flex  items-center gap-6 my-4 lg:mr-12">
+          <div className="flex  items-center translate-y-[26px] gap-6 my-4 lg:mr-20">
             <img
               src={telegram1}
               alt="Telegram"
