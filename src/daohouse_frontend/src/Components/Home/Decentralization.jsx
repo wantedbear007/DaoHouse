@@ -20,39 +20,33 @@ const Decentralization = () => {
         className + " w-full bg-[#E0E0E0] min-h-screen flex items-center justify-center bg-gradient-to-b from-[#F5F5F5] to-[#01273A]"
       }
     >
-    <Container classes={"flex flex-col translate-y-[-28px]  max-w-[99%]  items-center justify-center relative"}> 
-
+      <Container classes={"flex flex-col items-center justify-center relative max-w-full px-4"}>
         {/* Main Section */}
-        <div className="relative w-full max-w-[95%] lg:mx-72 sm:max-w-[90%] md:max-w-[98%] h-auto sm:h-[60vh] px-4 sm:px-6 md:px-12 lg:px-40 tablet:px-32 mobile:px-4 flex flex-col items-center justify-center gap-8 bg-white rounded-xl shadow-lg p-8 sm:p-12">
+        <div className="relative w-full max-w-[95%] lg:mx-72 sm:max-w-[90%] md:max-w-[98%] h-auto sm:h-[60vh] px-4 sm:px-6 md:px-12 lg:px-40 tablet:px-32 mobile:px-4 flex flex-col items-center justify-center gap-8 bg-white rounded-xl shadow-lg p-8 sm:p-12 overflow-hidden">
           {/* Circles as Background */}
           <img
             src={smallcircle}
             alt="small circle"
-            className="absolute w-[38%]  md:h-[60vh] " // Smaller size for mobile, scales up ;
-
+            className="absolute w-[20%] md:w-[38%] h-auto"
           />
           <img
             src={mediumcircle}
             alt="medium circle"
-            className="absolute w-[60%] md:h-[60vh] " // Medium size
+            className="absolute w-[60%] md:w-[60%] h-auto"
           />
-        
 
           {/* Text Section */}
           <div className="w-full text-center flex flex-col items-center gap-6 z-10">
-          <h1 className="text-[20px] big_phone:text-[36px] font-mulish mobile:text-4xl sm:text-3xl md:text-6xl lg:text-4xl text-[#0F3746] font-bold">
-          <span className="block">Bringing Decentralization to Life:</span>
-          <span className="block">Empowering Communities through</span>
-          <span className="block">Seamless DAO Management</span>
-          </h1>
+            <h1 className="text-[20px] big_phone:text-[36px] font-mulish mobile:text-4xl sm:text-3xl md:text-6xl lg:text-4xl text-[#0F3746] font-bold max-w-[90%] sm:max-w-[80%] md:max-w-[70%]">
+              <span className="block">Bringing Decentralization to Life:</span>
+              <span className="block">Empowering Communities through</span>
+              <span className="block">Seamless DAO Management</span>
+            </h1>
 
-          <p className="text-xs mobile:text-sm sm:text-sm font-mulish md:text-base text-gray-700 mt-2">
-  <span className="block"> Our platform provides the tools and infrastructure needed to establish</span>
-  <span className="block"> and manage your own decentralized autonomous organizations.</span>
-</p>
-
-
-
+            <p className="text-xs mobile:text-sm sm:text-sm font-mulish md:text-base text-gray-700 mt-2 max-w-[90%] sm:max-w-[80%] md:max-w-[70%]">
+              <span className="block">Our platform provides the tools and infrastructure needed to establish</span>
+              <span className="block">and manage your own decentralized autonomous organizations.</span>
+            </p>
 
             <button
               onClick={handleJoinDaoClick}
@@ -64,27 +58,27 @@ const Decentralization = () => {
         </div>
 
         {/* Statistics Section */}
-        <div className="w-full bg-transparent  translate-y-[4px] py-8 z-10">
+        <div className="w-full bg-transparent py-8 z-10 overflow-x-auto">
           <div className="w-full max-w-8xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4 sm:px-4 md:px-8 py-4 text-center text-white">
             {/* Members */}
             <div className="stat-card bg-transparent border border-white rounded-lg py-2 flex justify-start pl-4 relative overflow-hidden">
               <div className="text-left">
-                <h1 className="text-lg md:text-2xl  translate-x-[18px]   font-mulish translate-y-[15px]">Members</h1>
+                <h1 className="text-lg md:text-2xl font-mulish">Members</h1>
                 <p className="stat-number text-5xl font-mulish md:text-7xl mt-2">150K+</p>
               </div>
             </div>
             {/* Proposals */}
             <div className="stat-card bg-transparent border border-white rounded-lg py-2 flex justify-start pl-4 relative overflow-hidden">
               <div className="text-left">
-                <h1 className="text-lg md:text-2xl  translate-x-[18px] font-mulish translate-y-[15px]">Proposals</h1>
+                <h1 className="text-lg md:text-2xl font-mulish">Proposals</h1>
                 <p className="stat-number text-5xl font-mulish md:text-7xl mt-2">100K+</p>
               </div>
             </div>
             {/* DAOs */}
             <div className="stat-card bg-transparent border border-white rounded-lg py-2 flex justify-start pl-4 relative overflow-hidden">
               <div className="text-left">
-                <h1 className="text-lg md:text-2xl translate-x-[16px]  font-mulish translate-y-[15px]">DAOs</h1>
-                <p className="stat-number text-5xl  font-mulish md:text-7xl mt-2">800+</p>
+                <h1 className="text-lg md:text-2xl font-mulish">DAOs</h1>
+                <p className="stat-number text-5xl font-mulish md:text-7xl mt-2">800+</p>
               </div>
             </div>
           </div>
