@@ -67,7 +67,7 @@ const Feature = () => {
           {cardData.map((card, index) => (
             <div
               key={index}
-              className="relative bg-[#0E3746] text-white p-[20px] rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-4 w-full sm:w-[300px] md:w-[300px] lg:w-[390px] h-[265px] mb-6"
+              className="relative bg-[#0E3746] text-white p-[20px] rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-4 w-full sm:w-[300px] md:w-[300px] lg:w-[360px] h-[265px] mb-6"
               onMouseEnter={() => setHoveredCardIndex(index)}
               onMouseLeave={() => setHoveredCardIndex(null)}
             >

@@ -26,7 +26,8 @@ const About = () => {
   return (
     <div className="flex justify-center items-center min-h-screen">
     <div className="bg-[#0F3746] rounded-2xl w-[89%] align-center md:align-center sm:align-center shadow-lg  ">
-      <Container classes={'relative flex justify-center items-center py-8'}>
+      {/* <Container classes={'relative flex justify-center items-center py-8'}> */}
+      <Container className="mt-0">
         <div className="absolute pointer-events-none select-none xl:left-[40%] 2xl:left-[40%] lg:left-[35%] md:left-[35%] left-0 md:top-0 top-[18%] mt-8">
           {/* <div>
             <img

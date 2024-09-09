@@ -325,19 +325,20 @@ const Navbar = () => {
 
   return (
     <nav>
-      <div className="bg-white shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50">
+      <div className="bg-white  shadow-lg shadow-slate-900/20 shadow-b-2 sticky w-full z-50">
         <Container>
           <div className="tablet:px-20 small_phone:px-8 px-4 small_phone:py-5 py-3 flex justify-between items-center w-full">
             {/* Logo */}
-            <Link className="w-[33%]" to="/">
+            <Link className=" w-[33%]" to="/">
               <img
                 src={logo}
                 alt="DAO House"
-                className="mobile:h-10 small_phone:w-30 w-25 h-8 lg:ml-6"
+                // className="mobile:h-10 small_phone:w-30 w-25 h-8 lg:ml-6"
+                className="mobile:h-10 small_phone:w-30 w-25 h-8 "
               />
             </Link>
             {/* Navigation menu */}
-            <div className="big_phone:flex items-center tablet:space-x-8 space-x-4 hidden lg:w-[33%]">
+            <div className=" big_phone:flex items-center tablet:space-x-10 space-x-6 hidden lg:w-[49%] gap-[40px]">
               {menuItems.map((item, index) => (
                 <div
                   key={index}

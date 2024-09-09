@@ -6,6 +6,8 @@ import telegram1 from "../../../assets/telegram1.png";
 import likedin from "../../../assets/likedin.png";
 import discord1 from "../../../assets/discord1.png";
 
+import Container from "../Container/Container";
+
 const Footer = () => {
   const handleLogoClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -13,7 +15,8 @@ const Footer = () => {
 
   return (
     <React.Fragment>
-      <footer className="bg-[#ffffff]  h-auto small_phone:py-12  py-5 text-center ">
+      <footer className="bg-[#ffffff]  h-auto small_phone:py-12  py-5 text-center   ">
+      <Container>
         {/* Main Content */}
         {/* <div className="w-full flex flex-col md:flex-row items-center justify-between small_phone:mb-8 lg:gap-[270px] md:gap-[200px] gap-8 border border-red-300"> */}
         <div className="w-full flex flex-col md:flex-row items-center justify-between small_phone:mb-8 lg:gap-[200px] md:gap-[80px] gap-8 ">
@@ -27,7 +30,7 @@ const Footer = () => {
           </Link>
 
           {/* Navigation Links */}
-          <div className=" flex flex-col md:flex-row translate-y-[40px] justify-center lg:mt-3 md:ml-14 md:mb-12 my-1 gap-6">
+          <div className=" flex lg:flex-row translate-y-[22px] justify-center lg:mt-3 md:ml-14 md:mb-12 my-1 gap-6">
             <Link
               to="/"
               className="text-[#3D3D3D] small_phone:text-base text-sm font-inter font-normal hover:underline"
@@ -79,6 +82,7 @@ const Footer = () => {
             All rights reserved. &copy; {new Date().getFullYear()}, DAO House.
           </p>
         </div>
+        </Container>
       </footer>
     </React.Fragment>
   );
