@@ -7,10 +7,16 @@ import ApprovedAnimation from "./MyProposals/proposal-cards-animations/approved-
 import RejectedAnimation from "./MyProposals/proposal-cards-animations/rejected-animation.json";
 import { Principal } from "@dfinity/principal";
 import ViewModal from "../Dao/ViewModal";
+import { useNavigate } from "react-router-dom";
 
-export default function Card({ proposal }) {
+export default function Card({ proposal, showActions }) {
+
+  console.log(proposal.dao_canister_id);
+  const id = proposal.dao_canister_id
+  
 
   const [isModalOpen,setIsModalOpen]=useState(false)
+  const navigate = useNavigate()
 
   const a = proposal?.proposal_description;
 
@@ -98,6 +104,10 @@ export default function Card({ proposal }) {
     setIsModalOpen(false)
   }
 
+  const handleViewMore = () => {
+    navigate(`/dao/profile/${id}`)
+  }
+
   const handleVotesClick = () => {
     setIsModalOpen(true)
   }
@@ -174,7 +184,8 @@ export default function Card({ proposal }) {
         </div>
 
         {/* Cast Vote Section */}
-        <div className="bg-sky-200 w-full md:w-96 p-4 rounded-md mt-6">
+        {showActions && (
+          <div className="bg-sky-200 w-full md:w-96 p-4 rounded-md mt-6">
           <h1 className="text-lg font-semibold mb-2">Cast Vote</h1>
           <form className="flex flex-col md:flex-row items-start md:items-center">
             <div className="flex items-center space-x-4 mr-0 md:mr-4 mb-4 md:mb-0">
@@ -195,14 +206,19 @@ export default function Card({ proposal }) {
             </button>
           </form>
         </div>
+        )}
+
+        
 
         <div className="flex justify-evenly md:justify-start mt-8 space-x-4">
-          <button className="flex flex-col items-center text-gray-600 md:flex-row md:items-center">
+          {showActions && (
+            <button className="flex flex-col items-center text-gray-600 md:flex-row md:items-center">
             <svg className="mb-1" width="16" height="15" viewBox="0 0 16 15">
               <path d="M3.11111 9.22293H12.8889V8.34456H3.11111V9.22293ZM3.11111 6.58781H12.8889V5.70943H3.11111V6.58781ZM3.11111 3.95269H12.8889V3.07431H3.11111V3.95269ZM16 15L13.2649 12.2972H1.43556C1.02667 12.2972 0.685333 12.162 0.411556 11.8914C0.137778 11.6209 0.000592593 11.2833 0 10.8787V1.41857C0 1.01452 0.137185 0.677227 0.411556 0.406687C0.685926 0.136148 1.02726 0.000585583 1.43556 0H14.5644C14.9733 0 15.3147 0.135562 15.5884 0.406687C15.8622 0.677812 15.9994 1.01511 16 1.41857V15ZM1.43556 11.4189H13.6444L15.1111 12.8629V1.41857C15.1111 1.28389 15.0542 1.16004 14.9404 1.04702C14.8267 0.934005 14.7013 0.877789 14.5644 0.878374H1.43556C1.29926 0.878374 1.17393 0.93459 1.05956 1.04702C0.945185 1.15945 0.888296 1.2833 0.888889 1.41857V10.8787C0.888889 11.0134 0.945778 11.1372 1.05956 11.2502C1.17333 11.3632 1.29867 11.4195 1.43556 11.4189Z" fill="black" />
             </svg>
             <span className="md:ml-2">{commentcount} Comments</span>
           </button>
+          )}
 
           <button className="flex flex-col items-center text-gray-600 md:flex-row md:items-center">
             <svg className="mb-1" width="17" height="17" viewBox="0 0 17 17">
@@ -216,9 +232,15 @@ export default function Card({ proposal }) {
               <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/>
               <path d="M19.07 18.93C17.66 17.52 15.48 16.5 12 16.5s-5.66 1.02-7.07 2.43A2 2 0 0 0 6.34 22h11.32a2 2 0 0 0 1.41-3.07z"/>
             </svg>
-            <span className="md:ml-2">{votecount} Votes</span>
+            <span className="md:ml-2">{votecount} Voters</span>
           </button>
         </div>
+
+        {!showActions && (
+          <div className="mt-4 bg-[#CDEFFE] w-32 rounded-full cursor-pointer">
+          <button className=" px-6 py-2 font-semibold" onClick={handleViewMore}>View More</button>
+        </div>
+        )}
 
       </div>
       <ViewModal open={isModalOpen } onClose={handleOnClose}/>
