@@ -346,7 +346,11 @@ const FeedPage = () => {
         for (const dao of allDaos) {
           const daoActor = await createDaoActor(dao.dao_canister_id);
           const daoProposals = await daoActor.get_all_proposals(pagination);
-          allProposals = allProposals.concat(daoProposals);
+          const proposalsWithDaoId = daoProposals.map((proposal) => ({
+            ...proposal,
+            dao_canister_id: dao.dao_canister_id,
+          }));
+          allProposals = allProposals.concat(proposalsWithDaoId);
         }
         setProposals(allProposals.slice(0, itemsPerPage));
         setHasMore(allProposals.length > itemsPerPage);
@@ -359,7 +363,11 @@ const FeedPage = () => {
           try {
             const response = await daoActor.search_proposal(searchTerm.trim());
             if (response.length) {
-              searchResults = searchResults.concat(response);
+              const searchResultsWithDaoId = response.map((proposal) => ({
+                ...proposal,
+                dao_canister_id: dao.dao_canister_id, // Attach dao_canister_id to each proposal
+              }));
+              searchResults = searchResults.concat(searchResultsWithDaoId);
             }
           } catch (error) {
             console.error(`Error searching proposals in DAO ${dao.dao_canister_id}:`, error);
