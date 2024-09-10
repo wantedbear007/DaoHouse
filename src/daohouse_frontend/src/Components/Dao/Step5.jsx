@@ -9,13 +9,9 @@ import Container from "../Container/Container";
 import ViewModal from "./ViewModal";
 
 const Step5 = ({ setData, setActiveStep, data }) => {
-  console.log("step5", data);
   const [loadingNext, setLoadingNext] = useState(false);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const user = data.step3.members;
-  console.log(user);
 
   const [quorum, setQuorum] = useState(() => {
     const savedData = localStorage.getItem("step5Quorum");
@@ -27,6 +23,7 @@ const Step5 = ({ setData, setActiveStep, data }) => {
           { name: "Group 2", index: 2, vote: 50 },
         ];
   });
+
   const className = "DAO_Step5";
 
   const handleVoteChange = (index, newValue) => {
@@ -46,7 +43,6 @@ const Step5 = ({ setData, setActiveStep, data }) => {
   }
 
   useEffect(() => {
-    // Save quorum data to local storage whenever it changes
     localStorage.setItem("step5Quorum", JSON.stringify(quorum));
   }, [quorum]);
 
@@ -106,46 +102,47 @@ const Step5 = ({ setData, setActiveStep, data }) => {
                     index={index}
                     handleVoteChange={handleVoteChange}
                   />
-                  <span className="text-nowrap">{vote} %</span>
+                  <span className="text-nowrap hidden sm:block ">{vote} %</span>
                 </div>
               </div>
             ))}
           </section>
 
           {/** On the Mobile after 800px */}
-          <section className="bg-[#F5F5F5] rounded-lg w-full p-4 gap-4 big_phone:hidden flex flex-col">
+          <section className="bg-[#EBEBEB] rounded-lg w-full p-4 gap-4  sm:hidden mt-2 big_phone:hidden flex flex-col gap-10">
+            <section className="flex justify-between items-center  sm:hidden mt-2 border-b pb-2">
+              <p className="flex items-center gap-2 font-semibold font-mulish ">Groups</p>
+              <p className="flex items-center gap-2 translate-x-[38px] sm:translate-x-0 font-semibold text font-mulish">
+                Voting Policy 
+              </p><LuAlertCircle className="text-blue-300" />
+
+             
+              
+            </section>
+            <hr className="border-t-2 border-gray-400 sm:hidden mt-2 " />
+
             {quorum.map(({ name, index, vote }) => (
               <div
                 key={index}
-                className="border border-slate-200 p-4 rounded-lg flex flex-col gap-3"
+                className="bg-[#EBEBEB] border border-slate-300 p-4 rounded-lg flex flex-col gap-"
               >
-                {/** Heading section with groups and voting policy */}
-                <section className="flex justify-between items-center border-b pb-2">
-                  <p className="flex items-center gap-2 font-semibold">
-                    <RiGroupLine /> {name}
-                  </p>
-                  <p className="flex items-center gap-2 font-semibold">
-                    <MdOutlineVerifiedUser /> Voting Policy
-                  </p>
-                </section>
-
                 {/** Council, Members, and View button with gradient slider */}
                 <section className="flex justify-between items-center pt-2">
                   <div className="flex flex-col gap-2">
-                    <p className="text-sm">Council</p>
-                    <p className="text-sm">
+                    <p className="text-sm text-gray-500 text-xs">{name}</p>
+                    <p className="text-sm text-gray-500 text-xs">
                       {user[index]?.length || 0} members
                     </p>
                     <button
                       onClick={handleViewClickModal}
-                      className="text-cyan-800 bg-slate-200 px-5 py-1 rounded-md"
+                      className="text-[#229ED9]  font-mulish text-sm bg-white border px-5 py-1 rounded-md"
                     >
                       View
                     </button>
                   </div>
 
-                  <div className="flex flex-col items-end gap-2">
-                    <span className="text-sm">{vote} %</span>
+                  <div className="flex flex-col items-end gap-6">
+                    <h2 className="text-sm hidden sm:block">{vote} %</h2>
                     <RangeInput
                       index={index}
                       handleVoteChange={handleVoteChange}
@@ -153,7 +150,7 @@ const Step5 = ({ setData, setActiveStep, data }) => {
                   </div>
                 </section>
 
-                <hr className="border-t border-gray-300 mt-2" />
+                
               </div>
             ))}
           </section>
@@ -205,20 +202,25 @@ const RangeInput = ({ index, handleVoteChange }) => {
     setValue(value); // Update rangeValue when prop value changes
   }, [value]);
 
-  const gradient = `linear-gradient(to right, #0e3746 ${value}%, #fff ${value}%)`;
-
+  const gradient = `linear-gradient(to right, #0e3746 ${value}%, #D0D0D0 ${value}%)`;
+  
   return (
-    <input
-      type="range"
-      min={0}
-      max={100}
-      className="mobile:w-10/12 mobile:h-[8px] h-[5px] custom-range border-2 border-[#061c24]"
-      step={1}
-      value={value}
-      onChange={handleChange}
-      style={{
-        background: gradient,
-      }}
-    />
+    <div className="flex items-center w-full gap-2">
+     
+      <input
+        type="range"
+        min={0}
+        max={100}
+        className="w-[50%] h-[8px] border-3 bg-[#D0D0D0] sm:w-full sm:h-[8px] custom-range translate-x-[42px] sm:translate-x-0" // Adjust width and height for mobile
+        step={1}
+        value={value}
+        onChange={handleChange}
+        style={{
+          background: gradient,
+        }}
+      />
+      {/* Vote percentage - Visible on mobile only, hidden on larger screens */}
+      <span className="text-xs translate-x-[40px] sm:translate-x-    font-semibold block sm:hidden">{value} %</span>
+    </div>
   );
 };
