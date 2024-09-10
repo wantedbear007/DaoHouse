@@ -211,7 +211,7 @@ const RangeInput = ({ index, handleVoteChange }) => {
         type="range"
         min={0}
         max={100}
-        className="w-[50%] h-[8px] border-3 bg-[#D0D0D0] sm:w-full sm:h-[8px] custom-range translate-x-[50px] sm:translate-x-0" // Adjust width and height for mobile
+        className="w-[50%] h-[8px] border-3 bg-[#D0D0D0] sm:w-full sm:h-[8px] custom-range translate-x-[42px] sm:translate-x-0" // Adjust width and height for mobile
         step={1}
         value={value}
         onChange={handleChange}
@@ -220,7 +220,7 @@ const RangeInput = ({ index, handleVoteChange }) => {
         }}
       />
       {/* Vote percentage - Visible on mobile only, hidden on larger screens */}
-      <span className="text-xs translate-x-[50px] sm:translate-x-    font-semibold block sm:hidden">{value} %</span>
+      <span className="text-xs translate-x-[40px] sm:translate-x-    font-semibold block sm:hidden">{value} %</span>
     </div>
   );
 };
