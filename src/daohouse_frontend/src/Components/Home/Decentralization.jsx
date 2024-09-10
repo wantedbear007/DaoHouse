@@ -27,12 +27,12 @@ const Decentralization = () => {
           <img
             src={smallcircle}
             alt="small circle"
-            className="absolute w-[42%] h-[60vh]  " // Reduced size for small circle
+            className="absolute w-[40%] h-[62vh]  " // Reduced size for small circle
           />
           <img
             src={mediumcircle}
             alt="medium circle"
-            className="absolute w-[70%] h-[60vh] opacity-3 " // Reduced size for medium circle
+            className="absolute w-[65%] h-[62vh]  " // Reduced size for medium circle
           />
 
 
@@ -44,7 +44,7 @@ const Decentralization = () => {
               <span className="block">Seamless DAO Management</span>
             </h1>
 
-            <p className="text-xs mobile:text-sm sm:text-sm font-mulish md:text-base text-gray-700 mt-2 max-w-[90%] sm:max-w-[80%] md:max-w-[70%]">
+            <p className="text-xs mobile:text-sm sm:text-sm font-mulish md:text-base text-gray-700 mt-2 max-w-[100%] sm:max-w-[90%] md:max-w-[85%]">
               <span className="block">Our platform provides the tools and infrastructure needed to establish</span>
               <span className="block">and manage your own decentralized autonomous organizations.</span>
             </p>
