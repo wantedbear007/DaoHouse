@@ -27,13 +27,14 @@ const Decentralization = () => {
           <img
             src={smallcircle}
             alt="small circle"
-            className="absolute w-[20%] md:w-[38%] h-auto"
+            className="absolute w-[42%] h-[60vh]  " // Reduced size for small circle
           />
           <img
             src={mediumcircle}
             alt="medium circle"
-            className="absolute w-[60%] md:w-[60%] h-auto"
+            className="absolute w-[70%] h-[60vh] opacity-3 " // Reduced size for medium circle
           />
+
 
           {/* Text Section */}
           <div className="w-full text-center flex flex-col items-center gap-6 z-10">
