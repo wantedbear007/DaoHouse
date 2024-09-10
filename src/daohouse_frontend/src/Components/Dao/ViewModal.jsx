@@ -46,7 +46,7 @@ function ViewModal({ open, onClose, users = [] }) {
                         <CloseIcon />
                     </IconButton>
                 </div>
-            <div className="mb-4">
+                <div className="mt-8 sm:mt-0 sm:flex sm:flex-col">
                 {users.length > 0 ? (
                     users.map((principalId) => (
                         <div
