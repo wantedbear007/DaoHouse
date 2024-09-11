@@ -27,6 +27,7 @@ function ViewModal({ open, onClose, users = [] }) {
     // Find the user based on the selectedUserId
    // const user = users.find(user => user.principalId === selectedUserId);
 
+    
  return (
     <Modal
         open={open}
@@ -46,7 +47,7 @@ function ViewModal({ open, onClose, users = [] }) {
                         <CloseIcon />
                     </IconButton>
                 </div>
-                <div className="mt-8 sm:mt-0 sm:flex sm:flex-col">
+                <div className="mt-6 sm:mt-0 sm:flex sm:flex-col sm:w-3/4">
                 {users.length > 0 ? (
                     users.map((principalId) => (
                         <div
@@ -62,9 +63,12 @@ function ViewModal({ open, onClose, users = [] }) {
                                 />
                                 <div>
                                     <p className="m-0 font-bold text-left">Username.user</p>
+                                    <span className='block m-0 text-right'>{principalId}</span>
                                 </div>
+                                
+                            
                             </div>
-                            <p className="m-0 text-right">{principalId}</p>
+                        
                         </div>
                     ))
                 ) : (
