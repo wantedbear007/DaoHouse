@@ -10,25 +10,28 @@ const About = () => {
   };
 
   return (
-    <div className="flex justify-center translate-y-[-140px] items-center min-h-screen">
+    <div className="flex justify-center  items-center  ">
       {/* Mobile view */}
-      <div className="block lg:hidden bg-[#0F3746] rounded-2xl w-[80%] sm:w-[90%] shadow-lg p-6 sm:p-8  translate-y-[50px]  translate-y-0">
+      <div className="block lg:hidden bg-[#0F3746] rounded-[8px] w-[324px] h-[315px] shadow-lg p-[20px_32px] gap-[16px]  translate-y-[50px] opacity-100">
         <Container>
           <div className="w-full text-white flex flex-col items-center relative text-center">
             <div className="mb-4">
-              <h2 className="font-mulish text-[12px] sm:text-[16px] font-normal mb-2">
+              <h2 className="font-mulish text-[8px] font-bold leading-[12px] tracking-[0.04em] text-center mb-2">
                 ABOUT PLATFORM
               </h2>
-              <p className="font-mulish font-bold text-[24px] sm:text-[28px] leading-snug">
+              <p className="font-mulish font-bold text-[16px] leading-[20px] text-center">
                 Unlocking Collective Intelligence
               </p>
             </div>
-            <div className="flex flex-col gap-4 font-mulish text-[12px] sm:text-[14px] leading-relaxed text-center">
+            <div className="flex flex-col gap-[16px] font-mulish text-[10px] font-normal leading-[14px] text-center">
               <p>
-                At our platform, decentralized autonomous organization meets cutting-edge technology to revolutionize the way communities govern themselves.
+                At our platform, decentralized autonomous
+                <p> organization meets cutting-edge technology to</p> revolutionize the way communities govern themselves.
               </p>
               <p>
-                We believe in the power of collective intelligence and the potential for blockchain technology to democratize decision-making processes. Our platform provides a seamless and transparent framework for organizations of all sizes to manage resources, vote on proposals, and drive impactful change.
+                We believe in the power of collective intelligence and<p>the potential for blockchain technology to democratize</p>
+                <p> decision-making processes. Our platform provides a</p> 
+                 seamless and transparent framework for organizations of all sizes to manage resources, vote on proposals, and drive impactful change.
               </p>
             </div>
             <div className="mt-6">
@@ -44,7 +47,7 @@ const About = () => {
       </div>
 
       {/* Desktop view */}
-      <div className="hidden lg:flex justify-center  w-[75%]   bg-[#0F3746] rounded-2xl shadow-lg p-10">
+      <div className="hidden lg:flex justify-center w-[75%] bg-[#0F3746] rounded-2xl  translate-y-[-50px] shadow-lg p-10">
         <Container>
           <div className="w-full text-white flex flex-col items-center relative text-center">
             {/* Title */}

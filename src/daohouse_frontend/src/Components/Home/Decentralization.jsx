@@ -24,7 +24,7 @@ const Decentralization = () => {
     >
       <Container classes={"flex flex-col items-center justify-center relative max-w-full px-4"}>
         {/* Main Section */}
-        <div className="relative translate-y-[-90px] w-full max-w-[110%] lg:mx-80 sm:max-w-[90%] md:max-w-[190%] px-4 sm:px-6 md:px-8 lg:px-16 tablet:px-8 mobile:px-4 flex flex-col items-center justify-center gap-8 bg-white rounded-xl shadow-lg p-6 sm:p-8 md:p-10 lg:p-12 overflow-hidden main-section">
+        <div className="relative  w-full max-w-[110%] lg:mx-80 sm:max-w-[90%] md:max-w-[190%] px-4 sm:px-6 md:px-8 lg:px-16 tablet:px-8 mobile:px-4 flex flex-col items-center justify-center gap-8 bg-white rounded-xl shadow-lg p-6 sm:p-8 md:p-10 lg:p-12 overflow-hidden main-section">
           
           {/* Circles as Background */}
           {/* Large screen circles (shown only on large screens) */}
@@ -43,13 +43,13 @@ const Decentralization = () => {
           <img
   src={mobileviewCircleBig}
   alt="mobile large circle"
-  className="block md:hidden w-[900px] h-[400vh] h-[100vh] md:h[200vh] sm:w-[800px] sm:h-[800px]" // Tailwind CSS sizing
+  className="block md:hidden  h-[260px]  " // Tailwind CSS sizing
 />
 
 <img
   src={mobilecircleSmall}
   alt="mobile small circle"
-  className="block md:hidden w-[60%] h-auto sm:w-[100px] md:h[200vh] sm:h-[100px]" // Tailwind CSS sizing
+  className="block md:hidden  h-[260px]" // Tailwind CSS sizing
 />
 
 
@@ -76,7 +76,7 @@ const Decentralization = () => {
         </div>
 
         {/* Statistics Section */}
-        <div className="w-full bg-transparent py-8 z-10 overflow-x-auto translate-y-[-50px]">
+        <div className="w-full bg-transparent py-8 z-10 overflow-x-auto  translate-y-0">
           <div className="w-full max-w-8xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4 sm:px-4 md:px-8 py-4 text-center text-white">
             {/* Members */}
             <div className="stat-card bg-transparent border border-white rounded-lg py-2 flex justify-start pl-4 relative overflow-hidden">
