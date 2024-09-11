@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import { useAuth, useAuthClient } from "../utils/useAuthClient";
 import { LuChevronDown } from "react-icons/lu";
 import LoginModal from "../Auth/LoginModal";
@@ -13,12 +13,16 @@ import { Principal } from "@dfinity/principal";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { idlFactory as ledgerIDL } from "./ledger.did";
 import { createActor } from "../../../../declarations/icp_ledger_canister";
+import UserDetailsModal from "./UserDetailsModal";
+import { useNavigate } from "react-router-dom";
 
 
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
   const [isConnecting, setIsConnecting] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const hasShownToastRef = useRef(false);
@@ -48,6 +52,10 @@ const Navbar = () => {
     { label: "DAOs", route: "/dao" },
   ];
 
+  // const h =() =>{
+  //  navigate( "/UserDetailsModal")
+  // }
+
 
   // const host = "http://127.0.0.1:40335"
 
@@ -66,7 +74,7 @@ const Navbar = () => {
 
 
   //   const tokenActorrr = createActor(Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai"), { agentOptions: { identity } });
-    
+
 
   //   // const agent = new HttpAgent({
   //   //   identity,
@@ -146,7 +154,7 @@ const Navbar = () => {
   //   const backendCanisterId = process.env.CANISTER_ID_DAOHOUSE_BACKEND;
 
   //     if (currentBalance > sendableAmount) {
-   
+
   //       let transaction = {
   //         from_subaccount: [],
   //         spender: {
@@ -187,7 +195,7 @@ const Navbar = () => {
   //   } finally {
   //   }
   // };
-  
+
   // async function paymentTest() {
 
   //   console.log("owner principal is ", stringPrincipal )
@@ -204,14 +212,14 @@ const Navbar = () => {
   //   console.log("balance is ", name)
 
   //   const { metadata, balance }  = await fetchMetadataAndBalance(actor, Principal.fromText(stringPrincipal))
-    
+
   //   const formattedMetadata = formatTokenMetaData(metadata);
 
   //   const parsedBalance = parseInt(balance, 10);
   //     console.log("Balance:", parsedBalance);
 
   //     transferApprove(parsedBalance, formattedMetadata, actor);
-    
+
 
 
   // }
@@ -256,15 +264,29 @@ const Navbar = () => {
         `${protocol}://${process.env.CANISTER_ID_IC_ASSET_HANDLER}.${domain}/f/${userProfile.profile_img}`
       );
     } else {
-      setImageSrc(MyProfileImage); // Set to default if no profile image
+      setImageSrc(MyProfileImage);
     }
 
     setUsername(userProfile?.username || "");
   }, [userProfile]);
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      setIsModalOpen(false);
+      setIsDetailsModalOpen(true);
+    }
+  }, [isAuthenticated]);
+
+  const handleDetailsSubmit = (details) => {
+    // Handle form submission
+    console.log("User details submitted:", details);
+    setIsDetailsModalOpen(false);
+  };
+
   const handleLogin = async () => {
     setIsConnecting(true);
-    await login("Icp").then(() => window.location.reload());
+    await login("Icp").then(() => window.location.reload()).then(setIsDetailsModalOpen(false));
+    navigate("/")
   };
 
   const handleNFIDLogin = async () => {
@@ -316,12 +338,12 @@ const Navbar = () => {
   const filteredDropdownItems =
     window.innerWidth < 769
       ? [
-          ...dropdownItems.filter((item) => item.label !== "Logout"),
-          dropdownItems.find((item) => item.label === "Logout"),
-        ]
+        ...dropdownItems.filter((item) => item.label !== "Logout"),
+        dropdownItems.find((item) => item.label === "Logout"),
+      ]
       : dropdownItems.filter(
-          (item) => item.label === "Profile" || item.label === "Logout"
-        );
+        (item) => item.label === "Profile" || item.label === "Logout"
+      );
 
   return (
     <nav>
@@ -345,48 +367,39 @@ const Navbar = () => {
                 >
                   <Link
                     to={item.route}
-                    className={`hover:text-[#05212C] hover:font-medium cursor-pointer text-[16px] text-[#829095] ${
-                      location.pathname === item.route
+                    className={`hover:text-[#05212C] hover:font-medium cursor-pointer text-[16px] text-[#829095] ${location.pathname === item.route
                         ? "font-semibold border-b-2 border-[#05212C] text-black"
                         : "border-transparent border-b-0.5"
-                    }`}
+                      }`}
                   >
                     {item.label}
                   </Link>
                 </div>
               ))}
             </div>
-            
+
             {/* User profile or login */}
             <div>
               {!isAuthenticated ? (
-                
+
                 <div className="flex items-center tablet:space-x-4 space-x-2">
-                 
+
                   <button
                     onClick={handleLoginModalOpen}
                     className="mobile:px-8 px-4 py-2 rounded-[27.5px] bg-[#0E3746] shadow-md text-white big_phone:text-base small_phone:text-sm text-xs"
                   >
                     {isModalOpen && isLoading ? "Connecting" : "Connect Wallet"}
                   </button>
-                  
+
                 </div>
               ) : (
                 <div className="relative">
-                {/* <button
-                    onClick={async () => {
-                      await paymentTest();
-                    }}
-                    className=""
-                  >
-                    Pay To Bhanu
-                  </button> */}
                   {/* Updated flex container to align profile image and username */}
                   <div
                     className="flex items-center space-x-0.9 bg-white border border-[#0F3746] rounded-full px-4 py-2 cursor-pointer shadow-lg"
                     onClick={() => setDropdownVisible(!dropdownVisible)}
                   >
-                 
+
                     {/* Profile Image */}
                     <div className="w-10 h-10 flex items-center rounded-full overflow-hidden">
                       <img
@@ -429,6 +442,11 @@ const Navbar = () => {
           onLogin={handleLogin}
           // onLoginPlug={handleLoginPlug}
           onLoginNFID={handleNFIDLogin}
+        />
+        <UserDetailsModal
+          isOpen={isDetailsModalOpen}
+          onClose={() => setIsDetailsModalOpen(false)}
+          onSubmit={handleDetailsSubmit}
         />
       </div>
     </nav>
