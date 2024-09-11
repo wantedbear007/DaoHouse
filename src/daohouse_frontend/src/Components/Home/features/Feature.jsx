@@ -33,12 +33,12 @@ const Feature = () => {
   };
 
   return (
-    <div className='bg-[#F5F5F5] translate-y-[-30px]  mobile:py-16 py-6'>
+    <div className='bg-[#F5F5F5] translate-y-[-180px]  mobile:py-16 py-6'>
       <Container className='w-full'>
         <div className="flex justify-center py-5 mobile:px-4 px-8">
           {/* Centered content */}
           <div className="text-center">
-            <h2 className="text-about-heading font-mulish text-[#0E3746] font-bold text-[20px] md:text-[12px] lg:text-[18px] leading-tight">
+            <h2 className="text-about-heading font-mulish text-[#0E3746] font-bold text-[12px] md:text-[8812px] lg:text-[18px] leading-tight">
               OUR FEATURES
             </h2>
 
@@ -49,7 +49,7 @@ const Feature = () => {
         </div>
 
         {/* Horizontal line with a thicker rectangular center   */}
-        <div className="relative w-full flex justify-center mb-10">
+        <div className="relative w-full flex justify-center mb-10 hidden lg:flex">
           <hr className="border-t-2 border-[#0E3746] w-[82%] relative mb-4" />
           <div
             className="absolute h-[5px] w-[50px] bg-[#0E3746] rounded-full transition-all duration-500 ease-in-out"
@@ -67,7 +67,7 @@ const Feature = () => {
           {cardData.map((card, index) => (
             <div
               key={index}
-              className="relative bg-[#0E3746] text-white p-[20px] rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-4 w-full sm:w-[300px] md:w-[300px] lg:w-[360px] h-[265px] mb-6"
+              className="relative bg-[#0E3746] text-white p-[20px] rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-4 w-full sm:w-[300px] md:w-[300px] lg:w-[365px] h-[265px] mb-6"
               onMouseEnter={() => setHoveredCardIndex(index)}
               onMouseLeave={() => setHoveredCardIndex(null)}
             >
