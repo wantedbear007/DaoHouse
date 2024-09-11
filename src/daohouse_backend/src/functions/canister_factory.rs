@@ -1,10 +1,11 @@
 // to create canisters
 
 use std::borrow::Borrow;
+use std::fmt::format;
 
 use crate::api::call::{call_with_payment128, CallResult};
 use crate::api::canister_version;
-use crate::routes::upload_image;
+use crate::routes::{delete_canister, stop_canister, upload_image};
 use crate::types::{
     CanisterIdRecord, CanisterInstallMode, CreateCanisterArgument, CreateCanisterArgumentExtended,
     InstallCodeArgument, InstallCodeArgumentExtended,
@@ -47,16 +48,10 @@ pub async fn deposit_cycles_in_canister(arg: CanisterIdRecord, cycles: u128) -> 
     .await
 }
 
-pub async fn install_code_in_canister(arg: InstallCodeArgument, wasm_module: Vec<u8>) -> CallResult<()> {
-    // let mut wasm_module_sample: Vec<u8> = Vec::new();
-
-    // with_state(|state| match state.wasm_module.get(&0) {
-    // 		Some(val) => {
-    // 				wasm_module_sample = val.wasm;
-    // 		}
-    // 		None => panic!("WASM error"),
-    // });
-
+pub async fn install_code_in_canister(
+    arg: InstallCodeArgument,
+    wasm_module: Vec<u8>,
+) -> CallResult<()> {
     let cycles: u128 = 100_000_000_000;
 
     let extended_arg = InstallCodeArgumentExtended {
@@ -74,4 +69,16 @@ pub async fn install_code_in_canister(arg: InstallCodeArgument, wasm_module: Vec
         cycles,
     )
     .await
+}
+
+// delete canister
+pub async fn reverse_canister_creation(id: CanisterIdRecord) -> Result<(), String> {
+    stop_canister(id.clone())
+        .await
+        .map_err(|err| format!("Failed to stop {:?}", err))?;
+    delete_canister(id)
+        .await
+        .map_err(|err| format!("Failed to delete canister {:?}", err))?;
+
+    Ok(())
 }

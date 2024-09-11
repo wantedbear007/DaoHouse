@@ -1,33 +1,35 @@
 use crate::proposal_route::check_proposal_state;
-use crate::types::{Dao, ProposalInput, Proposals};
-use crate::{guards::*, AccountBalance, DaoGroup, Pagination, ProposalStakes, TokenTransferArgs};
-use crate::{proposal_route, with_state, ProposalState, VoteParam};
-use candid::Principal;
+use crate::types::{Dao, Proposals};
+use crate::{
+    guards::*, AccountBalance, Comment, DaoGroup, Pagination, ProposalStakes,
+    ReplyCommentArgs, TokenTransferArgs,
+};
+use crate::{with_state, ProposalState, VoteParam};
 use ic_cdk::api;
-use ic_cdk::api::call::CallResult;
 use ic_cdk::api::management_canister::main::raw_rand;
 use ic_cdk::{query, update};
 use sha2::{Digest, Sha256};
 
 use super::{icrc_get_balance, icrc_transfer};
 
-#[update(guard=check_members)]
-pub async fn create_proposal(daohouse_backend_id: String, proposal: ProposalInput) -> String {
-    let uuids = raw_rand().await.unwrap().0;
-    let proposal_id = format!("{:x}", Sha256::digest(&uuids));
-    let response = with_state(|state| {
-        proposal_route::create_new_proposal(state, proposal.clone(), proposal_id.clone())
-    });
+// #[update(guard=check_members)]
+// pub async fn create_proposal(daohouse_backend_id: Principal, proposal: ProposalInput) -> String {
+//     let uuids = raw_rand().await.unwrap().0;
+//     with_state(  move | state| async {
+//         let proposal_id = format!("{:x}", Sha256::digest(&uuids));
+//         proposal_route::create_new_proposal(state, proposal.clone(), proposal_id.clone(), daohouse_backend_id.clone());
+//     }).await;
 
-    let _res: CallResult<(String,)> = ic_cdk::call(
-        Principal::from_text(daohouse_backend_id).unwrap(),
-        "update_proposal_count",
-        (),
-    )
-    .await;
+//     // let _res: CallResult<(String,)> = ic_cdk::call(
+//     //     daohouse_backend_id,
+//     //     "update_proposal_count",
+//     //     (),
+//     // )
+//     // .await;
 
-    response
-}
+//     String::from("value")
+//     // response
+// }
 
 // get all proposals
 #[query]
@@ -84,7 +86,7 @@ async fn get_dao_detail() -> Dao {
     with_state(|state| state.dao.clone())
 }
 
-#[update(guard = check_members)]
+#[update(guard = guard_check_members)]
 fn change_proposal_state(
     proposal_id: String,
     proposal_state: ProposalState,
@@ -100,10 +102,20 @@ fn change_proposal_state(
 }
 
 #[update(guard = prevent_anonymous)]
-fn comment_on_proposal(comment: String, proposal_id: String) -> Result<String, String> {
+async fn comment_on_proposal(comment: String, proposal_id: String) -> Result<String, String> {
+    let uuids = raw_rand().await.unwrap().0;
+    let comment_id = format!("{:x}", Sha256::digest(&uuids));
+
     with_state(|state| match &mut state.proposals.get(&proposal_id) {
         Some(pro) => {
-            pro.comments_list.push(comment);
+            pro.comments_list.push(Comment {
+                author_principal: ic_cdk::api::caller(),
+                comment_id,
+                comment_text: comment,
+                created_at: ic_cdk::api::time(),
+                likes: 0,
+                replies: vec![],
+            });
             pro.comments += 1;
             state.proposals.insert(proposal_id, pro.to_owned());
             Ok(String::from("Comment was sucessfully added"))
@@ -111,6 +123,56 @@ fn comment_on_proposal(comment: String, proposal_id: String) -> Result<String, S
         None => Err(String::from("Proposal does not exist.")),
     })
 }
+
+#[update(guard = prevent_anonymous)]
+async fn reply_comment(args: ReplyCommentArgs) -> Result<String, String> {
+    let proposal = match with_state(|state| state.proposals.get(&args.proposal_id)) {
+        Some(val) => val,
+        None => {
+            return Err(String::from(
+                "No proposal associated with the following proposal ID",
+            ))
+        }
+    };
+
+    let mut updated_comment_list = proposal.comments_list.clone();
+
+    for com in updated_comment_list.iter_mut() {
+        if com.comment_id == args.comment_id.clone() {
+            com.replies.push(args.comment.clone());
+            break;
+        }
+    }
+
+    let updated_proposal = Proposals {
+        comments: proposal.comments + 1,
+        comments_list: updated_comment_list,
+        ..proposal
+    };
+
+    with_state(|state| {
+        state
+            .proposals
+            .insert(updated_proposal.proposal_id.clone(), updated_proposal)
+    });
+
+    Ok(String::from("Successfully commented on post"))
+}
+
+// #[update(guard=prevent_anonymous)]
+// async fn like_comment(args: CommentLikeArgs) {
+//     with_state(|state| match state.proposals.get(&args.proposal_id) {
+//         Some(val) => {
+//             for comment in val.comments_list.iter() {
+//                 if comment == args.comment_id {
+
+//                 }
+//             }
+//         },
+//         None => Err(String::from("No proposal found with following ID")),
+
+//     })
+// }
 
 fn refresh_proposals(id: &String) {
     with_state(|state| match &mut state.proposals.get(&id) {
