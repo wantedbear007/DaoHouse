@@ -37,7 +37,7 @@ function ViewModal({ open, onClose, users = [] }) {
         closeAfterTransition
     >
         <Box
-            className="relative p-4 bg-white rounded-lg shadow-2xl max-w-3xl w-full"
+            className="relative p-4 bg-white rounded-lg shadow-2xl max-w-3xl w-full md:w-3/4 sm:w-full mx-4"
         >
             <div className="absolute top-0 right-2">
                     <IconButton
@@ -47,7 +47,7 @@ function ViewModal({ open, onClose, users = [] }) {
                         <CloseIcon />
                     </IconButton>
                 </div>
-                <div className="mt-6 sm:mt-0 sm:flex sm:flex-col sm:w-3/4">
+                <div className="mt-6 sm:mt-0 sm:flex sm:flex-col sm:w-30">
                 {users.length > 0 ? (
                     users.map((principalId) => (
                         <div
@@ -55,15 +55,19 @@ function ViewModal({ open, onClose, users = [] }) {
                             className={`flex items-center mb-4 justify-between cursor-pointer p-2 rounded-md bg-gray-100`}
                             onClick={() => onClose(principalId)}
                         >
-                            <div className="flex items-center">
+                            <div className="flex items-center ">
                                 <img
                                     src={ avatar}
                                     alt={`user's profile`}
                                     className="w-12 h-12 mr-4 rounded-full"
                                 />
                                 <div>
-                                    <p className="m-0 font-bold text-left">Username.user</p>
-                                    <span className='block m-0 text-right'>{principalId}</span>
+                                <div className="flex flex-col items-start">
+    <p className="m-0 font-bold text-left">Username.user</p>
+    <span className="block m-0 text-xs text-gray-600">{principalId}</span>
+</div>
+
+
                                 </div>
                                 
                             
