@@ -153,10 +153,10 @@ const ProposalsDetails = () => {
   return (
     <div className={`${className} bg-zinc-200 w-full relative`}>
       {/* <div className=""> */}
-        <Container classes="__mainComponent lg:mt-[54px] lg:pb-20 py-6 big_phone:px-16 px-6 tablet:flex-row flex-col w-full">
-          <div className="flex md:flex-row flex-col md:justify-between w-full items-center">
-          <div className="flex flex-col md:flex-row items-center md:items-start mb-[39px]">
-              <div className="w-[320px] h-[160px] lg:w-[240px] lg:h-[136px] bg-[#C2C2C2] md:w-[150px] md:h-[100px] rounded overflow-hidden flex-shrink-0">
+        <Container classes="__mainComponent mt-4 lg:mt-[54px] lg:pb-20 py-6 big_phone:px-16 px-6 tablet:flex-row flex-col w-full">
+          <div className="flex md:flex-row flex-col md:justify-between w-full items-center mb-12">
+          <div className="flex flex-col md:flex-row items-center">
+              <div className="w-[320px] h-[160px] lg:w-[240px] lg:h-[136px] bg-[#C2C2C2] md:w-[150px] md:h-[100px] rounded overflow-hidden">
                 <img className="w-full h-full object-cover" src={getImageUrl(dao.image_id)} alt="profile-pic" />
               </div>
               <div className="lg:ml-10 ml-4 py-4 md:mt-0 w-full md:w-72 xl:w-96 text-center md:text-left font-mulish font-semibold big_phone:text-lg">
@@ -206,8 +206,10 @@ const ProposalsDetails = () => {
       {/* <Container classes="__mainComponent lg:pt-0 lg:pb-20 py-6 big_phone:px-8 px-6 tablet:flex-row gap-2 flex-col w-full bg-zinc-200"> */}
 
         
-                <Card proposal={proposal} showActions={true} isProposalDetails={true} />
-                <Comments />
+                <div>
+                  <Card proposal={proposal} showActions={true} isProposalDetails={true} />
+                  <Comments />
+                </div>
         
       </Container>
     </div>
