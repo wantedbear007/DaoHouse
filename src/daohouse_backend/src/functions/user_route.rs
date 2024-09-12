@@ -686,3 +686,17 @@ fn get_canister_meta_data() -> Result<CanisterData, String> {
 
 //     // Ok("()".to_string())
 // }
+
+
+#[query(guard = prevent_anonymous)]
+async fn check_profile_existence() -> Result<(), String> {
+    let principal_id = api::caller();
+    let profile = with_state(|state| state.user_profile.get(&principal_id));
+
+    if let Some(user_profile) = profile {
+        if !user_profile.email_id.trim().is_empty() {
+            return Err(crate::utils::USER_REGISTERED.to_string());
+        }
+    }
+    Ok(()) 
+}
