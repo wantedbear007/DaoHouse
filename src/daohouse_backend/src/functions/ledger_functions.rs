@@ -1,7 +1,5 @@
 use candid::{encode_one, Principal};
-use ic_cdk::api::{
-    self,
-};
+use ic_cdk::api::{self};
 
 use crate::{
     CanisterInstallMode, CanisterSettings, CreateCanisterArgument, InstallCodeArgument, LedgerArg,
@@ -31,7 +29,11 @@ pub async fn create_ledger_canister(ledger_args: LedgerArg) -> Result<Principal,
     let (canister_id,) = match create_new_canister(arg).await {
         Ok(id) => id,
         Err((_, err_string)) => {
-            return Err(format!("Error while creating canister {}", err_string));
+            return Err(format!(
+                "{} {}",
+                crate::utils::CREATE_CANISTER_FAIL,
+                err_string
+            ));
         }
     };
 
@@ -80,6 +82,8 @@ pub async fn create_ledger_canister(ledger_args: LedgerArg) -> Result<Principal,
     Ok(canister_id_principal)
     // Ok(canister_id_principal.tos)
 }
+
+// get recipient
 
 // get canister details
 

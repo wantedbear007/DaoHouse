@@ -25,7 +25,7 @@ const Footer = () => {
             <img
               src={BlackLogo}
               alt="DAO House"
-              className="small_phone:w-32 w-20 mx-auto translate-y-[40px] small_phone:mb-10 mb-6 lg:ml-20 lg:mx-0 md:justify-center md:mx-auto"
+              className="small_phone:w-32 w-20 mx-auto translate-y-0 translate-y-[28px] small_phone:mb-10 mb-6 lg:ml-20 lg:mx-0 md:justify-center md:mx-auto"
             />
           </Link>
 
@@ -52,7 +52,7 @@ const Footer = () => {
           </div>
 
           {/* Social Icons */}
-          <div className="flex  items-center translate-y-[22px] gap-6 my-4 lg:mr-20">
+          <div className="flex  items-center translate-y-0 translate-y-[10px] gap-6 my-4 lg:mr-20">
             <img
               src={telegram1}
               alt="Telegram"

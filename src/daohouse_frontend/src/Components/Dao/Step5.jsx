@@ -107,7 +107,7 @@ const Step5 = ({ setData, setActiveStep, data }) => {
               <p className="flex items-center gap-2 font-semibold font-mulish">
                 Groups
               </p>
-              <p className="flex items-center gap-2 translate-x-[38px] sm:translate-x-0 font-semibold font-mulish">
+              <p className="flex items-center gap-2 translate-x-[34px] sm:translate-x-0 font-semibold font-mulish">
                 Voting Policy
               </p>
               <LuAlertCircle className="text-blue-300" />

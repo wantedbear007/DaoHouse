@@ -1,15 +1,15 @@
 #!/bin/bash
 
-dfx canister call daohouse_backend create_profile
+chmod 777 ./create_profile.sh
+./create_profile.sh
 
-ASSET_HANDLER_ID=$(dfx canister id ic_asset_handler)
-echo "ASSET_HANDLER_ID: $ASSET_HANDLER_ID"
+# ASSET_HANDLER_ID=$(dfx canister id ic_asset_handler)
+# echo "ASSET_HANDLER_ID: $ASSET_HANDLER_ID"
 
 COUNT=1
 
 for ((i = 1; i <= COUNT; i++)); do
   dao_test=$(dfx canister call daohouse_backend create_dao '(
-    "'$ASSET_HANDLER_ID'", 
     record {
       dao_name = "first dao";
       purpose = "test krne ke liye ke chota sa sentence";
@@ -17,7 +17,7 @@ for ((i = 1; i <= COUNT; i++)); do
       link_of_document = "https://example.com/charter.pdf";
       cool_down_period = 7;
       token_name = "DRAGONBALLZ";
-      total_tokens = 1000;
+      token_supply = 1000;
       token_symbol = "GOKU";
       members = vec{
         principal "m2zqz-pr5r2-ozayk-w5trf-mt6mw-7vuys-mitrw-4qdpb-dm5p7-77ey6-fae";
@@ -29,7 +29,7 @@ for ((i = 1; i <= COUNT; i++)); do
       linksandsocials = vec{
         "https://twitter.com/sampledao";
       };
-      required_votes = 100;
+    required_votes = 100;
       image_id = "1";
       image_content = vec {10};
       image_title = "sample.jpg";
@@ -42,16 +42,19 @@ for ((i = 1; i <= COUNT; i++)); do
             group_name = "Example Group";
             group_members = vec { principal "aaaaa-aa" };
             group_permissions = vec { "example_permission" };
+            quorem = 65;
         };
         record {
             group_name = "Example Group2";
             group_members = vec { principal "aaaaa-aa" };
             group_permissions = vec { "example_permission" };
+            quorem = 65;
         };
         record {
             group_name = "Example Group3";
             group_members = vec { principal "aaaaa-aa" };
             group_permissions = vec { "example_permission" };
+            quorem = 65;
         }
     };
       
