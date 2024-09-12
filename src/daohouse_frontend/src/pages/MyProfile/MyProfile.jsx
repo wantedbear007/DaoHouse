@@ -174,13 +174,13 @@ const MyProfile = ({ childComponent }) => {
                 <p className={`${tabButtonsStyle} ${activeTab === 0 ? "text-white" : ""}`}>My Profile{activeTab === 0 ? <FaArrowRightLong className="md:inline hidden" /> : ""}</p>
               </Link>
               <Link to="/my-profile/posts" onClick={() => setActiveTab(1)}>
-                <p className={`${tabButtonsStyle} ${activeTab === 1 ? "text-white" : ""}`}>Posts {activeTab === 1 ? <FaArrowRightLong className="md:inline hidden" /> : ""}</p>
+                <p className={`${tabButtonsStyle} ${activeTab === 1 ? "text-white" : ""}`}>Submitted Proposals{activeTab === 1 ? <FaArrowRightLong className="md:inline hidden" /> : ""}</p>
               </Link>
               <Link to="/my-profile/followers" onClick={() => setActiveTab(2)}>
-                <p className={`${tabButtonsStyle} ${activeTab === 2 ? "text-white" : ""}`}>Followers {activeTab === 2 ? <FaArrowRightLong className="md:inline hidden" /> : ""}</p>
+                <p className={`${tabButtonsStyle} ${activeTab === 2 ? "text-white" : ""}`}>  Followed Daos List {activeTab === 2 ? <FaArrowRightLong className="md:inline hidden" /> : ""}</p>
               </Link>
               <Link to="/my-profile/following" onClick={() => setActiveTab(3)}>
-                <p className={`${tabButtonsStyle} ${activeTab === 3 ? "text-white" : ""}`}>Following {activeTab === 3 ? <FaArrowRightLong className="md:inline hidden" /> : ""}</p>
+                <p className={`${tabButtonsStyle} ${activeTab === 3 ? "text-white" : ""}`}>  Dao Joined {activeTab === 3 ? <FaArrowRightLong className="md:inline hidden" /> : ""}</p>
               </Link>
             </div>
           </div>
@@ -213,19 +213,19 @@ const MyProfile = ({ childComponent }) => {
                     <span className="md:mr-5 tablet:text-[32px] text-[24px] font-normal text-[#05212C] user-acc-info">
                       {post}
                       <span className="tablet:text-[16px] text-[14px] mx-1">
-                        Posts
+                        Submitted Proposals
                       </span>
                     </span>
                     <span className="md:mx-5 tablet:text-[32px] text-[24px] font-normal text-[#05212C] user-acc-info">
                       {followers}
                       <span className="tablet:text-[16px] text-[14px] mx-1">
-                        Followers
+                        Followed Daos List
                       </span>
                     </span>
                     <span className="md:mx-5 tablet:text-[32px] text-[24px] font-normal text-[#05212C] user-acc-info">
                       {following}
                       <span className="tablet:text-[16px] text-[14px] mx-1">
-                        Following
+                        Dao Joined
                       </span>
                     </span>
                   </div>

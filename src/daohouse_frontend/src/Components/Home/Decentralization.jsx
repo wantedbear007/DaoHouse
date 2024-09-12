@@ -19,7 +19,7 @@ const Decentralization = () => {
     <div
       className={
         className +
-        " w-full bg-[#E0E0E0] min-h-screen flex items-center justify-center bg-gradient-to-t from-[#0E3746]/100 via-[#0E3746]/80 to-[#F5F5F5]"
+        " w-full bg-[#E0E0E0]  flex items-center justify-center bg-gradient-to-t from-[#0E3746]/100 via-[#0E3746]/80 to-[#F5F5F5]"
       }
     >
       <Container classes={"flex flex-col items-center justify-center relative max-w-full px-4"}>
