@@ -77,6 +77,8 @@ const UserDetailsModal = ({ isOpen, onClose, onSubmit }) => {
         const response = await backendActor.create_profile(MinimalProfileinput);
         console.log("response", response);
         console.log("Navigating to home...");
+        onClose();
+        onSubmit();
         navigate("/");
 
       } catch (error) {
