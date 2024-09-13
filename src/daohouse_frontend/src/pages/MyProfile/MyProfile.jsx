@@ -121,7 +121,7 @@ const MyProfile = ({ childComponent }) => {
   }, [activeTab, following]); // Updated to include following
 
   return (
-    <div className={`${className} bg-zinc-200 w-full  relative`}>
+    <div className={`${className} bg-zinc-200 w-full  relative mt-[90px]`}>
       <div
         style={{
           backgroundImage: `url("${MyProfileRectangle}")`,
