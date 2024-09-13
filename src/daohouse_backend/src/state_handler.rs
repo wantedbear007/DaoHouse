@@ -1,6 +1,6 @@
 // use std::collections::HashMap;
 use crate::types::{PostInfo, UserProfile};
-use crate::{Analytics, DaoDetails, Memory, WasmArgs};
+use crate::{Analytics, CanisterData, DaoDetails, Memory, ProposalValueStore, WasmArgs};
 use candid::Principal;
 use ic_stable_structures::StableBTreeMap;
 // use std::collections::BTreeMap;
@@ -10,15 +10,18 @@ pub struct State {
 
     pub post_detail: StableBTreeMap<String, PostInfo, Memory>,
 
-    pub dao_details: StableBTreeMap<String, DaoDetails, Memory>,
+    pub dao_details: StableBTreeMap<Principal, DaoDetails, Memory>,
 
     pub analytics_content: StableBTreeMap<u64, Analytics, Memory>,
 
     pub wasm_module: StableBTreeMap<u64, WasmArgs, Memory>,
 
-    payment_recipient: Option<Principal>,
+    // payment_recipient: Option<Principal>,
+    pub proposal_store: StableBTreeMap<String, ProposalValueStore, Memory>,
 
     pub ledger_wasm: Vec<u8>,
+
+    pub canister_data: StableBTreeMap<u8, CanisterData, Memory>,
 }
 
 impl State {
@@ -29,17 +32,11 @@ impl State {
             dao_details: dao_file_contents(),
             analytics_content: analytics_content(),
             wasm_module: init_wasm_module(),
-            payment_recipient: None,
+            // payment_recipient: None,
             ledger_wasm: vec![],
+            canister_data: init_canister_data(), // ..Default::default()
+            proposal_store: init_proposal_state(),
         }
-    }
-
-    pub fn get_payment_recipient(&self) -> Principal {
-        self.payment_recipient.unwrap()
-    }
-
-    pub fn set_payment_recipient(&mut self, principal: Principal) {
-        self.payment_recipient = Some(principal);
     }
 }
 
@@ -51,7 +48,7 @@ fn post_file_contents() -> StableBTreeMap<String, PostInfo, Memory> {
     StableBTreeMap::init(crate::memory::get_user_memory())
 }
 
-fn dao_file_contents() -> StableBTreeMap<String, DaoDetails, Memory> {
+fn dao_file_contents() -> StableBTreeMap<Principal, DaoDetails, Memory> {
     StableBTreeMap::init(crate::memory::get_dao_memory())
 }
 fn analytics_content() -> StableBTreeMap<u64, Analytics, Memory> {
@@ -60,6 +57,14 @@ fn analytics_content() -> StableBTreeMap<u64, Analytics, Memory> {
 
 fn init_wasm_module() -> StableBTreeMap<u64, WasmArgs, Memory> {
     StableBTreeMap::init(crate::memory::get_wasm_memory())
+}
+
+fn init_canister_data() -> StableBTreeMap<u8, CanisterData, Memory> {
+    StableBTreeMap::init(crate::memory::get_canister_data_memory())
+}
+
+fn init_proposal_state() -> StableBTreeMap<String, ProposalValueStore, Memory> {
+    StableBTreeMap::init(crate::memory::get_proposal_memory())
 }
 
 // fn ledger_wasm_module() ->

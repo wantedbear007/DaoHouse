@@ -127,12 +127,12 @@ const Step1 = ({ setData, setActiveStep, data }) => {
           />
 
           {/** DAO Type */}
-          <label
+          {/* <label
             htmlFor="type"
             className="font-semibold mobile:text-base text-sm"
           >
             DAO Type
-            {/* <span className="text-red-500">*</span> */}
+           
           </label>
           <input
             onChange={handleChange}
@@ -140,7 +140,7 @@ const Step1 = ({ setData, setActiveStep, data }) => {
             value={inputData.DAOType}
             name="DAOType"
             className="rounded-lg mobile:p-3 p-2 mobile:text-base text-sm"
-          />
+          /> */}
 
           {/* setUp Period */}
           <label
