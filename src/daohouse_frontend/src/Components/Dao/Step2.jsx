@@ -153,7 +153,7 @@ const Step2 = ({ setData, setActiveStep, data }) => {
 
               <input
                 required
-                type="text"
+                type="number"
                 name="TokenSupply"
                 value={inputData.TokenSupply}
                 onChange={handleChange}
