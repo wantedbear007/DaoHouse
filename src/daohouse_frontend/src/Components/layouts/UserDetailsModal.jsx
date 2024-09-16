@@ -24,9 +24,9 @@ const UserDetailsModal = ({ isOpen, onClose, onSubmit }) => {
       document.body.style.width = '100%';
     } else {
       const scrollY = document.body.style.top; 
-      document.body.style.position = '';
+      document.body.style.position = ''; 
       document.body.style.top = '';
-      window.scrollTo(0, parseInt(scrollY || '0') * -1); 
+      window.scrollTo(0, parseInt(scrollY || '0') * -1);
     }
 
     return () => {
@@ -174,7 +174,7 @@ const UserDetailsModal = ({ isOpen, onClose, onSubmit }) => {
                     disabled={isLoading}
                   >
                     {isLoading ? (
-                      <div className="w-40 h-40 px-8 py-4 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
+                      <div className="w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
                     ) : (
                       "Submit"
                     )}
