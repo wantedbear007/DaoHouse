@@ -29,6 +29,7 @@ jobs:
           elif [ -n "${{ matrix.dfx-json-no-dfx-version }}" ]; then
             echo "{}" > dfx.json
           fi
+          rustup target add wasm32-unknown-unknown
 
     - name: Starting DFX instance
       run: |
