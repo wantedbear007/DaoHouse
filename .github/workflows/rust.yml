@@ -36,6 +36,16 @@ jobs:
     - name: Creating Canisters
       run: |
         dfx canister create dao_canister
+        dfx canister create ic_asset_handler
+        dfx canister create daohouse_backend
+        dfx canister create icrc1_ledger_canister
+
+    - name: Building Canisters
+      run: |
+        dfx build icrc1_ledger_canister
+        dfx build dao_canister
+        dfx build ic_asset_handler
+        dfx build daohouse_backend
 
 
 
