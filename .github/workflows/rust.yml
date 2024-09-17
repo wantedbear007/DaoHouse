@@ -20,6 +20,7 @@ jobs:
     - name: ADDING DFX TO PATH 
       run: |
         source "$HOME/.local/share/dfx/env"
+        dfx --version
 
     # Cache cargo dependencies
     - name: Cache Cargo
