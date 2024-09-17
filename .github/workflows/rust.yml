@@ -17,9 +17,10 @@ jobs:
     - name: Install DFX
       run: |
         echo "sh -ci \"\$(curl -fsSL https://internetcomputer.org/install.sh)\"" sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)" < <(echo -ne '\n')
-        name: Install DFX
-        run: | source "$HOME/.local/share/dfx/env"
-        dfx --version
+    - name: Install DFX
+      run: |
+       source "$HOME/.local/share/dfx/env"
+        # dfx --version
 
     # Cache cargo dependencies
     - name: Cache Cargo
