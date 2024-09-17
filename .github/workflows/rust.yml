@@ -19,6 +19,10 @@ jobs:
       uses: dfinity/setup-dfx@main
     - name: Confirm successful installation
       run: dfx --version
+    - name: Checkout
+      uses: actions/checkout@v4
+
+
 
 # jobs:
 #   build:
