@@ -10,30 +10,41 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+  example-job:
+    runs-on: ubuntu-latest 
     steps:
-    - name: Install DFX
-      run: |
-        DFXVM_INIT_YES=true sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)"
-    - name: ADDING DFX TO PATH 
-      run: |
-        source "$HOME/.local/share/dfx/env"
-        dfx --version
-        dfx canister create dao_canister
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install dfx
+      uses: dfinity/setup-dfx@main
+    - name: Confirm successful installation
+      run: dfx --version
 
-    # Cache cargo dependencies
-    # - name: Cache Cargo
-    #   uses: actions/cache@v3
-    #   with:
-    #     path: |
-    #       ~/.cargo/bin
-    #       target
-    #       ~/.cargo/registry
-    #     key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-cargo-
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Install DFX
+#       run: |
+#         DFXVM_INIT_YES=true sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)"
+#     - name: ADDING DFX TO PATH 
+#       run: |
+#         source "$HOME/.local/share/dfx/env"
+#         dfx --version
+#         dfx canister create dao_canister
+
+#     # Cache cargo dependencies
+#     # - name: Cache Cargo
+#     #   uses: actions/cache@v3
+#     #   with:
+#     #     path: |
+#     #       ~/.cargo/bin
+#     #       target
+#     #       ~/.cargo/registry
+#     #     key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+#     #     restore-keys: |
+#     #       ${{ runner.os }}-cargo-
 
 
 
