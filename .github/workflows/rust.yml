@@ -1,4 +1,4 @@
-name: Rust
+name: CI-DAOHouse
 
 on:
   push:
@@ -15,25 +15,52 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+      
+    - name: Cache Rust cargo registry
+      uses: actions/cache@v2
+      with:
+        path: ~/.cargo/registry
+        key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-registry-
+
+    - name: Cache Rust cargo index
+      uses: actions/cache@v2
+      with:
+        path: ~/.cargo/git
+        key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-index-
+
+    - name: Cache DFX version and installation
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/dfinity
+        key: ${{ runner.os }}-dfx-${{ hashFiles('dfx.json') }}
+        restore-keys: |
+          ${{ runner.os }}-dfx-
+
     - name: Install dfx
+      if: steps.cache-dfx.outputs.cache-hit != 'true'
       uses: dfinity/setup-dfx@main
+
     - name: Confirm successful installation
       run: dfx --version
-    - name: Checkout
-      uses: actions/checkout@v4
 
-    - name: Setup
-      run: |
-          if [ -n "${{ matrix.dfx-json-dfx-version }}" ]; then
-            echo "{\"dfx\": \"${{ matrix.dfx-json-dfx-version }}\"}" > dfx.json
-          elif [ -n "${{ matrix.dfx-json-no-dfx-version }}" ]; then
-            echo "{}" > dfx.json
-          fi
-          rustup target add wasm32-unknown-unknown
+    - name: Setup Rust target
+      run: rustup target add wasm32-unknown-unknown
+
+    - name: Cache build output
+      uses: actions/cache@v2
+      with:
+        path: target
+        key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}-${{ hashFiles('**/*.rs') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-build-
 
     - name: Starting DFX instance
-      run: |
-        dfx start --clean --background
+      run: dfx start --clean --background
+
     - name: Creating Canisters
       run: |
         dfx canister create dao_canister
@@ -47,38 +74,3 @@ jobs:
         dfx build dao_canister
         dfx build ic_asset_handler
         dfx build daohouse_backend
-
-
-
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#     - name: Install DFX
-#       run: |
-#         DFXVM_INIT_YES=true sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)"
-#     - name: ADDING DFX TO PATH 
-#       run: |
-#         source "$HOME/.local/share/dfx/env"
-#         dfx --version
-#         dfx canister create dao_canister
-
-#     # Cache cargo dependencies
-#     # - name: Cache Cargo
-#     #   uses: actions/cache@v3
-#     #   with:
-#     #     path: |
-#     #       ~/.cargo/bin
-#     #       target
-#     #       ~/.cargo/registry
-#     #     key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-#     #     restore-keys: |
-#     #       ${{ runner.os }}-cargo-
-
-
-
-
-    # - uses: actions/checkout@v3
-    # - name: Build
-      # run: dfx --version
