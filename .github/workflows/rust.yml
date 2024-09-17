@@ -22,6 +22,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Setup
+      run: |
+          if [ -n "${{ matrix.dfx-json-dfx-version }}" ]; then
+            echo "{\"dfx\": \"${{ matrix.dfx-json-dfx-version }}\"}" > dfx.json
+          elif [ -n "${{ matrix.dfx-json-no-dfx-version }}" ]; then
+            echo "{}" > dfx.json
+          fi
+
 
 
 # jobs:
