@@ -16,12 +16,10 @@ jobs:
     steps:
     - name: Install DFX
       run: |
-        echo "sh -ci \"\$(curl -fsSL https://internetcomputer.org/install.sh)\"" sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)" < <(echo -ne '\n')
-    - name: Install DFX
+        DFXVM_INIT_YES=true sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)"
+    - name: ADDING DFX TO PATH 
       run: |
-        dfx --version
-      
-      # source "$HOME/.local/share/dfx/env"
+        source "$HOME/.local/share/dfx/env"
 
     # Cache cargo dependencies
     - name: Cache Cargo
