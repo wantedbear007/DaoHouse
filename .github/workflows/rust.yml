@@ -16,7 +16,7 @@ jobs:
     steps:
     - name: Install DFX
       run: |
-        sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)"
+        sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)" --quiet
         dfx --version
 
     # Cache cargo dependencies
