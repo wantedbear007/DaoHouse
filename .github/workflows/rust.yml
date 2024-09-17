@@ -33,6 +33,7 @@ jobs:
     - name: Creating canisters
       run: |
         dfx --version
+        dfx start --clean --background
         dfx canister create dao_canister
 
 
