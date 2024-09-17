@@ -30,6 +30,11 @@ jobs:
             echo "{}" > dfx.json
           fi
 
+    - name: Creating canisters
+      run: |
+        dfx --version
+        dfx canister create dao_canister
+
 
 
 # jobs:
