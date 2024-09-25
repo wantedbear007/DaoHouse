@@ -1,37 +1,18 @@
-name: CI-DAOHouse
+name: 'Install dfx'
+description: 'Install the dfx utility at a particular version'
+inputs:
+  dfx-version:
+    description: >
+      The dfx version to install. This value will be used to populate
+      the DFX_VERSION variable that will be handled by the installation
+      script "install.sh".
+      If "latest" is provided, the latest version will be installed.
+      If "auto" is provided, the version will be taken from the "dfx" field in dfx.json if it exists; otherwise as if "latest".
+    default: 'auto'
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-env:
-  CARGO_TERM_COLOR: always
-
-jobs:
-  example-job:
-    runs-on: ubuntu-latest 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      
-    - name: Cache Rust cargo registry
-      uses: actions/cache@v2
-      with:
-        path: ~/.cargo/registry
-        key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-cargo-registry-
-
-    - name: Cache Rust cargo index
-      uses: actions/cache@v2
-      with:
-        path: ~/.cargo/git
-        key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-cargo-index-
-
+runs:
+  using: composite
+  steps:
     - name: Cache DFX version and installation
       uses: actions/cache@v2
       with:
@@ -39,38 +20,118 @@ jobs:
         key: ${{ runner.os }}-dfx-${{ hashFiles('dfx.json') }}
         restore-keys: |
           ${{ runner.os }}-dfx-
-
+          
     - name: Install dfx
+      shell: sh
       if: steps.cache-dfx.outputs.cache-hit != 'true'
       uses: dfinity/setup-dfx@main
-
-    - name: Confirm successful installation
-      run: dfx --version
-
-    - name: Setup Rust target
-      run: rustup target add wasm32-unknown-unknown
-
-    - name: Cache build output
-      uses: actions/cache@v2
-      with:
-        path: target
-        key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}-${{ hashFiles('**/*.rs') }}
-        restore-keys: |
-          ${{ runner.os }}-cargo-build-
-
-    - name: Starting DFX instance
-      run: dfx start --clean --background
-
-    - name: Creating Canisters
+      env:
+        DFXVM_INIT_YES: 'true'
       run: |
-        dfx canister create dao_canister
-        dfx canister create ic_asset_handler
-        dfx canister create daohouse_backend
-        dfx canister create icrc1_ledger_canister
+        if [ "${{ inputs.dfx-version }}" = "latest" ]; then
+          export DFX_VERSION=""
+        elif [ "${{ inputs.dfx-version }}" = "auto" ]; then
+          export DFX_VERSION="$(jq -er '.dfx // ""' dfx.json || echo "")"
+        else
+          export DFX_VERSION="${{ inputs.dfx-version }}"
+        fi
 
-    - name: Building Canisters
+        echo "DFX_VERSION is $DFX_VERSION"
+
+        # Retry up to 10 times.  Each attempt has 20 seconds total to complete, 5 seconds of which is to connect.
+        # This uses the default retry delay, which starts at 1s and doubles each time, up to 10 min.
+        if install_script=$(curl --fail --silent --show-error --location --retry 10 --connect-timeout 5 --max-time 20 --retry-connrefused  https://internetcomputer.org/install.sh); then
+          sh -c "$install_script"
+        else
+          echo "Failed to download install script."
+          exit 1
+        fi
+    - name: Set up path (linux)
+      shell: sh
+      if: runner.os == 'Linux'
       run: |
-        dfx build icrc1_ledger_canister
-        dfx build dao_canister
-        dfx build ic_asset_handler
-        dfx build daohouse_backend
+        echo "$HOME/.local/share/dfx/bin" >> $GITHUB_PATH
+    - name: Set up path (macos)
+      shell: sh
+      if: runner.os == 'macOS'
+      run: |
+        echo "$HOME/Library/Application Support/org.dfinity.dfx/bin" >> $GITHUB_PATH
+
+
+
+# name: CI-DAOHouse
+
+# on:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
+
+# env:
+#   CARGO_TERM_COLOR: always
+
+# jobs:
+#   example-job:
+#     runs-on: ubuntu-latest 
+#     steps:
+#     - name: Checkout repository
+#       uses: actions/checkout@v2
+      
+#     - name: Cache Rust cargo registry
+#       uses: actions/cache@v2
+#       with:
+#         path: ~/.cargo/registry
+#         key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+#         restore-keys: |
+#           ${{ runner.os }}-cargo-registry-
+
+#     - name: Cache Rust cargo index
+#       uses: actions/cache@v2
+#       with:
+#         path: ~/.cargo/git
+#         key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+#         restore-keys: |
+#           ${{ runner.os }}-cargo-index-
+
+#     - name: Cache DFX version and installation
+#       uses: actions/cache@v2
+#       with:
+#         path: ~/.cache/dfinity
+#         key: ${{ runner.os }}-dfx-${{ hashFiles('dfx.json') }}
+#         restore-keys: |
+#           ${{ runner.os }}-dfx-
+
+#     - name: Install dfx
+#       if: steps.cache-dfx.outputs.cache-hit != 'true'
+#       uses: dfinity/setup-dfx@main
+
+#     - name: Confirm successful installation
+#       run: dfx --version
+
+#     - name: Setup Rust target
+#       run: rustup target add wasm32-unknown-unknown
+
+#     - name: Cache build output
+#       uses: actions/cache@v2
+#       with:
+#         path: target
+#         key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}-${{ hashFiles('**/*.rs') }}
+#         restore-keys: |
+#           ${{ runner.os }}-cargo-build-
+
+#     - name: Starting DFX instance
+#       run: dfx start --clean --background
+
+#     - name: Creating Canisters
+#       run: |
+#         dfx canister create dao_canister
+#         dfx canister create ic_asset_handler
+#         dfx canister create daohouse_backend
+#         dfx canister create icrc1_ledger_canister
+
+#     - name: Building Canisters
+#       run: |
+#         dfx build icrc1_ledger_canister
+#         dfx build dao_canister
+#         dfx build ic_asset_handler
+#         dfx build daohouse_backend
